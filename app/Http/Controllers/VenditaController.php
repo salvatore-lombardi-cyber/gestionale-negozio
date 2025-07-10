@@ -1,0 +1,139 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Vendita;
+use App\Models\Cliente;
+use App\Models\Prodotto;
+use App\Models\DettaglioVendita;
+use Illuminate\Http\Request;
+use App\Models\Magazzino;
+
+class VenditaController extends Controller
+{
+    public function index()
+    {
+        $vendite = Vendita::with('cliente')->orderBy('data_vendita', 'desc')->get();
+        return view('vendite.index', compact('vendite'));
+    }
+    
+    public function create()
+{
+    $clienti = Cliente::orderBy('cognome')->get();
+    $prodotti = Prodotto::where('attivo', true)->orderBy('nome')->get();
+    
+    // Prendiamo anche i dati del magazzino per taglie e colori disponibili
+    $magazzino = Magazzino::with('prodotto')
+        ->where('quantita', '>', 0)
+        ->get()
+        ->groupBy('prodotto_id');
+    
+    return view('vendite.create', compact('clienti', 'prodotti', 'magazzino'));
+}
+    
+public function store(Request $request)
+{
+    $request->validate([
+        'cliente_id' => 'nullable|exists:clientes,id',
+        'data_vendita' => 'required|date',
+        'metodo_pagamento' => 'required|in:contanti,carta,bonifico,assegno',
+        'prodotti' => 'required|array|min:1',
+        'prodotti.*.id' => 'required|exists:prodottos,id',
+        'prodotti.*.quantita' => 'required|integer|min:1',
+        'prodotti.*.taglia' => 'required|string',
+        'prodotti.*.colore' => 'required|string',
+    ]);
+
+    // Verifichiamo la disponibilità nel magazzino
+    foreach ($request->prodotti as $prodotto) {
+        $scorta = Magazzino::where('prodotto_id', $prodotto['id'])
+            ->where('taglia', $prodotto['taglia'])
+            ->where('colore', $prodotto['colore'])
+            ->first();
+            
+        if (!$scorta || $scorta->quantita < $prodotto['quantita']) {
+            return back()->withErrors([
+                'prodotti' => "Quantità non disponibile per {$prodotto['taglia']} {$prodotto['colore']}"
+            ])->withInput();
+        }
+    }
+
+    // Calcola il totale
+    $totale = 0;
+    foreach ($request->prodotti as $prodotto) {
+        $prod = Prodotto::find($prodotto['id']);
+        $subtotale = $prod->prezzo * $prodotto['quantita'];
+        $totale += $subtotale;
+    }
+
+    $scontoPercentuale = $request->sconto ?? 0;
+    $scontoEuro = ($totale * $scontoPercentuale) / 100;
+    $totale_finale = $totale - $scontoEuro;
+
+    // Crea la vendita
+    $vendita = Vendita::create([
+        'cliente_id' => $request->cliente_id,
+        'data_vendita' => $request->data_vendita,
+        'totale' => $totale,
+        'sconto' => $scontoPercentuale,
+        'totale_finale' => $totale_finale,
+        'metodo_pagamento' => $request->metodo_pagamento,
+        'note' => $request->note,
+    ]);
+
+    // Crea i dettagli e aggiorna il magazzino
+    foreach ($request->prodotti as $prodotto) {
+        $prod = Prodotto::find($prodotto['id']);
+        $subtotale = $prod->prezzo * $prodotto['quantita'];
+        
+        DettaglioVendita::create([
+            'vendita_id' => $vendita->id,
+            'prodotto_id' => $prodotto['id'],
+            'taglia' => $prodotto['taglia'],
+            'colore' => $prodotto['colore'],
+            'quantita' => $prodotto['quantita'],
+            'prezzo_unitario' => $prod->prezzo,
+            'subtotale' => $subtotale,
+        ]);
+        
+        // AGGIORNA IL MAGAZZINO
+        $scorta = Magazzino::where('prodotto_id', $prodotto['id'])
+            ->where('taglia', $prodotto['taglia'])
+            ->where('colore', $prodotto['colore'])
+            ->first();
+            
+        if ($scorta) {
+            $scorta->quantita -= $prodotto['quantita'];
+            $scorta->save();
+        }
+    }
+
+    return redirect()->route('vendite.index')
+        ->with('success', 'Vendita registrata con successo! Magazzino aggiornato.');
+}
+    
+    public function show(Vendita $vendita)
+    {
+        $vendita->load('cliente', 'dettagli.prodotto');
+        return view('vendite.show', compact('vendita'));
+    }
+    
+    public function edit(Vendita $vendita)
+    {
+        // Non implementato
+    }
+    
+    public function update(Request $request, Vendita $vendita)
+    {
+        // Non implementato
+    }
+    
+    public function destroy(Vendita $vendita)
+    {
+        $vendita->dettagli()->delete();
+        $vendita->delete();
+        
+        return redirect()->route('vendite.index')
+        ->with('success', 'Vendita eliminata con successo!');
+    }
+}
