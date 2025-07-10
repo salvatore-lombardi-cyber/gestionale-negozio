@@ -50,7 +50,7 @@ class DdtController extends Controller
             'numero_ddt' => Ddt::generaNumeroDdt(),
             'data_ddt' => $request->data_ddt,
             'vendita_id' => $vendita->id,
-            'cliente_id' => $vendita->cliente_id,
+            'cliente_id' => $vendita->cliente_id ?? null, // ← FIX: Permetti NULL
             'destinatario_nome' => $request->destinatario_nome,
             'destinatario_cognome' => $request->destinatario_cognome,
             'destinatario_indirizzo' => $request->destinatario_indirizzo,
@@ -59,7 +59,7 @@ class DdtController extends Controller
             'causale' => $request->causale,
             'trasportatore' => $request->trasportatore,
             'note' => $request->note,
-            'stato' => 'bozza'
+            'stato' => 'bozza',
         ]);
         
         return redirect()->route('ddts.index')->with('success', 'DDT creato con successo!');
@@ -72,29 +72,29 @@ class DdtController extends Controller
         return view('ddts.show', compact('ddt'));
     }
     public function downloadPdf(Ddt $ddt)
-{
-    $ddt->load(['vendita.dettagli.prodotto', 'cliente']);
-    
-    $pdf = Pdf::loadView('pdfs.ddt', compact('ddt'));
-    
-    return $pdf->download('DDT-' . $ddt->numero_ddt . '.pdf');
-}
-
-public function sendEmail(Ddt $ddt)
-{
-    $ddt->load(['vendita.dettagli.prodotto', 'cliente']);
-    
-    // Verifica che il cliente abbia un'email
-    if (!$ddt->cliente->email) {
-        return redirect()->back()->with('error', 'Il cliente non ha un indirizzo email configurato.');
-    }
-    
-    try {
-        Mail::to($ddt->cliente->email)->send(new \App\Mail\DdtMail($ddt));
+    {
+        $ddt->load(['vendita.dettagli.prodotto', 'cliente']);
         
-        return redirect()->back()->with('success', 'DDT inviato via email a ' . $ddt->cliente->email);
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Errore nell\'invio email: ' . $e->getMessage());
+        $pdf = Pdf::loadView('pdfs.ddt', compact('ddt'));
+        
+        return $pdf->download('DDT-' . $ddt->numero_ddt . '.pdf');
     }
-}
+    
+    public function sendEmail(Ddt $ddt)
+    {
+        $ddt->load(['vendita.dettagli.prodotto', 'cliente']);
+        
+        // Verifica che il cliente abbia un'email
+        if (!$ddt->cliente->email) {
+            return redirect()->back()->with('error', 'Il cliente non ha un indirizzo email configurato.');
+        }
+        
+        try {
+            Mail::to($ddt->cliente->email)->send(new \App\Mail\DdtMail($ddt));
+            
+            return redirect()->back()->with('success', 'DDT inviato via email a ' . $ddt->cliente->email);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Errore nell\'invio email: ' . $e->getMessage());
+        }
+    }
 }

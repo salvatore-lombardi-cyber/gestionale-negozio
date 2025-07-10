@@ -343,7 +343,7 @@
             </a>
         </div>
     </div>
-
+    
     <!-- Ricerca -->
     <div class="search-container">
         <input type="text" class="search-input" id="searchInput" placeholder="🔍 Cerca DDT per numero, cliente, destinatario, stato...">
@@ -355,7 +355,7 @@
             <button class="filter-chip" data-filter="status">Stato</button>
         </div>
     </div>
-
+    
     <!-- Tabella/Cards -->
     <div class="modern-card">
         <!-- Desktop -->
@@ -373,187 +373,187 @@
                 </thead>
                 <tbody>
                     @forelse($ddts as $ddt)
-                    <tr class="ddt-row" 
-                        data-number="{{ strtolower($ddt->numero_ddt) }}"
-                        data-customer="{{ strtolower($ddt->cliente->nome_completo) }}"
-                        data-recipient="{{ strtolower($ddt->destinatario_completo) }}"
-                        data-status="{{ $ddt->stato }}">
-                        <td>
-                            <span class="ddt-number">{{ $ddt->numero_ddt }}</span>
-                        </td>
-                        <td>{{ $ddt->data_ddt->format('d/m/Y') }}</td>
-                        <td>
-                            <span class="customer-name">{{ $ddt->cliente->nome_completo }}</span>
-                        </td>
-                        <td>
-                            <span class="recipient-name">{{ $ddt->destinatario_completo }}</span>
-                        </td>
-                        <td>
-                            <span class="status-badge status-{{ $ddt->stato }}">
-                                @if($ddt->stato == 'bozza')
-                                    <i class="bi bi-file-earmark"></i> {{ __('app.draft') }}
-                                @elseif($ddt->stato == 'confermato')
-                                    <i class="bi bi-check-circle"></i> {{ __('app.confirmed') }}
-                                @elseif($ddt->stato == 'spedito')
-                                    <i class="bi bi-truck"></i> {{ __('app.shipped') }}
-                                @else
-                                    <i class="bi bi-check-circle-fill"></i> {{ __('app.delivered') }}
-                                @endif
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ route('ddts.show', $ddt) }}" class="action-btn view">
-                                <i class="bi bi-eye"></i> {{ __('app.view') }}
-                            </a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6">
-                            <div class="empty-state">
-                                <i class="bi bi-file-earmark-text"></i>
-                                <h5>{{ __('app.no_ddts_created') }}</h5>
-                                <p>{{ __('app.start_creating_first_ddt') }}</p>
-                                <a href="{{ route('ddts.create') }}" class="modern-btn">
-                                    <i class="bi bi-plus-circle"></i> {{ __('app.create_first_ddt') }}
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Mobile -->
-        <div class="mobile-cards">
-            @forelse($ddts as $ddt)
-            <div class="ddt-card mobile-ddt-row"
-                 data-number="{{ strtolower($ddt->numero_ddt) }}"
-                 data-customer="{{ strtolower($ddt->cliente->nome_completo) }}"
-                 data-recipient="{{ strtolower($ddt->destinatario_completo) }}"
-                 data-status="{{ $ddt->stato }}">
-                
-                <div class="ddt-card-header">
-                    <span class="ddt-card-number">{{ $ddt->numero_ddt }}</span>
-                    <span>{{ $ddt->data_ddt->format('d/m/Y') }}</span>
-                </div>
-                
-                <div class="ddt-card-details">
-                    <div class="ddt-detail">
-                        <div class="ddt-detail-label">{{ __('app.customer') }}</div>
-                        <div class="ddt-detail-value">{{ $ddt->cliente->nome_completo }}</div>
-                    </div>
-                    
-                    <div class="ddt-detail">
-                        <div class="ddt-detail-label">{{ __('app.recipient') }}</div>
-                        <div class="ddt-detail-value">{{ $ddt->destinatario_completo }}</div>
-                    </div>
-                </div>
-                
-                <div class="ddt-card-status">
-                    <span class="status-badge status-{{ $ddt->stato }}">
-                        @if($ddt->stato == 'bozza')
+                    <tr class="ddt-row"
+                    data-number="{{ strtolower($ddt->numero_ddt) }}"
+                    data-customer="{{ strtolower($ddt->cliente ? $ddt->cliente->nome_completo : 'cliente occasionale') }}"
+                    data-recipient="{{ strtolower($ddt->destinatario_completo) }}"
+                    data-status="{{ $ddt->stato }}">
+                    <td>
+                        <span class="ddt-number">{{ $ddt->numero_ddt }}</span>
+                    </td>
+                    <td>{{ $ddt->data_ddt->format('d/m/Y') }}</td>
+                    <td>
+                        <span class="customer-name">{{ $ddt->cliente ? $ddt->cliente->nome_completo : 'Cliente occasionale' }}</span>
+                    </td>
+                    <td>
+                        <span class="recipient-name">{{ $ddt->destinatario_completo }}</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-{{ $ddt->stato }}">
+                            @if($ddt->stato == 'bozza')
                             <i class="bi bi-file-earmark"></i> {{ __('app.draft') }}
-                        @elseif($ddt->stato == 'confermato')
+                            @elseif($ddt->stato == 'confermato')
                             <i class="bi bi-check-circle"></i> {{ __('app.confirmed') }}
-                        @elseif($ddt->stato == 'spedito')
+                            @elseif($ddt->stato == 'spedito')
                             <i class="bi bi-truck"></i> {{ __('app.shipped') }}
-                        @else
+                            @else
                             <i class="bi bi-check-circle-fill"></i> {{ __('app.delivered') }}
-                        @endif
-                    </span>
-                </div>
-                
-                <div class="ddt-card-actions">
-                    <a href="{{ route('ddts.show', $ddt) }}" class="mobile-action-btn">
-                        <i class="bi bi-eye"></i> {{ __('app.view') }}
-                    </a>
-                </div>
-            </div>
-            @empty
-            <div class="ddt-card">
-                <div class="empty-state">
-                    <i class="bi bi-file-earmark-text"></i>
-                    <h5>{{ __('app.no_ddts_created') }}</h5>
-                    <p>{{ __('app.start_creating_first_ddt') }}</p>
-                    <a href="{{ route('ddts.create') }}" class="modern-btn">
-                        <i class="bi bi-plus-circle"></i> {{ __('app.create_first_ddt') }}
-                    </a>
-                </div>
-            </div>
-            @endforelse
+                            @endif
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ route('ddts.show', $ddt) }}" class="action-btn view">
+                            <i class="bi bi-eye"></i> {{ __('app.view') }}
+                        </a>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <h5>{{ __('app.no_ddts_created') }}</h5>
+                            <p>{{ __('app.start_creating_first_ddt') }}</p>
+                            <a href="{{ route('ddts.create') }}" class="modern-btn">
+                                <i class="bi bi-plus-circle"></i> {{ __('app.create_first_ddt') }}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Mobile -->
+    <div class="mobile-cards">
+        @forelse($ddts as $ddt)
+        <div class="ddt-card mobile-ddt-row"
+        data-number="{{ strtolower($ddt->numero_ddt) }}"
+        data-customer="{{ strtolower($ddt->cliente->nome_completo) }}"
+        data-recipient="{{ strtolower($ddt->destinatario_completo) }}"
+        data-status="{{ $ddt->stato }}">
+        
+        <div class="ddt-card-header">
+            <span class="ddt-card-number">{{ $ddt->numero_ddt }}</span>
+            <span>{{ $ddt->data_ddt->format('d/m/Y') }}</span>
         </div>
         
-        <div id="noResults" class="empty-state" style="display: none;">
-            <i class="bi bi-search"></i>
-            <h5>Nessun DDT trovato</h5>
-            <p>Prova a modificare i criteri di ricerca</p>
+        <div class="ddt-card-details">
+            <div class="ddt-detail">
+                <div class="ddt-detail-label">{{ __('app.customer') }}</div>
+                <div class="ddt-detail-value">{{ $ddt->cliente->nome_completo }}</div>
+            </div>
+            
+            <div class="ddt-detail">
+                <div class="ddt-detail-label">{{ __('app.recipient') }}</div>
+                <div class="ddt-detail-value">{{ $ddt->destinatario_completo }}</div>
+            </div>
+        </div>
+        
+        <div class="ddt-card-status">
+            <span class="status-badge status-{{ $ddt->stato }}">
+                @if($ddt->stato == 'bozza')
+                <i class="bi bi-file-earmark"></i> {{ __('app.draft') }}
+                @elseif($ddt->stato == 'confermato')
+                <i class="bi bi-check-circle"></i> {{ __('app.confirmed') }}
+                @elseif($ddt->stato == 'spedito')
+                <i class="bi bi-truck"></i> {{ __('app.shipped') }}
+                @else
+                <i class="bi bi-check-circle-fill"></i> {{ __('app.delivered') }}
+                @endif
+            </span>
+        </div>
+        
+        <div class="ddt-card-actions">
+            <a href="{{ route('ddts.show', $ddt) }}" class="mobile-action-btn">
+                <i class="bi bi-eye"></i> {{ __('app.view') }}
+            </a>
         </div>
     </div>
+    @empty
+    <div class="ddt-card">
+        <div class="empty-state">
+            <i class="bi bi-file-earmark-text"></i>
+            <h5>{{ __('app.no_ddts_created') }}</h5>
+            <p>{{ __('app.start_creating_first_ddt') }}</p>
+            <a href="{{ route('ddts.create') }}" class="modern-btn">
+                <i class="bi bi-plus-circle"></i> {{ __('app.create_first_ddt') }}
+            </a>
+        </div>
+    </div>
+    @endforelse
+</div>
+
+<div id="noResults" class="empty-state" style="display: none;">
+    <i class="bi bi-search"></i>
+    <h5>Nessun DDT trovato</h5>
+    <p>Prova a modificare i criteri di ricerca</p>
+</div>
+</div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const filterChips = document.querySelectorAll('.filter-chip');
-    const ddtRows = document.querySelectorAll('.ddt-row');
-    const mobileDdtRows = document.querySelectorAll('.mobile-ddt-row');
-    const noResults = document.getElementById('noResults');
-    let currentFilter = 'all';
-    
-    // Gestione filtri
-    filterChips.forEach(chip => {
-        chip.addEventListener('click', function() {
-            filterChips.forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            currentFilter = this.dataset.filter;
-            performSearch();
-        });
-    });
-    
-    // Ricerca in tempo reale
-    searchInput.addEventListener('input', performSearch);
-    
-    function performSearch() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        let visibleRows = 0;
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const filterChips = document.querySelectorAll('.filter-chip');
+        const ddtRows = document.querySelectorAll('.ddt-row');
+        const mobileDdtRows = document.querySelectorAll('.mobile-ddt-row');
+        const noResults = document.getElementById('noResults');
+        let currentFilter = 'all';
         
-        // Ricerca desktop
-        ddtRows.forEach(row => {
-            if (shouldShowItem(row, searchTerm)) {
-                row.style.display = '';
-                visibleRows++;
-            } else {
-                row.style.display = 'none';
-            }
+        // Gestione filtri
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                filterChips.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                performSearch();
+            });
         });
         
-        // Ricerca mobile
-        mobileDdtRows.forEach(row => {
-            if (shouldShowItem(row, searchTerm)) {
-                row.style.display = '';
-                visibleRows++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
+        // Ricerca in tempo reale
+        searchInput.addEventListener('input', performSearch);
         
-        noResults.style.display = (visibleRows === 0 && searchTerm !== '') ? 'block' : 'none';
-    }
-    
-    function shouldShowItem(item, searchTerm) {
-        if (searchTerm === '') return true;
-        
-        if (currentFilter === 'all') {
-            return item.dataset.number.includes(searchTerm) ||
-                   item.dataset.customer.includes(searchTerm) ||
-                   item.dataset.recipient.includes(searchTerm) ||
-                   item.dataset.status.includes(searchTerm);
-        } else {
-            return item.dataset[currentFilter].includes(searchTerm);
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleRows = 0;
+            
+            // Ricerca desktop
+            ddtRows.forEach(row => {
+                if (shouldShowItem(row, searchTerm)) {
+                    row.style.display = '';
+                    visibleRows++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Ricerca mobile
+            mobileDdtRows.forEach(row => {
+                if (shouldShowItem(row, searchTerm)) {
+                    row.style.display = '';
+                    visibleRows++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            noResults.style.display = (visibleRows === 0 && searchTerm !== '') ? 'block' : 'none';
         }
-    }
-});
+        
+        function shouldShowItem(item, searchTerm) {
+            if (searchTerm === '') return true;
+            
+            if (currentFilter === 'all') {
+                return item.dataset.number.includes(searchTerm) ||
+                item.dataset.customer.includes(searchTerm) ||
+                item.dataset.recipient.includes(searchTerm) ||
+                item.dataset.status.includes(searchTerm);
+            } else {
+                return item.dataset[currentFilter].includes(searchTerm);
+            }
+        }
+    });
 </script>
 @endsection
