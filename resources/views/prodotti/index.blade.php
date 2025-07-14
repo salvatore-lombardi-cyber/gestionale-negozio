@@ -518,12 +518,12 @@
             <i class="bi bi-search search-icon"></i>
         </div>
         <div class="filter-chips">
-            <button class="filter-chip active" data-filter="all">Tutti</button>
-            <button class="filter-chip" data-filter="name">Nome</button>
-            <button class="filter-chip" data-filter="code">Codice</button>
-            <button class="filter-chip" data-filter="category">Categoria</button>
-            <button class="filter-chip" data-filter="brand">Marca</button>
-            <button class="filter-chip" data-filter="price">Prezzo</button>
+            <button class="filter-chip active" data-filter="all">{{ __('app.all') }}</button>
+            <button class="filter-chip" data-filter="name">{{ __('app.name') }}</button>
+            <button class="filter-chip" data-filter="code">{{ __('app.code') }}</button>
+            <button class="filter-chip" data-filter="category">{{ __('app.category') }}</button>
+            <button class="filter-chip" data-filter="brand">{{ __('app.brand') }}</button>
+            <button class="filter-chip" data-filter="price">{{ __('app.price') }}</button>
         </div>
     </div>
     

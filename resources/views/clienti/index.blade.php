@@ -505,12 +505,12 @@
             <i class="bi bi-search search-icon"></i>
         </div>
         <div class="filter-chips">
-            <button class="filter-chip active" data-filter="all">Tutti</button>
-            <button class="filter-chip" data-filter="name">Nome</button>
-            <button class="filter-chip" data-filter="surname">Cognome</button>
-            <button class="filter-chip" data-filter="phone">Telefono</button>
-            <button class="filter-chip" data-filter="email">Email</button>
-            <button class="filter-chip" data-filter="city">Città</button>
+            <button class="filter-chip active" data-filter="all">{{ __('app.all') }}</button>
+            <button class="filter-chip" data-filter="name">{{ __('app.name') }}</button>
+            <button class="filter-chip" data-filter="surname">{{ __('app.surname') }}</button>
+            <button class="filter-chip" data-filter="phone">{{ __('app.phone') }}</button>
+            <button class="filter-chip" data-filter="email">{{ __('app.email') }}</button>
+            <button class="filter-chip" data-filter="city">{{ __('app.city') }}</button>
         </div>
     </div>
     

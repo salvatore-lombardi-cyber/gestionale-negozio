@@ -146,7 +146,7 @@
         box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
     
-  .filter-chips {
+    .filter-chips {
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
@@ -560,7 +560,7 @@ $totaleSconteBasse = $prodottiConStatistiche->sum('varianti_scorte_basse');
             </a>
         </div>
     </div>
-
+    
     <!-- Dashboard Statistiche -->
     <div class="stats-grid">
         <div class="stat-card products">
@@ -595,19 +595,19 @@ $totaleSconteBasse = $prodottiConStatistiche->sum('varianti_scorte_basse');
             <div class="stat-label">{{ __('app.out_of_stock') }}</div>
         </div>
     </div>
-
+    
     <!-- Ricerca -->
     <div class="search-container">
         <input type="text" class="search-input" id="searchInput" placeholder="🔍 Cerca prodotti in magazzino per nome, codice, categoria...">
         <div class="filter-chips">
-            <button class="filter-chip active" data-filter="all">Tutti</button>
-            <button class="filter-chip" data-filter="name">Nome</button>
-            <button class="filter-chip" data-filter="code">Codice</button>
-            <button class="filter-chip" data-filter="category">Categoria</button>
-            <button class="filter-chip" data-filter="status">Stato</button>
+            <button class="filter-chip active" data-filter="all">{{ __('app.all') }}</button>
+            <button class="filter-chip" data-filter="name">{{ __('app.name') }}</button>
+            <button class="filter-chip" data-filter="code">{{ __('app.code') }}</button>
+            <button class="filter-chip" data-filter="category">{{ __('app.category') }}</button>
+            <button class="filter-chip" data-filter="status">{{ __('app.status') }}</button>
         </div>
     </div>
-
+    
     <!-- Tabella/Cards -->
     <div class="modern-card">
         <!-- Desktop -->
@@ -627,241 +627,241 @@ $totaleSconteBasse = $prodottiConStatistiche->sum('varianti_scorte_basse');
                 <tbody>
                     @forelse($prodottiConStatistiche as $item)
                     <tr class="warehouse-row"
-                        data-name="{{ strtolower($item->prodotto->nome) }}"
-                        data-code="{{ strtolower($item->prodotto->codice_prodotto) }}"
-                        data-category="{{ strtolower($item->prodotto->categoria) }}"
-                        data-status="{{ $item->stato_generale }}">
-                        <td>
-                            <div class="product-info">
-                                <span class="product-name">{{ $item->prodotto->nome }}</span>
-                                <span class="product-category">{{ $item->prodotto->categoria }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="product-code">{{ $item->prodotto->codice_prodotto }}</span>
-                        </td>
-                        <td>
-                            <span class="price-display">€ {{ number_format($item->prodotto->prezzo, 2) }}</span>
-                        </td>
-                        <td>
-                            <div class="variant-info">
-                                <span class="variant-badge">{{ $item->varianti_totali }} {{ __('app.variants') }}</span>
-                                <span class="variant-details">
-                                    {{ $item->varianti_disponibili }} {{ __('app.available') }}, {{ $item->varianti_esaurite }} {{ __('app.out_of_stock') }}
-                                </span>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="quantity-badge {{ $item->totale_quantita > 0 ? 'quantity-available' : 'quantity-danger' }}">
-                                {{ $item->totale_quantita }} {{ __('app.pcs') }}
-                            </span>
-                        </td>
-                        <td>
-                            @if($item->stato_generale == 'esaurito')
-                                <span class="status-badge status-danger">
-                                    <i class="bi bi-x-circle"></i> {{ __('app.out_of_stock') }}
-                                </span>
-                            @elseif($item->stato_generale == 'attenzione')
-                                <span class="status-badge status-warning">
-                                    <i class="bi bi-exclamation-triangle"></i> {{ __('app.warning') }}
-                                </span>
-                                @if($item->varianti_scorte_basse > 0)
-                                    <div class="low-stock-info">
-                                        {{ $item->varianti_scorte_basse }} {{ __('app.low_stock') }}
-                                    </div>
-                                @endif
-                            @else
-                                <span class="status-badge status-ok">
-                                    <i class="bi bi-check-circle"></i> OK
-                                </span>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="{{ route('magazzino.dettaglio-prodotto', $item->prodotto->id) }}" class="action-btn details">
-                                <i class="bi bi-eye"></i> {{ __('app.details') }}
-                            </a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="7">
-                            <div class="empty-state">
-                                <i class="bi bi-boxes"></i>
-                                <h5>{{ __('app.no_products_in_warehouse') }}</h5>
-                                <p>{{ __('app.start_adding_products_and_stock') }}</p>
-                                <a href="{{ route('prodotti.create') }}" class="modern-btn">
-                                    <i class="bi bi-plus-circle"></i> {{ __('app.create_first_product') }}
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Mobile -->
-        <div class="mobile-cards">
-            @forelse($prodottiConStatistiche as $item)
-            <div class="warehouse-card mobile-warehouse-row"
-                 data-name="{{ strtolower($item->prodotto->nome) }}"
-                 data-code="{{ strtolower($item->prodotto->codice_prodotto) }}"
-                 data-category="{{ strtolower($item->prodotto->categoria) }}"
-                 data-status="{{ $item->stato_generale }}">
-                
-                <div class="warehouse-card-header">
-                    <div class="warehouse-card-title">{{ $item->prodotto->nome }}</div>
-                    <div class="warehouse-card-subtitle">{{ $item->prodotto->categoria }}</div>
-                </div>
-                
-                <div class="warehouse-card-details">
-                    <div class="detail-item">
-                        <div class="detail-label">{{ __('app.code') }}</div>
-                        <div class="detail-value">
-                            <span class="product-code">{{ $item->prodotto->codice_prodotto }}</span>
+                    data-name="{{ strtolower($item->prodotto->nome) }}"
+                    data-code="{{ strtolower($item->prodotto->codice_prodotto) }}"
+                    data-category="{{ strtolower($item->prodotto->categoria) }}"
+                    data-status="{{ $item->stato_generale }}">
+                    <td>
+                        <div class="product-info">
+                            <span class="product-name">{{ $item->prodotto->nome }}</span>
+                            <span class="product-category">{{ $item->prodotto->categoria }}</span>
                         </div>
-                    </div>
-                    
-                    <div class="detail-item">
-                        <div class="detail-label">{{ __('app.price') }}</div>
-                        <div class="detail-value">
-                            <span class="price-display">€ {{ number_format($item->prodotto->prezzo, 2) }}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-item">
-                        <div class="detail-label">{{ __('app.variants') }}</div>
-                        <div class="detail-value">
-                            <span class="variant-badge">{{ $item->varianti_totali }}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-item">
-                        <div class="detail-label">{{ __('app.total_pieces') }}</div>
-                        <div class="detail-value">
-                            <span class="quantity-badge {{ $item->totale_quantita > 0 ? 'quantity-available' : 'quantity-danger' }}">
-                                {{ $item->totale_quantita }} {{ __('app.pcs') }}
+                    </td>
+                    <td>
+                        <span class="product-code">{{ $item->prodotto->codice_prodotto }}</span>
+                    </td>
+                    <td>
+                        <span class="price-display">€ {{ number_format($item->prodotto->prezzo, 2) }}</span>
+                    </td>
+                    <td>
+                        <div class="variant-info">
+                            <span class="variant-badge">{{ $item->varianti_totali }} {{ __('app.variants') }}</span>
+                            <span class="variant-details">
+                                {{ $item->varianti_disponibili }} {{ __('app.available') }}, {{ $item->varianti_esaurite }} {{ __('app.out_of_stock') }}
                             </span>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="warehouse-card-status">
-                    @if($item->stato_generale == 'esaurito')
+                    </td>
+                    <td>
+                        <span class="quantity-badge {{ $item->totale_quantita > 0 ? 'quantity-available' : 'quantity-danger' }}">
+                            {{ $item->totale_quantita }} {{ __('app.pcs') }}
+                        </span>
+                    </td>
+                    <td>
+                        @if($item->stato_generale == 'esaurito')
                         <span class="status-badge status-danger">
                             <i class="bi bi-x-circle"></i> {{ __('app.out_of_stock') }}
                         </span>
-                    @elseif($item->stato_generale == 'attenzione')
+                        @elseif($item->stato_generale == 'attenzione')
                         <span class="status-badge status-warning">
                             <i class="bi bi-exclamation-triangle"></i> {{ __('app.warning') }}
                         </span>
                         @if($item->varianti_scorte_basse > 0)
-                            <div class="low-stock-info">
-                                {{ $item->varianti_scorte_basse }} {{ __('app.low_stock') }}
-                            </div>
+                        <div class="low-stock-info">
+                            {{ $item->varianti_scorte_basse }} {{ __('app.low_stock') }}
+                        </div>
                         @endif
-                    @else
+                        @else
                         <span class="status-badge status-ok">
                             <i class="bi bi-check-circle"></i> OK
                         </span>
-                    @endif
-                </div>
-                
-                <div class="warehouse-card-actions">
-                    <a href="{{ route('magazzino.dettaglio-prodotto', $item->prodotto->id) }}" class="mobile-action-btn">
-                        <i class="bi bi-eye"></i> {{ __('app.details') }}
-                    </a>
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('magazzino.dettaglio-prodotto', $item->prodotto->id) }}" class="action-btn details">
+                            <i class="bi bi-eye"></i> {{ __('app.details') }}
+                        </a>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7">
+                        <div class="empty-state">
+                            <i class="bi bi-boxes"></i>
+                            <h5>{{ __('app.no_products_in_warehouse') }}</h5>
+                            <p>{{ __('app.start_adding_products_and_stock') }}</p>
+                            <a href="{{ route('prodotti.create') }}" class="modern-btn">
+                                <i class="bi bi-plus-circle"></i> {{ __('app.create_first_product') }}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Mobile -->
+    <div class="mobile-cards">
+        @forelse($prodottiConStatistiche as $item)
+        <div class="warehouse-card mobile-warehouse-row"
+        data-name="{{ strtolower($item->prodotto->nome) }}"
+        data-code="{{ strtolower($item->prodotto->codice_prodotto) }}"
+        data-category="{{ strtolower($item->prodotto->categoria) }}"
+        data-status="{{ $item->stato_generale }}">
+        
+        <div class="warehouse-card-header">
+            <div class="warehouse-card-title">{{ $item->prodotto->nome }}</div>
+            <div class="warehouse-card-subtitle">{{ $item->prodotto->categoria }}</div>
+        </div>
+        
+        <div class="warehouse-card-details">
+            <div class="detail-item">
+                <div class="detail-label">{{ __('app.code') }}</div>
+                <div class="detail-value">
+                    <span class="product-code">{{ $item->prodotto->codice_prodotto }}</span>
                 </div>
             </div>
-            @empty
-            <div class="warehouse-card">
-                <div class="empty-state">
-                    <i class="bi bi-boxes"></i>
-                    <h5>{{ __('app.no_products_in_warehouse') }}</h5>
-                    <p>{{ __('app.start_adding_products_and_stock') }}</p>
-                    <a href="{{ route('prodotti.create') }}" class="modern-btn">
-                        <i class="bi bi-plus-circle"></i> {{ __('app.create_first_product') }}
-                    </a>
+            
+            <div class="detail-item">
+                <div class="detail-label">{{ __('app.price') }}</div>
+                <div class="detail-value">
+                    <span class="price-display">€ {{ number_format($item->prodotto->prezzo, 2) }}</span>
                 </div>
             </div>
-            @endforelse
+            
+            <div class="detail-item">
+                <div class="detail-label">{{ __('app.variants') }}</div>
+                <div class="detail-value">
+                    <span class="variant-badge">{{ $item->varianti_totali }}</span>
+                </div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">{{ __('app.total_pieces') }}</div>
+                <div class="detail-value">
+                    <span class="quantity-badge {{ $item->totale_quantita > 0 ? 'quantity-available' : 'quantity-danger' }}">
+                        {{ $item->totale_quantita }} {{ __('app.pcs') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="warehouse-card-status">
+            @if($item->stato_generale == 'esaurito')
+            <span class="status-badge status-danger">
+                <i class="bi bi-x-circle"></i> {{ __('app.out_of_stock') }}
+            </span>
+            @elseif($item->stato_generale == 'attenzione')
+            <span class="status-badge status-warning">
+                <i class="bi bi-exclamation-triangle"></i> {{ __('app.warning') }}
+            </span>
+            @if($item->varianti_scorte_basse > 0)
+            <div class="low-stock-info">
+                {{ $item->varianti_scorte_basse }} {{ __('app.low_stock') }}
+            </div>
+            @endif
+            @else
+            <span class="status-badge status-ok">
+                <i class="bi bi-check-circle"></i> OK
+            </span>
+            @endif
+        </div>
+        
+        <div class="warehouse-card-actions">
+            <a href="{{ route('magazzino.dettaglio-prodotto', $item->prodotto->id) }}" class="mobile-action-btn">
+                <i class="bi bi-eye"></i> {{ __('app.details') }}
+            </a>
         </div>
     </div>
+    @empty
+    <div class="warehouse-card">
+        <div class="empty-state">
+            <i class="bi bi-boxes"></i>
+            <h5>{{ __('app.no_products_in_warehouse') }}</h5>
+            <p>{{ __('app.start_adding_products_and_stock') }}</p>
+            <a href="{{ route('prodotti.create') }}" class="modern-btn">
+                <i class="bi bi-plus-circle"></i> {{ __('app.create_first_product') }}
+            </a>
+        </div>
+    </div>
+    @endforelse
+</div>
+</div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const filterChips = document.querySelectorAll('.filter-chip');
-    const warehouseRows = document.querySelectorAll('.warehouse-row');
-    const mobileWarehouseRows = document.querySelectorAll('.mobile-warehouse-row');
-    let currentFilter = 'all';
-    
-    // Gestione filtri
-    filterChips.forEach(chip => {
-        chip.addEventListener('click', function() {
-            filterChips.forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            currentFilter = this.dataset.filter;
-            performSearch();
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const filterChips = document.querySelectorAll('.filter-chip');
+        const warehouseRows = document.querySelectorAll('.warehouse-row');
+        const mobileWarehouseRows = document.querySelectorAll('.mobile-warehouse-row');
+        let currentFilter = 'all';
+        
+        // Gestione filtri
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                filterChips.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                performSearch();
+            });
+        });
+        
+        // Ricerca in tempo reale
+        searchInput.addEventListener('input', performSearch);
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleRows = 0;
+            
+            // Ricerca desktop
+            warehouseRows.forEach(row => {
+                if (shouldShowItem(row, searchTerm)) {
+                    row.style.display = '';
+                    visibleRows++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Ricerca mobile
+            mobileWarehouseRows.forEach(row => {
+                if (shouldShowItem(row, searchTerm)) {
+                    row.style.display = '';
+                    visibleRows++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        function shouldShowItem(item, searchTerm) {
+            if (searchTerm === '') return true;
+            
+            if (currentFilter === 'all') {
+                return item.dataset.name.includes(searchTerm) ||
+                item.dataset.code.includes(searchTerm) ||
+                item.dataset.category.includes(searchTerm) ||
+                item.dataset.status.includes(searchTerm);
+            } else {
+                return item.dataset[currentFilter].includes(searchTerm);
+            }
+        }
+        
+        // Animazioni di entrata
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100);
+            }, index * 200);
         });
     });
-    
-    // Ricerca in tempo reale
-    searchInput.addEventListener('input', performSearch);
-    
-    function performSearch() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        let visibleRows = 0;
-        
-        // Ricerca desktop
-        warehouseRows.forEach(row => {
-            if (shouldShowItem(row, searchTerm)) {
-                row.style.display = '';
-                visibleRows++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-        
-        // Ricerca mobile
-        mobileWarehouseRows.forEach(row => {
-            if (shouldShowItem(row, searchTerm)) {
-                row.style.display = '';
-                visibleRows++;
-            } else {
-                row.style.display = 'none';
-           }
-       });
-   }
-   
-   function shouldShowItem(item, searchTerm) {
-       if (searchTerm === '') return true;
-       
-       if (currentFilter === 'all') {
-           return item.dataset.name.includes(searchTerm) ||
-                  item.dataset.code.includes(searchTerm) ||
-                  item.dataset.category.includes(searchTerm) ||
-                  item.dataset.status.includes(searchTerm);
-       } else {
-           return item.dataset[currentFilter].includes(searchTerm);
-       }
-   }
-   
-   // Animazioni di entrata
-   const statCards = document.querySelectorAll('.stat-card');
-   statCards.forEach((card, index) => {
-       setTimeout(() => {
-           card.style.opacity = '0';
-           card.style.transform = 'translateY(30px)';
-           card.style.transition = 'all 0.6s ease';
-           
-           setTimeout(() => {
-               card.style.opacity = '1';
-               card.style.transform = 'translateY(0)';
-           }, 100);
-       }, index * 200);
-   });
-});
 </script>
 @endsection

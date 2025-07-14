@@ -351,21 +351,21 @@
         }
     }
     @media (max-width: 576px) {
-    .page-header .d-flex {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
+        .page-header .d-flex {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+        }
+        
+        .modern-btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
     }
-    
-    .page-title {
-        font-size: 1.8rem;
-    }
-    
-    .modern-btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
-}
 </style>
 
 
@@ -388,11 +388,11 @@
         <input type="text" class="search-input" id="searchInput" placeholder="🔍 {{ __('app.search_ddts_placeholder') }}">
         
         <div class="filter-chips">
-            <button class="filter-chip active" data-filter="all">Tutti</button>
-            <button class="filter-chip" data-filter="number">Numero</button>
-            <button class="filter-chip" data-filter="customer">Cliente</button>
-            <button class="filter-chip" data-filter="recipient">Destinatario</button>
-            <button class="filter-chip" data-filter="status">Stato</button>
+            <button class="filter-chip active" data-filter="all">{{ __('app.all') }}</button>
+            <button class="filter-chip" data-filter="number">{{ __('app.number') }}</button>
+            <button class="filter-chip" data-filter="customer">{{ __('app.customer') }}</button>
+            <button class="filter-chip" data-filter="recipient">{{ __('app.recipient') }}</button>
+            <button class="filter-chip" data-filter="status">{{ __('app.status') }}</button>
         </div>
     </div>
     

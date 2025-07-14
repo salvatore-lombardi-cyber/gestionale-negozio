@@ -378,21 +378,21 @@
         }
     }
     @media (max-width: 576px) {
-    .page-header .d-flex {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
+        .page-header .d-flex {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+        }
+        
+        .modern-btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
     }
-    
-    .page-title {
-        font-size: 1.8rem;
-    }
-    
-    .modern-btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
-}
 </style>
 
 <div class="sales-container">
@@ -451,12 +451,12 @@
         
         <!-- Filtri -->
         <div class="filter-chips">
-            <button class="filter-chip active" data-filter="all">Tutti</button>
-            <button class="filter-chip" data-filter="today">Oggi</button>
-            <button class="filter-chip" data-filter="week">Questa settimana</button>
-            <button class="filter-chip" data-filter="cash">Contanti</button>
-            <button class="filter-chip" data-filter="card">Carta</button>
-            <button class="filter-chip" data-filter="customer">Con Cliente</button>
+            <button class="filter-chip active" data-filter="all">{{ __('app.all') }}</button>
+            <button class="filter-chip" data-filter="today">{{ __('app.today') }}</button>
+            <button class="filter-chip" data-filter="week">{{ __('app.this_week') }}</button>
+            <button class="filter-chip" data-filter="cash">{{ __('app.cash') }}</button>
+            <button class="filter-chip" data-filter="card">{{ __('app.card') }}</button>
+            <button class="filter-chip" data-filter="customer">{{ __('app.with_customer') }}</button>
         </div>
     </div>
     

@@ -49,3 +49,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Route per cambio lingua
+Route::get('/language/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'it'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('language.change');

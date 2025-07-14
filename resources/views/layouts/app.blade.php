@@ -226,7 +226,8 @@
     <nav class="navbar navbar-expand-lg modern-navbar">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('dashboard') }}">
-                <i class="bi bi-shop"></i> Gestionale Negozio
+                <i class="bi bi-shop"></i>
+                {{ __('app.store_management') }}
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

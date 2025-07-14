@@ -1,7 +1,22 @@
 <?php
 
 return [
-    // Menu principale
+    /*
+    |--------------------------------------------------------------------------
+    | BRAND & GENERAL
+    |--------------------------------------------------------------------------
+    */
+    'store_management' => 'Gestionale Negozio',
+    'welcome' => 'Benvenuto',
+    'welcome_message' => 'Benvenuto nel tuo gestionale',
+    'all' => 'Tutti',
+    'new' => 'Nuovo',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | NAVIGATION MENU
+    |--------------------------------------------------------------------------
+    */
     'dashboard' => 'Dashboard',
     'products' => 'Prodotti',
     'clients' => 'Clienti', 
@@ -10,7 +25,11 @@ return [
     'ddts' => 'DDT',
     'reports' => 'Report',
     
-    // Azioni comuni
+    /*
+    |--------------------------------------------------------------------------
+    | COMMON ACTIONS
+    |--------------------------------------------------------------------------
+    */
     'add' => 'Aggiungi',
     'edit' => 'Modifica',
     'delete' => 'Elimina',
@@ -27,8 +46,16 @@ return [
     'confirm' => 'Conferma',
     'yes' => 'Sì',
     'no' => 'No',
+    'actions' => 'Azioni',
+    'manage' => 'Gestisci',
+    'details' => 'Dettaglio',
+    'select' => 'Seleziona',
     
-    // Gestione utente
+    /*
+    |--------------------------------------------------------------------------
+    | USER MANAGEMENT
+    |--------------------------------------------------------------------------
+    */
     'profile' => 'Profilo',
     'logout' => 'Esci',
     'login' => 'Accedi',
@@ -36,9 +63,14 @@ return [
     'language' => 'Lingua',
     'settings' => 'Impostazioni',
     'account' => 'Account',
+    'dark_mode' => 'Modalità Scura',
+    'light_mode' => 'Modalità Chiara',
     
-    // Messaggi
-    'welcome' => 'Benvenuto',
+    /*
+    |--------------------------------------------------------------------------
+    | SYSTEM MESSAGES
+    |--------------------------------------------------------------------------
+    */
     'success' => 'Operazione completata con successo',
     'error' => 'Si è verificato un errore',
     'confirm_delete' => 'Sei sicuro di voler eliminare questo elemento?',
@@ -48,44 +80,150 @@ return [
     'deleted' => 'Eliminato!',
     'updated' => 'Aggiornato!',
     'created' => 'Creato!',
+    'warning' => 'Attenzione',
     
-    // Dettagli prodotti
+    /*
+    |--------------------------------------------------------------------------
+    | SEARCH & FILTERS
+    |--------------------------------------------------------------------------
+    */
+    'search_products_placeholder' => 'Cerca prodotti per nome, codice, categoria, marca...',
+    'search_sales_placeholder' => 'Cerca per cliente o ID vendita...',
+    'search_clients_placeholder' => 'Cerca clienti per nome o cognome...',
+    'search_ddts_placeholder' => 'Cerca DDT per numero o cliente...',
+    'search_warehouse_placeholder' => 'Cerca prodotti in magazzino...',
+    'no_results_found' => 'Nessun risultato trovato',
+    'modify_search_criteria' => 'Prova a modificare i criteri di ricerca',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | BASIC INFORMATION FIELDS
+    |--------------------------------------------------------------------------
+    */
     'name' => 'Nome',
+    'surname' => 'Cognome',
+    'email' => 'Email',
+    'phone' => 'Telefono',
+    'address' => 'Indirizzo',
+    'city' => 'Città',
+    'postal_code' => 'CAP',
+    'country' => 'Paese',
     'description' => 'Descrizione',
+    'date' => 'Data',
+    'number' => 'Numero',
+    'code' => 'Codice',
+    'notes' => 'Note',
+    'tel' => 'Tel',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | FORM PLACEHOLDERS
+    |--------------------------------------------------------------------------
+    */
+    'enter_name' => 'Inserisci il nome',
+    'enter_surname' => 'Inserisci il cognome',
+    'enter_email' => 'Inserisci email',
+    'enter_phone' => 'Inserisci telefono',
+    'enter_address' => 'Inserisci indirizzo',
+    'enter_quantity' => 'Inserisci quantità',
+    'select_product' => 'Seleziona prodotto...',
+    'select_size' => 'Seleziona taglia...',
+    'select_color' => 'Seleziona colore...',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | PRODUCTS SECTION
+    |--------------------------------------------------------------------------
+    */
+    'product' => 'Prodotto',
+    'product_name' => 'Nome Prodotto',
+    'product_code' => 'Codice Prodotto',
+    'product_information' => 'Informazioni Prodotto',
     'price' => 'Prezzo',
     'quantity' => 'Quantità',
     'size' => 'Taglia',
     'color' => 'Colore',
     'category' => 'Categoria',
     'brand' => 'Marca',
-    'code' => 'Codice',
     'barcode' => 'Codice a barre',
     'stock' => 'Scorte',
     'variants' => 'Varianti',
+    'active' => 'Attivo',
+    'inactive' => 'Inattivo',
+    'available' => 'Disponibile',
+    'out_of_stock' => 'Esaurito',
+    'low_stock' => 'Scorte basse',
+    'used' => 'Usato',
+    'damaged' => 'Danneggiato',
+    'no_products_found' => 'Nessun prodotto trovato',
+    'create_first_product' => 'Crea Primo Prodotto',
+    'edit_product' => 'Modifica Prodotto',
+    'update_product' => 'Aggiorna Prodotto',
+    'active_product' => 'Prodotto attivo',
+    'basic_info' => 'Informazioni Base',
+    'metadata' => 'Dati Sistema',
+    'created_on' => 'Creato il',
+    'last_modified' => 'Ultima modifica',
+    'back_to_list' => 'Torna alla Lista',
+    'save_product_warehouse' => 'Salva Prodotto e Magazzino',
     
-    // Clienti
+    /*
+    |--------------------------------------------------------------------------
+    | CLIENTS SECTION
+    |--------------------------------------------------------------------------
+    */
+    'client' => 'Cliente',
     'customer' => 'Cliente',
     'customers' => 'Clienti',
-    'phone' => 'Telefono',
-    'email' => 'Email',
-    'address' => 'Indirizzo',
-    'city' => 'Città',
-    'postal_code' => 'CAP',
-    'country' => 'Paese',
+    'clients' => 'Clienti',
+    'gender' => 'Genere',
+    'male' => 'Maschio',
+    'female' => 'Femmina',
+    'other' => 'Altro',
+    'date_of_birth' => 'Data di Nascita',
+    'customer_since' => 'Cliente dal',
+    'edit_customer' => 'Modifica Cliente',
+    'update_customer' => 'Aggiorna Cliente',
+    'customer_information' => 'Informazioni Cliente',
+    'view_customer' => 'Visualizza Cliente',
+    'no_clients_found' => 'Nessun cliente trovato',
+    'occasional_customer' => 'Cliente occasionale',
     
-    // Vendite
+    /*
+    |--------------------------------------------------------------------------
+    | SALES SECTION
+    |--------------------------------------------------------------------------
+    */
     'sale' => 'Vendita',
     'total' => 'Totale',
     'subtotal' => 'Subtotale',
+    'final_total' => 'Totale Finale',
     'tax' => 'Tasse',
     'discount' => 'Sconto',
-    'date' => 'Data',
     'payment_method' => 'Metodo di pagamento',
+    'payment' => 'Pagamento',
     'cash' => 'Contanti',
     'card' => 'Carta',
     'bank_transfer' => 'Bonifico',
+    'confirm_delete_sale' => 'Sei sicuro di voler eliminare questa vendita?',
+    'no_sales_found' => 'Nessuna vendita registrata',
+    'back_to_sales' => 'Torna alle Vendite',
+    'sale_information' => 'Informazioni Vendita',
+    'totals' => 'Totali',
+    'sold_products' => 'Prodotti Venduti',
+    'unit_price' => 'Prezzo Unitario',
+    'print_receipt' => 'Stampa Scontrino',
+    'delete_sale' => 'Elimina Vendita',
+    'summary' => 'Riepilogo',
+    'total_revenue' => 'Incasso Totale',
+    'average_sale' => 'Scontrino Medio',
+    'todays_sales' => 'Vendite Oggi',
     
-    // DDT
+    /*
+    |--------------------------------------------------------------------------
+    | DDT SECTION
+    |--------------------------------------------------------------------------
+    */
     'ddt_number' => 'Numero DDT',
     'shipping_date' => 'Data spedizione',
     'delivery_date' => 'Data consegna',
@@ -94,129 +232,55 @@ return [
     'confirmed' => 'Confermato',
     'shipped' => 'Spedito',
     'delivered' => 'Consegnato',
-    'notes' => 'Note',
-    
-    // Stati e messaggi
-    'active' => 'Attivo',
-    'inactive' => 'Inattivo',
-    'available' => 'Disponibile',
-    'out_of_stock' => 'Esaurito',
-    'low_stock' => 'Scorte basse',
-    'new' => 'Nuovo',
-    'used' => 'Usato',
-    'damaged' => 'Danneggiato',
-    
-    // Tempo
-    'today' => 'Oggi',
-    'yesterday' => 'Ieri',
-    'this_week' => 'Questa settimana',
-    'this_month' => 'Questo mese',
-    'this_year' => 'Questo anno',
-    'last_week' => 'Settimana scorsa',
-    'last_month' => 'Mese scorso',
-    'last_year' => 'Anno scorso',
-    
-    // Homepage
-    'welcome_message' => 'Benvenuto nel tuo gestionale',
-    'quick_stats' => 'Statistiche rapide',
-    'recent_sales' => 'Vendite recenti',
-    'low_stock_products' => 'Prodotti con scorte basse',
-    'pending_ddts' => 'DDT in sospeso',
-    'total_products' => 'Prodotti totali',
-    'total_clients' => 'Clienti totali',
-    'total_sales' => 'Vendite totali',
-    'monthly_revenue' => 'Ricavi mensili',
-    
-    // Dark mode
-    'dark_mode' => 'Modalità Scura',
-    'light_mode' => 'Modalità Chiara',
-    'manage' => 'Gestisci',
-    'product' => 'Prodotto',
-    'actions' => 'Azioni',
-    'no_products_found' => 'Nessun prodotto trovato',
-    'client' => 'Cliente',
-    'surname' => 'Cognome',
-    'no_clients_found' => 'Nessun cliente trovato',
-    'final_total' => 'Totale Finale',
-    'payment' => 'Pagamento',
-    'occasional_customer' => 'Cliente occasionale',
-    'confirm_delete_sale' => 'Sei sicuro di voler eliminare questa vendita?',
-    'no_sales_found' => 'Nessuna vendita registrata',
-    'summary' => 'Riepilogo',
-    'total_revenue' => 'Incasso Totale',
-    'average_sale' => 'Scontrino Medio',
-    'todays_sales' => 'Vendite Oggi',
     'delivery_documents' => 'Documenti di Trasporto',
     'recipient' => 'Destinatario',
+    'reason' => 'Causale',
+    'carrier' => 'Trasportatore',
+    'ddt_total' => 'Totale DDT',
+    'ddt_information' => 'Informazioni DDT',
     'no_ddts_created' => 'Nessun DDT creato',
     'start_creating_first_ddt' => 'Inizia creando il primo Documento di Trasporto',
     'create_first_ddt' => 'Crea primo DDT',
-    'new_stock' => 'Nuova Scorta',
-    'total_variants' => 'Varianti Totali',
-    'total_pieces' => 'Pezzi Totali',
-    'pcs' => 'pz',
-    'warning' => 'Attenzione',
-    'details' => 'Dettaglio',
-    'no_products_in_warehouse' => 'Nessun prodotto in magazzino',
-    'start_adding_products_and_stock' => 'Inizia aggiungendo alcuni prodotti e le loro scorte',
-    'create_first_product' => 'Crea Primo Prodotto',
-    'back_to_list' => 'Torna alla Lista',
-    'product_code' => 'Codice Prodotto',
-    'created_on' => 'Creato il',
-    'last_modified' => 'Ultima modifica',
-    'edit_product' => 'Modifica Prodotto',
-    'product_name' => 'Nome Prodotto',
-    'active_product' => 'Prodotto attivo',
-    'update_product' => 'Aggiorna Prodotto',
-    'gender' => 'Genere',
-    'male' => 'Maschio',
-    'female' => 'Femmina',
-    'date_of_birth' => 'Data di Nascita',
-    'customer_since' => 'Cliente dal',
-    'edit_customer' => 'Modifica Cliente',
-    'select' => 'Seleziona',
-    'other' => 'Altro',
-    'update_customer' => 'Aggiorna Cliente',
-    'back_to_sales' => 'Torna alle Vendite',
-    'sale_information' => 'Informazioni Vendita',
-    'totals' => 'Totali',
-    'sold_products' => 'Prodotti Venduti',
-    'unit_price' => 'Prezzo Unitario',
-    'print_receipt' => 'Stampa Scontrino',
-    'delete_sale' => 'Elimina Vendita',
-    'customer_information' => 'Informazioni Cliente',
-    'view_customer' => 'Visualizza Cliente',
     'back_to_ddts' => 'Torna ai DDT',
     'send_email' => 'Invia Email',
     'print_pdf' => 'Stampa PDF',
-    'ddt_information' => 'Informazioni DDT',
-    'number' => 'Numero',
-    'reason' => 'Causale',
-    'tel' => 'Tel',
-    'carrier' => 'Trasportatore',
-    'ddt_total' => 'Totale DDT',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | WAREHOUSE SECTION
+    |--------------------------------------------------------------------------
+    */
     'warehouse_details' => 'Dettaglio Magazzino',
-    'back_to_warehouse' => 'Torna al Magazzino',
-    'add_stock' => 'Aggiungi Scorta',
     'warehouse_variants' => 'Varianti in Magazzino',
+    'new_stock' => 'Nuova Scorta',
+    'add_stock' => 'Aggiungi Scorta',
+    'edit_stock' => 'Modifica Scorta',
+    'update_stock' => 'Aggiorna Scorta',
+    'stock_information' => 'Informazioni Scorta',
     'min_stock' => 'Scorta Min.',
+    'minimum_stock' => 'Scorta Minima',
+    'total_variants' => 'Varianti Totali',
+    'total_pieces' => 'Pezzi Totali',
     'total_value' => 'Valore Totale',
+    'pcs' => 'pz',
+    'no_products_in_warehouse' => 'Nessun prodotto in magazzino',
     'no_variants_in_warehouse' => 'Nessuna variante in magazzino',
     'product_no_variants_loaded' => 'Questo prodotto non ha ancora varianti caricate nel magazzino.',
     'add_first_variant' => 'Aggiungi Prima Variante',
-    'edit_stock' => 'Modifica Scorta',
-    'select_product' => 'Seleziona prodotto',
-    'select_size' => 'Seleziona taglia',
-    'select_color' => 'Seleziona colore',
-    'minimum_stock' => 'Scorta Minima',
+    'add_variant' => 'Aggiungi Variante',
+    'start_adding_products_and_stock' => 'Inizia aggiungendo alcuni prodotti e le loro scorte',
+    'back_to_warehouse' => 'Torna al Magazzino',
     'low_stock_notification' => 'Quando la quantità scende sotto questo valore, riceverai un avviso.',
-    'update_stock' => 'Aggiorna Scorta',
-    'stock_information' => 'Informazioni Scorta',
     'quick_actions' => 'Azioni Rapide',
     'add_10_pieces' => '+10 Pezzi',
     'subtract_5_pieces' => '-5 Pezzi',
     'clear_stock' => 'Azzera Scorta',
-    // Colori
+    
+    /*
+    |--------------------------------------------------------------------------
+    | COLORS
+    |--------------------------------------------------------------------------
+    */
     'black' => 'Nero',
     'white' => 'Bianco',
     'gray' => 'Grigio',
@@ -236,40 +300,33 @@ return [
     'gold' => 'Oro',
     'silver' => 'Argento',
     'multicolor' => 'Multicolore',
-    'product_information' => 'Informazioni Prodotto',
-    'metadata' => 'Dati Sistema',
-    'basic_info' => 'Informazioni Base',
-    'product_name' => 'Nome Prodotto',
-    'product_code' => 'Codice Prodotto',
-    'description' => 'Descrizione',
-    'price' => 'Prezzo',
-    'category' => 'Categoria',
-    'brand' => 'Marca',
-    'active_product' => 'Prodotto attivo',
-    'warehouse_variants' => 'Varianti Magazzino',
-    'add_variant' => 'Aggiungi Variante',
-    'min_stock' => 'Scorta Min.',
-    'size' => 'Taglia',
-    'color' => 'Colore',
-    'quantity' => 'Quantità',
-    'back' => 'Indietro',
-    'cancel' => 'Annulla',
-    'save_product_warehouse' => 'Salva Prodotto e Magazzino',
-    // Placeholder e ricerche
-    'search_products_placeholder' => 'Cerca prodotti per nome, codice, categoria, marca...',
-    'search_sales_placeholder' => 'Cerca per cliente o ID vendita...',
-    'search_clients_placeholder' => 'Cerca clienti per nome o cognome...',
-    'search_ddts_placeholder' => 'Cerca DDT per numero o cliente...',
-    'search_warehouse_placeholder' => 'Cerca prodotti in magazzino...',
-    'enter_name' => 'Inserisci il nome',
-    'enter_surname' => 'Inserisci il cognome',
-    'enter_email' => 'Inserisci email',
-    'enter_phone' => 'Inserisci telefono',
-    'enter_address' => 'Inserisci indirizzo',
-    'enter_quantity' => 'Inserisci quantità',
-    'select_product' => 'Seleziona prodotto...',
-    'select_size' => 'Seleziona taglia...',
-    'select_color' => 'Seleziona colore...',
-    'no_results_found' => 'Nessun risultato trovato',
-    'modify_search_criteria' => 'Prova a modificare i criteri di ricerca',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | TIME PERIODS
+    |--------------------------------------------------------------------------
+    */
+    'today' => 'Oggi',
+    'yesterday' => 'Ieri',
+    'this_week' => 'Questa settimana',
+    'this_month' => 'Questo mese',
+    'this_year' => 'Questo anno',
+    'last_week' => 'Settimana scorsa',
+    'last_month' => 'Mese scorso',
+    'last_year' => 'Anno scorso',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD & STATISTICS
+    |--------------------------------------------------------------------------
+    */
+    'quick_stats' => 'Statistiche rapide',
+    'recent_sales' => 'Vendite recenti',
+    'low_stock_products' => 'Prodotti con scorte basse',
+    'pending_ddts' => 'DDT in sospeso',
+    'total_products' => 'Prodotti totali',
+    'total_clients' => 'Clienti totali',
+    'total_sales' => 'Vendite totali',
+    'monthly_revenue' => 'Ricavi mensili',
+    'with_customer' => 'Con Cliente',
 ];
