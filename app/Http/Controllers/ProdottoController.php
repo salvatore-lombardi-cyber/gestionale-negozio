@@ -3,10 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prodotto;
+use App\Services\QRCodeService;
+use App\Services\LabelCodeService;
 use Illuminate\Http\Request;
 
 class ProdottoController extends Controller
 {
+    protected $qrService;
+    protected $labelService;
+
+    public function __construct(QRCodeService $qrService, LabelCodeService $labelService)
+    {
+        $this->qrService = $qrService;
+        $this->labelService = $labelService;
+    }
+
     // Mostra tutti i prodotti
     public function index()
     {
@@ -39,6 +50,9 @@ class ProdottoController extends Controller
             'nome', 'descrizione', 'prezzo', 'categoria', 'brand', 'codice_prodotto', 'attivo'
         ]));
         
+        // Genera automaticamente codice etichetta
+        $this->labelService->generateProductCode($prodotto);
+        
         // Crea le varianti di magazzino se presenti
         if ($request->has('varianti') && is_array($request->varianti)) {
             $scortaMinima = $request->input('scorta_minima_globale', 5);
@@ -51,13 +65,16 @@ class ProdottoController extends Controller
                 ->first();
                 
                 if (!$esistente) {
-                    \App\Models\Magazzino::create([
+                    $magazzino = \App\Models\Magazzino::create([
                         'prodotto_id' => $prodotto->id,
                         'taglia' => $variante['taglia'],
                         'colore' => $variante['colore'],
                         'quantita' => $variante['quantita'],
                         'scorta_minima' => $scortaMinima,
                     ]);
+                    
+                    // Genera automaticamente codice variante
+                    $this->labelService->generateVariantCode($magazzino);
                 }
             }
         }
@@ -102,5 +119,95 @@ class ProdottoController extends Controller
         
         return redirect()->route('prodotti.index')
         ->with('success', 'Prodotto disattivato con successo!');
+    }
+
+    // Genera QR Code per prodotto
+    public function generateQR(Request $request, $id)
+    {
+        $prodotto = Prodotto::findOrFail($id);
+        
+        try {
+            // Assicura che abbia un codice etichetta
+            $this->labelService->generateProductCode($prodotto);
+            
+            // Genera QR Code
+            $qrPath = $this->qrService->generateProductQR($prodotto);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'QR Code generato con successo',
+                'qr_url' => $prodotto->getQRCodeUrl(),
+                'code' => $prodotto->codice_etichetta
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore nella generazione del QR Code: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Genera tutti i QR Code (prodotto + varianti)
+    public function generateAllQR(Request $request, $id)
+    {
+        $prodotto = Prodotto::with('magazzino')->findOrFail($id);
+        
+        try {
+            $results = [];
+            
+            // QR Code prodotto principale
+            $this->labelService->generateProductCode($prodotto);
+            $results['product'] = [
+                'path' => $this->qrService->generateProductQR($prodotto),
+                'url' => $prodotto->getQRCodeUrl(),
+                'code' => $prodotto->codice_etichetta
+            ];
+            
+            // QR Code varianti
+            $results['variants'] = [];
+            foreach ($prodotto->magazzino as $magazzino) {
+                $this->labelService->generateVariantCode($magazzino);
+                $variantPath = $this->qrService->generateVariantQR($magazzino);
+                
+                $results['variants'][] = [
+                    'id' => $magazzino->id,
+                    'taglia' => $magazzino->taglia,
+                    'colore' => $magazzino->colore,
+                    'path' => $variantPath,
+                    'url' => $magazzino->getVariantQRUrl(),
+                    'code' => $magazzino->codice_variante
+                ];
+            }
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Tutti i QR Code generati con successo',
+                'data' => $results
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore nella generazione dei QR Code: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Pagina per stampare etichette
+    public function printLabels(Request $request, $id)
+    {
+        $prodotto = Prodotto::with('magazzino')->findOrFail($id);
+        
+        // Assicura che tutti i codici e QR Code esistano
+        $this->labelService->generateProductCode($prodotto);
+        
+        foreach ($prodotto->magazzino as $magazzino) {
+            $this->labelService->generateVariantCode($magazzino);
+            
+            if (!$magazzino->hasVariantQR()) {
+                $this->qrService->generateVariantQR($magazzino);
+            }
+        }
+        
+        return view('prodotti.labels', compact('prodotto'));
     }
 }

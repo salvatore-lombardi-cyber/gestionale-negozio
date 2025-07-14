@@ -50,6 +50,8 @@ return [
     'manage' => 'Gestisci',
     'details' => 'Dettaglio',
     'select' => 'Seleziona',
+    'print' => 'Stampa',
+    'labels' => 'Etichette',
     
     /*
     |--------------------------------------------------------------------------
@@ -275,6 +277,38 @@ return [
     'add_10_pieces' => '+10 Pezzi',
     'subtract_5_pieces' => '-5 Pezzi',
     'clear_stock' => 'Azzera Scorta',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | QR CODE & LABELS SECTION
+    |--------------------------------------------------------------------------
+    */
+    'qr_labels' => 'Etichette QR',
+    'qr_labels_management' => 'Gestione Etichette QR Code',
+    'products_list' => 'Lista Prodotti',
+    'total_products' => 'Prodotti Totali',
+    'products_with_qr' => 'Prodotti con QR',
+    'total_variants' => 'Varianti Totali',
+    'labels_printed_today' => 'Etichette Stampate Oggi',
+    'quick_actions' => 'Azioni Rapide',
+    'generate_all_missing_qr' => 'Genera Tutti i QR Mancanti',
+    'test_scanner' => 'Test Scanner',
+    'bulk_print' => 'Stampa in Massa',
+    'all_categories' => 'Tutte le Categorie',
+    'qr_status' => 'Stato QR',
+    'label_code' => 'Codice Etichetta',
+    'qr_ready' => 'QR Pronto',
+    'qr_missing' => 'QR Mancante',
+    'not_generated' => 'Non Generato',
+    'generate_codes' => 'Genera Codici',
+    'preview_labels' => 'Anteprima Etichette',
+    'print_labels' => 'Stampa Etichette',
+    'labels_preview' => 'Anteprima Etichette',
+    'confirm_generate_all_qr' => 'Sei sicuro di voler generare tutti i QR Code mancanti?',
+    'feature_coming_soon' => 'Funzionalità in arrivo presto',
+    'copies' => 'Copie',
+    'total_labels' => 'Etichette Totali',
+    'select_labels_to_print' => 'Seleziona le etichette da stampare',
     
     /*
     |--------------------------------------------------------------------------

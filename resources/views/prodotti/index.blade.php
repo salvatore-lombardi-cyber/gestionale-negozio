@@ -206,6 +206,16 @@
         color: white;
     }
     
+    .action-btn.qr {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+    
+    .action-btn.labels {
+        background: linear-gradient(135deg, #6f42c1, #8e44ad);
+        color: white;
+    }
+    
     .action-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -236,6 +246,26 @@
         font-weight: 700;
         color: #28a745;
         font-size: 1.1rem;
+    }
+    
+    .qr-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.8rem;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-weight: 600;
+    }
+    
+    .qr-status.ready {
+        background: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+    }
+    
+    .qr-status.missing {
+        background: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
     }
     
     .no-results {
@@ -371,10 +401,12 @@
         display: flex;
         gap: 0.5rem;
         justify-content: center;
+        flex-wrap: wrap;
     }
     
     .mobile-action-btn {
         flex: 1;
+        min-width: 80px;
         border: none;
         border-radius: 10px;
         padding: 12px 8px;
@@ -405,6 +437,16 @@
     
     .mobile-action-btn.delete {
         background: linear-gradient(135deg, #f72585, #c5025a);
+        color: white;
+    }
+    
+    .mobile-action-btn.qr {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+    
+    .mobile-action-btn.labels {
+        background: linear-gradient(135deg, #6f42c1, #8e44ad);
         color: white;
     }
     
@@ -486,6 +528,7 @@
         .mobile-action-btn {
             padding: 10px 6px;
             font-size: 0.7rem;
+            min-width: 70px;
         }
         
         .mobile-action-btn i {
@@ -501,9 +544,14 @@
             <h1 class="page-title">
                 <i class="bi bi-box-seam"></i> {{ __('app.products') }}
             </h1>
-            <a href="{{ route('prodotti.create') }}" class="modern-btn">
-                <i class="bi bi-plus-circle"></i> {{ __('app.new') }} {{ __('app.product') }}
-            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('labels.index') }}" class="modern-btn" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                    <i class="bi bi-qr-code"></i> {{ __('app.qr_labels') }}
+                </a>
+                <a href="{{ route('prodotti.create') }}" class="modern-btn">
+                    <i class="bi bi-plus-circle"></i> {{ __('app.new') }} {{ __('app.product') }}
+                </a>
+            </div>
         </div>
     </div>
     
@@ -539,6 +587,7 @@
                         <th><i class="bi bi-grid-3x3-gap"></i> {{ __('app.category') }}</th>
                         <th><i class="bi bi-award"></i> {{ __('app.brand') }}</th>
                         <th><i class="bi bi-currency-euro"></i> {{ __('app.price') }}</th>
+                        <th><i class="bi bi-qr-code"></i> QR</th>
                         <th><i class="bi bi-gear"></i> {{ __('app.actions') }}</th>
                     </tr>
                 </thead>
@@ -552,6 +601,9 @@
                     data-price="{{ $prodotto->prezzo }}">
                     <td>
                         <span class="product-code">{{ $prodotto->codice_prodotto }}</span>
+                        @if($prodotto->hasLabelCode())
+                        <br><small class="text-muted">{{ $prodotto->codice_etichetta }}</small>
+                        @endif
                     </td>
                     <td>
                         <strong>{{ $prodotto->nome }}</strong>
@@ -566,24 +618,41 @@
                         <span class="price-tag">€ {{ number_format($prodotto->prezzo, 2) }}</span>
                     </td>
                     <td>
+                        @if($prodotto->hasQRCode())
+                        <span class="qr-status ready">
+                            <i class="bi bi-check-circle"></i> Ready
+                        </span>
+                        @else
+                        <span class="qr-status missing">
+                            <i class="bi bi-exclamation-triangle"></i> Missing
+                        </span>
+                        @endif
+                    </td>
+                    <td>
                         <a href="{{ route('prodotti.show', $prodotto) }}" class="action-btn view">
-                            <i class="bi bi-eye"></i> <span>{{ __('app.view') }}</span>
+                            <i class="bi bi-eye"></i>
                         </a>
                         <a href="{{ route('prodotti.edit', $prodotto) }}" class="action-btn edit">
-                            <i class="bi bi-pencil"></i> <span>{{ __('app.edit') }}</span>
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <button class="action-btn qr" onclick="generateQR({{ $prodotto->id }})" title="Genera QR Code">
+                            <i class="bi bi-qr-code"></i>
+                        </button>
+                        <a href="{{ route('prodotti.labels', $prodotto->id) }}" class="action-btn labels" title="Stampa Etichette">
+                            <i class="bi bi-printer"></i>
                         </a>
                         <form action="{{ route('prodotti.destroy', $prodotto) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="action-btn delete" onclick="return confirm('{{ __('app.confirm_delete') }}')">
-                                <i class="bi bi-trash"></i> <span>{{ __('app.delete') }}</span>
+                                <i class="bi bi-trash"></i>
                             </button>
                         </form>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6">
+                    <td colspan="7">
                         <div class="empty-state">
                             <i class="bi bi-box-seam"></i>
                             <h5>{{ __('app.no_products_found') }}</h5>
@@ -611,7 +680,18 @@
         
         <div class="product-card-header">
             <h3 class="product-card-title">{{ $prodotto->nome }}</h3>
-            <span class="product-card-code">{{ $prodotto->codice_prodotto }}</span>
+            <div class="d-flex flex-column align-items-end">
+                <span class="product-card-code">{{ $prodotto->codice_prodotto }}</span>
+                @if($prodotto->hasQRCode())
+                <small class="qr-status ready mt-1">
+                    <i class="bi bi-check-circle"></i> QR Ready
+                </small>
+                @else
+                <small class="qr-status missing mt-1">
+                    <i class="bi bi-exclamation-triangle"></i> QR Missing
+                </small>
+                @endif
+            </div>
         </div>
         
         <div class="product-card-details">
@@ -641,6 +721,14 @@
             <a href="{{ route('prodotti.edit', $prodotto) }}" class="mobile-action-btn edit">
                 <i class="bi bi-pencil"></i>
                 <span>{{ __('app.edit') }}</span>
+            </a>
+            <button class="mobile-action-btn qr" onclick="generateQR({{ $prodotto->id }})" style="border: none; width: 100%;">
+                <i class="bi bi-qr-code"></i>
+                <span>QR</span>
+            </button>
+            <a href="{{ route('prodotti.labels', $prodotto->id) }}" class="mobile-action-btn labels">
+                <i class="bi bi-printer"></i>
+                <span>{{ __('app.labels') }}</span>
             </a>
             <form action="{{ route('prodotti.destroy', $prodotto) }}" method="POST" style="flex: 1;">
                 @csrf
@@ -794,5 +882,90 @@
             }, index * 150);
         });
     });
+    
+    // Funzione per generare QR Code
+    function generateQR(productId) {
+        const button = event.target.closest('button');
+        const originalText = button.innerHTML;
+        
+        // Mostra loading
+        button.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i>';
+        button.disabled = true;
+        
+        fetch(`/prodotti/${productId}/generate-all-qr`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Aggiorna lo stato visuale
+                updateQRStatus(productId, true);
+                showNotification('QR Code generati con successo!', 'success');
+            } else {
+                showNotification('Errore nella generazione: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('Errore di connessione: ' + error.message, 'error');
+        })
+        .finally(() => {
+            // Ripristina il bottone
+            button.innerHTML = originalText;
+            button.disabled = false;
+        });
+    }
+    
+    // Aggiorna stato QR visualmente
+    function updateQRStatus(productId, hasQR) {
+        const rows = document.querySelectorAll(`[data-product-id="${productId}"]`);
+        rows.forEach(row => {
+            const statusElement = row.querySelector('.qr-status');
+            if (statusElement) {
+                if (hasQR) {
+                    statusElement.className = 'qr-status ready';
+                    statusElement.innerHTML = '<i class="bi bi-check-circle"></i> Ready';
+                } else {
+                    statusElement.className = 'qr-status missing';
+                    statusElement.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Missing';
+                }
+            }
+        });
+    }
+    
+    // Sistema notifiche
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+           ${message}
+           <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+       `;
+        document.body.appendChild(notification);
+        
+        // Auto rimozione dopo 5 secondi
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+    
+    // Stile per animazione loading
+    const style = document.createElement('style');
+    style.textContent = `
+       .spin {
+           animation: spin 1s linear infinite;
+       }
+       @keyframes spin {
+           from { transform: rotate(0deg); }
+           to { transform: rotate(360deg); }
+       }
+   `;
+    document.head.appendChild(style);
 </script>
 @endsection
