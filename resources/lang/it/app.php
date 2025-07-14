@@ -126,7 +126,7 @@ return [
     'total_clients' => 'Clienti totali',
     'total_sales' => 'Vendite totali',
     'monthly_revenue' => 'Ricavi mensili',
-
+    
     // Dark mode
     'dark_mode' => 'Modalità Scura',
     'light_mode' => 'Modalità Chiara',
@@ -255,4 +255,21 @@ return [
     'back' => 'Indietro',
     'cancel' => 'Annulla',
     'save_product_warehouse' => 'Salva Prodotto e Magazzino',
+    // Placeholder e ricerche
+    'search_products_placeholder' => 'Cerca prodotti per nome, codice, categoria, marca...',
+    'search_sales_placeholder' => 'Cerca per cliente o ID vendita...',
+    'search_clients_placeholder' => 'Cerca clienti per nome o cognome...',
+    'search_ddts_placeholder' => 'Cerca DDT per numero o cliente...',
+    'search_warehouse_placeholder' => 'Cerca prodotti in magazzino...',
+    'enter_name' => 'Inserisci il nome',
+    'enter_surname' => 'Inserisci il cognome',
+    'enter_email' => 'Inserisci email',
+    'enter_phone' => 'Inserisci telefono',
+    'enter_address' => 'Inserisci indirizzo',
+    'enter_quantity' => 'Inserisci quantità',
+    'select_product' => 'Seleziona prodotto...',
+    'select_size' => 'Seleziona taglia...',
+    'select_color' => 'Seleziona colore...',
+    'no_results_found' => 'Nessun risultato trovato',
+    'modify_search_criteria' => 'Prova a modificare i criteri di ricerca',
 ];

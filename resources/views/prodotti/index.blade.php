@@ -506,15 +506,15 @@
             </a>
         </div>
     </div>
-
+    
     <!-- Barra di Ricerca Avanzata -->
     <div class="search-container">
         <div class="search-box">
             <input type="text" 
-                   class="search-input" 
-                   id="searchInput" 
-                   placeholder="🔍 Cerca prodotti per nome, codice, categoria, marca..."
-                   autocomplete="off">
+            class="search-input" 
+            id="searchInput" 
+            placeholder="🔍 {{ __('app.search_products_placeholder') }}"            
+            autocomplete="off">
             <i class="bi bi-search search-icon"></i>
         </div>
         <div class="filter-chips">
@@ -526,7 +526,7 @@
             <button class="filter-chip" data-filter="price">Prezzo</button>
         </div>
     </div>
-
+    
     <!-- Tabella Prodotti -->
     <div class="modern-card">
         <!-- Tabella Desktop -->
@@ -545,254 +545,254 @@
                 <tbody id="productsTableBody">
                     @forelse($prodotti as $prodotto)
                     <tr class="product-row" 
-                        data-name="{{ strtolower($prodotto->nome) }}"
-                        data-code="{{ strtolower($prodotto->codice_prodotto) }}"
-                        data-category="{{ strtolower($prodotto->categoria) }}"
-                        data-brand="{{ strtolower($prodotto->brand ?? '') }}"
-                        data-price="{{ $prodotto->prezzo }}">
-                        <td>
-                            <span class="product-code">{{ $prodotto->codice_prodotto }}</span>
-                        </td>
-                        <td>
-                            <strong>{{ $prodotto->nome }}</strong>
-                        </td>
-                        <td>
-                            <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
-                                {{ $prodotto->categoria }}
-                            </span>
-                        </td>
-                        <td>{{ $prodotto->brand ?? 'N/A' }}</td>
-                        <td>
-                            <span class="price-tag">€ {{ number_format($prodotto->prezzo, 2) }}</span>
-                        </td>
-                        <td>
-                            <a href="{{ route('prodotti.show', $prodotto) }}" class="action-btn view">
-                                <i class="bi bi-eye"></i> <span>{{ __('app.view') }}</span>
-                            </a>
-                            <a href="{{ route('prodotti.edit', $prodotto) }}" class="action-btn edit">
-                                <i class="bi bi-pencil"></i> <span>{{ __('app.edit') }}</span>
-                            </a>
-                            <form action="{{ route('prodotti.destroy', $prodotto) }}" method="POST" style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="action-btn delete" onclick="return confirm('{{ __('app.confirm_delete') }}')">
-                                    <i class="bi bi-trash"></i> <span>{{ __('app.delete') }}</span>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6">
-                            <div class="empty-state">
-                                <i class="bi bi-box-seam"></i>
-                                <h5>{{ __('app.no_products_found') }}</h5>
-                                <p>Inizia aggiungendo il primo prodotto al tuo catalogo</p>
-                                <a href="{{ route('prodotti.create') }}" class="modern-btn">
-                                    <i class="bi bi-plus-circle"></i> Aggiungi Primo Prodotto
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Cards Mobile -->
-        <div class="mobile-cards" id="mobileCards">
-            @forelse($prodotti as $prodotto)
-            <div class="product-card mobile-product-row"
-                 data-name="{{ strtolower($prodotto->nome) }}"
-                 data-code="{{ strtolower($prodotto->codice_prodotto) }}"
-                 data-category="{{ strtolower($prodotto->categoria) }}"
-                 data-brand="{{ strtolower($prodotto->brand ?? '') }}"
-                 data-price="{{ $prodotto->prezzo }}">
-                
-                <div class="product-card-header">
-                    <h3 class="product-card-title">{{ $prodotto->nome }}</h3>
-                    <span class="product-card-code">{{ $prodotto->codice_prodotto }}</span>
-                </div>
-                
-                <div class="product-card-details">
-                    <div class="product-detail">
-                        <span class="product-detail-label">{{ __('app.category') }}</span>
-                        <span class="product-detail-value">
-                            <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; font-size: 0.7rem;">
-                                {{ $prodotto->categoria }}
-                            </span>
+                    data-name="{{ strtolower($prodotto->nome) }}"
+                    data-code="{{ strtolower($prodotto->codice_prodotto) }}"
+                    data-category="{{ strtolower($prodotto->categoria) }}"
+                    data-brand="{{ strtolower($prodotto->brand ?? '') }}"
+                    data-price="{{ $prodotto->prezzo }}">
+                    <td>
+                        <span class="product-code">{{ $prodotto->codice_prodotto }}</span>
+                    </td>
+                    <td>
+                        <strong>{{ $prodotto->nome }}</strong>
+                    </td>
+                    <td>
+                        <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                            {{ $prodotto->categoria }}
                         </span>
-                    </div>
-                    <div class="product-detail">
-                        <span class="product-detail-label">{{ __('app.brand') }}</span>
-                        <span class="product-detail-value">{{ $prodotto->brand ?? 'N/A' }}</span>
-                    </div>
-                </div>
-                
-                <div class="product-card-price">
-                    € {{ number_format($prodotto->prezzo, 2) }}
-                </div>
-                
-                <div class="product-card-actions">
-                    <a href="{{ route('prodotti.show', $prodotto) }}" class="mobile-action-btn view">
-                        <i class="bi bi-eye"></i>
-                        <span>{{ __('app.view') }}</span>
-                    </a>
-                    <a href="{{ route('prodotti.edit', $prodotto) }}" class="mobile-action-btn edit">
-                        <i class="bi bi-pencil"></i>
-                        <span>{{ __('app.edit') }}</span>
-                    </a>
-                    <form action="{{ route('prodotti.destroy', $prodotto) }}" method="POST" style="flex: 1;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="mobile-action-btn delete" style="width: 100%; border: none;" onclick="return confirm('{{ __('app.confirm_delete') }}')">
-                            <i class="bi bi-trash"></i>
-                            <span>{{ __('app.delete') }}</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            @empty
-            <div class="product-card">
-                <div class="empty-state">
-                    <i class="bi bi-box-seam"></i>
-                    <h5>{{ __('app.no_products_found') }}</h5>
-                    <p>Inizia aggiungendo il primo prodotto al tuo catalogo</p>
-                    <a href="{{ route('prodotti.create') }}" class="modern-btn">
-                        <i class="bi bi-plus-circle"></i> Aggiungi Primo Prodotto
-                    </a>
-                </div>
-            </div>
-            @endforelse
+                    </td>
+                    <td>{{ $prodotto->brand ?? 'N/A' }}</td>
+                    <td>
+                        <span class="price-tag">€ {{ number_format($prodotto->prezzo, 2) }}</span>
+                    </td>
+                    <td>
+                        <a href="{{ route('prodotti.show', $prodotto) }}" class="action-btn view">
+                            <i class="bi bi-eye"></i> <span>{{ __('app.view') }}</span>
+                        </a>
+                        <a href="{{ route('prodotti.edit', $prodotto) }}" class="action-btn edit">
+                            <i class="bi bi-pencil"></i> <span>{{ __('app.edit') }}</span>
+                        </a>
+                        <form action="{{ route('prodotti.destroy', $prodotto) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="action-btn delete" onclick="return confirm('{{ __('app.confirm_delete') }}')">
+                                <i class="bi bi-trash"></i> <span>{{ __('app.delete') }}</span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <i class="bi bi-box-seam"></i>
+                            <h5>{{ __('app.no_products_found') }}</h5>
+                            <p>Inizia aggiungendo il primo prodotto al tuo catalogo</p>
+                            <a href="{{ route('prodotti.create') }}" class="modern-btn">
+                                <i class="bi bi-plus-circle"></i> Aggiungi Primo Prodotto
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Cards Mobile -->
+    <div class="mobile-cards" id="mobileCards">
+        @forelse($prodotti as $prodotto)
+        <div class="product-card mobile-product-row"
+        data-name="{{ strtolower($prodotto->nome) }}"
+        data-code="{{ strtolower($prodotto->codice_prodotto) }}"
+        data-category="{{ strtolower($prodotto->categoria) }}"
+        data-brand="{{ strtolower($prodotto->brand ?? '') }}"
+        data-price="{{ $prodotto->prezzo }}">
+        
+        <div class="product-card-header">
+            <h3 class="product-card-title">{{ $prodotto->nome }}</h3>
+            <span class="product-card-code">{{ $prodotto->codice_prodotto }}</span>
         </div>
         
-        <!-- Messaggio nessun risultato -->
-        <div id="noResults" class="no-results" style="display: none;">
-            <i class="bi bi-search"></i>
-            <h5>Nessun prodotto trovato</h5>
-            <p>Prova a modificare i criteri di ricerca</p>
+        <div class="product-card-details">
+            <div class="product-detail">
+                <span class="product-detail-label">{{ __('app.category') }}</span>
+                <span class="product-detail-value">
+                    <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; font-size: 0.7rem;">
+                        {{ $prodotto->categoria }}
+                    </span>
+                </span>
+            </div>
+            <div class="product-detail">
+                <span class="product-detail-label">{{ __('app.brand') }}</span>
+                <span class="product-detail-value">{{ $prodotto->brand ?? 'N/A' }}</span>
+            </div>
+        </div>
+        
+        <div class="product-card-price">
+            € {{ number_format($prodotto->prezzo, 2) }}
+        </div>
+        
+        <div class="product-card-actions">
+            <a href="{{ route('prodotti.show', $prodotto) }}" class="mobile-action-btn view">
+                <i class="bi bi-eye"></i>
+                <span>{{ __('app.view') }}</span>
+            </a>
+            <a href="{{ route('prodotti.edit', $prodotto) }}" class="mobile-action-btn edit">
+                <i class="bi bi-pencil"></i>
+                <span>{{ __('app.edit') }}</span>
+            </a>
+            <form action="{{ route('prodotti.destroy', $prodotto) }}" method="POST" style="flex: 1;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="mobile-action-btn delete" style="width: 100%; border: none;" onclick="return confirm('{{ __('app.confirm_delete') }}')">
+                    <i class="bi bi-trash"></i>
+                    <span>{{ __('app.delete') }}</span>
+                </button>
+            </form>
         </div>
     </div>
+    @empty
+    <div class="product-card">
+        <div class="empty-state">
+            <i class="bi bi-box-seam"></i>
+            <h5>{{ __('app.no_products_found') }}</h5>
+            <p>Inizia aggiungendo il primo prodotto al tuo catalogo</p>
+            <a href="{{ route('prodotti.create') }}" class="modern-btn">
+                <i class="bi bi-plus-circle"></i> Aggiungi Primo Prodotto
+            </a>
+        </div>
+    </div>
+    @endforelse
+</div>
+
+<!-- Messaggio nessun risultato -->
+<div id="noResults" class="no-results" style="display: none;">
+    <i class="bi bi-search"></i>
+    <h5>Nessun prodotto trovato</h5>
+    <p>Prova a modificare i criteri di ricerca</p>
+</div>
+</div>
 </div>
 
 <script>
-// Sistema di ricerca avanzata
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const filterChips = document.querySelectorAll('.filter-chip');
-    const productRows = document.querySelectorAll('.product-row');
-    const mobileProductRows = document.querySelectorAll('.mobile-product-row');
-    const noResults = document.getElementById('noResults');
-    let currentFilter = 'all';
-    
-    // Gestione filtri
-    filterChips.forEach(chip => {
-        chip.addEventListener('click', function() {
-            filterChips.forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            currentFilter = this.dataset.filter;
+    // Sistema di ricerca avanzata
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const filterChips = document.querySelectorAll('.filter-chip');
+        const productRows = document.querySelectorAll('.product-row');
+        const mobileProductRows = document.querySelectorAll('.mobile-product-row');
+        const noResults = document.getElementById('noResults');
+        let currentFilter = 'all';
+        
+        // Gestione filtri
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                filterChips.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                performSearch();
+            });
+        });
+        
+        // Ricerca in tempo reale
+        searchInput.addEventListener('input', function() {
             performSearch();
         });
-    });
-    
-    // Ricerca in tempo reale
-    searchInput.addEventListener('input', function() {
-        performSearch();
-    });
-    
-    function performSearch() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        let visibleRows = 0;
         
-        // Ricerca nella tabella desktop
-        productRows.forEach(row => {
-            let shouldShow = shouldShowItem(row, searchTerm);
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleRows = 0;
             
-            if (shouldShow) {
-                row.style.display = '';
-                visibleRows++;
+            // Ricerca nella tabella desktop
+            productRows.forEach(row => {
+                let shouldShow = shouldShowItem(row, searchTerm);
+                
+                if (shouldShow) {
+                    row.style.display = '';
+                    visibleRows++;
+                    setTimeout(() => {
+                        row.style.opacity = '1';
+                        row.style.transform = 'translateX(0)';
+                    }, 100);
+                } else {
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        row.style.display = 'none';
+                    }, 300);
+                }
+            });
+            
+            // Ricerca nelle card mobile
+            mobileProductRows.forEach(row => {
+                let shouldShow = shouldShowItem(row, searchTerm);
+                
+                if (shouldShow) {
+                    row.style.display = '';
+                    visibleRows++;
+                    setTimeout(() => {
+                        row.style.opacity = '1';
+                        row.style.transform = 'translateY(0)';
+                    }, 100);
+                } else {
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        row.style.display = 'none';
+                    }, 300);
+                }
+            });
+            
+            // Mostra/nascondi messaggio nessun risultato
+            if (visibleRows === 0 && searchTerm !== '') {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+        
+        function shouldShowItem(item, searchTerm) {
+            if (searchTerm === '') return true;
+            
+            if (currentFilter === 'all') {
+                return item.dataset.name.includes(searchTerm) ||
+                item.dataset.code.includes(searchTerm) ||
+                item.dataset.category.includes(searchTerm) ||
+                item.dataset.brand.includes(searchTerm) ||
+                item.dataset.price.includes(searchTerm);
+            } else {
+                return item.dataset[currentFilter].includes(searchTerm);
+            }
+        }
+        
+        // Animazione di entrata delle righe desktop
+        productRows.forEach((row, index) => {
+            setTimeout(() => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-50px)';
+                row.style.transition = 'all 0.5s ease';
+                
                 setTimeout(() => {
                     row.style.opacity = '1';
                     row.style.transform = 'translateX(0)';
                 }, 100);
-            } else {
-                row.style.opacity = '0';
-                row.style.transform = 'translateX(-20px)';
-                setTimeout(() => {
-                    row.style.display = 'none';
-                }, 300);
-            }
+            }, index * 100);
         });
         
-        // Ricerca nelle card mobile
-        mobileProductRows.forEach(row => {
-            let shouldShow = shouldShowItem(row, searchTerm);
-            
-            if (shouldShow) {
-                row.style.display = '';
-                visibleRows++;
+        // Animazione di entrata delle card mobile
+        mobileProductRows.forEach((row, index) => {
+            setTimeout(() => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(30px)';
+                row.style.transition = 'all 0.5s ease';
+                
                 setTimeout(() => {
                     row.style.opacity = '1';
                     row.style.transform = 'translateY(0)';
                 }, 100);
-            } else {
-                row.style.opacity = '0';
-                row.style.transform = 'translateY(-20px)';
-                setTimeout(() => {
-                    row.style.display = 'none';
-                }, 300);
-            }
+            }, index * 150);
         });
-        
-        // Mostra/nascondi messaggio nessun risultato
-        if (visibleRows === 0 && searchTerm !== '') {
-            noResults.style.display = 'block';
-        } else {
-            noResults.style.display = 'none';
-        }
-    }
-    
-    function shouldShowItem(item, searchTerm) {
-        if (searchTerm === '') return true;
-        
-        if (currentFilter === 'all') {
-            return item.dataset.name.includes(searchTerm) ||
-                   item.dataset.code.includes(searchTerm) ||
-                   item.dataset.category.includes(searchTerm) ||
-                   item.dataset.brand.includes(searchTerm) ||
-                   item.dataset.price.includes(searchTerm);
-        } else {
-            return item.dataset[currentFilter].includes(searchTerm);
-        }
-    }
-    
-    // Animazione di entrata delle righe desktop
-    productRows.forEach((row, index) => {
-        setTimeout(() => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateX(-50px)';
-            row.style.transition = 'all 0.5s ease';
-            
-            setTimeout(() => {
-                row.style.opacity = '1';
-                row.style.transform = 'translateX(0)';
-            }, 100);
-        }, index * 100);
     });
-    
-    // Animazione di entrata delle card mobile
-    mobileProductRows.forEach((row, index) => {
-        setTimeout(() => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(30px)';
-            row.style.transition = 'all 0.5s ease';
-            
-            setTimeout(() => {
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
-            }, 100);
-        }, index * 150);
-    });
-});
 </script>
 @endsection

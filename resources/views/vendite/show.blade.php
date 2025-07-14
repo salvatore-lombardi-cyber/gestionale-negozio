@@ -471,6 +471,150 @@
             margin: 2px 0;
         }
     }
+    /* Mobile Cards per Prodotti */
+.mobile-products {
+    display: none;
+}
+
+.product-mobile-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.product-mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.product-mobile-name {
+    font-weight: 700;
+    color: #2d3748;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.product-mobile-price {
+    font-weight: 700;
+    color: #28a745;
+    font-size: 1.2rem;
+}
+
+.product-mobile-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.product-mobile-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.product-mobile-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.product-mobile-value {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.product-mobile-variants {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.product-mobile-variant {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.product-mobile-total {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(40, 167, 69, 0.1);
+    border-radius: 10px;
+    color: #28a745;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Dark Mode per Mobile Cards */
+[data-bs-theme="dark"] .product-mobile-card {
+    background: rgba(45, 55, 72, 0.95);
+    border-color: rgba(102, 126, 234, 0.2);
+}
+
+[data-bs-theme="dark"] .product-mobile-name,
+[data-bs-theme="dark"] .product-mobile-value {
+    color: #e2e8f0;
+}
+
+[data-bs-theme="dark"] .product-mobile-variant {
+    background: rgba(102, 126, 234, 0.2);
+    color: #e2e8f0;
+}
+
+/* Responsive Updates */
+@media (max-width: 768px) {
+    .products-table {
+        display: none;
+    }
+    
+    .mobile-products {
+        display: block;
+    }
+    
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    /* Fix per evitare overflow */
+    .sale-detail-container {
+        overflow-x: hidden;
+    }
+    
+    .info-card {
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 100%;
+    }
+    
+    /* Miglioramenti generali mobile */
+    .sale-number {
+        display: block;
+        margin-left: 0;
+        margin-top: 0.5rem;
+        text-align: center;
+    }
+    
+    .action-buttons {
+        gap: 0.5rem;
+    }
+    
+    .modern-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}
 </style>
 
 <div class="sale-detail-container">

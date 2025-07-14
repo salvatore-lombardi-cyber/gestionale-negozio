@@ -146,7 +146,7 @@
         box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
     
-    .filter-chips {
+  .filter-chips {
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
@@ -166,6 +166,7 @@
     
     .filter-chip:hover {
         transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
     }
     
     .filter-chip.active {

@@ -100,6 +100,33 @@
         border-color: #667eea;
         box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
+    .filter-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+    
+    .filter-chip {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-chip:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .filter-chip.active {
+        background: linear-gradient(135deg, #f72585, #c5025a);
+    }
+    
     
     .modern-btn {
         background: linear-gradient(135deg, #667eea, #764ba2);
@@ -350,6 +377,22 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
     }
+    @media (max-width: 576px) {
+    .page-header .d-flex {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .page-title {
+        font-size: 1.8rem;
+    }
+    
+    .modern-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}
 </style>
 
 <div class="sales-container">
@@ -364,7 +407,7 @@
             </a>
         </div>
     </div>
-
+    
     @if(count($vendite) > 0)
     <!-- Dashboard -->
     <div class="stats-grid">
@@ -401,12 +444,22 @@
         </div>
     </div>
     @endif
-
+    
     <!-- Ricerca -->
     <div class="search-container">
-        <input type="text" class="search-input" placeholder="🔍 Cerca vendite...">
+        <input type="text" class="search-input" placeholder="🔍 {{ __('app.search_sales_placeholder') }}">
+        
+        <!-- Filtri -->
+        <div class="filter-chips">
+            <button class="filter-chip active" data-filter="all">Tutti</button>
+            <button class="filter-chip" data-filter="today">Oggi</button>
+            <button class="filter-chip" data-filter="week">Questa settimana</button>
+            <button class="filter-chip" data-filter="cash">Contanti</button>
+            <button class="filter-chip" data-filter="card">Carta</button>
+            <button class="filter-chip" data-filter="customer">Con Cliente</button>
+        </div>
     </div>
-
+    
     <!-- Tabella/Cards -->
     <div class="modern-card">
         <!-- Desktop -->
@@ -434,11 +487,11 @@
                         <td>
                             <span class="payment-badge payment-{{ $vendita->metodo_pagamento }}">
                                 @if($vendita->metodo_pagamento == 'contanti')
-                                    <i class="bi bi-cash"></i> {{ __('app.cash') }}
+                                <i class="bi bi-cash"></i> {{ __('app.cash') }}
                                 @elseif($vendita->metodo_pagamento == 'carta')
-                                    <i class="bi bi-credit-card"></i> {{ __('app.card') }}
+                                <i class="bi bi-credit-card"></i> {{ __('app.card') }}
                                 @else
-                                    <i class="bi bi-bank"></i> {{ __('app.bank_transfer') }}
+                                <i class="bi bi-bank"></i> {{ __('app.bank_transfer') }}
                                 @endif
                             </span>
                         </td>
@@ -496,11 +549,11 @@
                         <span class="sale-detail-value">
                             <span class="payment-badge payment-{{ $vendita->metodo_pagamento }}">
                                 @if($vendita->metodo_pagamento == 'contanti')
-                                    <i class="bi bi-cash"></i> {{ __('app.cash') }}
+                                <i class="bi bi-cash"></i> {{ __('app.cash') }}
                                 @elseif($vendita->metodo_pagamento == 'carta')
-                                    <i class="bi bi-credit-card"></i> {{ __('app.card') }}
+                                <i class="bi bi-credit-card"></i> {{ __('app.card') }}
                                 @else
-                                    <i class="bi bi-bank"></i> {{ __('app.bank_transfer') }}
+                                <i class="bi bi-bank"></i> {{ __('app.bank_transfer') }}
                                 @endif
                             </span>
                         </span>

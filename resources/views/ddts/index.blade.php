@@ -3,6 +3,7 @@
 @section('title', __('app.delivery_documents') . ' - Gestionale Negozio')
 
 @section('content')
+
 <style>
     .ddts-container {
         padding: 2rem;
@@ -36,6 +37,7 @@
         margin-bottom: 2rem;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
     }
     
     .search-input {
@@ -45,6 +47,7 @@
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
+        margin-bottom: 1.5rem; /* ← SPAZIO SOTTO LA BARRA DI RICERCA */
     }
     
     .search-input:focus {
@@ -73,6 +76,7 @@
     
     .filter-chip:hover {
         transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
     }
     
     .filter-chip.active {
@@ -305,6 +309,10 @@
         color: #e2e8f0;
     }
     
+    [data-bs-theme="dark"] .filter-chips {
+        border-top-color: rgba(102, 126, 234, 0.2); /* ← LINEA SEPARATRICE DARK MODE */
+    }
+    
     [data-bs-theme="dark"] .ddt-number,
     [data-bs-theme="dark"] .ddt-card-number {
         background: rgba(102, 126, 234, 0.2);
@@ -321,6 +329,19 @@
             padding: 1rem;
         }
         
+        .search-input {
+            margin-bottom: 1rem; /* ← SPAZIO RIDOTTO SU MOBILE */
+        }
+        
+        .filter-chips {
+            gap: 0.3rem; /* ← GAP RIDOTTO SU MOBILE */
+        }
+        
+        .filter-chip {
+            padding: 6px 12px; /* ← PADDING RIDOTTO SU MOBILE */
+            font-size: 0.8rem;
+        }
+        
         .modern-card .table-responsive {
             display: none;
         }
@@ -329,7 +350,24 @@
             display: block;
         }
     }
+    @media (max-width: 576px) {
+    .page-header .d-flex {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .page-title {
+        font-size: 1.8rem;
+    }
+    
+    .modern-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}
 </style>
+
 
 <div class="ddts-container">
     <!-- Header -->
@@ -344,9 +382,11 @@
         </div>
     </div>
     
+    
     <!-- Ricerca -->
     <div class="search-container">
-        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Cerca DDT per numero, cliente, destinatario, stato...">
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 {{ __('app.search_ddts_placeholder') }}">
+        
         <div class="filter-chips">
             <button class="filter-chip active" data-filter="all">Tutti</button>
             <button class="filter-chip" data-filter="number">Numero</button>
@@ -355,6 +395,8 @@
             <button class="filter-chip" data-filter="status">Stato</button>
         </div>
     </div>
+    
+    
     
     <!-- Tabella/Cards -->
     <div class="modern-card">

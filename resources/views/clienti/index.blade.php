@@ -493,15 +493,15 @@
             </a>
         </div>
     </div>
-
+    
     <!-- Barra di Ricerca Avanzata -->
     <div class="search-container">
         <div class="search-box">
             <input type="text" 
-                   class="search-input" 
-                   id="searchInput" 
-                   placeholder="🔍 Cerca clienti per nome, cognome, telefono, email, città..."
-                   autocomplete="off">
+            class="search-input" 
+            id="searchInput" 
+            placeholder="🔍 {{ __('app.search_clients_placeholder') }}"                   
+            autocomplete="off">
             <i class="bi bi-search search-icon"></i>
         </div>
         <div class="filter-chips">
@@ -513,7 +513,7 @@
             <button class="filter-chip" data-filter="city">Città</button>
         </div>
     </div>
-
+    
     <!-- Tabella/Cards Clienti -->
     <div class="modern-card">
         <!-- Tabella Desktop -->
@@ -531,286 +531,286 @@
                 <tbody id="clientsTableBody">
                     @forelse($clienti as $cliente)
                     <tr class="client-row" 
-                        data-name="{{ strtolower($cliente->nome) }}"
-                        data-surname="{{ strtolower($cliente->cognome) }}"
-                        data-phone="{{ strtolower($cliente->telefono ?? '') }}"
-                        data-email="{{ strtolower($cliente->email ?? '') }}"
-                        data-city="{{ strtolower($cliente->citta ?? '') }}">
-                        <td>
-                            <div class="client-name">
-                                <div class="client-avatar">
-                                    {{ strtoupper(substr($cliente->nome, 0, 1)) }}{{ strtoupper(substr($cliente->cognome, 0, 1)) }}
-                                </div>
-                                <div>
-                                    <strong>{{ $cliente->nome }} {{ $cliente->cognome }}</strong>
-                                </div>
+                    data-name="{{ strtolower($cliente->nome) }}"
+                    data-surname="{{ strtolower($cliente->cognome) }}"
+                    data-phone="{{ strtolower($cliente->telefono ?? '') }}"
+                    data-email="{{ strtolower($cliente->email ?? '') }}"
+                    data-city="{{ strtolower($cliente->citta ?? '') }}">
+                    <td>
+                        <div class="client-name">
+                            <div class="client-avatar">
+                                {{ strtoupper(substr($cliente->nome, 0, 1)) }}{{ strtoupper(substr($cliente->cognome, 0, 1)) }}
                             </div>
-                        </td>
-                        <td>
-                            @if($cliente->telefono)
-                                <div class="contact-info">
-                                    <div class="contact-item">
-                                        <i class="bi bi-telephone"></i>{{ $cliente->telefono }}
-                                    </div>
-                                </div>
-                            @else
-                                <span class="text-muted">N/A</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if($cliente->email)
-                                <div class="contact-info">
-                                    <div class="contact-item">
-                                        <i class="bi bi-envelope"></i>{{ $cliente->email }}
-                                    </div>
-                                </div>
-                            @else
-                                <span class="text-muted">N/A</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if($cliente->citta)
-                                <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
-                                    {{ $cliente->citta }}
-                                </span>
-                            @else
-                                <span class="text-muted">N/A</span>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="{{ route('clienti.show', $cliente) }}" class="action-btn view">
-                                <i class="bi bi-eye"></i> <span>{{ __('app.view') }}</span>
-                            </a>
-                            <a href="{{ route('clienti.edit', $cliente) }}" class="action-btn edit">
-                                <i class="bi bi-pencil"></i> <span>{{ __('app.edit') }}</span>
-                            </a>
-                            <form action="{{ route('clienti.destroy', $cliente) }}" method="POST" style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="action-btn delete" onclick="return confirm('{{ __('app.confirm_delete') }}')">
-                                    <i class="bi bi-trash"></i> <span>{{ __('app.delete') }}</span>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5">
-                            <div class="empty-state">
-                                <i class="bi bi-people"></i>
-                                <h5>{{ __('app.no_clients_found') }}</h5>
-                                <p>Inizia aggiungendo il primo cliente al tuo database</p>
-                                <a href="{{ route('clienti.create') }}" class="modern-btn">
-                                    <i class="bi bi-person-plus"></i> Aggiungi Primo Cliente
-                                </a>
+                            <div>
+                                <strong>{{ $cliente->nome }} {{ $cliente->cognome }}</strong>
                             </div>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                        </div>
+                    </td>
+                    <td>
+                        @if($cliente->telefono)
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="bi bi-telephone"></i>{{ $cliente->telefono }}
+                            </div>
+                        </div>
+                        @else
+                        <span class="text-muted">N/A</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if($cliente->email)
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="bi bi-envelope"></i>{{ $cliente->email }}
+                            </div>
+                        </div>
+                        @else
+                        <span class="text-muted">N/A</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if($cliente->citta)
+                        <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                            {{ $cliente->citta }}
+                        </span>
+                        @else
+                        <span class="text-muted">N/A</span>
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('clienti.show', $cliente) }}" class="action-btn view">
+                            <i class="bi bi-eye"></i> <span>{{ __('app.view') }}</span>
+                        </a>
+                        <a href="{{ route('clienti.edit', $cliente) }}" class="action-btn edit">
+                            <i class="bi bi-pencil"></i> <span>{{ __('app.edit') }}</span>
+                        </a>
+                        <form action="{{ route('clienti.destroy', $cliente) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="action-btn delete" onclick="return confirm('{{ __('app.confirm_delete') }}')">
+                                <i class="bi bi-trash"></i> <span>{{ __('app.delete') }}</span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5">
+                        <div class="empty-state">
+                            <i class="bi bi-people"></i>
+                            <h5>{{ __('app.no_clients_found') }}</h5>
+                            <p>Inizia aggiungendo il primo cliente al tuo database</p>
+                            <a href="{{ route('clienti.create') }}" class="modern-btn">
+                                <i class="bi bi-person-plus"></i> Aggiungi Primo Cliente
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Cards Mobile -->
+    <div class="mobile-cards" id="mobileCards">
+        @forelse($clienti as $cliente)
+        <div class="client-card mobile-client-row"
+        data-name="{{ strtolower($cliente->nome) }}"
+        data-surname="{{ strtolower($cliente->cognome) }}"
+        data-phone="{{ strtolower($cliente->telefono ?? '') }}"
+        data-email="{{ strtolower($cliente->email ?? '') }}"
+        data-city="{{ strtolower($cliente->citta ?? '') }}">
+        
+        <div class="client-card-header">
+            <div class="mobile-avatar">
+                {{ strtoupper(substr($cliente->nome, 0, 1)) }}{{ strtoupper(substr($cliente->cognome, 0, 1)) }}
+            </div>
+            <h3 class="client-card-name">{{ $cliente->nome }} {{ $cliente->cognome }}</h3>
         </div>
         
-        <!-- Cards Mobile -->
-        <div class="mobile-cards" id="mobileCards">
-            @forelse($clienti as $cliente)
-            <div class="client-card mobile-client-row"
-                 data-name="{{ strtolower($cliente->nome) }}"
-                 data-surname="{{ strtolower($cliente->cognome) }}"
-                 data-phone="{{ strtolower($cliente->telefono ?? '') }}"
-                 data-email="{{ strtolower($cliente->email ?? '') }}"
-                 data-city="{{ strtolower($cliente->citta ?? '') }}">
-                
-                <div class="client-card-header">
-                    <div class="mobile-avatar">
-                        {{ strtoupper(substr($cliente->nome, 0, 1)) }}{{ strtoupper(substr($cliente->cognome, 0, 1)) }}
-                    </div>
-                    <h3 class="client-card-name">{{ $cliente->nome }} {{ $cliente->cognome }}</h3>
-                </div>
-                
-                <div class="client-card-details">
-                    @if($cliente->telefono)
-                    <div class="client-detail">
-                        <i class="bi bi-telephone"></i>
-                        <span>{{ $cliente->telefono }}</span>
-                    </div>
-                    @endif
-                    
-                    @if($cliente->email)
-                    <div class="client-detail">
-                        <i class="bi bi-envelope"></i>
-                        <span>{{ $cliente->email }}</span>
-                    </div>
-                    @endif
-                    
-                    @if($cliente->citta)
-                    <div class="client-detail">
-                        <i class="bi bi-geo-alt"></i>
-                        <span>{{ $cliente->citta }}</span>
-                    </div>
-                    @endif
-                </div>
-                
-                <div class="client-card-actions">
-                    <a href="{{ route('clienti.show', $cliente) }}" class="mobile-action-btn view">
-                        <i class="bi bi-eye"></i>
-                        <span>{{ __('app.view') }}</span>
-                    </a>
-                    <a href="{{ route('clienti.edit', $cliente) }}" class="mobile-action-btn edit">
-                        <i class="bi bi-pencil"></i>
-                        <span>{{ __('app.edit') }}</span>
-                    </a>
-                    <form action="{{ route('clienti.destroy', $cliente) }}" method="POST" style="flex: 1;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="mobile-action-btn delete" style="width: 100%; border: none;" onclick="return confirm('{{ __('app.confirm_delete') }}')">
-                            <i class="bi bi-trash"></i>
-                            <span>{{ __('app.delete') }}</span>
-                        </button>
-                    </form>
-                </div>
+        <div class="client-card-details">
+            @if($cliente->telefono)
+            <div class="client-detail">
+                <i class="bi bi-telephone"></i>
+                <span>{{ $cliente->telefono }}</span>
             </div>
-            @empty
-            <div class="client-card">
-                <div class="empty-state">
-                    <i class="bi bi-people"></i>
-                    <h5>{{ __('app.no_clients_found') }}</h5>
-                    <p>Inizia aggiungendo il primo cliente al tuo database</p>
-                    <a href="{{ route('clienti.create') }}" class="modern-btn">
-                        <i class="bi bi-person-plus"></i> Aggiungi Primo Cliente
-                    </a>
-                </div>
+            @endif
+            
+            @if($cliente->email)
+            <div class="client-detail">
+                <i class="bi bi-envelope"></i>
+                <span>{{ $cliente->email }}</span>
             </div>
-            @endforelse
+            @endif
+            
+            @if($cliente->citta)
+            <div class="client-detail">
+                <i class="bi bi-geo-alt"></i>
+                <span>{{ $cliente->citta }}</span>
+            </div>
+            @endif
         </div>
         
-        <!-- Messaggio nessun risultato -->
-        <div id="noResults" class="no-results" style="display: none;">
-            <i class="bi bi-search"></i>
-            <h5>Nessun cliente trovato</h5>
-            <p>Prova a modificare i criteri di ricerca</p>
+        <div class="client-card-actions">
+            <a href="{{ route('clienti.show', $cliente) }}" class="mobile-action-btn view">
+                <i class="bi bi-eye"></i>
+                <span>{{ __('app.view') }}</span>
+            </a>
+            <a href="{{ route('clienti.edit', $cliente) }}" class="mobile-action-btn edit">
+                <i class="bi bi-pencil"></i>
+                <span>{{ __('app.edit') }}</span>
+            </a>
+            <form action="{{ route('clienti.destroy', $cliente) }}" method="POST" style="flex: 1;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="mobile-action-btn delete" style="width: 100%; border: none;" onclick="return confirm('{{ __('app.confirm_delete') }}')">
+                    <i class="bi bi-trash"></i>
+                    <span>{{ __('app.delete') }}</span>
+                </button>
+            </form>
         </div>
     </div>
+    @empty
+    <div class="client-card">
+        <div class="empty-state">
+            <i class="bi bi-people"></i>
+            <h5>{{ __('app.no_clients_found') }}</h5>
+            <p>Inizia aggiungendo il primo cliente al tuo database</p>
+            <a href="{{ route('clienti.create') }}" class="modern-btn">
+                <i class="bi bi-person-plus"></i> Aggiungi Primo Cliente
+            </a>
+        </div>
+    </div>
+    @endforelse
+</div>
+
+<!-- Messaggio nessun risultato -->
+<div id="noResults" class="no-results" style="display: none;">
+    <i class="bi bi-search"></i>
+    <h5>Nessun cliente trovato</h5>
+    <p>Prova a modificare i criteri di ricerca</p>
+</div>
+</div>
 </div>
 
 <script>
-// Sistema di ricerca avanzata per clienti
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const filterChips = document.querySelectorAll('.filter-chip');
-    const clientRows = document.querySelectorAll('.client-row');
-    const mobileClientRows = document.querySelectorAll('.mobile-client-row');
-    const noResults = document.getElementById('noResults');
-    let currentFilter = 'all';
-    
-    // Gestione filtri
-    filterChips.forEach(chip => {
-        chip.addEventListener('click', function() {
-            filterChips.forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            currentFilter = this.dataset.filter;
+    // Sistema di ricerca avanzata per clienti
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const filterChips = document.querySelectorAll('.filter-chip');
+        const clientRows = document.querySelectorAll('.client-row');
+        const mobileClientRows = document.querySelectorAll('.mobile-client-row');
+        const noResults = document.getElementById('noResults');
+        let currentFilter = 'all';
+        
+        // Gestione filtri
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                filterChips.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                performSearch();
+            });
+        });
+        
+        // Ricerca in tempo reale
+        searchInput.addEventListener('input', function() {
             performSearch();
         });
-    });
-    
-    // Ricerca in tempo reale
-    searchInput.addEventListener('input', function() {
-        performSearch();
-    });
-    
-    function performSearch() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        let visibleRows = 0;
         
-        // Ricerca nella tabella desktop
-        clientRows.forEach(row => {
-            let shouldShow = shouldShowItem(row, searchTerm);
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleRows = 0;
             
-            if (shouldShow) {
-                row.style.display = '';
-                visibleRows++;
+            // Ricerca nella tabella desktop
+            clientRows.forEach(row => {
+                let shouldShow = shouldShowItem(row, searchTerm);
+                
+                if (shouldShow) {
+                    row.style.display = '';
+                    visibleRows++;
+                    setTimeout(() => {
+                        row.style.opacity = '1';
+                        row.style.transform = 'translateX(0)';
+                    }, 100);
+                } else {
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        row.style.display = 'none';
+                    }, 300);
+                }
+            });
+            
+            // Ricerca nelle card mobile
+            mobileClientRows.forEach(row => {
+                let shouldShow = shouldShowItem(row, searchTerm);
+                
+                if (shouldShow) {
+                    row.style.display = '';
+                    visibleRows++;
+                    setTimeout(() => {
+                        row.style.opacity = '1';
+                        row.style.transform = 'translateY(0)';
+                    }, 100);
+                } else {
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        row.style.display = 'none';
+                    }, 300);
+                }
+            });
+            
+            // Mostra/nascondi messaggio nessun risultato
+            if (visibleRows === 0 && searchTerm !== '') {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+        
+        function shouldShowItem(item, searchTerm) {
+            if (searchTerm === '') return true;
+            
+            if (currentFilter === 'all') {
+                return item.dataset.name.includes(searchTerm) ||
+                item.dataset.surname.includes(searchTerm) ||
+                item.dataset.phone.includes(searchTerm) ||
+                item.dataset.email.includes(searchTerm) ||
+                item.dataset.city.includes(searchTerm);
+            } else {
+                return item.dataset[currentFilter].includes(searchTerm);
+            }
+        }
+        
+        // Animazione di entrata delle righe desktop
+        clientRows.forEach((row, index) => {
+            setTimeout(() => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-50px)';
+                row.style.transition = 'all 0.5s ease';
+                
                 setTimeout(() => {
                     row.style.opacity = '1';
                     row.style.transform = 'translateX(0)';
                 }, 100);
-            } else {
-                row.style.opacity = '0';
-                row.style.transform = 'translateX(-20px)';
-                setTimeout(() => {
-                    row.style.display = 'none';
-                }, 300);
-            }
+            }, index * 100);
         });
         
-        // Ricerca nelle card mobile
-        mobileClientRows.forEach(row => {
-            let shouldShow = shouldShowItem(row, searchTerm);
-            
-            if (shouldShow) {
-                row.style.display = '';
-                visibleRows++;
+        // Animazione di entrata delle card mobile
+        mobileClientRows.forEach((row, index) => {
+            setTimeout(() => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(30px)';
+                row.style.transition = 'all 0.5s ease';
+                
                 setTimeout(() => {
                     row.style.opacity = '1';
                     row.style.transform = 'translateY(0)';
                 }, 100);
-            } else {
-                row.style.opacity = '0';
-                row.style.transform = 'translateY(-20px)';
-                setTimeout(() => {
-                    row.style.display = 'none';
-                }, 300);
-            }
+            }, index * 150);
         });
-        
-        // Mostra/nascondi messaggio nessun risultato
-        if (visibleRows === 0 && searchTerm !== '') {
-            noResults.style.display = 'block';
-        } else {
-            noResults.style.display = 'none';
-        }
-    }
-    
-    function shouldShowItem(item, searchTerm) {
-        if (searchTerm === '') return true;
-        
-        if (currentFilter === 'all') {
-            return item.dataset.name.includes(searchTerm) ||
-                   item.dataset.surname.includes(searchTerm) ||
-                   item.dataset.phone.includes(searchTerm) ||
-                   item.dataset.email.includes(searchTerm) ||
-                   item.dataset.city.includes(searchTerm);
-        } else {
-            return item.dataset[currentFilter].includes(searchTerm);
-        }
-    }
-    
-    // Animazione di entrata delle righe desktop
-    clientRows.forEach((row, index) => {
-        setTimeout(() => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateX(-50px)';
-            row.style.transition = 'all 0.5s ease';
-            
-            setTimeout(() => {
-                row.style.opacity = '1';
-                row.style.transform = 'translateX(0)';
-            }, 100);
-        }, index * 100);
     });
-    
-    // Animazione di entrata delle card mobile
-    mobileClientRows.forEach((row, index) => {
-        setTimeout(() => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(30px)';
-            row.style.transition = 'all 0.5s ease';
-            
-            setTimeout(() => {
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
-            }, 100);
-        }, index * 150);
-    });
-});
 </script>
 @endsection
