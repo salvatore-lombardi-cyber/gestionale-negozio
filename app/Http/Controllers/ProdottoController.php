@@ -208,6 +208,6 @@ class ProdottoController extends Controller
             }
         }
         
-        return view('prodotti.labels', compact('prodotto'));
+       return view('labels.print', compact('prodotto'));
     }
 }

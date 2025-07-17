@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Etichette QR Code - Gestionale Negozio')
+@section('title', __('app.qr_labels_management') . ' - Gestionale Negozio')
 
 @section('content')
 <style>
@@ -27,7 +27,7 @@
         -webkit-text-fill-color: transparent;
         margin: 0;
     }
-
+    
     .stats-container {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
@@ -37,13 +37,13 @@
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
-
+    
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1.5rem;
     }
-
+    
     .stat-card {
         background: rgba(255, 255, 255, 0.9);
         border-radius: 15px;
@@ -52,30 +52,30 @@
         transition: all 0.3s ease;
         border: 1px solid rgba(102, 126, 234, 0.1);
     }
-
+    
     .stat-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     }
-
+    
     .stat-icon {
         font-size: 2.5rem;
         margin-bottom: 0.5rem;
     }
-
+    
     .stat-number {
         font-size: 2rem;
         font-weight: bold;
         color: #667eea;
         margin-bottom: 0.5rem;
     }
-
+    
     .stat-label {
         color: #6c757d;
         font-size: 0.9rem;
         font-weight: 600;
     }
-
+    
     .actions-container {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
@@ -189,15 +189,15 @@
         box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
         color: white;
     }
-
+    
     .modern-btn.btn-success {
         background: linear-gradient(135deg, #28a745, #20c997);
     }
-
+    
     .modern-btn.btn-warning {
         background: linear-gradient(135deg, #ffd60a, #ff8500);
     }
-
+    
     .modern-btn.btn-info {
         background: linear-gradient(135deg, #48cae4, #0077b6);
     }
@@ -318,14 +318,14 @@
         background: rgba(255, 193, 7, 0.1);
         color: #ffc107;
     }
-
+    
     .variant-badge {
         font-size: 0.8rem;
         padding: 4px 8px;
         border-radius: 12px;
         font-weight: 600;
     }
-
+    
     .variant-badge.info {
         background: rgba(72, 202, 228, 0.1);
         color: #48cae4;
@@ -344,7 +344,7 @@
         background: rgba(45, 55, 72, 0.95);
         color: #e2e8f0;
     }
-
+    
     [data-bs-theme="dark"] .stat-card {
         background: rgba(45, 55, 72, 0.9);
         color: #e2e8f0;
@@ -373,12 +373,158 @@
         background: rgba(102, 126, 234, 0.2);
         color: #e2e8f0;
     }
-
-    [data-bs-theme="dark"] .stat-label {
+    
+    /* Mobile Cards - Nasconde tabella, mostra card */
+    .mobile-cards {
+        display: none;
+    }
+    
+    .product-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .product-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .product-card-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin: 0;
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .product-card-code {
+        font-family: 'Courier New', monospace;
+        background: rgba(102, 126, 234, 0.1);
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        flex-shrink: 0;
+    }
+    
+    .product-card-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .product-detail {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .product-detail-label {
+        font-size: 0.8rem;
+        color: #6c757d;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+    
+    .product-detail-value {
+        font-weight: 600;
+    }
+    
+    .product-card-price {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #28a745;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding: 0.5rem;
+        background: rgba(40, 167, 69, 0.1);
+        border-radius: 10px;
+    }
+    
+    .product-card-actions {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .mobile-action-btn {
+        flex: 1;
+        min-width: 70px;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 8px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        text-align: center;
+    }
+    
+    .mobile-action-btn i {
+        font-size: 1.1rem;
+    }
+    
+    .mobile-action-btn.qr {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+    
+    .mobile-action-btn.preview {
+        background: linear-gradient(135deg, #48cae4, #0077b6);
+        color: white;
+    }
+    
+    .mobile-action-btn.print {
+        background: linear-gradient(135deg, #6f42c1, #8e44ad);
+        color: white;
+    }
+    
+    .mobile-action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        color: white;
+    }
+    
+    /* Dark mode per mobile cards */
+    [data-bs-theme="dark"] .product-card {
+        background: rgba(45, 55, 72, 0.95);
+        color: #e2e8f0;
+    }
+    
+    [data-bs-theme="dark"] .product-card-code {
+        background: rgba(102, 126, 234, 0.2);
+        color: #e2e8f0;
+    }
+    
+    [data-bs-theme="dark"] .product-detail-label {
         color: #a0aec0;
     }
     
-    /* Responsive */
+    [data-bs-theme="dark"] .product-card-price {
+        background: rgba(40, 167, 69, 0.2);
+    }
+    
+    /* Responsive perfetto */
     @media (max-width: 768px) {
         .products-container {
             padding: 1rem;
@@ -404,18 +550,27 @@
         .filter-chips {
             justify-content: center;
         }
-
+        
         .stats-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
         }
-
+        
         .stat-card {
             padding: 1rem;
         }
-
+        
         .stat-number {
             font-size: 1.5rem;
+        }
+        
+        /* Nasconde tabella su mobile */
+        .modern-card .table-responsive {
+            display: none;
+        }
+        
+        .mobile-cards {
+            display: block;
         }
     }
     
@@ -425,14 +580,42 @@
             gap: 1rem;
             text-align: center;
         }
-
+        
         .stats-grid {
             grid-template-columns: 1fr;
         }
-
+        
         .actions-container .d-grid {
             grid-template-columns: 1fr;
         }
+        
+        .product-card {
+            padding: 1rem;
+        }
+        
+        .product-card-details {
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+        }
+        
+        .mobile-action-btn {
+            padding: 10px 6px;
+            font-size: 0.65rem;
+            min-width: 60px;
+        }
+        
+        .mobile-action-btn i {
+            font-size: 1rem;
+        }
+    }
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 </style>
 
@@ -441,16 +624,16 @@
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="page-title">
-                <i class="bi bi-qr-code"></i> Etichette QR Code
+                <i class="bi bi-qr-code"></i> {{ __('app.qr_labels') }}
             </h1>
             <div class="d-flex gap-2">
                 <a href="{{ route('prodotti.index') }}" class="modern-btn btn-info">
-                    <i class="bi bi-arrow-left"></i> Torna ai Prodotti
+                    <i class="bi bi-arrow-left"></i> {{ __('app.back_to_products') }}
                 </a>
             </div>
         </div>
     </div>
-
+    
     <!-- Statistiche -->
     <div class="stats-container">
         <div class="stats-grid">
@@ -459,47 +642,49 @@
                     <i class="bi bi-box-seam"></i>
                 </div>
                 <div class="stat-number">{{ $stats['total_products'] }}</div>
-                <div class="stat-label">Prodotti Totali</div>
+                <div class="stat-label">{{ __('app.total_products') }}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon text-success">
                     <i class="bi bi-qr-code"></i>
                 </div>
                 <div class="stat-number">{{ $stats['products_with_qr'] }}</div>
-                <div class="stat-label">Prodotti con QR</div>
+                <div class="stat-label">{{ __('app.products_with_qr') }}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon text-warning">
                     <i class="bi bi-palette"></i>
                 </div>
                 <div class="stat-number">{{ $stats['total_variants'] }}</div>
-                <div class="stat-label">Varianti Totali</div>
+                <div class="stat-label">{{ __('app.total_variants') }}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon text-danger">
                     <i class="bi bi-printer"></i>
                 </div>
                 <div class="stat-number">{{ $stats['labels_printed_today'] }}</div>
-                <div class="stat-label">Etichette Oggi</div>
+                <div class="stat-label">{{ __('app.labels_printed_today') }}</div>
             </div>
         </div>
     </div>
-
+    
     <!-- Azioni Rapide -->
     <div class="actions-container">
-        <h4 class="mb-3">Azioni Rapide</h4>
+        <h4 class="mb-3 section-title">
+            <i class="bi bi-lightning "></i> {{ __('app.quick_actions') }}
+        </h4>
         <div class="d-grid d-md-flex gap-3">
             <button class="modern-btn btn-success" onclick="generateAllMissingQR()">
                 <i class="bi bi-magic"></i>
-                Genera Tutti i QR Mancanti
+                {{ __('app.generate_all_missing_qr') }}
             </button>
             <a href="{{ route('labels.scanner') }}" class="modern-btn btn-info">
                 <i class="bi bi-camera"></i>
-                Test Scanner
+                {{ __('app.test_scanner') }}
             </a>
             <button class="modern-btn btn-warning" onclick="printBulkLabels()">
                 <i class="bi bi-printer"></i>
-                Stampa in Massa
+                {{ __('app.bulk_print') }}
             </button>
         </div>
     </div>
@@ -510,16 +695,16 @@
             <input type="text" 
             class="search-input" 
             id="searchInput" 
-            placeholder="🔍 Cerca prodotti per nome, codice, categoria, marca..."            
+            placeholder="🔍 {{ __('app.search_products_placeholder') }}"            
             autocomplete="off">
             <i class="bi bi-search search-icon"></i>
         </div>
         <div class="filter-chips">
-            <button class="filter-chip active" data-filter="all">Tutti</button>
-            <button class="filter-chip" data-filter="name">Nome</button>
-            <button class="filter-chip" data-filter="code">Codice</button>
-            <button class="filter-chip" data-filter="category">Categoria</button>
-            <button class="filter-chip" data-filter="brand">Marca</button>
+            <button class="filter-chip active" data-filter="all">{{ __('app.all') }}</button>
+            <button class="filter-chip" data-filter="name">{{ __('app.name') }}</button>
+            <button class="filter-chip" data-filter="code">{{ __('app.code') }}</button>
+            <button class="filter-chip" data-filter="category">{{ __('app.category') }}</button>
+            <button class="filter-chip" data-filter="brand">{{ __('app.brand') }}</button>
         </div>
     </div>
     
@@ -529,12 +714,12 @@
             <table class="table modern-table" id="productsTable">
                 <thead>
                     <tr>
-                        <th><i class="bi bi-tag"></i> Prodotto</th>
-                        <th><i class="bi bi-grid-3x3-gap"></i> Categoria</th>
-                        <th><i class="bi bi-palette"></i> Varianti</th>
-                        <th><i class="bi bi-qr-code"></i> Stato QR</th>
-                        <th><i class="bi bi-upc-scan"></i> Codice Etichetta</th>
-                        <th><i class="bi bi-gear"></i> Azioni</th>
+                        <th><i class="bi bi-tag"></i> {{ __('app.product') }}</th>
+                        <th><i class="bi bi-grid-3x3-gap"></i> {{ __('app.category') }}</th>
+                        <th><i class="bi bi-palette"></i> {{ __('app.variants') }}</th>
+                        <th><i class="bi bi-qr-code"></i> {{ __('app.qr_status') }}</th>
+                        <th><i class="bi bi-upc-scan"></i> {{ __('app.label_code') }}</th>
+                        <th><i class="bi bi-gear"></i> {{ __('app.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody id="productsTableBody">
@@ -544,244 +729,382 @@
                     data-code="{{ strtolower($prodotto->codice_prodotto) }}"
                     data-category="{{ strtolower($prodotto->categoria) }}"
                     data-brand="{{ strtolower($prodotto->brand ?? '') }}">
-                        <td>
-                            <div>
-                                <strong>{{ $prodotto->nome }}</strong><br>
-                                <small class="text-muted">{{ $prodotto->codice_prodotto }}</small><br>
-                                <small class="text-success">€{{ number_format($prodotto->prezzo, 2) }}</small>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
-                                {{ ucfirst($prodotto->categoria) }}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="variant-badge info">{{ $prodotto->magazzino->count() }} Varianti</span>
-                        </td>
-                        <td>
-                            @if($prodotto->hasQRCode())
-                                <span class="qr-status ready">
-                                    <i class="bi bi-check-circle"></i> Pronto
-                                </span>
-                            @else
-                                <span class="qr-status missing">
-                                    <i class="bi bi-exclamation-triangle"></i> Mancante
-                                </span>
-                            @endif
-                        </td>
-                        <td>
-                            @if($prodotto->hasLabelCode())
-                                <code class="product-code">{{ $prodotto->codice_etichetta }}</code>
-                            @else
-                                <span class="text-muted">Non Generato</span>
-                            @endif
-                        </td>
-                        <td>
-                            <button class="action-btn qr" onclick="generateSingle({{ $prodotto->id }})" title="Genera Codici">
-                                <i class="bi bi-magic"></i>
-                            </button>
-                            <button class="action-btn preview" onclick="viewPreview({{ $prodotto->id }})" title="Anteprima Etichette">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                            <a href="{{ route('prodotti.labels', $prodotto->id) }}" class="action-btn print" title="Stampa Etichette">
-                                <i class="bi bi-printer"></i>
+                    <td>
+                        <div>
+                            <strong>{{ $prodotto->nome }}</strong><br>
+                            <small class="text-muted">{{ $prodotto->codice_prodotto }}</small><br>
+                            <small class="text-success">€{{ number_format($prodotto->prezzo, 2) }}</small>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                            {{ ucfirst($prodotto->categoria) }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="variant-badge info">{{ $prodotto->magazzino->count() }} {{ __('app.variants') }}</span>
+                    </td>
+                    <td>
+                        @if($prodotto->hasQRCode())
+                        <span class="qr-status ready">
+                            <i class="bi bi-check-circle"></i> {{ __('app.qr_ready') }}
+                        </span>
+                        @else
+                        <span class="qr-status missing">
+                            <i class="bi bi-exclamation-triangle"></i> {{ __('app.qr_missing') }}
+                        </span>
+                        @endif
+                    </td>
+                    <td>
+                        @if($prodotto->hasLabelCode())
+                        <code class="product-code">{{ $prodotto->codice_etichetta }}</code>
+                        @else
+                        <span class="text-muted">{{ __('app.not_generated') }}</span>
+                        @endif
+                    </td>
+                    <td>
+                        <button class="action-btn qr" onclick="generateSingle({{ $prodotto->id }})" title="{{ __('app.generate_codes') }}">
+                            <i class="bi bi-magic"></i>
+                        </button>
+                        <button class="action-btn preview" onclick="viewPreview({{ $prodotto->id }})" title="{{ __('app.preview_labels') }}">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <a href="{{ route('prodotti.labels', $prodotto->id) }}" class="action-btn print" title="{{ __('app.print_labels') }}">
+                            <i class="bi bi-printer"></i>
+                        </a>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6">
+                        <div class="text-center py-5">
+                            <i class="bi bi-box-seam" style="font-size: 4rem; opacity: 0.5; margin-bottom: 1rem;"></i>
+                            <h5>{{ __('app.no_products_found') }}</h5>
+                            <p class="text-muted">{{ __('app.start_adding_products') }}</p>
+                            <a href="{{ route('prodotti.create') }}" class="modern-btn">
+                                <i class="bi bi-plus-circle"></i> {{ __('app.add_first_product') }}
                             </a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6">
-                            <div class="text-center py-5">
-                                <i class="bi bi-box-seam" style="font-size: 4rem; opacity: 0.5; margin-bottom: 1rem;"></i>
-                                <h5>Nessun prodotto trovato</h5>
-                                <p class="text-muted">Inizia aggiungendo alcuni prodotti al tuo catalogo</p>
-                                <a href="{{ route('prodotti.create') }}" class="modern-btn">
-                                    <i class="bi bi-plus-circle"></i> Aggiungi Primo Prodotto
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                        </div>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
 
-<!-- Modal per Preview -->
-<div class="modal fade" id="previewModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Anteprima Etichette</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="previewContent">
-                <!-- Contenuto dinamico -->
-            </div>
+<!-- Cards Mobile -->
+<div class="mobile-cards" id="mobileCards">
+    @forelse($prodotti as $prodotto)
+    <div class="product-card mobile-product-row"
+    data-name="{{ strtolower($prodotto->nome) }}"
+    data-code="{{ strtolower($prodotto->codice_prodotto) }}"
+    data-category="{{ strtolower($prodotto->categoria) }}"
+    data-brand="{{ strtolower($prodotto->brand ?? '') }}">
+    
+    <div class="product-card-header">
+        <h3 class="product-card-title">{{ $prodotto->nome }}</h3>
+        <div class="d-flex flex-column align-items-end">
+            <span class="product-card-code">{{ $prodotto->codice_prodotto }}</span>
+            @if($prodotto->hasQRCode())
+            <small class="qr-status ready mt-1">
+                <i class="bi bi-check-circle"></i> {{ __('app.qr_ready') }}
+            </small>
+            @else
+            <small class="qr-status missing mt-1">
+                <i class="bi bi-exclamation-triangle"></i> {{ __('app.qr_missing') }}
+            </small>
+            @endif
         </div>
     </div>
+    
+    <div class="product-card-details">
+        <div class="product-detail">
+            <span class="product-detail-label">{{ __('app.category') }}</span>
+            <span class="product-detail-value">
+                <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; font-size: 0.7rem;">
+                    {{ ucfirst($prodotto->categoria) }}
+                </span>
+            </span>
+        </div>
+        <div class="product-detail">
+            <span class="product-detail-label">{{ __('app.variants') }}</span>
+            <span class="product-detail-value">{{ $prodotto->magazzino->count() }} {{ __('app.variants') }}</span>
+        </div>
+        <div class="product-detail">
+            <span class="product-detail-label">{{ __('app.label_code') }}</span>
+            <span class="product-detail-value">
+                @if($prodotto->hasLabelCode())
+                <code class="product-card-code">{{ $prodotto->codice_etichetta }}</code>
+                @else
+                <span class="text-muted">{{ __('app.not_generated') }}</span>
+                @endif
+            </span>
+        </div>
+        <div class="product-detail">
+            <span class="product-detail-label">{{ __('app.brand') }}</span>
+            <span class="product-detail-value">{{ $prodotto->brand ?? 'N/A' }}</span>
+        </div>
+    </div>
+    
+    <div class="product-card-price">
+        € {{ number_format($prodotto->prezzo, 2) }}
+    </div>
+    
+    <div class="product-card-actions">
+        <button class="mobile-action-btn qr" onclick="generateSingle({{ $prodotto->id }})" style="border: none; width: 100%;">
+            <i class="bi bi-magic"></i>
+            <span>{{ __('app.generate') }}</span>
+        </button>
+        <button class="mobile-action-btn preview" onclick="viewPreview({{ $prodotto->id }})" style="border: none; width: 100%;">
+            <i class="bi bi-eye"></i>
+            <span>{{ __('app.preview') }}</span>
+        </button>
+        <a href="{{ route('prodotti.labels', $prodotto->id) }}" class="mobile-action-btn print">
+            <i class="bi bi-printer"></i>
+            <span>{{ __('app.print') }}</span>
+        </a>
+    </div>
+</div>
+@empty
+<div class="product-card">
+    <div class="text-center py-5">
+        <i class="bi bi-box-seam" style="font-size: 4rem; opacity: 0.5; margin-bottom: 1rem;"></i>
+        <h5>{{ __('app.no_products_found') }}</h5>
+        <p class="text-muted">{{ __('app.start_adding_products') }}</p>
+        <a href="{{ route('prodotti.create') }}" class="modern-btn">
+            <i class="bi bi-plus-circle"></i> {{ __('app.add_first_product') }}
+        </a>
+    </div>
+</div>
+@endforelse
+</div>
+
+<!-- Messaggio nessun risultato -->
+<div id="noResults" class="text-center py-5" style="display: none;">
+    <i class="bi bi-search" style="font-size: 4rem; opacity: 0.5; margin-bottom: 1rem;"></i>
+    <h5>{{ __('app.no_results_found') }}</h5>
+    <p class="text-muted">{{ __('app.try_different_search') }}</p>
+</div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const filterChips = document.querySelectorAll('.filter-chip');
-    const productRows = document.querySelectorAll('.product-row');
-    let currentFilter = 'all';
-    
-    // Gestione filtri
-    filterChips.forEach(chip => {
-        chip.addEventListener('click', function() {
-            filterChips.forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            currentFilter = this.dataset.filter;
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const filterChips = document.querySelectorAll('.filter-chip');
+        const productRows = document.querySelectorAll('.product-row');
+        const mobileProductRows = document.querySelectorAll('.mobile-product-row');
+        const noResults = document.getElementById('noResults');
+        let currentFilter = 'all';
+        
+        // Gestione filtri
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                filterChips.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                performSearch();
+            });
+        });
+        
+        // Ricerca in tempo reale
+        searchInput.addEventListener('input', function() {
             performSearch();
         });
-    });
-    
-    // Ricerca in tempo reale
-    searchInput.addEventListener('input', function() {
-        performSearch();
-    });
-    
-    function performSearch() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        let visibleRows = 0;
         
-        productRows.forEach(row => {
-            let shouldShow = shouldShowItem(row, searchTerm);
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleRows = 0;
             
-            if (shouldShow) {
-                row.style.display = '';
-                visibleRows++;
+            // Ricerca nella tabella desktop
+            productRows.forEach(row => {
+                let shouldShow = shouldShowItem(row, searchTerm);
+                
+                if (shouldShow) {
+                    row.style.display = '';
+                    visibleRows++;
+                    setTimeout(() => {
+                        row.style.opacity = '1';
+                        row.style.transform = 'translateX(0)';
+                    }, 100);
+                } else {
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        row.style.display = 'none';
+                    }, 300);
+                }
+            });
+            
+            // Ricerca nelle card mobile
+            mobileProductRows.forEach(row => {
+                let shouldShow = shouldShowItem(row, searchTerm);
+                
+                if (shouldShow) {
+                    row.style.display = '';
+                    visibleRows++;
+                    setTimeout(() => {
+                        row.style.opacity = '1';
+                        row.style.transform = 'translateY(0)';
+                    }, 100);
+                } else {
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        row.style.display = 'none';
+                    }, 300);
+                }
+            });
+            
+            // Mostra/nascondi messaggio nessun risultato
+            if (visibleRows === 0 && searchTerm !== '') {
+                noResults.style.display = 'block';
             } else {
-                row.style.display = 'none';
+                noResults.style.display = 'none';
             }
+        }
+        
+        function shouldShowItem(item, searchTerm) {
+            if (searchTerm === '') return true;
+            
+            if (currentFilter === 'all') {
+                return item.dataset.name.includes(searchTerm) ||
+                item.dataset.code.includes(searchTerm) ||
+                item.dataset.category.includes(searchTerm) ||
+                item.dataset.brand.includes(searchTerm);
+            } else {
+                return item.dataset[currentFilter].includes(searchTerm);
+            }
+        }
+        
+        // Animazione di entrata delle righe desktop
+        productRows.forEach((row, index) => {
+            setTimeout(() => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-50px)';
+                row.style.transition = 'all 0.5s ease';
+                
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateX(0)';
+                }, 100);
+            }, index * 100);
+        });
+        
+        // Animazione di entrata delle card mobile
+        mobileProductRows.forEach((row, index) => {
+            setTimeout(() => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(30px)';
+                row.style.transition = 'all 0.5s ease';
+                
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, 100);
+            }, index * 150);
+        });
+    });
+    
+    // Genera codici per singolo prodotto
+    function generateSingle(productId) {
+        const button = event.target.closest('button');
+        const originalText = button.innerHTML;
+        
+        button.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i>';
+        button.disabled = true;
+        
+        fetch(`/labels/generate-all/${productId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('{{ __('app.qr_generated_success') }}', 'success');
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showNotification('{{ __('app.error') }}: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('{{ __('app.connection_error') }}: ' + error.message, 'error');
+        })
+        .finally(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
         });
     }
     
-    function shouldShowItem(item, searchTerm) {
-        if (searchTerm === '') return true;
+    // Genera tutti i QR mancanti
+    function generateAllMissingQR() {
+        if (!confirm('{{ __('app.confirm_generate_all_qr') }}')) {
+            return;
+        }
         
-        if (currentFilter === 'all') {
-            return item.dataset.name.includes(searchTerm) ||
-            item.dataset.code.includes(searchTerm) ||
-            item.dataset.category.includes(searchTerm) ||
-            item.dataset.brand.includes(searchTerm);
-        } else {
-            return item.dataset[currentFilter].includes(searchTerm);
-        }
-    }
-});
-
-// Genera codici per singolo prodotto
-function generateSingle(productId) {
-    const button = event.target.closest('button');
-    const originalText = button.innerHTML;
-    
-    button.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i>';
-    button.disabled = true;
-    
-    fetch(`/labels/generate-all/${productId}`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('Codici e QR generati con successo!', 'success');
-            setTimeout(() => location.reload(), 1500);
-        } else {
-            showNotification('Errore: ' + data.message, 'error');
-        }
-    })
-    .catch(error => {
-        showNotification('Errore di connessione: ' + error.message, 'error');
-    })
-    .finally(() => {
-        button.innerHTML = originalText;
-        button.disabled = false;
-    });
-}
-
-// Genera tutti i QR mancanti
-function generateAllMissingQR() {
-    if (!confirm('Sei sicuro di voler generare tutti i QR Code mancanti? Questa operazione potrebbe richiedere alcuni minuti.')) {
-        return;
+        const button = event.target;
+        const originalText = button.innerHTML;
+        
+        button.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i> {{ __('app.generating') }}...';
+        button.disabled = true;
+        
+        // Simula generazione multipla (implementare logica reale)
+        let processed = 0;
+        const total = {{ $prodotti->where('qr_enabled', false)->count() }};
+        
+        const interval = setInterval(() => {
+            processed++;
+            button.innerHTML = `<i class="bi bi-arrow-clockwise spin"></i> ${processed}/${total} {{ __('app.completed') }}...`;
+            
+            if (processed >= total) {
+                clearInterval(interval);
+                button.innerHTML = originalText;
+                button.disabled = false;
+                showNotification(`${total} {{ __('app.qr_codes_generated_success') }}`, 'success');
+                setTimeout(() => location.reload(), 2000);
+            }
+        }, 500);
     }
     
-    const button = event.target;
-    const originalText = button.innerHTML;
+    // Preview etichette
+    function viewPreview(productId) {
+        // Apre la preview nella stessa pagina
+        window.location.href = `/labels/preview/${productId}`;
+    }
     
-    button.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i> Generazione in corso...';
-    button.disabled = true;
+    // Stampa in massa
+    function printBulkLabels() {
+        showNotification('{{ __('app.feature_coming_soon') }}', 'info');
+    }
     
-    // Simula generazione multipla (implementare logica reale)
-    let processed = 0;
-    const total = {{ $prodotti->where('qr_enabled', false)->count() }};
-    
-    const interval = setInterval(() => {
-        processed++;
-        button.innerHTML = `<i class="bi bi-arrow-clockwise spin"></i> ${processed}/${total} completati...`;
+    // Sistema notifiche
+    function showNotification(message, type = 'info') {
+        const alertClass = type === 'success' ? 'alert-success' : 
+        type === 'error' ? 'alert-danger' : 
+        type === 'info' ? 'alert-info' : 'alert-warning';
         
-        if (processed >= total) {
-            clearInterval(interval);
-            button.innerHTML = originalText;
-            button.disabled = false;
-            showNotification(`${total} QR Code generati con successo!`, 'success');
-            setTimeout(() => location.reload(), 2000);
-        }
-    }, 500);
-}
-
-// Preview etichette
-function viewPreview(productId) {
-    fetch(`/labels/preview/${productId}`)
-    .then(response => response.text())
-    .then(html => {
-        document.getElementById('previewContent').innerHTML = html;
-        new bootstrap.Modal(document.getElementById('previewModal')).show();
-    })
-    .catch(error => {
-        showNotification('Errore nel caricamento preview: ' + error.message, 'error');
-    });
-}
-
-// Stampa in massa
-function printBulkLabels() {
-    showNotification('Funzionalità in sviluppo - Disponibile presto!', 'info');
-}
-
-// Sistema notifiche
-function showNotification(message, type = 'info') {
-    const alertClass = type === 'success' ? 'alert-success' : 
-                      type === 'error' ? 'alert-danger' : 
-                      type === 'info' ? 'alert-info' : 'alert-warning';
-    
-    const notification = document.createElement('div');
-    notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
-    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
-    notification.innerHTML = `
+        const notification = document.createElement('div');
+        notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
-    document.body.appendChild(notification);
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
     
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.remove();
-        }
-    }, 5000);
-}
-
-// Stile per animazione loading
-const style = document.createElement('style');
-style.textContent = `
+    // Stile per animazione loading
+    const style = document.createElement('style');
+    style.textContent = `
     .spin {
         animation: spin 1s linear infinite;
     }
@@ -790,6 +1113,6 @@ style.textContent = `
         to { transform: rotate(360deg); }
     }
 `;
-document.head.appendChild(style);
+    document.head.appendChild(style);
 </script>
 @endsection

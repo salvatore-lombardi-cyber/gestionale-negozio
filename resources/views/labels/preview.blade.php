@@ -1,17 +1,9 @@
 @extends('layouts.app')
 
-@section('title', __('app.preview_labels') . ' - ' . $prodotto->nome)
+@section('title', 'Anteprima Etichette - ' . $prodotto->nome)
 
 @section('content')
 <style>
-    /* Mobile gradient background */
-    @media (max-width: 768px) {
-        body {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            min-height: 100vh;
-        }
-    }
-    
     .preview-container {
         padding: 2rem;
         min-height: calc(100vh - 76px);
@@ -27,14 +19,8 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
-    .header-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
     .page-title {
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: 700;
         background: linear-gradient(135deg, #667eea, #764ba2);
         -webkit-background-clip: text;
@@ -42,96 +28,49 @@
         margin: 0;
     }
     
-    /* Desktop Buttons */
-    .desktop-buttons {
-        display: flex;
-        gap: 12px;
-    }
-    
-    .header-btn {
-        padding: 10px 20px;
-        border-radius: 25px;
+    .modern-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
         border: none;
+        border-radius: 15px;
+        padding: 12px 24px;
         font-weight: 600;
-        font-size: 14px;
+        color: white;
         text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        white-space: nowrap;
     }
     
-    .header-btn i {
-        font-size: 16px;
-    }
-    
-    .header-btn.btn-success {
-        background: linear-gradient(135deg, #28a745, #20c997);
-        color: white;
-    }
-    
-    .header-btn.btn-secondary {
-        background: linear-gradient(135deg, #6c757d, #5a6268);
-        color: white;
-    }
-    
-    .header-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        color: white;
-    }
-    
-    /* Mobile Buttons - Hidden by default */
-    .mobile-buttons {
-        display: none;
-        margin-bottom: 1.5rem;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 1.5rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .mobile-btn {
+    .modern-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
         width: 100%;
-        padding: 14px 24px;
-        border-radius: 25px;
-        border: none;
-        font-weight: 600;
-        font-size: 15px;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
         transition: all 0.3s ease;
-        cursor: pointer;
-        margin-bottom: 12px;
     }
     
-    .mobile-btn:last-child {
-        margin-bottom: 0;
+    .modern-btn:hover::before {
+        left: 0;
     }
     
-    .mobile-btn i {
-        font-size: 18px;
-    }
-    
-    .mobile-btn.btn-success {
-        background: linear-gradient(135deg, #28a745, #20c997);
+    .modern-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
         color: white;
     }
     
-    .mobile-btn.btn-secondary {
+    .modern-btn.btn-secondary {
         background: linear-gradient(135deg, #6c757d, #5a6268);
-        color: white;
     }
     
-    .mobile-btn:active {
-        transform: scale(0.98);
+    .modern-btn.btn-success {
+        background: linear-gradient(135deg, #28a745, #20c997);
     }
     
     .modern-card {
@@ -374,10 +313,6 @@
         color: #e2e8f0;
     }
     
-    [data-bs-theme="dark"] .mobile-buttons {
-        background: transparent;
-    }
-    
     [data-bs-theme="dark"] .label-card {
         background: rgba(45, 55, 72, 0.95);
         border-color: rgba(102, 126, 234, 0.5);
@@ -404,24 +339,6 @@
             padding: 1rem;
         }
         
-        .page-header {
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .header-content {
-            justify-content: center;
-        }
-        
-        .desktop-buttons {
-            display: none;
-        }
-        
-        .mobile-buttons {
-            display: block;
-            padding: 0 1rem;
-        }
-        
         .labels-grid {
             grid-template-columns: 1fr;
         }
@@ -432,21 +349,14 @@
         }
         
         .page-title {
-            font-size: 1.8rem;
-            text-align: center;
-        }
-        
-        .product-info-card,
-        .section-card {
-            padding: 1.5rem;
+            font-size: 2rem;
         }
     }
     
     /* Stampa */
     @media print {
         .page-header,
-        .product-info-card,
-        .mobile-buttons {
+        .product-info-card {
             display: none;
         }
         
@@ -484,14 +394,14 @@
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="page-title">
-                <i class="bi bi-tags-fill"></i> {{ __('app.preview_labels') }}
+                <i class="bi bi-eye"></i> Anteprima Etichette
             </h1>
             <div class="d-flex gap-2">
-                <a href="{{ route('labels.index') }}" class="header-btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i> {{ __('app.back') }}
+                <a href="{{ route('labels.index') }}" class="modern-btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Indietro
                 </a>
-                <button onclick="printLabels()" class="header-btn btn-success">
-                    <i class="bi bi-printer"></i> {{ __('app.print') }}
+                <button onclick="printLabels()" class="modern-btn btn-success">
+                    <i class="bi bi-printer"></i> Stampa
                 </button>
             </div>
         </div>
@@ -502,11 +412,11 @@
         <div class="product-info">
             <div class="product-qr-preview">
                 @if($prodotto->qr_code_path && Storage::disk('public')->exists($prodotto->qr_code_path))
-                    <img src="{{ Storage::url($prodotto->qr_code_path) }}" alt="{{ __('app.product_qr_code') }}">
+                    <img src="{{ Storage::url($prodotto->qr_code_path) }}" alt="QR Code Prodotto">
                 @else
                     <div class="no-qr" style="width: 120px; height: 120px; font-size: 14px;">
                         <i class="bi bi-qr-code"></i>
-                        <span>{{ __('app.no_qr') }}</span>
+                        <span>NO QR</span>
                     </div>
                 @endif
             </div>
@@ -531,33 +441,25 @@
                         </span>
                     @endif
                     <span class="meta-badge">
-                        <i class="bi bi-palette"></i> {{ $prodotto->magazzino->count() }} {{ __('app.variants') }}
+                        <i class="bi bi-palette"></i> {{ $prodotto->magazzino->count() }} varianti
                     </span>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Etichette -->
+    <!-- Etichetta Prodotto -->
     <div class="section-card">
         <h3 class="section-title">
-            <i class="bi bi-tags-fill"></i> 
-            @if($prodotto->magazzino->count() > 0)
-                {{ __('app.product_labels') }}
-                <span class="badge bg-primary">{{ $prodotto->magazzino->count() + 1 }} {{ __('app.total') }}</span>
-            @else
-                {{ __('app.product_label') }}
-            @endif
+            <i class="bi bi-tag-fill"></i> Etichetta Prodotto Principale
         </h3>
-        
         <div class="labels-grid">
-            <!-- Etichetta Prodotto Principale -->
             <div class="label-card">
                 <div class="label-qr">
                     @if($prodotto->qr_code_path && Storage::disk('public')->exists($prodotto->qr_code_path))
-                        <img src="{{ Storage::url($prodotto->qr_code_path) }}" alt="{{ __('app.qr_code') }}">
+                        <img src="{{ Storage::url($prodotto->qr_code_path) }}" alt="QR Code">
                     @else
-                        <div class="no-qr">{{ __('app.no_qr') }}</div>
+                        <div class="no-qr">NO QR</div>
                     @endif
                 </div>
                 <div class="label-info">
@@ -569,32 +471,42 @@
                     @endif
                 </div>
             </div>
-            
-            <!-- Etichette Varianti -->
-            @foreach($prodotto->magazzino as $variante)
-                <div class="label-card variant-label">
-                    <div class="label-qr">
-                        @if($variante->variant_qr_path && Storage::disk('public')->exists($variante->variant_qr_path))
-                            <img src="{{ Storage::url($variante->variant_qr_path) }}" alt="{{ __('app.variant_qr_code') }}">
-                        @else
-                            <div class="no-qr">{{ __('app.no_qr') }}</div>
-                        @endif
-                    </div>
-                    <div class="label-info">
-                        <div class="label-code">{{ $variante->codice_variante }}</div>
-                        <div class="label-name">{{ $prodotto->nome }}</div>
-                        <div class="label-variant">
-                            <i class="bi bi-palette2"></i> {{ $variante->taglia }} - {{ $variante->colore }}
-                        </div>
-                        <div class="label-price">€{{ number_format($prodotto->prezzo, 2) }}</div>
-                        @if($prodotto->brand)
-                            <div class="label-brand">{{ $prodotto->brand }}</div>
-                        @endif
-                    </div>
-                </div>
-            @endforeach
         </div>
     </div>
+    
+    <!-- Etichette Varianti -->
+    @if($prodotto->magazzino->count() > 0)
+        <div class="section-card">
+            <h3 class="section-title">
+                <i class="bi bi-tags-fill"></i> Etichette Varianti 
+                <span class="badge bg-primary">{{ $prodotto->magazzino->count() }}</span>
+            </h3>
+            <div class="labels-grid">
+                @foreach($prodotto->magazzino as $variante)
+                    <div class="label-card variant-label">
+                        <div class="label-qr">
+                            @if($variante->variant_qr_path && Storage::disk('public')->exists($variante->variant_qr_path))
+                                <img src="{{ Storage::url($variante->variant_qr_path) }}" alt="QR Code Variante">
+                            @else
+                                <div class="no-qr">NO QR</div>
+                            @endif
+                        </div>
+                        <div class="label-info">
+                            <div class="label-code">{{ $variante->codice_variante }}</div>
+                            <div class="label-name">{{ $prodotto->nome }}</div>
+                            <div class="label-variant">
+                                <i class="bi bi-palette2"></i> {{ $variante->taglia }} - {{ $variante->colore }}
+                            </div>
+                            <div class="label-price">€{{ number_format($prodotto->prezzo, 2) }}</div>
+                            @if($prodotto->brand)
+                                <div class="label-brand">{{ $prodotto->brand }}</div>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
 </div>
 
 <script>
@@ -603,7 +515,7 @@ function printLabels() {
     const button = event.target.closest('button');
     const originalText = button.innerHTML;
     
-    button.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i> {{ __('app.preparing') }}';
+    button.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i> Preparazione...';
     button.disabled = true;
     
     // Piccolo delay per l'animazione
@@ -629,7 +541,8 @@ document.head.appendChild(style);
 
 // Notifica successo stampa (opzionale)
 window.addEventListener('afterprint', function() {
-    console.log('{{ __('app.print_completed') }}');
+    // Puoi aggiungere una notifica qui se vuoi
+    console.log('Stampa completata o annullata');
 });
 </script>
 @endsection

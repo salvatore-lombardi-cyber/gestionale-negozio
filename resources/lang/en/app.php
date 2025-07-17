@@ -278,6 +278,38 @@ return [
     
     /*
     |--------------------------------------------------------------------------
+    | QR CODE & LABELS SECTION
+    |--------------------------------------------------------------------------
+    */
+'qr_labels' => 'QR Labels',
+'qr_labels_management' => 'QR Code Labels Management',
+'products_list' => 'Products List',
+'total_products' => 'Total Products',
+'products_with_qr' => 'Products with QR',
+'total_variants' => 'Total Variants',
+'labels_printed_today' => 'Labels Printed Today',
+'quick_actions' => 'Quick Actions',
+'generate_all_missing_qr' => 'Generate All Missing QR',
+'test_scanner' => 'Test Scanner',
+'bulk_print' => 'Bulk Print',
+'all_categories' => 'All Categories',
+'qr_status' => 'QR Status',
+'label_code' => 'Label Code',
+'qr_ready' => 'QR Ready',
+'qr_missing' => 'QR Missing',
+'not_generated' => 'Not Generated',
+'generate_codes' => 'Generate Codes',
+'preview_labels' => 'Preview Labels',
+'print_labels' => 'Print Labels',
+'labels_preview' => 'Labels Preview',
+'confirm_generate_all_qr' => 'Are you sure you want to generate all missing QR Codes?',
+'feature_coming_soon' => 'Feature coming soon',
+'copies' => 'Copies',
+'total_labels' => 'Total Labels',
+'select_labels_to_print' => 'Select labels to print',
+    
+    /*
+    |--------------------------------------------------------------------------
     | COLORS
     |--------------------------------------------------------------------------
     */
@@ -329,4 +361,33 @@ return [
     'total_sales' => 'Total Sales',
     'monthly_revenue' => 'Monthly Revenue',
     'with_customer' => 'With Customer',
+
+    'back' => 'Back',
+'print' => 'Print',
+'product_qr_code' => 'Product QR Code',
+'no_qr' => 'NO QR',
+'variants' => 'variants',
+'product_labels' => 'Product Labels',
+'product_label' => 'Product Label',
+'total' => 'total',
+'qr_code' => 'QR Code',
+'variant_qr_code' => 'Variant QR Code',
+'preparing' => 'Preparing...',
+'print_completed' => 'Print completed or cancelled',
+
+'back_to_products' => 'Back to Products',
+'search_products_placeholder' => 'Search products by name, code, category, brand...',
+'no_products_found' => 'No products found',
+'start_adding_products' => 'Start by adding some products to your catalog',
+'add_first_product' => 'Add First Product',
+'qr_generated_success' => 'Codes and QR generated successfully!',
+'error' => 'Error',
+'connection_error' => 'Connection error',
+'generating' => 'Generating',
+'completed' => 'completed',
+'qr_codes_generated_success' => 'QR Codes generated successfully!',
+'generate' => 'Generate',
+'preview' => 'Preview',
+'no_results_found' => 'No results found',
+'try_different_search' => 'Try modifying the search criteria',
 ];

@@ -4,9 +4,10 @@ namespace App\Services;
 
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Color\Color;
-use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\RoundBlockSizeMode;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Prodotto;
 use App\Models\Magazzino;
@@ -15,13 +16,13 @@ class QRCodeService
 {
     private $storeId;
     private $logoPath;
-
+    
     public function __construct()
     {
         $this->storeId = config('app.store_id', 'STORE001');
         $this->logoPath = public_path('images/logo-small.png');
     }
-
+    
     /**
      * Genera QR Code per prodotto principale
      */
@@ -31,13 +32,18 @@ class QRCodeService
         $code = $prodotto->codice_etichetta ?? $prodotto->codice_prodotto;
         $qrData = $this->buildQRData($code);
         
-        $qrCode = new QrCode($qrData);
-        $qrCode->setSize(300);
-        $qrCode->setErrorCorrectionLevel(new ErrorCorrectionLevelHigh());
-        $qrCode->setForegroundColor(new Color(0, 0, 0));
-        $qrCode->setBackgroundColor(new Color(255, 255, 255));
-        $qrCode->setMargin(10);
-
+        // Sintassi corretta per versione 6.0.9 con named parameters
+        $qrCode = new QrCode(
+            data: $qrData,
+            encoding: new Encoding('UTF-8'),
+            errorCorrectionLevel: ErrorCorrectionLevel::High,
+            size: 300,
+            margin: 10,
+            roundBlockSizeMode: RoundBlockSizeMode::Margin,
+            foregroundColor: new Color(0, 0, 0),
+            backgroundColor: new Color(255, 255, 255)
+        );
+        
         $writer = new PngWriter();
         $result = $writer->write($qrCode);
         
@@ -49,10 +55,10 @@ class QRCodeService
             'qr_code' => $qrData,
             'qr_code_path' => $filename
         ]);
-
+        
         return $filename;
     }
-
+    
     /**
      * Genera QR Code per variante (taglia/colore)
      */
@@ -60,13 +66,18 @@ class QRCodeService
     {
         $qrData = $magazzino->codice_variante;
         
-        $qrCode = new QrCode($qrData);
-        $qrCode->setSize(250);
-        $qrCode->setErrorCorrectionLevel(new ErrorCorrectionLevelHigh());
-        $qrCode->setForegroundColor(new Color(0, 0, 0));
-        $qrCode->setBackgroundColor(new Color(255, 255, 255));
-        $qrCode->setMargin(8);
-
+        // Sintassi corretta per versione 6.0.9 con named parameters
+        $qrCode = new QrCode(
+            data: $qrData,
+            encoding: new Encoding('UTF-8'),
+            errorCorrectionLevel: ErrorCorrectionLevel::High,
+            size: 250,
+            margin: 8,
+            roundBlockSizeMode: RoundBlockSizeMode::Margin,
+            foregroundColor: new Color(0, 0, 0),
+            backgroundColor: new Color(255, 255, 255)
+        );
+        
         $writer = new PngWriter();
         $result = $writer->write($qrCode);
         
@@ -78,10 +89,10 @@ class QRCodeService
             'variant_qr_code' => $qrData,
             'variant_qr_path' => $filename
         ]);
-
+        
         return $filename;
     }
-
+    
     /**
      * Costruisce i dati del QR Code
      */
@@ -89,7 +100,7 @@ class QRCodeService
     {
         return $this->storeId . '-' . $code;
     }
-
+    
     /**
      * Decodifica QR Code
      */
@@ -105,7 +116,7 @@ class QRCodeService
             'full_code' => $qrData
         ];
     }
-
+    
     /**
      * Trova prodotto da QR Code
      */
@@ -118,7 +129,7 @@ class QRCodeService
             ->orWhere('codice_prodotto', $decoded['product_code'])
             ->first();
     }
-
+    
     /**
      * Trova variante da QR Code
      */
@@ -126,7 +137,7 @@ class QRCodeService
     {
         return Magazzino::where('codice_variante', $qrData)->first();
     }
-
+    
     /**
      * Verifica se QR Code esiste
      */
@@ -136,7 +147,7 @@ class QRCodeService
                !empty($prodotto->qr_code_path) && 
                Storage::disk('public')->exists($prodotto->qr_code_path);
     }
-
+    
     /**
      * Verifica se QR Code variante esiste
      */
