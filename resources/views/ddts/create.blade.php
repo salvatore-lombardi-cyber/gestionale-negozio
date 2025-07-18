@@ -315,7 +315,7 @@
             <h1 class="page-title">
                 <i class="bi bi-file-earmark-plus"></i> Nuovo DDT
             </h1>
-            <a href="{{ route('ddts.index') }}" class="modern-btn secondary">
+            <a href="{{ route('ddts.index') }}" class="modern-btn">
                 <i class="bi bi-arrow-left"></i> Indietro
             </a>
         </div>

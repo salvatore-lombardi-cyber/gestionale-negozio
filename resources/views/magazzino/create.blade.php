@@ -357,7 +357,7 @@
             <h1 class="page-title">
                 <i class="bi bi-plus-circle"></i> Nuova Scorta
             </h1>
-            <a href="{{ route('magazzino.index') }}" class="modern-btn secondary">
+            <a href="{{ route('magazzino.index') }}" class="modern-btn">
                 <i class="bi bi-arrow-left"></i> Torna al Magazzino
             </a>
         </div>

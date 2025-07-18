@@ -337,7 +337,7 @@
             <h1 class="page-title">
                 <i class="bi bi-plus-circle"></i> {{ __('app.new') }} {{ __('app.product') }}
             </h1>
-            <a href="{{ route('prodotti.index') }}" class="modern-btn secondary">
+            <a href="{{ route('prodotti.index') }}" class="modern-btn ">
                 <i class="bi bi-arrow-left"></i> {{ __('app.back') }}
             </a>
         </div>

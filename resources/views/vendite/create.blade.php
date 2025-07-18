@@ -377,7 +377,7 @@
             <h1 class="page-title">
                 <i class="bi bi-cart-plus"></i> Nuova Vendita
             </h1>
-            <a href="{{ route('vendite.index') }}" class="modern-btn secondary">
+            <a href="{{ route('vendite.index') }}" class="modern-btn">
                 <i class="bi bi-arrow-left"></i> Indietro
             </a>
         </div>

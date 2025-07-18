@@ -322,7 +322,7 @@
             <h1 class="page-title">
                 <i class="bi bi-person-plus"></i> Nuovo Cliente
             </h1>
-            <a href="{{ route('clienti.index') }}" class="modern-btn secondary">
+            <a href="{{ route('clienti.index') }}" class="modern-btn ">
                 <i class="bi bi-arrow-left"></i> Indietro
             </a>
         </div>
