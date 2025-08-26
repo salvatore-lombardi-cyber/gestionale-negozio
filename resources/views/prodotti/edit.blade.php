@@ -407,7 +407,7 @@
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="bi bi-info-circle"></i>
-                    Informazioni Base
+                    {{ __('app.basic_information') }}
                 </h3>
                 
                 <div class="form-group">
@@ -421,7 +421,7 @@
                            name="nome" 
                            value="{{ old('nome', $prodotto->nome) }}" 
                            required
-                           placeholder="Inserisci il nome del prodotto">
+                           placeholder="{{ __('app.enter_product_name') }}">
                     @error('nome')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -435,11 +435,11 @@
                     <textarea class="modern-textarea @error('descrizione') is-invalid @enderror"
                               id="descrizione" 
                               name="descrizione" 
-                              placeholder="Descrizione dettagliata del prodotto (opzionale)">{{ old('descrizione', $prodotto->descrizione) }}</textarea>
+                              placeholder="{{ __('app.detailed_product_description_optional') }}">{{ old('descrizione', $prodotto->descrizione) }}</textarea>
                     @error('descrizione')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                    <div class="input-hint">Fornisci una descrizione dettagliata per aiutare i clienti</div>
+                    <div class="input-hint">{{ __('app.provide_detailed_description_help_customers') }}</div>
                 </div>
             </div>
 
@@ -447,7 +447,7 @@
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="bi bi-tags"></i>
-                    Prezzi e Categorizzazione
+                    {{ __('app.prices_and_categorization') }}
                 </h3>
                 
                 <div class="input-group">
@@ -480,7 +480,7 @@
                                name="categoria" 
                                value="{{ old('categoria', $prodotto->categoria) }}" 
                                required
-                               placeholder="es. abbigliamento, elettronica...">
+                               placeholder="{{ __('app.category_examples') }}">
                         @error('categoria')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -492,7 +492,7 @@
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="bi bi-box-seam"></i>
-                    Dettagli Prodotto
+                    {{ __('app.product_details') }}
                 </h3>
                 
                 <div class="input-group">
@@ -506,7 +506,7 @@
                                id="brand" 
                                name="brand" 
                                value="{{ old('brand', $prodotto->brand) }}"
-                               placeholder="Marca o produttore (opzionale)">
+                               placeholder="{{ __('app.brand_or_manufacturer_optional') }}">
                         @error('brand')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -523,11 +523,11 @@
                                name="codice_prodotto" 
                                value="{{ old('codice_prodotto', $prodotto->codice_prodotto) }}" 
                                required
-                               placeholder="Codice univoco del prodotto">
+                               placeholder="{{ __('app.unique_product_code') }}">
                         @error('codice_prodotto')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="input-hint">Il codice deve essere univoco nel sistema</div>
+                        <div class="input-hint">{{ __('app.code_must_be_unique') }}</div>
                     </div>
                 </div>
             </div>
@@ -547,7 +547,7 @@
                     </label>
                 </div>
                 <div class="input-hint" style="margin-top: 0.5rem; margin-left: 3rem;">
-                    I prodotti attivi sono visibili e acquistabili
+                    {{ __('app.active_products_visible_purchasable') }}
                 </div>
             </div>
 

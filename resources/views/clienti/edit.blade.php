@@ -397,7 +397,7 @@
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="bi bi-person-vcard"></i>
-                    Dati Anagrafici
+                    {{ __('app.personal_data') }}
                 </h3>
                 
                 <div class="input-group">
@@ -412,7 +412,7 @@
                                name="nome" 
                                value="{{ old('nome', $cliente->nome) }}" 
                                required
-                               placeholder="Nome del cliente">
+                               placeholder="{{ __('app.customer_name') }}">
                         @error('nome')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -429,7 +429,7 @@
                                name="cognome" 
                                value="{{ old('cognome', $cliente->cognome) }}" 
                                required
-                               placeholder="Cognome del cliente">
+                               placeholder="{{ __('app.customer_surname') }}">
                         @error('cognome')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -450,7 +450,7 @@
                         @error('data_nascita')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="input-hint">Utilizzata per calcolare l'età del cliente</div>
+                        <div class="input-hint">{{ __('app.used_to_calculate_customer_age') }}</div>
                     </div>
                     
                     <div class="form-group">
@@ -477,7 +477,7 @@
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="bi bi-telephone"></i>
-                    Informazioni di Contatto
+                    {{ __('app.contact_information') }}
                 </h3>
                 
                 <div class="input-group">
@@ -491,7 +491,7 @@
                                id="telefono" 
                                name="telefono" 
                                value="{{ old('telefono', $cliente->telefono) }}"
-                               placeholder="es. 3458816003">
+                               placeholder="{{ __('app.phone_example') }}">
                         @error('telefono')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -511,7 +511,7 @@
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        <div class="input-hint">Email per comunicazioni e fatturazione</div>
+                        <div class="input-hint">{{ __('app.email_for_communications_billing') }}</div>
                     </div>
                 </div>
             </div>
@@ -520,7 +520,7 @@
             <div class="form-section">
                 <h3 class="section-title">
                     <i class="bi bi-geo-alt"></i>
-                    Indirizzo e Residenza
+                    {{ __('app.address_and_residence') }}
                 </h3>
                 
                 <div class="form-group">
@@ -531,11 +531,11 @@
                     <textarea class="modern-textarea @error('indirizzo') is-invalid @enderror"
                               id="indirizzo" 
                               name="indirizzo" 
-                              placeholder="Via, numero civico, scala, piano, interno...">{{ old('indirizzo', $cliente->indirizzo) }}</textarea>
+                              placeholder="{{ __('app.address_placeholder') }}">{{ old('indirizzo', $cliente->indirizzo) }}</textarea>
                     @error('indirizzo')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                    <div class="input-hint">Indirizzo completo per spedizioni e fatturazione</div>
+                    <div class="input-hint">{{ __('app.complete_address_shipping_billing') }}</div>
                 </div>
                 
                 <div class="input-group-3">
@@ -549,7 +549,7 @@
                                id="citta" 
                                name="citta" 
                                value="{{ old('citta', $cliente->citta) }}"
-                               placeholder="Nome della città">
+                               placeholder="{{ __('app.city_name') }}">
                         @error('citta')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

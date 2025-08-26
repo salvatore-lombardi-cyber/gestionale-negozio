@@ -396,7 +396,7 @@
                 <h1 class="customer-title">{{ $cliente->nome_completo }}</h1>
                 <p class="customer-subtitle">
                     <i class="bi bi-person"></i>
-                    {{ __('app.customer') }} • Cliente dal {{ $cliente->created_at->format('d/m/Y') }}
+                    {{ __('app.customer') }} • {{ __('app.customer_since_date', ['date' => $cliente->created_at->format('d/m/Y')]) }}
                 </p>
             </div>
             <div class="action-buttons">
@@ -416,7 +416,7 @@
         <div class="info-card">
             <h3 class="card-title">
                 <i class="bi bi-person-vcard"></i>
-                Dati Anagrafici
+                {{ __('app.personal_data') }}
             </h3>
             
             <div class="info-item">
@@ -465,7 +465,7 @@
                 <span class="info-value">
                     @if($cliente->data_nascita)
                         <span class="date-display">{{ $cliente->data_nascita->format('d/m/Y') }}</span>
-                        <span class="age-badge">{{ $cliente->data_nascita->age }} anni</span>
+                        <span class="age-badge">{{ __('app.years_old', ['age' => $cliente->data_nascita->age]) }}</span>
                     @else
                         <em style="color: #a0aec0;">N/A</em>
                     @endif
@@ -477,7 +477,7 @@
         <div class="info-card">
             <h3 class="card-title">
                 <i class="bi bi-telephone"></i>
-                Informazioni Contatto
+                {{ __('app.contact_information') }}
             </h3>
             
             <div class="info-item">
@@ -544,7 +544,7 @@
         <div class="info-card">
             <h3 class="card-title">
                 <i class="bi bi-clock-history"></i>
-                Informazioni Sistema
+                {{ __('app.system_information') }}
             </h3>
             
             <div class="info-item">
@@ -570,7 +570,7 @@
             <div class="info-item">
                 <span class="info-label">
                     <i class="bi bi-calendar-check"></i>
-                    Cliente da
+                    {{ __('app.customer_for') }}
                 </span>
                 <span class="info-value">
                     <span class="datetime-display">{{ $cliente->created_at->diffForHumans() }}</span>
@@ -580,7 +580,7 @@
             <div class="info-item">
                 <span class="info-label">
                     <i class="bi bi-clock"></i>
-                    Ultima attività
+                    {{ __('app.last_activity') }}
                 </span>
                 <span class="info-value">
                     <span class="datetime-display">{{ $cliente->updated_at->diffForHumans() }}</span>

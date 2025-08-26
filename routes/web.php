@@ -77,3 +77,15 @@ Route::get('/language/{locale}', function ($locale) {
     }
     return redirect()->back();
 })->name('language.change');
+
+// Routes AI Assistant
+Route::prefix('ai-assistant')->name('ai.')->group(function () {
+    Route::get('/', [App\Http\Controllers\AIAssistantController::class, 'index'])->name('index');
+    Route::post('/ask', [App\Http\Controllers\AIAssistantController::class, 'ask'])->name('ask');
+    Route::post('/analyze', [App\Http\Controllers\AIAssistantController::class, 'analyze'])->name('analyze');
+    Route::post('/ask-products', [App\Http\Controllers\AIAssistantController::class, 'askProducts'])->name('ask-products');
+    Route::post('/ask-customers', [App\Http\Controllers\AIAssistantController::class, 'askCustomers'])->name('ask-customers');
+    Route::post('/ask-sales', [App\Http\Controllers\AIAssistantController::class, 'askSales'])->name('ask-sales');
+    Route::get('/status', [App\Http\Controllers\AIAssistantController::class, 'status'])->name('status');
+    Route::get('/suggestions', [App\Http\Controllers\AIAssistantController::class, 'suggestions'])->name('suggestions');
+});

@@ -620,11 +620,11 @@
                     <td>
                         @if($prodotto->hasQRCode())
                         <span class="qr-status ready">
-                            <i class="bi bi-check-circle"></i> Ready
+                            <i class="bi bi-check-circle"></i> {{ __('app.qr_ready') }}
                         </span>
                         @else
                         <span class="qr-status missing">
-                            <i class="bi bi-exclamation-triangle"></i> Missing
+                            <i class="bi bi-exclamation-triangle"></i> {{ __('app.qr_missing') }}
                         </span>
                         @endif
                     </td>
@@ -635,10 +635,10 @@
                         <a href="{{ route('prodotti.edit', $prodotto) }}" class="action-btn edit">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <button class="action-btn qr" onclick="generateQR({{ $prodotto->id }})" title="Genera QR Code">
+                        <button class="action-btn qr" onclick="generateQR({{ $prodotto->id }})" title="{{ __('app.generate_qr_code') }}">
                             <i class="bi bi-qr-code"></i>
                         </button>
-                        <a href="{{ route('prodotti.labels', $prodotto->id) }}" class="action-btn labels" title="Stampa Etichette">
+                        <a href="{{ route('prodotti.labels', $prodotto->id) }}" class="action-btn labels" title="{{ __('app.print_labels') }}">
                             <i class="bi bi-printer"></i>
                         </a>
                         <form action="{{ route('prodotti.destroy', $prodotto) }}" method="POST" style="display: inline;">
@@ -684,11 +684,11 @@
                 <span class="product-card-code">{{ $prodotto->codice_prodotto }}</span>
                 @if($prodotto->hasQRCode())
                 <small class="qr-status ready mt-1">
-                    <i class="bi bi-check-circle"></i> QR Ready
+                    <i class="bi bi-check-circle"></i> {{ __('app.qr_ready') }}
                 </small>
                 @else
                 <small class="qr-status missing mt-1">
-                    <i class="bi bi-exclamation-triangle"></i> QR Missing
+                    <i class="bi bi-exclamation-triangle"></i> {{ __('app.qr_missing') }}
                 </small>
                 @endif
             </div>
@@ -904,13 +904,13 @@
             if (data.success) {
                 // Aggiorna lo stato visuale
                 updateQRStatus(productId, true);
-                showNotification('QR Code generati con successo!', 'success');
+                showNotification('{{ __('app.qr_generated_successfully') }}', 'success');
             } else {
-                showNotification('Errore nella generazione: ' + data.message, 'error');
+                showNotification('{{ __('app.generation_error') }}: ' + data.message, 'error');
             }
         })
         .catch(error => {
-            showNotification('Errore di connessione: ' + error.message, 'error');
+            showNotification('{{ __('app.connection_error') }}: ' + error.message, 'error');
         })
         .finally(() => {
             // Ripristina il bottone
@@ -927,10 +927,10 @@
             if (statusElement) {
                 if (hasQR) {
                     statusElement.className = 'qr-status ready';
-                    statusElement.innerHTML = '<i class="bi bi-check-circle"></i> Ready';
+                    statusElement.innerHTML = '<i class="bi bi-check-circle"></i> {{ __('app.qr_ready') }}';
                 } else {
                     statusElement.className = 'qr-status missing';
-                    statusElement.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Missing';
+                    statusElement.innerHTML = '<i class="bi bi-exclamation-triangle"></i> {{ __('app.qr_missing') }}';
                 }
             }
         });

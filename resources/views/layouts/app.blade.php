@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Gestionale Negozio</title>
     
     <!-- Bootstrap CSS -->
@@ -264,6 +265,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('magazzino.index') }}">
                             <i class="bi bi-archive"></i> {{ __('app.warehouse') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('ai.index') }}">
+                            <i class="bi bi-robot me-2"></i>{{ __('app.ai_assistant') }}
                         </a>
                     </li>
                 </ul>
