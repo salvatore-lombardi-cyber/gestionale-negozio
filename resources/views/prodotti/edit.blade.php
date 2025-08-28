@@ -28,13 +28,13 @@
         left: 0;
         width: 100%;
         height: 4px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
     }
     
     .page-title {
         font-size: 2.2rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -62,7 +62,7 @@
         left: 0;
         width: 100%;
         height: 3px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
     }
     
     .form-section {
@@ -396,7 +396,7 @@
             {{ __('app.edit_product') }}: {{ $prodotto->nome }}
         </h1>
     </div>
-
+    
     <!-- Form Card -->
     <div class="form-card">
         <form action="{{ route('prodotti.update', $prodotto) }}" method="POST">
@@ -416,33 +416,33 @@
                         {{ __('app.product_name') }} <span class="required">*</span>
                     </label>
                     <input type="text" 
-                           class="modern-input @error('nome') is-invalid @enderror"
-                           id="nome" 
-                           name="nome" 
-                           value="{{ old('nome', $prodotto->nome) }}" 
-                           required
-                           placeholder="{{ __('app.enter_product_name') }}">
+                    class="modern-input @error('nome') is-invalid @enderror"
+                    id="nome" 
+                    name="nome" 
+                    value="{{ old('nome', $prodotto->nome) }}" 
+                    required
+                    placeholder="{{ __('app.enter_product_name') }}">
                     @error('nome')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                    <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
+                
                 <div class="form-group">
                     <label for="descrizione" class="form-label">
                         <i class="bi bi-text-paragraph"></i>
                         {{ __('app.description') }}
                     </label>
                     <textarea class="modern-textarea @error('descrizione') is-invalid @enderror"
-                              id="descrizione" 
-                              name="descrizione" 
-                              placeholder="{{ __('app.detailed_product_description_optional') }}">{{ old('descrizione', $prodotto->descrizione) }}</textarea>
+                    id="descrizione" 
+                    name="descrizione" 
+                    placeholder="{{ __('app.detailed_product_description_optional') }}">{{ old('descrizione', $prodotto->descrizione) }}</textarea>
                     @error('descrizione')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                    <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                     <div class="input-hint">{{ __('app.provide_detailed_description_help_customers') }}</div>
                 </div>
             </div>
-
+            
             <!-- Sezione Prezzi e Categoria -->
             <div class="form-section">
                 <h3 class="section-title">
@@ -457,15 +457,15 @@
                             {{ __('app.price') }} <span class="required">*</span>
                         </label>
                         <input type="number" 
-                               class="modern-input @error('prezzo') is-invalid @enderror"
-                               id="prezzo" 
-                               name="prezzo" 
-                               step="0.01" 
-                               value="{{ old('prezzo', $prodotto->prezzo) }}" 
-                               required
-                               placeholder="0.00">
+                        class="modern-input @error('prezzo') is-invalid @enderror"
+                        id="prezzo" 
+                        name="prezzo" 
+                        step="0.01" 
+                        value="{{ old('prezzo', $prodotto->prezzo) }}" 
+                        required
+                        placeholder="0.00">
                         @error('prezzo')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     
@@ -475,19 +475,19 @@
                             {{ __('app.category') }} <span class="required">*</span>
                         </label>
                         <input type="text" 
-                               class="modern-input @error('categoria') is-invalid @enderror"
-                               id="categoria" 
-                               name="categoria" 
-                               value="{{ old('categoria', $prodotto->categoria) }}" 
-                               required
-                               placeholder="{{ __('app.category_examples') }}">
+                        class="modern-input @error('categoria') is-invalid @enderror"
+                        id="categoria" 
+                        name="categoria" 
+                        value="{{ old('categoria', $prodotto->categoria) }}" 
+                        required
+                        placeholder="{{ __('app.category_examples') }}">
                         @error('categoria')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
             </div>
-
+            
             <!-- Sezione Dettagli Prodotto -->
             <div class="form-section">
                 <h3 class="section-title">
@@ -502,13 +502,13 @@
                             {{ __('app.brand') }}
                         </label>
                         <input type="text" 
-                               class="modern-input @error('brand') is-invalid @enderror"
-                               id="brand" 
-                               name="brand" 
-                               value="{{ old('brand', $prodotto->brand) }}"
-                               placeholder="{{ __('app.brand_or_manufacturer_optional') }}">
+                        class="modern-input @error('brand') is-invalid @enderror"
+                        id="brand" 
+                        name="brand" 
+                        value="{{ old('brand', $prodotto->brand) }}"
+                        placeholder="{{ __('app.brand_or_manufacturer_optional') }}">
                         @error('brand')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     
@@ -518,29 +518,29 @@
                             {{ __('app.product_code') }} <span class="required">*</span>
                         </label>
                         <input type="text" 
-                               class="modern-input @error('codice_prodotto') is-invalid @enderror"
-                               id="codice_prodotto" 
-                               name="codice_prodotto" 
-                               value="{{ old('codice_prodotto', $prodotto->codice_prodotto) }}" 
-                               required
-                               placeholder="{{ __('app.unique_product_code') }}">
+                        class="modern-input @error('codice_prodotto') is-invalid @enderror"
+                        id="codice_prodotto" 
+                        name="codice_prodotto" 
+                        value="{{ old('codice_prodotto', $prodotto->codice_prodotto) }}" 
+                        required
+                        placeholder="{{ __('app.unique_product_code') }}">
                         @error('codice_prodotto')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                         <div class="input-hint">{{ __('app.code_must_be_unique') }}</div>
                     </div>
                 </div>
             </div>
-
+            
             <!-- Sezione Stato -->
             <div class="checkbox-container">
                 <div class="modern-checkbox">
                     <input class="checkbox-input" 
-                           type="checkbox" 
-                           id="attivo" 
-                           name="attivo" 
-                           value="1"
-                           {{ old('attivo', $prodotto->attivo) ? 'checked' : '' }}>
+                    type="checkbox" 
+                    id="attivo" 
+                    name="attivo" 
+                    value="1"
+                    {{ old('attivo', $prodotto->attivo) ? 'checked' : '' }}>
                     <label class="checkbox-label" for="attivo">
                         <i class="bi bi-toggle-on"></i>
                         {{ __('app.active_product') }}
@@ -550,7 +550,7 @@
                     {{ __('app.active_products_visible_purchasable') }}
                 </div>
             </div>
-
+            
             <!-- Azioni Form -->
             <div class="form-actions">
                 <a href="{{ route('prodotti.show', $prodotto) }}" class="modern-btn btn-secondary">

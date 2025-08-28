@@ -26,7 +26,7 @@
         .modern-navbar .navbar-brand {
             font-weight: 700;
             font-size: 1.3rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -50,7 +50,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             transition: all 0.3s ease;
             z-index: -1;
             border-radius: 10px;
@@ -80,7 +80,7 @@
         }
         
         .modern-navbar .dropdown-item:hover {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             color: white;
         }
         
@@ -100,7 +100,7 @@
         
         /* Body background */
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             min-height: 100vh;
         }
         

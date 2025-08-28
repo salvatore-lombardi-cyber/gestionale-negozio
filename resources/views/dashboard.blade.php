@@ -3,7 +3,7 @@
 @section('content')
 <style>
     body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         min-height: 100vh;
     }
     
@@ -24,7 +24,7 @@
     .dashboard-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -306,7 +306,7 @@
                 </h1>
                 <p class="welcome-text">{{ __('app.welcome_message') }}</p>
             </div>
-
+            
             <!-- Cards delle Statistiche -->
             <div class="row g-4">
                 <div class="col-xl-3 col-lg-6 col-md-6">
@@ -321,7 +321,7 @@
                         </a>
                     </div>
                 </div>
-
+                
                 <div class="col-xl-3 col-lg-6 col-md-6">
                     <div class="stats-card success">
                         <div class="stats-icon success">
@@ -334,7 +334,7 @@
                         </a>
                     </div>
                 </div>
-
+                
                 <div class="col-xl-3 col-lg-6 col-md-6">
                     <div class="stats-card info">
                         <div class="stats-icon info">
@@ -347,7 +347,7 @@
                         </a>
                     </div>
                 </div>
-
+                
                 <div class="col-xl-3 col-lg-6 col-md-6">
                     <div class="stats-card warning">
                         <div class="stats-icon warning">
@@ -366,43 +366,43 @@
 </div>
 
 <script>
-// Animazione di entrata delle card
-document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.stats-card');
-    cards.forEach((card, index) => {
-        setTimeout(() => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(50px)';
-            card.style.transition = 'all 0.6s ease';
-            
+    // Animazione di entrata delle card
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.stats-card');
+        cards.forEach((card, index) => {
             setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100);
-        }, index * 150);
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'all 0.6s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100);
+            }, index * 150);
+        });
     });
-});
-
-// Aggiorna i numeri con animazione
-function animateNumbers() {
-    const numbers = document.querySelectorAll('.stats-number');
-    numbers.forEach(number => {
-        const finalValue = parseInt(number.textContent);
-        let currentValue = 0;
-        const increment = finalValue / 50;
-        const timer = setInterval(() => {
-            currentValue += increment;
-            if (currentValue >= finalValue) {
-                number.textContent = finalValue;
-                clearInterval(timer);
-            } else {
-                number.textContent = Math.floor(currentValue);
-            }
-        }, 30);
-    });
-}
-
-// Avvia animazione numeri al caricamento
-setTimeout(animateNumbers, 500);
+    
+    // Aggiorna i numeri con animazione
+    function animateNumbers() {
+        const numbers = document.querySelectorAll('.stats-number');
+        numbers.forEach(number => {
+            const finalValue = parseInt(number.textContent);
+            let currentValue = 0;
+            const increment = finalValue / 50;
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= finalValue) {
+                    number.textContent = finalValue;
+                    clearInterval(timer);
+                } else {
+                    number.textContent = Math.floor(currentValue);
+                }
+            }, 30);
+        });
+    }
+    
+    // Avvia animazione numeri al caricamento
+    setTimeout(animateNumbers, 500);
 </script>
 @endsection

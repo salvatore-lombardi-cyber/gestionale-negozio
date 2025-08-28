@@ -23,7 +23,7 @@
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -64,7 +64,7 @@
     }
     
     .filter-chip {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         color: white;
         padding: 5px 12px;
         border-radius: 20px;
@@ -115,7 +115,7 @@
     }
     
     .modern-table thead th {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         color: white;
         font-weight: 600;
         border: none;

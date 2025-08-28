@@ -11,7 +11,7 @@
     
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -93,7 +93,7 @@
         }
         
         .register-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -135,7 +135,7 @@
         }
         
         .form-floating input:focus {
-            border-color: #667eea;
+            border-color: #029D7E;
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         }
         
@@ -144,7 +144,7 @@
         }
         
         .btn-register {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             border: none;
             border-radius: 10px;
             padding: 12px;
@@ -161,14 +161,14 @@
         }
         
         .login-link {
-            color: #667eea;
+            color: #029D7E;
             text-decoration: none;
             font-size: 0.9rem;
             transition: all 0.3s ease;
         }
         
         .login-link:hover {
-            color: #764ba2;
+            color: #029D7E;
             text-decoration: underline;
         }
         
@@ -206,7 +206,7 @@
             padding: 0.5rem;
             border-radius: 8px;
             background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            color: #029D7E;
         }
         
         .password-strength ul {
@@ -287,35 +287,7 @@
     </style>
 </head>
 <body>
-    <!-- Icone fluttuanti identiche alla home -->
-    <div class="floating-icons">
-        <i class="bi bi-handbag floating-icon"></i>
-        <i class="bi bi-suit-heart floating-icon"></i>
-        <i class="bi bi-eyeglasses floating-icon"></i>
-        <i class="bi bi-watch floating-icon"></i>
-        <i class="bi bi-gem floating-icon"></i>
-        <i class="bi bi-award floating-icon"></i>
-    </div>
     
-    <!-- Marquee di abbigliamento identico alla home -->
-    <div class="fashion-marquee">
-        <div class="marquee-content">
-            <i class="bi bi-handbag"></i>
-            <i class="bi bi-suit-heart"></i>
-            <i class="bi bi-eyeglasses"></i>
-            <i class="bi bi-watch"></i>
-            <i class="bi bi-gem"></i>
-            <i class="bi bi-award"></i>
-            <i class="bi bi-suit-spade"></i>
-            <i class="bi bi-suit-club"></i>
-            <i class="bi bi-handbag"></i>
-            <i class="bi bi-suit-heart"></i>
-            <i class="bi bi-eyeglasses"></i>
-            <i class="bi bi-watch"></i>
-            <i class="bi bi-gem"></i>
-            <i class="bi bi-award"></i>
-        </div>
-    </div>
 
     <!-- Language Selector -->
     <div class="language-selector">

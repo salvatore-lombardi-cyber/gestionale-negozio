@@ -22,7 +22,7 @@
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -43,7 +43,7 @@
     }
     
     .ai-status-badge.online {
-        background: linear-gradient(135deg, #28a745, #20c997);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         color: white;
     }
     
@@ -139,7 +139,7 @@
     }
     
     .stat-card.customers::before {
-        background: linear-gradient(135deg, #28a745, #20c997);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
     }
     
     .stat-card.sales::before {
@@ -302,7 +302,7 @@
     }
     
     .send-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         border: none;
         border-radius: 15px;
         padding: 15px 20px;
@@ -344,7 +344,7 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         transition: all 0.3s ease;
         z-index: 0;
     }
@@ -383,7 +383,7 @@
     }
     
     .suggestion-chip {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         color: white;
         padding: 8px 16px;
         border-radius: 25px;
@@ -396,7 +396,7 @@
     }
     
     .suggestion-chip:hover {
-        background: linear-gradient(135deg, #5a6fd8, #654a92);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
     }

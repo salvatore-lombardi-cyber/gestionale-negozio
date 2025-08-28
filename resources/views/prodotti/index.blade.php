@@ -22,7 +22,7 @@
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -54,7 +54,7 @@
     
     .search-input:focus {
         outline: none;
-        border-color: #667eea;
+        border-color: #029D7E;
         box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         background: white;
     }
@@ -64,7 +64,7 @@
         right: 15px;
         top: 50%;
         transform: translateY(-50%);
-        color: #667eea;
+        color: #029D7E;
         font-size: 1.2rem;
     }
     
@@ -76,7 +76,7 @@
     }
     
     .filter-chip {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         color: white;
         padding: 5px 12px;
         border-radius: 20px;
@@ -150,7 +150,7 @@
     }
     
     .modern-table thead th {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         color: white;
         font-weight: 600;
         border: none;
@@ -207,7 +207,7 @@
     }
     
     .action-btn.qr {
-        background: linear-gradient(135deg, #28a745, #20c997);
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         color: white;
     }
     
@@ -389,7 +389,7 @@
     .product-card-price {
         font-size: 1.4rem;
         font-weight: 800;
-        color: #28a745;
+        color: #029D7E;
         text-align: center;
         margin-bottom: 1.5rem;
         padding: 0.5rem;
@@ -441,7 +441,7 @@
     }
     
     .mobile-action-btn.qr {
-        background: linear-gradient(135deg, #28a745, #20c997);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         color: white;
     }
     
@@ -545,7 +545,8 @@
                 <i class="bi bi-box-seam"></i> {{ __('app.products') }}
             </h1>
             <div class="d-flex gap-2">
-                <a href="{{ route('labels.index') }}" class="modern-btn" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                <a href="{{ route('labels.index') }}" class="modern-btn" style="background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);"
+">
                     <i class="bi bi-qr-code"></i> {{ __('app.qr_labels') }}
                 </a>
                 <a href="{{ route('prodotti.create') }}" class="modern-btn">

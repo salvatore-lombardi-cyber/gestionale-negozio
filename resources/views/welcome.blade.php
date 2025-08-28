@@ -11,7 +11,7 @@
     
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             min-height: 100vh;
         }
         
@@ -37,7 +37,8 @@
         .brand-title {
             font-size: 3.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
+            
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 1rem;
@@ -59,7 +60,7 @@
         }
         
         .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             border: none;
             color: white;
         }
@@ -72,12 +73,12 @@
         
         .btn-register {
             background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
+            border: 2px solid #029D7E;
+            color: #029D7E;
         }
         
         .btn-register:hover {
-            background: #667eea;
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             color: white;
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
@@ -105,7 +106,7 @@
         
         .feature-icon {
             font-size: 2.5rem;
-            color: #667eea;
+            color: #029D7E;
             margin-bottom: 1rem;
         }
         
@@ -118,32 +119,29 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="hero-content text-center">
-                        <h1 class="brand-title">
-                            <i class="bi bi-shop"></i>
-                            Gestionale Negozio
-                        </h1>
+                        <img class="img-fluid rounded" src="{{ asset('finson.png') }}" alt="">
                         <p class="subtitle">
-                            Il sistema completo per la gestione del tuo negozio di abbigliamento
+                            Il sistema completo per la gestione del tuo negozio 
                         </p>
                         
                         @if (Route::has('login'))
-                            <div class="auth-buttons">
-                                @auth
-                                    <a href="{{ url('/dashboard') }}" class="btn btn-login">
-                                        <i class="bi bi-speedometer2"></i> Vai alla Dashboard
-                                    </a>
-                                @else
-                                    <a href="{{ route('login') }}" class="btn btn-login">
-                                        <i class="bi bi-box-arrow-in-right"></i> Accedi
-                                    </a>
-                                    
-                                    @if (Route::has('register'))
-                                        <a href="{{ route('register') }}" class="btn btn-register">
-                                            <i class="bi bi-person-plus"></i> Registrati
-                                        </a>
-                                    @endif
-                                @endauth
-                            </div>
+                        <div class="auth-buttons">
+                            @auth
+                            <a href="{{ url('/dashboard') }}" class="btn btn-login">
+                                <i class="bi bi-speedometer2"></i> Vai alla Dashboard
+                            </a>
+                            @else
+                            <a href="{{ route('login') }}" class="btn btn-login">
+                                <i class="bi bi-box-arrow-in-right"></i> Accedi
+                            </a>
+                            
+                            @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="btn btn-register">
+                                <i class="bi bi-person-plus"></i> Registrati
+                            </a>
+                            @endif
+                            @endauth
+                        </div>
                         @endif
                         
                         <div class="features">

@@ -11,7 +11,7 @@
     
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -36,7 +36,7 @@
         }
         
         .login-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -76,12 +76,12 @@
         }
         
         .form-floating input:focus {
-            border-color: #667eea;
+            border-color: #029D7E;
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         }
         
         .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             border: none;
             border-radius: 10px;
             padding: 12px;
@@ -98,19 +98,19 @@
         }
         
         .form-check-input:checked {
-            background-color: #667eea;
-            border-color: #667eea;
+            background-color: #029D7E;
+            border-color: #029D7E;
         }
         
         .forgot-password {
-            color: #667eea;
+            color: #029D7E;
             text-decoration: none;
             font-size: 0.9rem;
             transition: all 0.3s ease;
         }
         
         .forgot-password:hover {
-            color: #764ba2;
+            color: #029D7E;
             text-decoration: underline;
         }
         
@@ -175,10 +175,11 @@
                 <i class="bi bi-globe"></i> {{ app()->getLocale() == 'it' ? 'Italiano' : 'English' }}
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{ route('language.change', ['lang' => 'it']) }}">
+                <li><a class="dropdown-item" href="{{ route('language.change', ['locale' => 'it']) }}">
+
                     <i class="bi bi-globe"></i> Italiano
                 </a></li>
-                <li><a class="dropdown-item" href="{{ route('language.change', ['lang' => 'en']) }}">
+                <li><a class="dropdown-item" href="{{ route('language.change', ['locale' => 'en']) }}">
                     <i class="bi bi-globe"></i> English
                 </a></li>
             </ul>
