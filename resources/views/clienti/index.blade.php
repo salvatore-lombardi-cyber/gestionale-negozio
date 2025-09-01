@@ -139,6 +139,32 @@
         transition: all 0.3s ease;
     }
     
+    .table-responsive {
+        border-radius: 20px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
+    }
+    
+    .table-responsive::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-track {
+        background: rgba(102, 126, 234, 0.1);
+        border-radius: 10px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: rgba(102, 126, 234, 0.3);
+        border-radius: 10px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+        background: rgba(102, 126, 234, 0.5);
+    }
+    
     .modern-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
@@ -147,6 +173,7 @@
     .modern-table {
         margin: 0;
         width: 100%;
+        table-layout: fixed;
     }
     
     .modern-table thead th {
@@ -160,6 +187,13 @@
         letter-spacing: 0.5px;
         white-space: nowrap;
     }
+    
+    /* Larghezze colonne ottimizzate */
+    .modern-table thead th:nth-child(1) { width: 30%; } /* Cliente */
+    .modern-table thead th:nth-child(2) { width: 20%; } /* Telefono */
+    .modern-table thead th:nth-child(3) { width: 25%; } /* Email */
+    .modern-table thead th:nth-child(4) { width: 15%; } /* Città */
+    .modern-table thead th:nth-child(5) { width: 10%; } /* Azioni */
     
     .modern-table tbody tr {
         transition: all 0.3s ease;
@@ -177,18 +211,28 @@
         border-bottom: 1px solid rgba(102, 126, 234, 0.1);
         vertical-align: middle;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* Tooltip per testi troncati */
+    .modern-table tbody td[title]:hover {
+        position: relative;
+        cursor: help;
     }
     
     .action-btn {
         border: none;
         border-radius: 8px;
-        padding: 6px 12px;
-        font-size: 0.8rem;
+        padding: 8px 10px;
+        font-size: 0.9rem;
         font-weight: 600;
         margin: 0 2px;
         transition: all 0.3s ease;
         text-decoration: none;
         display: inline-block;
+        min-width: 36px;
+        text-align: center;
     }
     
     .action-btn.view {
@@ -425,7 +469,70 @@
         color: #e2e8f0;
     }
     
-    /* Responsive */
+    /* MacBook Air e laptop small (1366px e inferiori) */
+    @media (max-width: 1400px) {
+        .modern-table thead th {
+            padding: 0.8rem 0.6rem;
+            font-size: 0.8rem;
+        }
+        
+        .modern-table tbody td {
+            padding: 0.8rem 0.6rem;
+            max-width: 120px;
+            font-size: 0.9rem;
+        }
+        
+        .action-btn {
+            padding: 6px 8px;
+            font-size: 0.8rem;
+            margin: 0 1px;
+            min-width: 32px;
+        }
+        
+        /* Nascondi colonne meno importanti su MacBook Air */
+        .modern-table thead th:nth-child(4),
+        .modern-table tbody td:nth-child(4) {
+            display: none; /* Nascondi città */
+        }
+    }
+    
+    /* Tablet landscape */
+    @media (max-width: 1024px) {
+        .clients-container {
+            padding: 1.5rem;
+        }
+        
+        .modern-table thead th {
+            padding: 0.7rem 0.4rem;
+            font-size: 0.75rem;
+        }
+        
+        .modern-table tbody td {
+            padding: 0.7rem 0.4rem;
+            max-width: 100px;
+            font-size: 0.85rem;
+        }
+        
+        .action-btn {
+            padding: 5px 7px;
+            font-size: 0.75rem;
+            min-width: 30px;
+        }
+        
+        .page-title {
+            font-size: 2.2rem;
+        }
+        
+        /* Nascondi più colonne su tablet */
+        .modern-table thead th:nth-child(3),
+        .modern-table tbody td:nth-child(3),
+        .modern-table thead th:nth-child(4),
+        .modern-table tbody td:nth-child(4) {
+            display: none; /* Nascondi email e città */
+        }
+    }
+    
+    /* Tablet portrait e mobile landscape */
     @media (max-width: 768px) {
         .clients-container {
             padding: 1rem;
@@ -449,6 +556,21 @@
             justify-content: center;
         }
         
+        /* Tabella compatta per tablet */
+        .modern-table thead th {
+            padding: 0.6rem 0.3rem;
+            font-size: 0.7rem;
+        }
+        
+        .modern-table tbody td {
+            padding: 0.6rem 0.3rem;
+            max-width: 80px;
+            font-size: 0.8rem;
+        }
+    }
+    
+    /* Mobile portrait */
+    @media (max-width: 576px) {
         /* Nasconde tabella su mobile */
         .modern-card .table-responsive {
             display: none;
@@ -578,17 +700,17 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('clienti.show', $cliente) }}" class="action-btn view">
-                            <i class="bi bi-eye"></i> <span>{{ __('app.view') }}</span>
+                        <a href="{{ route('clienti.show', $cliente) }}" class="action-btn view" title="{{ __('app.view') }}">
+                            <i class="bi bi-eye"></i>
                         </a>
-                        <a href="{{ route('clienti.edit', $cliente) }}" class="action-btn edit">
-                            <i class="bi bi-pencil"></i> <span>{{ __('app.edit') }}</span>
+                        <a href="{{ route('clienti.edit', $cliente) }}" class="action-btn edit" title="{{ __('app.edit') }}">
+                            <i class="bi bi-pencil"></i>
                         </a>
                         <form action="{{ route('clienti.destroy', $cliente) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="action-btn delete" onclick="return confirm('{{ __('app.confirm_delete') }}')">
-                                <i class="bi bi-trash"></i> <span>{{ __('app.delete') }}</span>
+                            <button type="submit" class="action-btn delete" title="{{ __('app.delete') }}" onclick="return confirm('{{ __('app.confirm_delete') }}')">
+                                <i class="bi bi-trash"></i>
                             </button>
                         </form>
                     </td>

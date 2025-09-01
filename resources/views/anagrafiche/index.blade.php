@@ -7,11 +7,11 @@
         min-height: 100vh;
     }
     
-    .dashboard-container {
+    .anagrafiche-container {
         padding: 2rem;
     }
     
-    .dashboard-header {
+    .anagrafiche-header {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
         border-radius: 20px;
@@ -21,7 +21,7 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
-    .dashboard-title {
+    .anagrafiche-title {
         font-size: 2.5rem;
         font-weight: 700;
         background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
@@ -220,9 +220,8 @@
     
     .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
     .floating-element:nth-child(2) { top: 20%; right: 20%; animation-delay: 1s; }
-    .floating-element:nth-child(3) { top: 50%; left: 5%; animation-delay: 2s; }
-    .floating-element:nth-child(4) { bottom: 30%; right: 10%; animation-delay: 3s; }
-    .floating-element:nth-child(5) { bottom: 10%; left: 30%; animation-delay: 4s; }
+    .floating-element:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 2s; }
+    .floating-element:nth-child(4) { bottom: 10%; right: 15%; animation-delay: 3s; }
     
     @keyframes float {
         0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -230,12 +229,12 @@
     }
     
     @media (max-width: 768px) {
-        .dashboard-header {
+        .anagrafiche-header {
             padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
         
-        .dashboard-title {
+        .anagrafiche-title {
             font-size: 2rem;
         }
         
@@ -269,11 +268,11 @@
     }
     
     @media (max-width: 576px) {
-        .dashboard-container {
+        .anagrafiche-container {
             padding: 1rem;
         }
         
-        .dashboard-title {
+        .anagrafiche-title {
             font-size: 1.8rem;
         }
         
@@ -289,35 +288,34 @@
 
 <!-- Elementi fluttuanti di sfondo -->
 <div class="floating-elements">
-    <i class="bi bi-box-seam floating-element"></i>
-    <i class="bi bi-people floating-element"></i>
-    <i class="bi bi-cart-check floating-element"></i>
-    <i class="bi bi-file-earmark-text floating-element"></i>
-    <i class="bi bi-archive floating-element"></i>
+    <i class="bi bi-person-lines-fill floating-element"></i>
+    <i class="bi bi-building floating-element"></i>
+    <i class="bi bi-truck floating-element"></i>
+    <i class="bi bi-person-badge floating-element"></i>
 </div>
 
-<div class="container-fluid dashboard-container">
+<div class="container-fluid anagrafiche-container">
     <div class="row">
         <div class="col-12">
-            <!-- Header della Dashboard -->
-            <div class="dashboard-header text-center">
-                <h1 class="dashboard-title">
-                    <i class="bi bi-speedometer2"></i> {{ __('app.dashboard') }}
+            <!-- Header della pagina Anagrafiche -->
+            <div class="anagrafiche-header text-center">
+                <h1 class="anagrafiche-title">
+                    <i class="bi bi-person-lines-fill"></i> {{ __('app.anagrafiche') }}
                 </h1>
-                <p class="welcome-text">{{ __('app.welcome_message') }}</p>
+                <p class="welcome-text">{{ __('app.anagrafiche_welcome') }}</p>
             </div>
             
-            <!-- Cards delle Statistiche -->
+            <!-- Cards delle Anagrafiche -->
             <div class="row g-4">
                 <div class="col-xl-3 col-lg-6 col-md-6">
                     <div class="stats-card primary pulse-animation">
                         <div class="stats-icon primary">
-                            <i class="bi bi-box-seam"></i>
+                            <i class="bi bi-people"></i>
                         </div>
-                        <h3 class="stats-number">{{ \App\Models\Prodotto::count() }}</h3>
-                        <p class="stats-label">{{ __('app.products') }}</p>
-                        <a href="{{ route('prodotti.index') }}" class="stats-btn primary">
-                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.products') }}
+                        <h3 class="stats-number">{{ \App\Models\Cliente::count() }}</h3>
+                        <p class="stats-label">{{ __('app.clients') }}</p>
+                        <a href="{{ route('clienti.index') }}" class="stats-btn primary">
+                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.clients') }}
                         </a>
                     </div>
                 </div>
@@ -325,12 +323,12 @@
                 <div class="col-xl-3 col-lg-6 col-md-6">
                     <div class="stats-card success">
                         <div class="stats-icon success">
-                            <i class="bi bi-people"></i>
+                            <i class="bi bi-building"></i>
                         </div>
-                        <h3 class="stats-number">{{ \App\Models\Cliente::count() }}</h3>
-                        <p class="stats-label">{{ __('app.clients') }}</p>
-                        <a href="{{ route('clienti.index') }}" class="stats-btn success">
-                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.clients') }}
+                        <h3 class="stats-number">0</h3>
+                        <p class="stats-label">{{ __('app.fornitori') }}</p>
+                        <a href="#" class="stats-btn success">
+                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.fornitori') }}
                         </a>
                     </div>
                 </div>
@@ -338,12 +336,12 @@
                 <div class="col-xl-3 col-lg-6 col-md-6">
                     <div class="stats-card info">
                         <div class="stats-icon info">
-                            <i class="bi bi-cart-check"></i>
+                            <i class="bi bi-truck"></i>
                         </div>
-                        <h3 class="stats-number">{{ \App\Models\Vendita::count() }}</h3>
-                        <p class="stats-label">{{ __('app.sales') }}</p>
-                        <a href="{{ route('vendite.index') }}" class="stats-btn info">
-                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.sales') }}
+                        <h3 class="stats-number">0</h3>
+                        <p class="stats-label">{{ __('app.vettori') }}</p>
+                        <a href="#" class="stats-btn info">
+                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.vettori') }}
                         </a>
                     </div>
                 </div>
@@ -351,12 +349,12 @@
                 <div class="col-xl-3 col-lg-6 col-md-6">
                     <div class="stats-card warning">
                         <div class="stats-icon warning">
-                            <i class="bi bi-file-earmark-text"></i>
+                            <i class="bi bi-person-badge"></i>
                         </div>
-                        <h3 class="stats-number">{{ \App\Models\Ddt::count() }}</h3>
-                        <p class="stats-label">{{ __('app.ddts') }}</p>
-                        <a href="{{ route('ddts.index') }}" class="stats-btn warning">
-                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.ddts') }}
+                        <h3 class="stats-number">0</h3>
+                        <p class="stats-label">{{ __('app.agenti') }}</p>
+                        <a href="#" class="stats-btn warning">
+                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.agenti') }}
                         </a>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('app.warehouse') . ' - Gestionale Negozio')
+@section('title', __('app.controllo_avanzato_giacenze') . ' - Finson')
 
 @section('content')
 <style>
@@ -553,7 +553,7 @@ $totaleSconteBasse = $prodottiConStatistiche->sum('varianti_scorte_basse');
     <div class="page-header">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="page-title">
-                <i class="bi bi-boxes"></i> {{ __('app.warehouse') }}
+                <i class="bi bi-clipboard-data"></i> {{ __('app.controllo_avanzato_giacenze') }}
             </h1>
             <a href="{{ route('magazzino.create') }}" class="modern-btn">
                 <i class="bi bi-plus-circle"></i> {{ __('app.new_stock') }}

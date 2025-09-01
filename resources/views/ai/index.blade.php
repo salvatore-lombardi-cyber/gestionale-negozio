@@ -675,7 +675,16 @@
                             <i class="bi bi-robot"></i>
                         </div>
                         <div class="message-content">
-                            <p>Ciao! Sono il tuo assistente AI per il gestionale negozio. Posso aiutarti ad analizzare i dati, rispondere a domande sui prodotti, clienti, vendite e magazzino. Come posso aiutarti oggi?</p>
+                            <p>Ciao! Sono il tuo assistente AI per il gestionale negozio. Posso aiutarti ad analizzare i dati, rispondere a domande sui prodotti, clienti, vendite e magazzino.</p>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(102, 126, 234, 0.1); border-radius: 10px; font-size: 0.9rem;">
+                                <strong>🆕 Novità: Comandi Calcolatrice Integrata!</strong><br>
+                                • <code>calcola 25 + 30 * 2</code> - Calcoli complessi<br>
+                                • <code>calcola 20% di 500</code> - Percentuali<br>
+                                • <code>aggiungi 150</code> - Somma al risultato<br>
+                                • <code>apri calcolatrice</code> - Mostra widget<br>
+                                • <code>azzera</code> - Reset calcolatrice
+                            </div>
+                            <p style="margin-top: 1rem;">Come posso aiutarti oggi? 🚀</p>
                         </div>
                     </div>
                 </div>
@@ -750,7 +759,111 @@
 
 <!-- JavaScript -->
 <script>
+// ===== AI CALCULATOR BRIDGE =====
+class AICalculatorBridge {
+    constructor() {
+        this.initCalculatorCommands();
+    }
+    
+    initCalculatorCommands() {
+        // Bridge per comunicazione AI → Calcolatrice
+        window.aiCalculatorBridge = {
+            calculate: (expression) => this.calculate(expression),
+            percentage: (number, percent) => this.calculatePercentage(number, percent),
+            add: (number) => this.addToResult(number),
+            subtract: (number) => this.subtractFromResult(number),
+            multiply: (number) => this.multiplyResult(number),
+            divide: (number) => this.divideResult(number),
+            clear: () => this.clearCalculator(),
+            show: () => this.showCalculator()
+        };
+    }
+    
+    calculate(expression) {
+        try {
+            // Sanitize expression per sicurezza
+            const sanitized = expression.replace(/[^0-9+\-*/().]/g, '');
+            const result = Function('"use strict"; return (' + sanitized + ')')();
+            
+            // Aggiorna calcolatrice globale
+            if (window.globalCalculatorCurrentInput !== undefined) {
+                window.globalCalculatorCurrentInput = result.toString();
+                window.globalUpdateCalculatorDisplay();
+            }
+            
+            this.showCalculator();
+            return result;
+        } catch (e) {
+            return 'Errore nel calcolo';
+        }
+    }
+    
+    calculatePercentage(number, percent) {
+        const result = (number * percent) / 100;
+        if (window.globalCalculatorCurrentInput !== undefined) {
+            window.globalCalculatorCurrentInput = result.toString();
+            window.globalUpdateCalculatorDisplay();
+        }
+        this.showCalculator();
+        return result;
+    }
+    
+    addToResult(number) {
+        const current = parseFloat(window.globalCalculatorCurrentInput || '0');
+        const result = current + number;
+        window.globalCalculatorCurrentInput = result.toString();
+        window.globalUpdateCalculatorDisplay();
+        this.showCalculator();
+        return result;
+    }
+    
+    subtractFromResult(number) {
+        const current = parseFloat(window.globalCalculatorCurrentInput || '0');
+        const result = current - number;
+        window.globalCalculatorCurrentInput = result.toString();
+        window.globalUpdateCalculatorDisplay();
+        this.showCalculator();
+        return result;
+    }
+    
+    multiplyResult(number) {
+        const current = parseFloat(window.globalCalculatorCurrentInput || '0');
+        const result = current * number;
+        window.globalCalculatorCurrentInput = result.toString();
+        window.globalUpdateCalculatorDisplay();
+        this.showCalculator();
+        return result;
+    }
+    
+    divideResult(number) {
+        if (number === 0) return 'Impossibile dividere per zero';
+        const current = parseFloat(window.globalCalculatorCurrentInput || '0');
+        const result = current / number;
+        window.globalCalculatorCurrentInput = result.toString();
+        window.globalUpdateCalculatorDisplay();
+        this.showCalculator();
+        return result;
+    }
+    
+    clearCalculator() {
+        if (window.globalClearAll) {
+            window.globalClearAll();
+        }
+        this.showCalculator();
+        return 'Calcolatrice azzerata';
+    }
+    
+    showCalculator() {
+        const calculator = document.getElementById('globalCalculatorWidget');
+        if (calculator) {
+            calculator.style.display = 'block';
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Inizializza bridge DOPO che il DOM è caricato
+    const calculatorBridge = new AICalculatorBridge();
     const chatMessages = document.getElementById('chat-messages');
     const userMessageInput = document.getElementById('user-message');
     const sendButton = document.getElementById('send-message');
@@ -848,6 +961,13 @@ document.addEventListener('DOMContentLoaded', function() {
         userMessageInput.value = '';
         userMessageInput.style.height = 'auto';
         charCount.textContent = '0';
+
+        // Controlla se è un comando calcolatrice
+        const calculatorResult = processCalculatorCommand(message);
+        if (calculatorResult) {
+            addMessage(calculatorResult, 'ai');
+            return;
+        }
 
         // Add loading message
         const loadingId = addLoadingMessage();
@@ -963,6 +1083,75 @@ document.addEventListener('DOMContentLoaded', function() {
         if (loadingMsg) {
             loadingMsg.remove();
         }
+    }
+
+    // ===== PARSER COMANDI CALCOLATRICE =====
+    function processCalculatorCommand(message) {
+        const msg = message.toLowerCase();
+        
+        // Comando: "calcola X + Y" o "calcola 15% di 1200"
+        if (msg.includes('calcola')) {
+            if (msg.includes('% di') || msg.includes('percento di')) {
+                // Estrai percentuale: "calcola il 15% di 1200" o "calcola 15% di 1200"
+                const match = msg.match(/calcola\s+(?:il\s+)?(\d+(?:\.\d+)?)%\s+di\s+(\d+(?:\.\d+)?)/);
+                if (match) {
+                    const percent = parseFloat(match[1]);
+                    const number = parseFloat(match[2]);
+                    const result = window.aiCalculatorBridge.calculatePercentage(number, percent);
+                    return `<i class="bi bi-calculator text-primary"></i> ${percent}% di ${number} = <strong>${result}</strong>`;
+                }
+            } else {
+                // Estrai espressione: "calcola 25 + 30 * 2"
+                const match = msg.match(/calcola\s+(.+)/);
+                if (match) {
+                    const expression = match[1].trim();
+                    const result = window.aiCalculatorBridge.calculate(expression);
+                    return `<i class="bi bi-calculator text-primary"></i> ${expression} = <strong>${result}</strong>`;
+                }
+            }
+        }
+        
+        // Comando: "aggiungi X" 
+        if ((msg.includes('aggiungi') || msg.includes('somma')) && msg.match(/\d+/)) {
+            const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
+            const result = window.aiCalculatorBridge.add(number);
+            return `<i class="bi bi-calculator text-primary"></i> Aggiunto ${number}. Risultato: <strong>${result}</strong>`;
+        }
+        
+        // Comando: "sottrai X"
+        if (msg.includes('sottrai') && msg.match(/\d+/)) {
+            const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
+            const result = window.aiCalculatorBridge.subtract(number);
+            return `<i class="bi bi-calculator text-primary"></i> Sottratto ${number}. Risultato: <strong>${result}</strong>`;
+        }
+        
+        // Comando: "moltiplica per X"
+        if ((msg.includes('moltiplica') || msg.includes('per')) && msg.match(/\d+/)) {
+            const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
+            const result = window.aiCalculatorBridge.multiply(number);
+            return `<i class="bi bi-calculator text-primary"></i> Moltiplicato per ${number}. Risultato: <strong>${result}</strong>`;
+        }
+        
+        // Comando: "dividi per X"
+        if (msg.includes('dividi') && msg.match(/\d+/)) {
+            const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
+            const result = window.aiCalculatorBridge.divide(number);
+            return `<i class="bi bi-calculator text-primary"></i> Diviso per ${number}. Risultato: <strong>${result}</strong>`;
+        }
+        
+        // Comando: "azzera calcolatrice" o "clear"
+        if (msg.includes('azzera') || msg.includes('clear') || msg.includes('cancella')) {
+            const result = window.aiCalculatorBridge.clear();
+            return `<i class="bi bi-calculator text-primary"></i> ${result}`;
+        }
+        
+        // Comando: "apri calcolatrice" o "mostra calcolatrice"
+        if (msg.includes('apri calcolatrice') || msg.includes('mostra calcolatrice') || msg.includes('calculator')) {
+            window.aiCalculatorBridge.show();
+            return `<i class="bi bi-calculator text-primary"></i> Calcolatrice aperta! Puoi anche usare il tasto <strong>F9</strong> per aprirla velocemente.`;
+        }
+        
+        return null; // Non è un comando calcolatrice
     }
 
     // Animation on load

@@ -22,6 +22,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
     
+    // Anagrafiche
+    Route::get('/anagrafiche', [App\Http\Controllers\AnagraficheController::class, 'index'])->name('anagrafiche.index');
+    
+    // Magazzino Overview
+    Route::get('/magazzino-overview', [App\Http\Controllers\MagazzinoOverviewController::class, 'index'])->name('magazzino-overview.index');
+    
+    // Fatturazione
+    Route::get('/fatturazione', [App\Http\Controllers\FatturazioneController::class, 'index'])->name('fatturazione.index');
+    Route::get('/fatturazione/crea', [App\Http\Controllers\FatturazioneController::class, 'create'])->name('fatturazione.create');
+    Route::post('/fatturazione', [App\Http\Controllers\FatturazioneController::class, 'store'])->name('fatturazione.store');
+    Route::get('/fatturazione/riepilogo', [App\Http\Controllers\FatturazioneController::class, 'riepilogo'])->name('fatturazione.riepilogo');
+    Route::get('/fatturazione/fatture-ricevute', [App\Http\Controllers\FatturazioneController::class, 'fatture_ricevute'])->name('fatturazione.fatture_ricevute');
+    Route::get('/fatturazione/analytics', [App\Http\Controllers\FatturazioneController::class, 'analytics'])->name('fatturazione.analytics');
+    Route::get('/fatturazione/{vendita}/pdf', [App\Http\Controllers\FatturazioneController::class, 'downloadPdf'])->name('fatturazione.pdf');
+    Route::get('/fatturazione/{vendita}', [App\Http\Controllers\FatturazioneController::class, 'show'])->name('fatturazione.show');
+    Route::get('/fatturazione/{vendita}/modifica', [App\Http\Controllers\FatturazioneController::class, 'edit'])->name('fatturazione.edit');
+    Route::put('/fatturazione/{vendita}', [App\Http\Controllers\FatturazioneController::class, 'update'])->name('fatturazione.update');
+    Route::delete('/fatturazione/{vendita}', [App\Http\Controllers\FatturazioneController::class, 'destroy'])->name('fatturazione.destroy');
+    
     // Profile routes (da Breeze)
     Route::get('/profile', function () {
         return view('profile.show');
@@ -29,9 +48,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile/edit', function () {
         return view('profile.edit');
     })->name('profile.edit');
-    Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('password.update');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     // Route del gestionale
@@ -89,3 +107,6 @@ Route::prefix('ai-assistant')->name('ai.')->group(function () {
     Route::get('/status', [App\Http\Controllers\AIAssistantController::class, 'status'])->name('status');
     Route::get('/suggestions', [App\Http\Controllers\AIAssistantController::class, 'suggestions'])->name('suggestions');
 });
+
+// Route API Calculator Chat
+Route::post('/api/calculator-chat', [App\Http\Controllers\CalculatorChatController::class, 'calculate'])->middleware(['auth']);

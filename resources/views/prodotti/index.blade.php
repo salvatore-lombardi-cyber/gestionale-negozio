@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('app.products') . ' - Gestionale Negozio')
+@section('title', __('app.products') . ' - Finson')
 
 @section('content')
 <style>

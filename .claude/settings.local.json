@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan make:controller:*)",
+      "Bash(mkdir:*)",
+      "WebSearch",
+      "WebSearch",
+      "Bash(php artisan make:migration:*)",
+      "Bash(php artisan:*)",
+      "Bash(mysql:*)",
+      "Bash(grep:*)",
+      "WebFetch(domain:ilcodicefiscale.com)",
+      "Bash(node:*)",
+      "Bash(composer show:*)",
+      "Bash(php -l:*)",
+      "Bash(find:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

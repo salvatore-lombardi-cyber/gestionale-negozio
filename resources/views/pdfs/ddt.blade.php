@@ -67,8 +67,15 @@
 </head>
 <body>
     <div class="header">
-        <h1>DOCUMENTO DI TRASPORTO</h1>
-        <h2>{{ $ddt->numero_ddt }}</h2>
+        <div style="display: table; width: 100%;">
+            <div style="display: table-cell; width: 30%; vertical-align: top;">
+                <img src="{{ public_path('finson_logo.png') }}" alt="Finson Logo" style="max-width: 120px; height: auto;">
+            </div>
+            <div style="display: table-cell; width: 70%; text-align: center; vertical-align: middle;">
+                <h1>DOCUMENTO DI TRASPORTO</h1>
+                <h2>{{ $ddt->numero_ddt }}</h2>
+            </div>
+        </div>
     </div>
 
     <div class="info-section">
