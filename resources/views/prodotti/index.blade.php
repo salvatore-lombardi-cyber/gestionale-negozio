@@ -509,6 +509,25 @@
         }
     }
     
+    /* MacBook Air e laptop small (1366px e inferiori) */
+    @media (max-width: 1400px) {
+        .modern-table thead th {
+            padding: 0.8rem 0.4rem;
+            font-size: 0.75rem;
+        }
+        
+        .modern-table tbody td {
+            padding: 0.8rem 0.4rem;
+            font-size: 0.85rem;
+        }
+        
+        .action-btn {
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            margin: 0 1px;
+        }
+    }
+
     @media (max-width: 576px) {
         .page-header .d-flex {
             flex-direction: column;
@@ -534,6 +553,7 @@
         .mobile-action-btn i {
             font-size: 1rem;
         }
+        
     }
 </style>
 

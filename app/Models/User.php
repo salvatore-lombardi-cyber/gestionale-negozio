@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,5 +45,37 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Verifica se l'utente ha un ruolo specifico
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role || $this->role === 'super_admin';
+    }
+
+    /**
+     * Verifica se l'utente ha uno dei ruoli specificati
+     */
+    public function hasAnyRole(array $roles): bool
+    {
+        return in_array($this->role, $roles) || $this->role === 'super_admin';
+    }
+
+    /**
+     * Verifica se l'utente è amministratore
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasAnyRole(['admin', 'super_admin']);
+    }
+
+    /**
+     * Verifica se l'utente può configurare il sistema
+     */
+    public function canConfigure(): bool
+    {
+        return $this->hasAnyRole(['admin', 'configuratore', 'super_admin']);
     }
 }

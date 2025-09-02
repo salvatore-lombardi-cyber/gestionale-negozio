@@ -54,7 +54,7 @@
     
     .search-input:focus {
         outline: none;
-        border-color: #667eea;
+        border-color: #029D7E;
         box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         background: white;
     }
@@ -64,7 +64,7 @@
         right: 15px;
         top: 50%;
         transform: translateY(-50%);
-        color: #667eea;
+        color: #029D7E;
         font-size: 1.2rem;
     }
     
@@ -188,12 +188,12 @@
         white-space: nowrap;
     }
     
-    /* Larghezze colonne ottimizzate */
-    .modern-table thead th:nth-child(1) { width: 30%; } /* Cliente */
-    .modern-table thead th:nth-child(2) { width: 20%; } /* Telefono */
+    /* Larghezze colonne ottimizzate per MacBook Air 13" */
+    .modern-table thead th:nth-child(1) { width: 22%; } /* Cliente */
+    .modern-table thead th:nth-child(2) { width: 18%; } /* Telefono */
     .modern-table thead th:nth-child(3) { width: 25%; } /* Email */
     .modern-table thead th:nth-child(4) { width: 15%; } /* Città */
-    .modern-table thead th:nth-child(5) { width: 10%; } /* Azioni */
+    .modern-table thead th:nth-child(5) { width: 20%; } /* Azioni */
     
     .modern-table tbody tr {
         transition: all 0.3s ease;
@@ -224,15 +224,13 @@
     .action-btn {
         border: none;
         border-radius: 8px;
-        padding: 8px 10px;
-        font-size: 0.9rem;
+        padding: 6px 12px;
+        font-size: 0.8rem;
         font-weight: 600;
         margin: 0 2px;
         transition: all 0.3s ease;
         text-decoration: none;
         display: inline-block;
-        min-width: 36px;
-        text-align: center;
     }
     
     .action-btn.view {
@@ -472,28 +470,27 @@
     /* MacBook Air e laptop small (1366px e inferiori) */
     @media (max-width: 1400px) {
         .modern-table thead th {
-            padding: 0.8rem 0.6rem;
-            font-size: 0.8rem;
+            padding: 0.8rem 0.4rem;
+            font-size: 0.75rem;
         }
         
         .modern-table tbody td {
-            padding: 0.8rem 0.6rem;
-            max-width: 120px;
-            font-size: 0.9rem;
+            padding: 0.8rem 0.4rem;
+            font-size: 0.85rem;
         }
         
         .action-btn {
-            padding: 6px 8px;
-            font-size: 0.8rem;
+            padding: 4px 8px;
+            font-size: 0.75rem;
             margin: 0 1px;
-            min-width: 32px;
         }
         
-        /* Nascondi colonne meno importanti su MacBook Air */
-        .modern-table thead th:nth-child(4),
-        .modern-table tbody td:nth-child(4) {
-            display: none; /* Nascondi città */
-        }
+        /* Ottimizza larghezze per MacBook Air 13" */
+        .modern-table thead th:nth-child(1) { width: 20%; } /* Cliente */
+        .modern-table thead th:nth-child(2) { width: 16%; } /* Telefono */
+        .modern-table thead th:nth-child(3) { width: 22%; } /* Email */
+        .modern-table thead th:nth-child(4) { width: 12%; } /* Città */
+        .modern-table thead th:nth-child(5) { width: 30%; } /* Azioni - più spazio */
     }
     
     /* Tablet landscape */
@@ -659,14 +656,7 @@
                     data-email="{{ strtolower($cliente->email ?? '') }}"
                     data-city="{{ strtolower($cliente->citta ?? '') }}">
                     <td>
-                        <div class="client-name">
-                            <div class="client-avatar">
-                                {{ strtoupper(substr($cliente->nome, 0, 1)) }}{{ strtoupper(substr($cliente->cognome, 0, 1)) }}
-                            </div>
-                            <div>
-                                <strong>{{ $cliente->nome }} {{ $cliente->cognome }}</strong>
-                            </div>
-                        </div>
+                        <strong>{{ $cliente->nome }} {{ $cliente->cognome }}</strong>
                     </td>
                     <td>
                         @if($cliente->telefono)

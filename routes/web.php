@@ -7,6 +7,7 @@ use App\Http\Controllers\VenditaController;
 use App\Http\Controllers\MagazzinoController;
 use App\Http\Controllers\DdtController;
 use App\Http\Controllers\LabelController;
+use App\Http\Controllers\ConfigurationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -83,6 +84,51 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/print/{id}', [LabelController::class, 'print'])->name('print');
         Route::get('/scanner', [LabelController::class, 'scanner'])->name('scanner');
         Route::post('/decode', [LabelController::class, 'decode'])->name('decode');
+    });
+
+    // Route Configurazioni
+    Route::prefix('configurations')->name('configurations.')->group(function () {
+        Route::get('/', [ConfigurationController::class, 'index'])->name('index');
+        
+        // Profilo Azienda
+        Route::get('/company-profile', [ConfigurationController::class, 'companyProfile'])->name('company-profile');
+        Route::post('/company-profile', [ConfigurationController::class, 'updateCompanyProfile'])->name('company-profile.update');
+        
+        // Coordinate Bancarie
+        Route::get('/bank-accounts', [ConfigurationController::class, 'bankAccounts'])->name('bank-accounts');
+        Route::post('/bank-accounts', [ConfigurationController::class, 'storeBankAccount'])->name('bank-accounts.store');
+        Route::put('/bank-accounts/{uuid}', [ConfigurationController::class, 'updateBankAccount'])->name('bank-accounts.update');
+        Route::delete('/bank-accounts/{uuid}', [ConfigurationController::class, 'deleteBankAccount'])->name('bank-accounts.delete');
+        
+        // Tabelle di Sistema
+        Route::get('/system-tables', [ConfigurationController::class, 'systemTables'])->name('system-tables');
+        Route::post('/tax-rates', [ConfigurationController::class, 'storeTaxRate'])->name('tax-rates.store');
+        Route::post('/payment-methods', [ConfigurationController::class, 'storePaymentMethod'])->name('payment-methods.store');
+        Route::post('/currencies', [ConfigurationController::class, 'storeCurrency'])->name('currencies.store');
+        
+        // Impostazioni
+        Route::get('/settings', [ConfigurationController::class, 'settings'])->name('settings');
+        Route::post('/settings', [ConfigurationController::class, 'updateSettings'])->name('settings.update');
+    });
+
+    // Route Enterprise Features (Funzionalità Avanzate)
+    Route::prefix('enterprise')->name('enterprise.')->middleware(['auth', 'verified'])->group(function () {
+        Route::get('/', [App\Http\Controllers\EnterpriseController::class, 'dashboard'])->name('dashboard');
+        Route::get('/business-intelligence', [App\Http\Controllers\EnterpriseController::class, 'businessIntelligence'])->name('business-intelligence');
+        Route::get('/smart-inventory', [App\Http\Controllers\EnterpriseController::class, 'smartInventory'])->name('smart-inventory');
+        Route::get('/security-center', [App\Http\Controllers\EnterpriseController::class, 'securityCenter'])->name('security-center');
+        Route::get('/document-integrity', [App\Http\Controllers\EnterpriseController::class, 'documentIntegrity'])->name('document-integrity');
+        Route::get('/performance-analytics', [App\Http\Controllers\EnterpriseController::class, 'performanceAnalytics'])->name('performance-analytics');
+        
+        // API per dashboard real-time
+        Route::get('/api/metrics', [App\Http\Controllers\EnterpriseController::class, 'apiMetrics'])->name('api.metrics');
+        Route::get('/api/security-alerts', [App\Http\Controllers\EnterpriseController::class, 'apiSecurityAlerts'])->name('api.security-alerts');
+        
+        // Document integrity verification
+        Route::post('/verify-document/{documentId}', [App\Http\Controllers\EnterpriseController::class, 'verifyDocumentIntegrity'])->name('verify-document');
+        
+        // Data export
+        Route::get('/export/business-data', [App\Http\Controllers\EnterpriseController::class, 'exportBusinessData'])->name('export.business-data');
     });
 });
 

@@ -22,7 +22,7 @@
             top: 70px;
             left: 0;
             height: calc(100vh - 70px);
-            width: 280px;
+            width: 210px;
             z-index: 1025;
             overflow-y: auto;
             padding: 20px 0;
@@ -239,7 +239,7 @@
         
         /* Contenuto principale con offset per sidebar e navbar */
         main {
-            margin-left: 280px;
+            margin-left: 210px;
             margin-top: 70px;
             padding: 0 !important;
             min-height: calc(100vh - 70px);
@@ -400,6 +400,10 @@
             <a class="nav-link" href="{{ route('ai.index') }}">
                 <i class="bi bi-robot"></i>
                 {{ __('app.ai_assistant') }}
+            </a>
+            <a class="nav-link" href="{{ route('configurations.index') }}">
+                <i class="bi bi-gear"></i>
+                {{ __('app.configurations') }}
             </a>
         </div>
     </nav>

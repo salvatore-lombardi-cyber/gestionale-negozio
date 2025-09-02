@@ -15,6 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
         ]);
+        
+        // Registra middleware personalizzati per sicurezza
+        $middleware->alias([
+            'config.access' => \App\Http\Middleware\ConfigurationAccess::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

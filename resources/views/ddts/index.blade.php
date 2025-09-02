@@ -52,7 +52,7 @@
     
     .search-input:focus {
         outline: none;
-        border-color: #667eea;
+        border-color: #029D7E;
         box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
     
@@ -323,6 +323,25 @@
         color: #e2e8f0;
     }
     
+    /* MacBook Air e laptop small (1366px e inferiori) */
+    @media (max-width: 1400px) {
+        .modern-table thead th {
+            padding: 0.8rem 0.4rem;
+            font-size: 0.75rem;
+        }
+        
+        .modern-table tbody td {
+            padding: 0.8rem 0.4rem;
+            font-size: 0.85rem;
+        }
+        
+        .action-btn {
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            margin: 0 1px;
+        }
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
         .ddts-container {
@@ -444,8 +463,8 @@
                         </span>
                     </td>
                     <td>
-                        <a href="{{ route('ddts.show', $ddt) }}" class="action-btn view">
-                            <i class="bi bi-eye"></i> {{ __('app.view') }}
+                        <a href="{{ route('ddts.show', $ddt) }}" class="action-btn view" title="{{ __('app.view') }}">
+                            <i class="bi bi-eye"></i>
                         </a>
                     </td>
                 </tr>
