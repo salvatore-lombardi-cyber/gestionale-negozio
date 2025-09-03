@@ -168,7 +168,7 @@
         background: linear-gradient(135deg, #667eea, #764ba2);
     }
     
-    .stat-icon.success { background: linear-gradient(135deg, #28a745, #20c997); }
+    .stat-icon.success { background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%); }
     .stat-icon.info { background: linear-gradient(135deg, #48cae4, #0077b6); }
     .stat-icon.warning { background: linear-gradient(135deg, #ffd60a, #ff8500); }
     
@@ -229,7 +229,8 @@
     }
     
     .user-message .message-avatar {
-        background: linear-gradient(135deg, #28a745, #20c997);
+        
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         margin-left: 1rem;
     }
     
@@ -259,7 +260,8 @@
     }
     
     .user-message .message-content {
-        background: linear-gradient(135deg, #28a745, #20c997);
+
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         color: white;
     }
     
@@ -625,7 +627,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Statistics Cards -->
     <div class="stats-grid">
         <div class="stat-card products">
@@ -657,7 +659,7 @@
             <p class="stat-label">{{ __('app.low_stock') }}</p>
         </div>
     </div>
-
+    
     <div class="row">
         <!-- Chat Interface -->
         <div class="col-12 col-lg-8">
@@ -688,14 +690,14 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Chat Input -->
                 <div class="chat-input-container">
                     <div class="d-flex align-items-end gap-2">
                         <div class="flex-grow-1">
                             <textarea class="chat-input" id="user-message" rows="1" 
-                                     placeholder="Scrivi la tua domanda..." maxlength="500"
-                                     style="resize: none; min-height: 50px;"></textarea>
+                            placeholder="Scrivi la tua domanda..." maxlength="500"
+                            style="resize: none; min-height: 50px;"></textarea>
                             <div class="character-count">
                                 <small><span id="char-count">0</span>/500 caratteri</small>
                             </div>
@@ -707,7 +709,7 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- Quick Actions -->
         <div class="col-12 col-lg-4">
             <div class="modern-card">
@@ -741,9 +743,9 @@
                             <span>Analisi Magazzino</span>
                         </button>
                     </div>
-
+                    
                     <hr class="my-4">
-
+                    
                     <!-- Quick Questions -->
                     <h4 class="section-title">
                         <i class="bi bi-lightbulb"></i>{{ __('app.suggested_questions') }}
@@ -759,156 +761,156 @@
 
 <!-- JavaScript -->
 <script>
-// ===== AI CALCULATOR BRIDGE =====
-class AICalculatorBridge {
-    constructor() {
-        this.initCalculatorCommands();
-    }
-    
-    initCalculatorCommands() {
-        // Bridge per comunicazione AI → Calcolatrice
-        window.aiCalculatorBridge = {
-            calculate: (expression) => this.calculate(expression),
-            percentage: (number, percent) => this.calculatePercentage(number, percent),
-            add: (number) => this.addToResult(number),
-            subtract: (number) => this.subtractFromResult(number),
-            multiply: (number) => this.multiplyResult(number),
-            divide: (number) => this.divideResult(number),
-            clear: () => this.clearCalculator(),
-            show: () => this.showCalculator()
-        };
-    }
-    
-    calculate(expression) {
-        try {
-            // Sanitize expression per sicurezza
-            const sanitized = expression.replace(/[^0-9+\-*/().]/g, '');
-            const result = Function('"use strict"; return (' + sanitized + ')')();
-            
-            // Aggiorna calcolatrice globale
+    // ===== AI CALCULATOR BRIDGE =====
+    class AICalculatorBridge {
+        constructor() {
+            this.initCalculatorCommands();
+        }
+        
+        initCalculatorCommands() {
+            // Bridge per comunicazione AI → Calcolatrice
+            window.aiCalculatorBridge = {
+                calculate: (expression) => this.calculate(expression),
+                percentage: (number, percent) => this.calculatePercentage(number, percent),
+                add: (number) => this.addToResult(number),
+                subtract: (number) => this.subtractFromResult(number),
+                multiply: (number) => this.multiplyResult(number),
+                divide: (number) => this.divideResult(number),
+                clear: () => this.clearCalculator(),
+                show: () => this.showCalculator()
+            };
+        }
+        
+        calculate(expression) {
+            try {
+                // Sanitize expression per sicurezza
+                const sanitized = expression.replace(/[^0-9+\-*/().]/g, '');
+                const result = Function('"use strict"; return (' + sanitized + ')')();
+                
+                // Aggiorna calcolatrice globale
+                if (window.globalCalculatorCurrentInput !== undefined) {
+                    window.globalCalculatorCurrentInput = result.toString();
+                    window.globalUpdateCalculatorDisplay();
+                }
+                
+                this.showCalculator();
+                return result;
+            } catch (e) {
+                return 'Errore nel calcolo';
+            }
+        }
+        
+        calculatePercentage(number, percent) {
+            const result = (number * percent) / 100;
             if (window.globalCalculatorCurrentInput !== undefined) {
                 window.globalCalculatorCurrentInput = result.toString();
                 window.globalUpdateCalculatorDisplay();
             }
-            
             this.showCalculator();
             return result;
-        } catch (e) {
-            return 'Errore nel calcolo';
         }
-    }
-    
-    calculatePercentage(number, percent) {
-        const result = (number * percent) / 100;
-        if (window.globalCalculatorCurrentInput !== undefined) {
+        
+        addToResult(number) {
+            const current = parseFloat(window.globalCalculatorCurrentInput || '0');
+            const result = current + number;
             window.globalCalculatorCurrentInput = result.toString();
             window.globalUpdateCalculatorDisplay();
+            this.showCalculator();
+            return result;
         }
-        this.showCalculator();
-        return result;
-    }
-    
-    addToResult(number) {
-        const current = parseFloat(window.globalCalculatorCurrentInput || '0');
-        const result = current + number;
-        window.globalCalculatorCurrentInput = result.toString();
-        window.globalUpdateCalculatorDisplay();
-        this.showCalculator();
-        return result;
-    }
-    
-    subtractFromResult(number) {
-        const current = parseFloat(window.globalCalculatorCurrentInput || '0');
-        const result = current - number;
-        window.globalCalculatorCurrentInput = result.toString();
-        window.globalUpdateCalculatorDisplay();
-        this.showCalculator();
-        return result;
-    }
-    
-    multiplyResult(number) {
-        const current = parseFloat(window.globalCalculatorCurrentInput || '0');
-        const result = current * number;
-        window.globalCalculatorCurrentInput = result.toString();
-        window.globalUpdateCalculatorDisplay();
-        this.showCalculator();
-        return result;
-    }
-    
-    divideResult(number) {
-        if (number === 0) return 'Impossibile dividere per zero';
-        const current = parseFloat(window.globalCalculatorCurrentInput || '0');
-        const result = current / number;
-        window.globalCalculatorCurrentInput = result.toString();
-        window.globalUpdateCalculatorDisplay();
-        this.showCalculator();
-        return result;
-    }
-    
-    clearCalculator() {
-        if (window.globalClearAll) {
-            window.globalClearAll();
+        
+        subtractFromResult(number) {
+            const current = parseFloat(window.globalCalculatorCurrentInput || '0');
+            const result = current - number;
+            window.globalCalculatorCurrentInput = result.toString();
+            window.globalUpdateCalculatorDisplay();
+            this.showCalculator();
+            return result;
         }
-        this.showCalculator();
-        return 'Calcolatrice azzerata';
-    }
-    
-    showCalculator() {
-        const calculator = document.getElementById('globalCalculatorWidget');
-        if (calculator) {
-            calculator.style.display = 'block';
+        
+        multiplyResult(number) {
+            const current = parseFloat(window.globalCalculatorCurrentInput || '0');
+            const result = current * number;
+            window.globalCalculatorCurrentInput = result.toString();
+            window.globalUpdateCalculatorDisplay();
+            this.showCalculator();
+            return result;
+        }
+        
+        divideResult(number) {
+            if (number === 0) return 'Impossibile dividere per zero';
+            const current = parseFloat(window.globalCalculatorCurrentInput || '0');
+            const result = current / number;
+            window.globalCalculatorCurrentInput = result.toString();
+            window.globalUpdateCalculatorDisplay();
+            this.showCalculator();
+            return result;
+        }
+        
+        clearCalculator() {
+            if (window.globalClearAll) {
+                window.globalClearAll();
+            }
+            this.showCalculator();
+            return 'Calcolatrice azzerata';
+        }
+        
+        showCalculator() {
+            const calculator = document.getElementById('globalCalculatorWidget');
+            if (calculator) {
+                calculator.style.display = 'block';
+            }
         }
     }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Inizializza bridge DOPO che il DOM è caricato
-    const calculatorBridge = new AICalculatorBridge();
-    const chatMessages = document.getElementById('chat-messages');
-    const userMessageInput = document.getElementById('user-message');
-    const sendButton = document.getElementById('send-message');
-    const aiStatus = document.getElementById('ai-status');
-    const charCount = document.getElementById('char-count');
-    const suggestionChips = document.getElementById('suggestion-chips');
-
-    // Auto-resize textarea
-    userMessageInput.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight) + 'px';
-        charCount.textContent = this.value.length;
-    });
-
-    // Check AI status
-    checkAIStatus();
     
-    // Load suggestions
-    loadSuggestions();
-
-    // Send message on Enter (Ctrl+Enter for new line)
-    userMessageInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && !e.ctrlKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-
-    // Send button click
-    sendButton.addEventListener('click', sendMessage);
-
-    // Quick action buttons
-    document.querySelectorAll('.quick-action-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const action = this.dataset.action;
-            const type = this.dataset.type;
-            
-            if (action === 'analyze') {
-                analyzeData(type);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inizializza bridge DOPO che il DOM è caricato
+        const calculatorBridge = new AICalculatorBridge();
+        const chatMessages = document.getElementById('chat-messages');
+        const userMessageInput = document.getElementById('user-message');
+        const sendButton = document.getElementById('send-message');
+        const aiStatus = document.getElementById('ai-status');
+        const charCount = document.getElementById('char-count');
+        const suggestionChips = document.getElementById('suggestion-chips');
+        
+        // Auto-resize textarea
+        userMessageInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            charCount.textContent = this.value.length;
+        });
+        
+        // Check AI status
+        checkAIStatus();
+        
+        // Load suggestions
+        loadSuggestions();
+        
+        // Send message on Enter (Ctrl+Enter for new line)
+        userMessageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.ctrlKey) {
+                e.preventDefault();
+                sendMessage();
             }
         });
-    });
-
-    function checkAIStatus() {
-        fetch('/ai-assistant/status')
+        
+        // Send button click
+        sendButton.addEventListener('click', sendMessage);
+        
+        // Quick action buttons
+        document.querySelectorAll('.quick-action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.dataset.action;
+                const type = this.dataset.type;
+                
+                if (action === 'analyze') {
+                    analyzeData(type);
+                }
+            });
+        });
+        
+        function checkAIStatus() {
+            fetch('/ai-assistant/status')
             .then(response => response.json())
             .then(data => {
                 if (data.ai_available) {
@@ -923,10 +925,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 aiStatus.className = 'ai-status-badge offline';
                 aiStatus.innerHTML = '<i class="bi bi-circle-fill me-2"></i><span>Errore Connessione</span>';
             });
-    }
-
-    function loadSuggestions() {
-        fetch('/ai-assistant/suggestions')
+        }
+        
+        function loadSuggestions() {
+            fetch('/ai-assistant/suggestions')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -948,117 +950,117 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 }
             });
-    }
-
-    function sendMessage() {
-        const message = userMessageInput.value.trim();
-        if (!message) return;
-
-        // Add user message to chat
-        addMessage(message, 'user');
-        
-        // Clear input
-        userMessageInput.value = '';
-        userMessageInput.style.height = 'auto';
-        charCount.textContent = '0';
-
-        // Controlla se è un comando calcolatrice
-        const calculatorResult = processCalculatorCommand(message);
-        if (calculatorResult) {
-            addMessage(calculatorResult, 'ai');
-            return;
         }
-
-        // Add loading message
-        const loadingId = addLoadingMessage();
-
-        // Send to AI
-        fetch('/ai-assistant/ask', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                question: message,
-                context_type: 'general'
+        
+        function sendMessage() {
+            const message = userMessageInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            
+            // Clear input
+            userMessageInput.value = '';
+            userMessageInput.style.height = 'auto';
+            charCount.textContent = '0';
+            
+            // Controlla se è un comando calcolatrice
+            const calculatorResult = processCalculatorCommand(message);
+            if (calculatorResult) {
+                addMessage(calculatorResult, 'ai');
+                return;
+            }
+            
+            // Add loading message
+            const loadingId = addLoadingMessage();
+            
+            // Send to AI
+            fetch('/ai-assistant/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    question: message,
+                    context_type: 'general'
+                })
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            removeLoadingMessage(loadingId);
+            .then(response => response.json())
+            .then(data => {
+                removeLoadingMessage(loadingId);
+                
+                if (data.success) {
+                    addMessage(data.response, 'ai');
+                } else {
+                    addMessage('Scusa, si è verificato un errore: ' + (data.error || 'Errore sconosciuto'), 'ai');
+                }
+            })
+            .catch(error => {
+                removeLoadingMessage(loadingId);
+                addMessage('Errore di connessione. Assicurati che l\'AI sia attiva.', 'ai');
+            });
+        }
+        
+        function analyzeData(type) {
+            const loadingId = addLoadingMessage();
             
-            if (data.success) {
-                addMessage(data.response, 'ai');
-            } else {
-                addMessage('Scusa, si è verificato un errore: ' + (data.error || 'Errore sconosciuto'), 'ai');
-            }
-        })
-        .catch(error => {
-            removeLoadingMessage(loadingId);
-            addMessage('Errore di connessione. Assicurati che l\'AI sia attiva.', 'ai');
-        });
-    }
-
-    function analyzeData(type) {
-        const loadingId = addLoadingMessage();
-
-        fetch('/ai-assistant/analyze', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ type: type })
-        })
-        .then(response => response.json())
-        .then(data => {
-            removeLoadingMessage(loadingId);
+            fetch('/ai-assistant/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ type: type })
+            })
+            .then(response => response.json())
+            .then(data => {
+                removeLoadingMessage(loadingId);
+                
+                if (data.success) {
+                    addMessage(data.response, 'ai');
+                } else {
+                    addMessage('Errore nell\'analisi: ' + (data.error || 'Errore sconosciuto'), 'ai');
+                }
+            })
+            .catch(error => {
+                removeLoadingMessage(loadingId);
+                addMessage('Errore di connessione durante l\'analisi.', 'ai');
+            });
+        }
+        
+        function addMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${type}-message`;
             
-            if (data.success) {
-                addMessage(data.response, 'ai');
-            } else {
-                addMessage('Errore nell\'analisi: ' + (data.error || 'Errore sconosciuto'), 'ai');
-            }
-        })
-        .catch(error => {
-            removeLoadingMessage(loadingId);
-            addMessage('Errore di connessione durante l\'analisi.', 'ai');
-        });
-    }
-
-    function addMessage(message, type) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `chat-message ${type}-message`;
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = type === 'ai' ? '<i class="bi bi-robot"></i>' : '<i class="bi bi-person"></i>';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerHTML = `<p>${message.replace(/\n/g, '<br>')}</p>`;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
         
-        const avatar = document.createElement('div');
-        avatar.className = 'message-avatar';
-        avatar.innerHTML = type === 'ai' ? '<i class="bi bi-robot"></i>' : '<i class="bi bi-person"></i>';
-        
-        const content = document.createElement('div');
-        content.className = 'message-content';
-        content.innerHTML = `<p>${message.replace(/\n/g, '<br>')}</p>`;
-        
-        messageDiv.appendChild(avatar);
-        messageDiv.appendChild(content);
-        
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function addLoadingMessage() {
-        const loadingId = 'loading-' + Date.now();
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'chat-message ai-message';
-        messageDiv.id = loadingId;
-        
-        const avatar = document.createElement('div');
-        avatar.className = 'message-avatar';
-        avatar.innerHTML = '<i class="bi bi-robot"></i>';
-        
-        const content = document.createElement('div');
-        content.className = 'message-content';
-        content.innerHTML = `
+        function addLoadingMessage() {
+            const loadingId = 'loading-' + Date.now();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message ai-message';
+            messageDiv.id = loadingId;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = '<i class="bi bi-robot"></i>';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerHTML = `
             <div class="loading-message">
                 <span>L'AI sta elaborando la risposta</span>
                 <div class="loading-dots">
@@ -1068,102 +1070,102 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        
-        messageDiv.appendChild(avatar);
-        messageDiv.appendChild(content);
-        
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        return loadingId;
-    }
-
-    function removeLoadingMessage(loadingId) {
-        const loadingMsg = document.getElementById(loadingId);
-        if (loadingMsg) {
-            loadingMsg.remove();
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            return loadingId;
         }
-    }
-
-    // ===== PARSER COMANDI CALCOLATRICE =====
-    function processCalculatorCommand(message) {
-        const msg = message.toLowerCase();
         
-        // Comando: "calcola X + Y" o "calcola 15% di 1200"
-        if (msg.includes('calcola')) {
-            if (msg.includes('% di') || msg.includes('percento di')) {
-                // Estrai percentuale: "calcola il 15% di 1200" o "calcola 15% di 1200"
-                const match = msg.match(/calcola\s+(?:il\s+)?(\d+(?:\.\d+)?)%\s+di\s+(\d+(?:\.\d+)?)/);
-                if (match) {
-                    const percent = parseFloat(match[1]);
-                    const number = parseFloat(match[2]);
-                    const result = window.aiCalculatorBridge.calculatePercentage(number, percent);
-                    return `<i class="bi bi-calculator text-primary"></i> ${percent}% di ${number} = <strong>${result}</strong>`;
-                }
-            } else {
-                // Estrai espressione: "calcola 25 + 30 * 2"
-                const match = msg.match(/calcola\s+(.+)/);
-                if (match) {
-                    const expression = match[1].trim();
-                    const result = window.aiCalculatorBridge.calculate(expression);
-                    return `<i class="bi bi-calculator text-primary"></i> ${expression} = <strong>${result}</strong>`;
-                }
+        function removeLoadingMessage(loadingId) {
+            const loadingMsg = document.getElementById(loadingId);
+            if (loadingMsg) {
+                loadingMsg.remove();
             }
         }
         
-        // Comando: "aggiungi X" 
-        if ((msg.includes('aggiungi') || msg.includes('somma')) && msg.match(/\d+/)) {
-            const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
-            const result = window.aiCalculatorBridge.add(number);
-            return `<i class="bi bi-calculator text-primary"></i> Aggiunto ${number}. Risultato: <strong>${result}</strong>`;
+        // ===== PARSER COMANDI CALCOLATRICE =====
+        function processCalculatorCommand(message) {
+            const msg = message.toLowerCase();
+            
+            // Comando: "calcola X + Y" o "calcola 15% di 1200"
+            if (msg.includes('calcola')) {
+                if (msg.includes('% di') || msg.includes('percento di')) {
+                    // Estrai percentuale: "calcola il 15% di 1200" o "calcola 15% di 1200"
+                    const match = msg.match(/calcola\s+(?:il\s+)?(\d+(?:\.\d+)?)%\s+di\s+(\d+(?:\.\d+)?)/);
+                    if (match) {
+                        const percent = parseFloat(match[1]);
+                        const number = parseFloat(match[2]);
+                        const result = window.aiCalculatorBridge.calculatePercentage(number, percent);
+                        return `<i class="bi bi-calculator text-primary"></i> ${percent}% di ${number} = <strong>${result}</strong>`;
+                    }
+                } else {
+                    // Estrai espressione: "calcola 25 + 30 * 2"
+                    const match = msg.match(/calcola\s+(.+)/);
+                    if (match) {
+                        const expression = match[1].trim();
+                        const result = window.aiCalculatorBridge.calculate(expression);
+                        return `<i class="bi bi-calculator text-primary"></i> ${expression} = <strong>${result}</strong>`;
+                    }
+                }
+            }
+            
+            // Comando: "aggiungi X" 
+            if ((msg.includes('aggiungi') || msg.includes('somma')) && msg.match(/\d+/)) {
+                const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
+                const result = window.aiCalculatorBridge.add(number);
+                return `<i class="bi bi-calculator text-primary"></i> Aggiunto ${number}. Risultato: <strong>${result}</strong>`;
+            }
+            
+            // Comando: "sottrai X"
+            if (msg.includes('sottrai') && msg.match(/\d+/)) {
+                const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
+                const result = window.aiCalculatorBridge.subtract(number);
+                return `<i class="bi bi-calculator text-primary"></i> Sottratto ${number}. Risultato: <strong>${result}</strong>`;
+            }
+            
+            // Comando: "moltiplica per X"
+            if ((msg.includes('moltiplica') || msg.includes('per')) && msg.match(/\d+/)) {
+                const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
+                const result = window.aiCalculatorBridge.multiply(number);
+                return `<i class="bi bi-calculator text-primary"></i> Moltiplicato per ${number}. Risultato: <strong>${result}</strong>`;
+            }
+            
+            // Comando: "dividi per X"
+            if (msg.includes('dividi') && msg.match(/\d+/)) {
+                const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
+                const result = window.aiCalculatorBridge.divide(number);
+                return `<i class="bi bi-calculator text-primary"></i> Diviso per ${number}. Risultato: <strong>${result}</strong>`;
+            }
+            
+            // Comando: "azzera calcolatrice" o "clear"
+            if (msg.includes('azzera') || msg.includes('clear') || msg.includes('cancella')) {
+                const result = window.aiCalculatorBridge.clear();
+                return `<i class="bi bi-calculator text-primary"></i> ${result}`;
+            }
+            
+            // Comando: "apri calcolatrice" o "mostra calcolatrice"
+            if (msg.includes('apri calcolatrice') || msg.includes('mostra calcolatrice') || msg.includes('calculator')) {
+                window.aiCalculatorBridge.show();
+                return `<i class="bi bi-calculator text-primary"></i> Calcolatrice aperta! Puoi anche usare il tasto <strong>F9</strong> per aprirla velocemente.`;
+            }
+            
+            return null; // Non è un comando calcolatrice
         }
         
-        // Comando: "sottrai X"
-        if (msg.includes('sottrai') && msg.match(/\d+/)) {
-            const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
-            const result = window.aiCalculatorBridge.subtract(number);
-            return `<i class="bi bi-calculator text-primary"></i> Sottratto ${number}. Risultato: <strong>${result}</strong>`;
-        }
-        
-        // Comando: "moltiplica per X"
-        if ((msg.includes('moltiplica') || msg.includes('per')) && msg.match(/\d+/)) {
-            const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
-            const result = window.aiCalculatorBridge.multiply(number);
-            return `<i class="bi bi-calculator text-primary"></i> Moltiplicato per ${number}. Risultato: <strong>${result}</strong>`;
-        }
-        
-        // Comando: "dividi per X"
-        if (msg.includes('dividi') && msg.match(/\d+/)) {
-            const number = parseFloat(msg.match(/(\d+(?:\.\d+)?)/)[1]);
-            const result = window.aiCalculatorBridge.divide(number);
-            return `<i class="bi bi-calculator text-primary"></i> Diviso per ${number}. Risultato: <strong>${result}</strong>`;
-        }
-        
-        // Comando: "azzera calcolatrice" o "clear"
-        if (msg.includes('azzera') || msg.includes('clear') || msg.includes('cancella')) {
-            const result = window.aiCalculatorBridge.clear();
-            return `<i class="bi bi-calculator text-primary"></i> ${result}`;
-        }
-        
-        // Comando: "apri calcolatrice" o "mostra calcolatrice"
-        if (msg.includes('apri calcolatrice') || msg.includes('mostra calcolatrice') || msg.includes('calculator')) {
-            window.aiCalculatorBridge.show();
-            return `<i class="bi bi-calculator text-primary"></i> Calcolatrice aperta! Puoi anche usare il tasto <strong>F9</strong> per aprirla velocemente.`;
-        }
-        
-        return null; // Non è un comando calcolatrice
-    }
-
-    // Animation on load
-    document.querySelectorAll('.stat-card').forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        setTimeout(() => {
-            card.style.transition = 'all 0.6s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 200);
+        // Animation on load
+        document.querySelectorAll('.stat-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 200);
+        });
     });
-});
 </script>
 @endsection
