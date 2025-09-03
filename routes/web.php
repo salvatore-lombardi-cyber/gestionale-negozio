@@ -100,8 +100,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/bank-accounts/{uuid}', [ConfigurationController::class, 'updateBankAccount'])->name('bank-accounts.update');
         Route::delete('/bank-accounts/{uuid}', [ConfigurationController::class, 'deleteBankAccount'])->name('bank-accounts.delete');
         
-        // Tabelle di Sistema
-        Route::get('/system-tables', [ConfigurationController::class, 'systemTables'])->name('system-tables');
+        // Tabelle di Sistema - Dashboard Spettacolare 🌈
+        Route::middleware(['throttle:100,1'])->group(function () {
+            Route::get('/system-tables', [App\Http\Controllers\SystemTablesController::class, 'index'])->name('system-tables.index');
+            Route::get('/system-tables/{table}', [App\Http\Controllers\SystemTablesController::class, 'show'])->name('system-tables.show');
+            Route::post('/system-tables/{table}', [App\Http\Controllers\SystemTablesController::class, 'store'])->name('system-tables.store');
+            Route::put('/system-tables/{table}/{id}', [App\Http\Controllers\SystemTablesController::class, 'update'])->name('system-tables.update');
+            Route::delete('/system-tables/{table}/{id}', [App\Http\Controllers\SystemTablesController::class, 'destroy'])->name('system-tables.destroy');
+            Route::get('/system-tables/{table}/export', [App\Http\Controllers\SystemTablesController::class, 'export'])->name('system-tables.export');
+            Route::get('/system-tables/{table}/api', [App\Http\Controllers\SystemTablesController::class, 'apiData'])->name('system-tables.api');
+            Route::get('/vat-nature-configurator', [App\Http\Controllers\SystemTablesController::class, 'vatNatureConfigurator'])->name('vat-nature-configurator');
+        });
+        
+        // Route legacy per compatibilità
         Route::post('/tax-rates', [ConfigurationController::class, 'storeTaxRate'])->name('tax-rates.store');
         Route::post('/payment-methods', [ConfigurationController::class, 'storePaymentMethod'])->name('payment-methods.store');
         Route::post('/currencies', [ConfigurationController::class, 'storeCurrency'])->name('currencies.store');

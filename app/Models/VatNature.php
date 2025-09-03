@@ -17,16 +17,15 @@ class VatNature extends Model
 
     protected $fillable = [
         'code',
+        'name',
         'description',
-        'fiscal_code',
-        'is_taxable',
-        'notes',
-        'active'
+        'active',
+        'sort_order'
     ];
 
     protected $casts = [
-        'is_taxable' => 'boolean',
         'active' => 'boolean',
+        'sort_order' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'

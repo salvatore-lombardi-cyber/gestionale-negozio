@@ -299,7 +299,7 @@
                         </div>
                         <h3 class="config-title">{{ __('app.system_tables') }}</h3>
                         <p class="config-description">{{ __('app.system_tables_desc') }}</p>
-                        <a href="{{ route('configurations.system-tables') }}" class="config-btn info">
+                        <a href="{{ route('configurations.system-tables.index') }}" class="config-btn info">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }}
                         </a>
                     </div>

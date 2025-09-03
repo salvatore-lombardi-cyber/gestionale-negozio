@@ -542,6 +542,7 @@ return [
 'bank_accounts_desc' => 'Gestisci IBAN e dati bancari',
 'system_tables' => 'Tabelle di Sistema',
 'system_tables_desc' => 'Configura aliquote IVA, pagamenti e valute',
+'system_tables_management' => 'Gestione Tabelle di Sistema',
 'system_settings' => 'Impostazioni Sistema',
 'system_settings_desc' => 'Numeratori documenti e configurazioni avanzate',
 'company_data' => 'Dati Aziendali',

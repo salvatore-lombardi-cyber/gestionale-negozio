@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\RateLimiter;
 use App\Services\ConfigurationCacheService;
 use App\Services\SecurityAuditService;
 use App\Http\Requests\SecureConfigurationRequest;
+use App\Models\SystemPagebuilder;
 
-// Import tutti i modelli
-use App\Models\SystemTables\*;
+// Import modelli Sistema
+use App\Models\GenericSystemTable;
 use App\Models\VatNatureAssociation;
 use App\Models\VatNature;
 use App\Models\GoodAppearance;
@@ -44,20 +45,20 @@ class SystemTablesController extends Controller
         'size_colors' => SizeColor::class,
         'warehouse_causes' => WarehouseCause::class,
         'color_variants' => ColorVariant::class,
-        'conditions' => \App\Models\SystemTables\Condition::class,
-        'fixed_price_denominations' => \App\Models\SystemTables\FixedPriceDenomination::class,
-        'deposits' => \App\Models\SystemTables\Deposit::class,
-        'price_lists' => \App\Models\SystemTables\PriceList::class,
-        'shipping_terms' => \App\Models\SystemTables\ShippingTerm::class,
-        'merchandising_sectors' => \App\Models\SystemTables\MerchandisingSector::class,
-        'size_variants' => \App\Models\SystemTables\SizeVariant::class,
-        'size_types' => \App\Models\SystemTables\SizeType::class,
-        'payment_types' => \App\Models\SystemTables\PaymentType::class,
-        'transports' => \App\Models\SystemTables\Transport::class,
-        'transport_carriers' => \App\Models\SystemTables\TransportCarrier::class,
-        'locations' => \App\Models\SystemTables\Location::class,
-        'unit_of_measures' => \App\Models\SystemTables\UnitOfMeasure::class,
-        'zones' => \App\Models\SystemTables\Zone::class,
+        'conditions' => 'conditions',
+        'fixed_price_denominations' => 'fixed_price_denominations', 
+        'deposits' => 'deposits',
+        'price_lists' => 'price_lists',
+        'shipping_terms' => 'shipping_terms',
+        'merchandising_sectors' => 'merchandising_sectors',
+        'size_variants' => 'size_variants',
+        'size_types' => 'size_types',
+        'payment_types' => 'payment_types',
+        'transports' => 'transports',
+        'transport_carriers' => 'transport_carriers',
+        'locations' => 'locations',
+        'unit_of_measures' => 'unit_of_measures',
+        'zones' => 'zones',
     ];
 
     // Configurazione per ogni tabella
@@ -68,10 +69,11 @@ class SystemTablesController extends Controller
             'color' => 'primary',
             'special_configurator' => true,
             'validation_rules' => [
-                'tax_rate_id' => 'required|exists:tax_rates,id',
-                'vat_nature_id' => 'required|exists:vat_natures,id',
-                'is_default' => 'boolean',
-                'description' => 'nullable|string|max:500'
+                'nome_associazione' => 'required|string|max:255|regex:/^[\p{L}\p{N}\s\-\._%]+$/u|min:3',
+                'descrizione' => 'nullable|string|max:500|regex:/^[\p{L}\p{N}\s\-\.,;:!?()\[\]{}"\'\/\\@#&*+=_]+$/u',
+                'tax_rate_id' => 'required|integer|exists:tax_rates,id',
+                'vat_nature_id' => 'required|integer|exists:vat_natures,id',
+                'is_default' => 'nullable|boolean'
             ]
         ],
         'vat_natures' => [
@@ -136,25 +138,76 @@ class SystemTablesController extends Controller
     ) {
         $this->cacheService = $cacheService;
         $this->auditService = $auditService;
-        
-        $this->middleware('config.access');
-        $this->middleware('throttle:100,1'); // 100 requests per minute per performance
     }
 
     /**
-     * Visualizza dashboard principale con tutte le 27 card
+     * Dashboard SPETTACOLARE con 27 pulsanti colorati 🌈
+     * La più bella vista gestionale d'Italia!
      */
     public function index()
     {
         $this->auditService->logConfigurationAccess('view_system_tables_dashboard');
         
+        // Carica configurazioni tabelle con i 27 colori spettacolari
+        $tables = SystemPagebuilder::getDashboardTables();
+        
         // Carica statistiche per tutte le tabelle con cache
         $stats = $this->cacheService->getAllSystemTablesStats();
         
-        return view('configurations.system-tables.dashboard', [
-            'tables' => self::TABLE_CONFIG,
-            'stats' => $stats
+        // Carica metriche performance per dashboard
+        $metrics = [
+            'total_tables' => $tables->count(),
+            'active_tables' => $tables->where('is_active', true)->count(),
+            'total_records' => $this->getTotalSystemRecords(),
+            'cache_hit_rate' => $this->cacheService->getCacheHitRate()
+        ];
+
+        return view('configurations.system-tables.index', [
+            'tables' => $tables,
+            'stats' => $stats,
+            'metrics' => $metrics,
+            'user_permissions' => $this->getUserPermissions()
         ]);
+    }
+
+    /**
+     * Ottieni permessi utente per tutte le tabelle (OWASP Security)
+     */
+    private function getUserPermissions(): array
+    {
+        $user = Auth::user();
+        $permissions = [];
+        
+        SystemPagebuilder::where('is_active', true)->get()->each(function($table) use ($user, &$permissions) {
+            $permissions[$table->objname] = [
+                'read' => $table->canUserAccess($user, 'read'),
+                'create' => $table->canUserAccess($user, 'create'),
+                'update' => $table->canUserAccess($user, 'update'),
+                'delete' => $table->canUserAccess($user, 'delete'),
+            ];
+        });
+
+        return $permissions;
+    }
+
+    /**
+     * Conta totale record in tutte le tabelle sistema
+     */
+    private function getTotalSystemRecords(): int
+    {
+        return cache()->remember('system_tables.total_records', 1800, function() {
+            $total = 0;
+            foreach (self::TABLE_MODELS as $table => $modelClass) {
+                if (class_exists($modelClass)) {
+                    try {
+                        $total += $modelClass::count();
+                    } catch (\Exception $e) {
+                        Log::warning("Cannot count records for {$table}: " . $e->getMessage());
+                    }
+                }
+            }
+            return $total;
+        });
     }
 
     /**
@@ -175,7 +228,7 @@ class SystemTablesController extends Controller
         RateLimiter::hit($rateLimiterKey, 300);
 
         // Carica dati con paginazione e filtri
-        $query = $modelClass::active();
+        $query = $modelClass::query();
         
         // Filtro di ricerca se presente
         if ($search = $request->get('search')) {
@@ -186,8 +239,8 @@ class SystemTablesController extends Controller
             });
         }
 
-        // Ordinamento
-        $query->ordered();
+        // Ordinamento standard
+        $query->orderBy('code')->orderBy('name');
 
         // Paginazione con cache
         $items = $this->cacheService->getCachedPaginatedData(
@@ -217,36 +270,87 @@ class SystemTablesController extends Controller
         $modelClass = self::TABLE_MODELS[$table];
         $config = self::TABLE_CONFIG[$table];
         
-        // Rate limiting per creazione
+        // Rate limiting per creazione (OWASP Security)
         $rateLimiterKey = "create_{$table}:" . Auth::id();
         if (RateLimiter::tooManyAttempts($rateLimiterKey, 20)) {
             return back()->withErrors(['error' => 'Troppi inserimenti. Attendi prima di aggiungerne altri.']);
         }
         RateLimiter::hit($rateLimiterKey, 3600);
 
-        // Validazione con regole specifiche della tabella
-        $validated = $request->validate($config['validation_rules']);
+        // Validazione con regole specifiche della tabella (OWASP Input Validation)
+        $validated = $request->validate($config['validation_rules'], [
+            'nome_associazione.required' => 'Il nome associazione è obbligatorio.',
+            'nome_associazione.min' => 'Il nome deve essere di almeno 3 caratteri.',
+            'nome_associazione.regex' => 'Il nome contiene caratteri non validi.',
+            'tax_rate_id.required' => 'L\'aliquota IVA è obbligatoria.',
+            'tax_rate_id.exists' => 'L\'aliquota IVA selezionata non è valida.',
+            'vat_nature_id.required' => 'La natura IVA è obbligatoria.',
+            'vat_nature_id.exists' => 'La natura IVA selezionata non è valida.',
+            'descrizione.regex' => 'La descrizione contiene caratteri non validi.'
+        ]);
 
-        // Verifica univocità codice se presente
-        if (isset($validated['code'])) {
+        // Validazione business logic per VAT associations
+        if ($table === 'vat_nature_associations') {
+            // Verifica che non esista già questa associazione
+            $existingAssociation = $modelClass::where('tax_rate_id', $validated['tax_rate_id'])
+                ->where('vat_nature_id', $validated['vat_nature_id'])
+                ->first();
+            
+            if ($existingAssociation) {
+                return back()->withErrors([
+                    'tax_rate_id' => 'Questa associazione esiste già nel sistema.'
+                ]);
+            }
+            
+            // Se è impostata come default, rimuovi default da altre associazioni con stessa aliquota
+            if ($validated['is_default'] ?? false) {
+                $modelClass::where('tax_rate_id', $validated['tax_rate_id'])
+                    ->where('is_default', true)
+                    ->update(['is_default' => false]);
+            }
+        }
+
+        // Verifica univocità codice se presente (per altre tabelle)
+        if (isset($validated['code']) && method_exists($modelClass, 'isCodeUnique')) {
             if (!$modelClass::isCodeUnique($validated['code'])) {
                 return back()->withErrors(['code' => 'Codice già esistente per questa tabella.']);
             }
         }
 
-        // Creazione record
-        $item = $modelClass::createSystemEntry($validated);
+        // Sanitizzazione input (OWASP)
+        if (isset($validated['nome_associazione'])) {
+            $validated['nome_associazione'] = trim(strip_tags($validated['nome_associazione']));
+            // Popola anche il campo 'name' per compatibilità tabella
+            $validated['name'] = $validated['nome_associazione'];
+        }
+        if (isset($validated['descrizione'])) {
+            $validated['descrizione'] = trim(strip_tags($validated['descrizione']));
+            // Popola anche il campo 'description' per compatibilità tabella
+            $validated['description'] = $validated['descrizione'];
+        }
+        
+        // Aggiungi metadati di sicurezza
+        $validated['created_by'] = Auth::id();
+        $validated['active'] = true;
+        $validated['uuid'] = \Illuminate\Support\Str::uuid();
+
+        // Creazione record con protezione Mass Assignment
+        $item = $modelClass::create($validated);
 
         $this->auditService->logSensitiveDataChange($table, 'create', [
             'item_id' => $item->id,
+            'uuid' => $item->uuid,
+            'nome_associazione' => $validated['nome_associazione'] ?? null,
             'code' => $validated['code'] ?? null,
-            'name' => $validated['name'] ?? $validated['description'] ?? null
+            'name' => $validated['name'] ?? $validated['descrizione'] ?? null,
+            'user_ip' => $request->ip(),
+            'user_agent' => $request->userAgent()
         ]);
 
         // Invalida cache
         $this->cacheService->invalidateSystemTablesCache($table);
 
-        return back()->with('success', "{$config['name']}: record aggiunto con successo!");
+        return back()->with('success', "{$config['name']}: associazione creata con successo!");
     }
 
     /**
@@ -338,9 +442,9 @@ class SystemTablesController extends Controller
         
         $modelClass = self::TABLE_MODELS[$table];
         
-        $items = $modelClass::active()
-            ->select(['id', 'code', 'name', 'description'])
-            ->ordered()
+        $items = $modelClass::select(['id', 'code', 'name', 'description'])
+            ->orderBy('code')
+            ->orderBy('name')
             ->limit(50)
             ->get();
 
@@ -359,9 +463,9 @@ class SystemTablesController extends Controller
     {
         $this->auditService->logConfigurationAccess('view_vat_nature_configurator');
         
-        $taxRates = \App\Models\TaxRate::active()->get();
-        $vatNatures = VatNature::active()->get();
-        $associations = VatNatureAssociation::with(['taxRate', 'vatNature'])->active()->get();
+        $taxRates = \App\Models\TaxRate::where('active', true)->get();
+        $vatNatures = VatNature::where('active', true)->get();
+        $associations = VatNatureAssociation::with(['taxRate', 'vatNature'])->where('active', true)->get();
         
         return view('configurations.system-tables.vat-nature-configurator', [
             'taxRates' => $taxRates,
@@ -382,13 +486,29 @@ class SystemTablesController extends Controller
         $modelClass = self::TABLE_MODELS[$table];
         $config = self::TABLE_CONFIG[$table];
         
-        $items = $modelClass::active()->ordered()->get();
+        $items = $modelClass::orderBy('code')->orderBy('name')->get();
         
         // Implementazione export (da completare con libreria export)
         return response()->json([
             'message' => "Export {$config['name']} completato",
             'count' => $items->count()
         ]);
+    }
+
+    /**
+     * Ottieni model class per una tabella
+     */
+    private function getModelForTable(string $table)
+    {
+        $modelReference = self::TABLE_MODELS[$table];
+        
+        // Se è una stringa (nome tabella), usa GenericSystemTable
+        if (is_string($modelReference) && !class_exists($modelReference)) {
+            return (new GenericSystemTable())->setTable($modelReference);
+        }
+        
+        // Se è una classe, usa quella
+        return new $modelReference();
     }
 
     /**
