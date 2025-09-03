@@ -285,7 +285,7 @@
                             <i class="bi bi-bank"></i>
                         </div>
                         <h3 class="config-title">{{ __('app.bank_accounts') }}</h3>
-                        <p class="config-description">{{ __('app.bank_accounts_desc') }}</p>
+                        <p class="config-description">{{ __('app.bank_accounts_desc') }} Configura metodi di pagamento e coordinate per fatturazione.</p>
                         <a href="{{ route('configurations.bank-accounts') }}" class="config-btn success">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }}
                         </a>

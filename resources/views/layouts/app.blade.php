@@ -385,6 +385,10 @@
                 <i class="bi bi-boxes"></i>
                 {{ __('app.warehouse_overview') }}
             </a>
+            <a class="nav-link" href="{{ route('configurations.index') }}">
+                <i class="bi bi-gear"></i>
+                {{ __('app.configurations') }}
+            </a>
             <a class="nav-link" href="{{ route('vendite.index') }}">
                 <i class="bi bi-cart-check"></i>
                 {{ __('app.sales') }}
@@ -400,10 +404,6 @@
             <a class="nav-link" href="{{ route('ai.index') }}">
                 <i class="bi bi-robot"></i>
                 {{ __('app.ai_assistant') }}
-            </a>
-            <a class="nav-link" href="{{ route('configurations.index') }}">
-                <i class="bi bi-gear"></i>
-                {{ __('app.configurations') }}
             </a>
         </div>
     </nav>
