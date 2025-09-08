@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProdottoController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\FornitoriController;
+use App\Http\Controllers\VettoriController;
 use App\Http\Controllers\VenditaController;
 use App\Http\Controllers\MagazzinoController;
 use App\Http\Controllers\DdtController;
@@ -56,6 +58,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route del gestionale
     Route::resource('prodotti', ProdottoController::class)->parameter('prodotti', 'prodotto');
     Route::resource('clienti', ClienteController::class)->parameter('clienti', 'cliente');
+    Route::resource('fornitori', FornitoriController::class)->parameter('fornitori', 'fornitore');
+    Route::resource('vettori', VettoriController::class)->parameter('vettori', 'vettore');
     Route::resource('vendite', VenditaController::class)->parameter('vendite', 'vendita');
     
     Route::get('/magazzino/caricamento-multiplo', [MagazzinoController::class, 'caricamentoMultiplo'])->name('magazzino.caricamento-multiplo');
@@ -85,6 +89,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/scanner', [LabelController::class, 'scanner'])->name('scanner');
         Route::post('/decode', [LabelController::class, 'decode'])->name('decode');
     });
+    
+    // Route speciali per Fornitori Enterprise
+    Route::prefix('fornitori')->name('fornitori.')->group(function () {
+        Route::get('/search', [FornitoriController::class, 'search'])->name('search'); // AJAX
+        Route::get('/export-csv', [FornitoriController::class, 'exportCsv'])->name('export-csv');
+        Route::post('/{fornitore}/verifica-dati', [FornitoriController::class, 'verificaDati'])->name('verifica-dati');
+    });
+
+    // Route speciali per Vettori Enterprise
+    Route::prefix('vettori')->name('vettori.')->group(function () {
+        Route::get('/search', [VettoriController::class, 'search'])->name('search'); // AJAX
+        Route::get('/export-csv', [VettoriController::class, 'exportCsv'])->name('export-csv');
+        Route::post('/{vettore}/verifica-dati', [VettoriController::class, 'verificaDati'])->name('verifica-dati');
+        Route::post('/calcola-costo', [VettoriController::class, 'calcolaCosto'])->name('calcola-costo'); // AJAX
+    });
 
     // Route Configurazioni
     Route::prefix('configurations')->name('configurations.')->group(function () {
@@ -110,6 +129,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/system-tables/{table}/export', [App\Http\Controllers\SystemTablesController::class, 'export'])->name('system-tables.export');
             Route::get('/system-tables/{table}/api', [App\Http\Controllers\SystemTablesController::class, 'apiData'])->name('system-tables.api');
             Route::get('/vat-nature-configurator', [App\Http\Controllers\SystemTablesController::class, 'vatNatureConfigurator'])->name('vat-nature-configurator');
+            Route::get('/tax-rates-configurator', [App\Http\Controllers\SystemTablesController::class, 'taxRatesConfigurator'])->name('tax-rates-configurator');
+            
+            // Route per gestione preferiti (NEW!)
+            Route::post('/favorites/add', [App\Http\Controllers\SystemTablesController::class, 'addToFavorites'])->name('system-tables.favorites.add');
+            Route::delete('/favorites/remove', [App\Http\Controllers\SystemTablesController::class, 'removeFromFavorites'])->name('system-tables.favorites.remove');
+            Route::post('/track-usage', [App\Http\Controllers\SystemTablesController::class, 'trackTableUsage'])->name('system-tables.track-usage');
         });
         
         // Route legacy per compatibilità

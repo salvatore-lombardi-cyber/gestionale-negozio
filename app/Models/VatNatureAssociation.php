@@ -25,7 +25,8 @@ class VatNatureAssociation extends Model
         'vat_nature_id', 
         'is_default',
         'active',
-        'created_by'
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
@@ -34,7 +35,8 @@ class VatNatureAssociation extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
-        'created_by' => 'integer'
+        'created_by' => 'integer',
+        'updated_by' => 'integer'
     ];
 
     // Relazioni
@@ -63,6 +65,12 @@ class VatNatureAssociation extends Model
     public function creator()
     {
         return $this->belongsTo(\App\Models\User::class, 'created_by');
+    }
+    
+    // Relazione con utente che ha fatto l'ultimo aggiornamento
+    public function updater()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'updated_by');
     }
 
     // Accessor per nome visualizzato
@@ -107,5 +115,26 @@ class VatNatureAssociation extends Model
         });
         
         return true;
+    }
+    
+    /**
+     * Boot model per gestire UUID e audit trail automaticamente
+     */
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (empty($model->uuid)) {
+                $model->uuid = \Illuminate\Support\Str::uuid()->toString();
+            }
+            if (auth()->check() && empty($model->created_by)) {
+                $model->created_by = auth()->id();
+            }
+        });
+
+        static::updating(function ($model) {
+            if (auth()->check()) {
+                $model->updated_by = auth()->id();
+            }
+        });
     }
 }

@@ -10,11 +10,13 @@ use App\Services\ConfigurationCacheService;
 use App\Services\SecurityAuditService;
 use App\Http\Requests\SecureConfigurationRequest;
 use App\Models\SystemPagebuilder;
+use App\Models\UserFavoriteTable;
 
 // Import modelli Sistema
 use App\Models\GenericSystemTable;
 use App\Models\VatNatureAssociation;
 use App\Models\VatNature;
+use App\Models\TaxRate;
 use App\Models\GoodAppearance;
 use App\Models\Bank;
 use App\Models\ProductCategory;
@@ -36,6 +38,7 @@ class SystemTablesController extends Controller
     // Mapping table -> model class
     private const TABLE_MODELS = [
         'vat_nature_associations' => VatNatureAssociation::class,
+        'tax_rates' => TaxRate::class,
         'vat_natures' => VatNature::class,
         'good_appearances' => GoodAppearance::class,
         'banks' => Bank::class,
@@ -49,6 +52,7 @@ class SystemTablesController extends Controller
         'fixed_price_denominations' => 'fixed_price_denominations', 
         'deposits' => 'deposits',
         'price_lists' => 'price_lists',
+        'payment_methods' => 'payment_methods',
         'shipping_terms' => 'shipping_terms',
         'merchandising_sectors' => 'merchandising_sectors',
         'size_variants' => 'size_variants',
@@ -58,6 +62,7 @@ class SystemTablesController extends Controller
         'transport_carriers' => 'transport_carriers',
         'locations' => 'locations',
         'unit_of_measures' => 'unit_of_measures',
+        'currencies' => 'currencies',
         'zones' => 'zones',
     ];
 
@@ -74,6 +79,20 @@ class SystemTablesController extends Controller
                 'tax_rate_id' => 'required|integer|exists:tax_rates,id',
                 'vat_nature_id' => 'required|integer|exists:vat_natures,id',
                 'is_default' => 'nullable|boolean'
+            ]
+        ],
+        'tax_rates' => [
+            'name' => 'Aliquote IVA',
+            'icon' => 'bi-percent',
+            'color' => 'danger',
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:tax_rates,code',
+                'name' => 'required|string|max:255|min:3',
+                'description' => 'required|string|max:500|min:5',
+                'riferimento_normativo' => 'nullable|string|max:1000',
+                'percentuale' => 'required|numeric|min:0|max:100|decimal:0,2',
+                'sort_order' => 'nullable|integer|min:0',
+                'active' => 'nullable|boolean'
             ]
         ],
         'vat_natures' => [
@@ -154,6 +173,12 @@ class SystemTablesController extends Controller
         // Carica statistiche per tutte le tabelle con cache
         $stats = $this->cacheService->getAllSystemTablesStats();
         
+        // Carica tabelle preferite dell'utente (NEW!)
+        $favoriteTablesWithDetails = [];
+        if (Auth::check()) {
+            $favoriteTablesWithDetails = UserFavoriteTable::getFavoritesWithDetails(Auth::id(), 6);
+        }
+        
         // Carica metriche performance per dashboard
         $metrics = [
             'total_tables' => $tables->count(),
@@ -166,7 +191,8 @@ class SystemTablesController extends Controller
             'tables' => $tables,
             'stats' => $stats,
             'metrics' => $metrics,
-            'user_permissions' => $this->getUserPermissions()
+            'user_permissions' => $this->getUserPermissions(),
+            'favoriteTablesWithDetails' => $favoriteTablesWithDetails // NEW!
         ]);
     }
 
@@ -329,20 +355,19 @@ class SystemTablesController extends Controller
             $validated['description'] = $validated['descrizione'];
         }
         
-        // Aggiungi metadati di sicurezza
-        $validated['created_by'] = Auth::id();
+        // Aggiungi metadati di sicurezza (UUID e audit trail gestiti automaticamente dal model)
         $validated['active'] = true;
-        $validated['uuid'] = \Illuminate\Support\Str::uuid();
 
         // Creazione record con protezione Mass Assignment
         $item = $modelClass::create($validated);
 
         $this->auditService->logSensitiveDataChange($table, 'create', [
             'item_id' => $item->id,
-            'uuid' => $item->uuid,
+            'uuid' => $item->uuid ?? null,
             'nome_associazione' => $validated['nome_associazione'] ?? null,
             'code' => $validated['code'] ?? null,
             'name' => $validated['name'] ?? $validated['descrizione'] ?? null,
+            'created_by' => $item->created_by ?? null,
             'user_ip' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);
@@ -463,7 +488,7 @@ class SystemTablesController extends Controller
     {
         $this->auditService->logConfigurationAccess('view_vat_nature_configurator');
         
-        $taxRates = \App\Models\TaxRate::where('active', true)->get();
+        $taxRates = TaxRate::where('active', true)->get();
         $vatNatures = VatNature::where('active', true)->get();
         $associations = VatNatureAssociation::with(['taxRate', 'vatNature'])->where('active', true)->get();
         
@@ -471,6 +496,42 @@ class SystemTablesController extends Controller
             'taxRates' => $taxRates,
             'vatNatures' => $vatNatures,
             'associations' => $associations
+        ]);
+    }
+
+    /**
+     * Configuratore Premium per Aliquote IVA (Card #2)
+     * Design enterprise superiore ad Aruba
+     */
+    public function taxRatesConfigurator()
+    {
+        $this->auditService->logConfigurationAccess('view_tax_rates_configurator');
+        
+        // Carica aliquote con statistiche avanzate
+        $taxRates = TaxRate::with(['creator', 'updater'])
+            ->orderByDefault()
+            ->get();
+        
+        // Statistiche business per dashboard
+        $stats = [
+            'total_rates' => $taxRates->count(),
+            'active_rates' => $taxRates->where('active', true)->count(),
+            'standard_rates' => $taxRates->whereIn('percentuale', [22.00, 10.00, 4.00, 0.00])->count(),
+            'custom_rates' => $taxRates->whereNotIn('percentuale', [22.00, 10.00, 4.00, 0.00])->count(),
+        ];
+        
+        // Aliquote standard italiane per quick setup
+        $standardRates = [
+            ['code' => 'IVA22', 'name' => 'Aliquota Ordinaria', 'percentuale' => 22.00, 'color' => '#d63031'],
+            ['code' => 'IVA10', 'name' => 'Aliquota Ridotta', 'percentuale' => 10.00, 'color' => '#00b894'],
+            ['code' => 'IVA4', 'name' => 'Aliquota Super-Ridotta', 'percentuale' => 4.00, 'color' => '#0984e3'],
+            ['code' => 'IVA0', 'name' => 'Aliquota Zero', 'percentuale' => 0.00, 'color' => '#636e72'],
+        ];
+        
+        return view('configurations.system-tables.tax-rates-configurator', [
+            'taxRates' => $taxRates,
+            'stats' => $stats,
+            'standardRates' => $standardRates
         ]);
     }
 
@@ -520,5 +581,96 @@ class SystemTablesController extends Controller
             $this->auditService->logUnauthorizedAccess("invalid_table_{$table}");
             abort(404, 'Tabella non trovata.');
         }
+    }
+    
+    // ==========================================
+    // GESTIONE TABELLE PREFERITE (NEW!)
+    // ==========================================
+    
+    /**
+     * Aggiungi tabella ai preferiti
+     */
+    public function addToFavorites(Request $request)
+    {
+        $request->validate([
+            'table_objname' => 'required|string|max:100'
+        ]);
+        
+        $tableObjname = $request->input('table_objname');
+        
+        // Verifica che la tabella esista
+        $systemTable = SystemPagebuilder::where('objname', $tableObjname)->first();
+        if (!$systemTable) {
+            return response()->json(['error' => 'Tabella non trovata'], 404);
+        }
+        
+        // Controlla se già nei preferiti
+        $existing = UserFavoriteTable::forUser(Auth::id())
+            ->where('table_objname', $tableObjname)
+            ->first();
+            
+        if ($existing) {
+            return response()->json(['message' => 'Tabella già nei preferiti'], 200);
+        }
+        
+        // Aggiungi ai preferiti
+        UserFavoriteTable::create([
+            'user_id' => Auth::id(),
+            'table_objname' => $tableObjname,
+            'sort_order' => UserFavoriteTable::forUser(Auth::id())->count()
+        ]);
+        
+        $this->auditService->logConfigurationAccess("add_favorite_table_{$tableObjname}");
+        
+        return response()->json(['message' => 'Tabella aggiunta ai preferiti!']);
+    }
+    
+    /**
+     * Rimuovi tabella dai preferiti
+     */
+    public function removeFromFavorites(Request $request)
+    {
+        $request->validate([
+            'table_objname' => 'required|string|max:100'
+        ]);
+        
+        $tableObjname = $request->input('table_objname');
+        
+        $favorite = UserFavoriteTable::forUser(Auth::id())
+            ->where('table_objname', $tableObjname)
+            ->first();
+            
+        if (!$favorite) {
+            return response()->json(['error' => 'Tabella non nei preferiti'], 404);
+        }
+        
+        $favorite->delete();
+        
+        $this->auditService->logConfigurationAccess("remove_favorite_table_{$tableObjname}");
+        
+        return response()->json(['message' => 'Tabella rimossa dai preferiti!']);
+    }
+    
+    /**
+     * Traccia utilizzo di una tabella
+     */
+    public function trackTableUsage(Request $request)
+    {
+        $request->validate([
+            'table_objname' => 'required|string|max:100'
+        ]);
+        
+        $tableObjname = $request->input('table_objname');
+        
+        // Se la tabella è nei preferiti, aggiorna i contatori
+        $favorite = UserFavoriteTable::forUser(Auth::id())
+            ->where('table_objname', $tableObjname)
+            ->first();
+            
+        if ($favorite) {
+            $favorite->incrementUsage();
+        }
+        
+        return response()->json(['message' => 'Utilizzo registrato']);
     }
 }

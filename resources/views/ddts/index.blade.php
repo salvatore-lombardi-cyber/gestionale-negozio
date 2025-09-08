@@ -474,10 +474,7 @@
                         <div class="empty-state">
                             <i class="bi bi-file-earmark-text"></i>
                             <h5>{{ __('app.no_ddts_created') }}</h5>
-                            <p>{{ __('app.start_creating_first_ddt') }}</p>
-                            <a href="{{ route('ddts.create') }}" class="modern-btn">
-                                <i class="bi bi-plus-circle"></i> {{ __('app.create_first_ddt') }}
-                            </a>
+                            <p>Inizia creando il primo DDT utilizzando il pulsante in alto</p>
                         </div>
                     </td>
                 </tr>
@@ -537,10 +534,7 @@
         <div class="empty-state">
             <i class="bi bi-file-earmark-text"></i>
             <h5>{{ __('app.no_ddts_created') }}</h5>
-            <p>{{ __('app.start_creating_first_ddt') }}</p>
-            <a href="{{ route('ddts.create') }}" class="modern-btn">
-                <i class="bi bi-plus-circle"></i> {{ __('app.create_first_ddt') }}
-            </a>
+            <p>Inizia creando il primo DDT utilizzando il pulsante in alto</p>
         </div>
     </div>
     @endforelse

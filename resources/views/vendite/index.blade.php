@@ -4,7 +4,7 @@
 
 @section('content')
 <style>
-    .sales-container {
+1    .sales-container {
         padding: 2rem;
         min-height: calc(100vh - 76px);
     }
@@ -422,7 +422,7 @@
                 <i class="bi bi-cart-check"></i> {{ __('app.sales') }}
             </h1>
             <a href="{{ route('vendite.create') }}" class="modern-btn">
-                <i class="bi bi-plus-circle"></i> {{ __('app.new') }} {{ __('app.sale') }}
+                <i class="bi bi-plus-circle"></i> {{ __('app.new_sale') }}
             </a>
         </div>
     </div>
@@ -533,10 +533,7 @@
                             <div class="empty-state">
                                 <i class="bi bi-cart-x"></i>
                                 <h5>{{ __('app.no_sales_found') }}</h5>
-                                <p>Inizia registrando la prima vendita</p>
-                                <a href="{{ route('vendite.create') }}" class="modern-btn">
-                                    <i class="bi bi-plus-circle"></i> Registra Prima Vendita
-                                </a>
+                                <p>Inizia registrando la prima vendita utilizzando il pulsante in alto</p>
                             </div>
                         </td>
                     </tr>
@@ -599,10 +596,7 @@
                 <div class="empty-state">
                     <i class="bi bi-cart-x"></i>
                     <h5>{{ __('app.no_sales_found') }}</h5>
-                    <p>Inizia registrando la prima vendita</p>
-                    <a href="{{ route('vendite.create') }}" class="modern-btn">
-                        <i class="bi bi-plus-circle"></i> Registra Prima Vendita
-                    </a>
+                    <p>Inizia registrando la prima vendita utilizzando il pulsante in alto</p>
                 </div>
             </div>
             @endforelse

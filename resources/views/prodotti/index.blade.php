@@ -677,10 +677,7 @@
                         <div class="empty-state">
                             <i class="bi bi-box-seam"></i>
                             <h5>{{ __('app.no_products_found') }}</h5>
-                            <p>Inizia aggiungendo il primo prodotto al tuo catalogo</p>
-                            <a href="{{ route('prodotti.create') }}" class="modern-btn">
-                                <i class="bi bi-plus-circle"></i> Aggiungi Primo Prodotto
-                            </a>
+                            <p>Inizia aggiungendo il primo prodotto utilizzando il pulsante in alto</p>
                         </div>
                     </td>
                 </tr>
@@ -766,10 +763,7 @@
         <div class="empty-state">
             <i class="bi bi-box-seam"></i>
             <h5>{{ __('app.no_products_found') }}</h5>
-            <p>Inizia aggiungendo il primo prodotto al tuo catalogo</p>
-            <a href="{{ route('prodotti.create') }}" class="modern-btn">
-                <i class="bi bi-plus-circle"></i> Aggiungi Primo Prodotto
-            </a>
+            <p>Inizia aggiungendo il primo prodotto utilizzando il pulsante in alto</p>
         </div>
     </div>
     @endforelse

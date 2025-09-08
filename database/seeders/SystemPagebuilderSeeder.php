@@ -14,7 +14,7 @@ class SystemPagebuilderSeeder extends Seeder
     public function run(): void
     {
         $tables = [
-            // 1. VAT NATURE ASSOCIATIONS - Verde Smeraldo
+            // 1. VAT NATURE ASSOCIATIONS - Verde Smeraldo (speciale con loadContentInDiv)
             [
                 'objname' => 'vat_nature_associations',
                 'tablename' => 'vat_nature_associations',
@@ -25,14 +25,14 @@ class SystemPagebuilderSeeder extends Seeder
                 'sort_order' => 1
             ],
             
-            // 2. VAT NATURES - Blu Oceano
+            // 2. TAX RATES - Rosso Fiscale (Aliquote IVA)
             [
-                'objname' => 'vat_natures',
-                'tablename' => 'vat_natures', 
-                'display_name' => 'Nature IVA',
-                'icon_svg' => '<i class="bi bi-receipt"></i>',
-                'color_from' => '#667eea',
-                'color_to' => '#764ba2',
+                'objname' => 'tax_rates',
+                'tablename' => 'tax_rates',
+                'display_name' => 'Aliquote IVA',
+                'icon_svg' => '<i class="bi bi-percent"></i>',
+                'color_from' => '#d63031',
+                'color_to' => '#e17055',
                 'sort_order' => 2
             ],
             
@@ -58,11 +58,11 @@ class SystemPagebuilderSeeder extends Seeder
                 'sort_order' => 4
             ],
             
-            // 5. PRODUCT CATEGORIES - Verde Natura
+            // 5. PRODUCT CATEGORIES - Verde Natura (Categorie articoli)
             [
                 'objname' => 'product_categories',
                 'tablename' => 'product_categories',
-                'display_name' => 'Categorie Prodotti',
+                'display_name' => 'Categorie Articoli',
                 'icon_svg' => '<i class="bi bi-grid-3x3-gap"></i>',
                 'color_from' => '#38b000',
                 'color_to' => '#70e000',
@@ -91,33 +91,33 @@ class SystemPagebuilderSeeder extends Seeder
                 'sort_order' => 7
             ],
             
-            // 8. SIZE COLORS - Giallo Solare
+            // 8. SIZE COLORS - Giallo Solare (Taglie e colori)
             [
                 'objname' => 'size_colors',
                 'tablename' => 'size_colors',
-                'display_name' => 'Colori Taglie',
+                'display_name' => 'Taglie e Colori',
                 'icon_svg' => '<i class="bi bi-palette"></i>',
                 'color_from' => '#ffecd2',
                 'color_to' => '#fcb69f',
                 'sort_order' => 8
             ],
             
-            // 9. WAREHOUSE CAUSES - Rosso Energia
+            // 9. WAREHOUSE CAUSES - Rosso Energia (Causali di magazzino)
             [
                 'objname' => 'warehouse_causes',
                 'tablename' => 'warehouse_causes',
-                'display_name' => 'Causali Magazzino',
+                'display_name' => 'Causali di Magazzino',
                 'icon_svg' => '<i class="bi bi-building"></i>',
                 'color_from' => '#ee0979',
                 'color_to' => '#ff6a00',
                 'sort_order' => 9
             ],
             
-            // 10. COLOR VARIANTS - Multicolore
+            // 10. COLOR VARIANTS - Multicolore (Colori varianti)
             [
                 'objname' => 'color_variants',
                 'tablename' => 'color_variants',
-                'display_name' => 'Varianti Colore',
+                'display_name' => 'Colori Varianti',
                 'icon_svg' => '<i class="bi bi-droplet-fill"></i>',
                 'color_from' => '#a8edea',
                 'color_to' => '#fed6e3',
@@ -135,11 +135,11 @@ class SystemPagebuilderSeeder extends Seeder
                 'sort_order' => 11
             ],
             
-            // 12. FIXED PRICE DENOMINATIONS - Oro Luxury
+            // 12. FIXED PRICE DENOMINATIONS - Oro Luxury (Denominazione prezzi fissi)
             [
                 'objname' => 'fixed_price_denominations',
                 'tablename' => 'fixed_price_denominations',
-                'display_name' => 'Denominazioni Prezzo Fisso',
+                'display_name' => 'Denominazione Prezzi Fissi',
                 'icon_svg' => '<i class="bi bi-currency-euro"></i>',
                 'color_from' => '#ffeaa7',
                 'color_to' => '#fab1a0',
@@ -161,25 +161,47 @@ class SystemPagebuilderSeeder extends Seeder
             [
                 'objname' => 'price_lists',
                 'tablename' => 'price_lists',
-                'display_name' => 'Listini Prezzi',
+                'display_name' => 'Listini',
                 'icon_svg' => '<i class="bi bi-list-columns"></i>',
                 'color_from' => '#fd79a8',
                 'color_to' => '#e84393',
                 'sort_order' => 14
             ],
             
-            // 15. SHIPPING TERMS - Blu Shipping
+            // 15. PAYMENT METHODS - Oro Premium (Modalità di pagamento)
             [
-                'objname' => 'shipping_terms',
-                'tablename' => 'shipping_terms',
-                'display_name' => 'Termini Spedizione',
-                'icon_svg' => '<i class="bi bi-truck-flatbed"></i>',
-                'color_from' => '#74b9ff',
-                'color_to' => '#0984e3',
+                'objname' => 'payment_methods',
+                'tablename' => 'payment_methods',
+                'display_name' => 'Modalità di Pagamento',
+                'icon_svg' => '<i class="bi bi-wallet2"></i>',
+                'color_from' => '#fdcb6e',
+                'color_to' => '#e84393',
                 'sort_order' => 15
             ],
             
-            // 16. MERCHANDISING SECTORS - Viola Fashion
+            // 16. VAT NATURES - Blu Oceano (Natura IVA)
+            [
+                'objname' => 'vat_natures',
+                'tablename' => 'vat_natures', 
+                'display_name' => 'Natura IVA',
+                'icon_svg' => '<i class="bi bi-receipt"></i>',
+                'color_from' => '#667eea',
+                'color_to' => '#764ba2',
+                'sort_order' => 16
+            ],
+            
+            // 17. SHIPPING TERMS - Blu Shipping (Porto)
+            [
+                'objname' => 'shipping_terms',
+                'tablename' => 'shipping_terms',
+                'display_name' => 'Porto',
+                'icon_svg' => '<i class="bi bi-truck-flatbed"></i>',
+                'color_from' => '#74b9ff',
+                'color_to' => '#0984e3',
+                'sort_order' => 17
+            ],
+            
+            // 18. MERCHANDISING SECTORS - Viola Fashion (Settori merceologici)
             [
                 'objname' => 'merchandising_sectors',
                 'tablename' => 'merchandising_sectors',
@@ -187,65 +209,65 @@ class SystemPagebuilderSeeder extends Seeder
                 'icon_svg' => '<i class="bi bi-diagram-3"></i>',
                 'color_from' => '#a29bfe',
                 'color_to' => '#6c5ce7',
-                'sort_order' => 16
-            ],
-            
-            // 17. SIZE VARIANTS - Turchese Vivace
-            [
-                'objname' => 'size_variants',
-                'tablename' => 'size_variants',
-                'display_name' => 'Varianti Taglia',
-                'icon_svg' => '<i class="bi bi-rulers"></i>',
-                'color_from' => '#00cec9',
-                'color_to' => '#55a3ff',
-                'sort_order' => 17
-            ],
-            
-            // 18. SIZE TYPES - Verde Lime
-            [
-                'objname' => 'size_types',
-                'tablename' => 'size_types',
-                'display_name' => 'Tipi Taglia',
-                'icon_svg' => '<i class="bi bi-bar-chart"></i>',
-                'color_from' => '#a7f070',
-                'color_to' => '#00d2d3',
                 'sort_order' => 18
             ],
             
-            // 19. PAYMENT TYPES - Giallo Bancario
+            // 19. SIZE VARIANTS - Turchese Vivace (Taglie varianti)
             [
-                'objname' => 'payment_types',
-                'tablename' => 'payment_types',
-                'display_name' => 'Tipi Pagamento',
-                'icon_svg' => '<i class="bi bi-credit-card"></i>',
-                'color_from' => '#fdcb6e',
-                'color_to' => '#e17055',
+                'objname' => 'size_variants',
+                'tablename' => 'size_variants',
+                'display_name' => 'Taglie Varianti',
+                'icon_svg' => '<i class="bi bi-rulers"></i>',
+                'color_from' => '#00cec9',
+                'color_to' => '#55a3ff',
                 'sort_order' => 19
             ],
             
-            // 20. TRANSPORTS - Grigio Moderno
+            // 20. SIZE TYPES - Verde Lime (Tipo di taglie)
             [
-                'objname' => 'transports',
-                'tablename' => 'transports',
-                'display_name' => 'Trasporti',
-                'icon_svg' => '<i class="bi bi-truck"></i>',
-                'color_from' => '#636e72',
-                'color_to' => '#2d3436',
+                'objname' => 'size_types',
+                'tablename' => 'size_types',
+                'display_name' => 'Tipo di Taglie',
+                'icon_svg' => '<i class="bi bi-bar-chart"></i>',
+                'color_from' => '#a7f070',
+                'color_to' => '#00d2d3',
                 'sort_order' => 20
             ],
             
-            // 21. TRANSPORT CARRIERS - Blu Logistica
+            // 21. PAYMENT TYPES - Giallo Bancario (Tipo di pagamento)
             [
-                'objname' => 'transport_carriers',
-                'tablename' => 'transport_carriers',
-                'display_name' => 'Vettori Trasporto',
-                'icon_svg' => '<i class="bi bi-person-badge"></i>',
-                'color_from' => '#3742fa',
-                'color_to' => '#2f3542',
+                'objname' => 'payment_types',
+                'tablename' => 'payment_types',
+                'display_name' => 'Tipo di Pagamento',
+                'icon_svg' => '<i class="bi bi-credit-card"></i>',
+                'color_from' => '#fdcb6e',
+                'color_to' => '#e17055',
                 'sort_order' => 21
             ],
             
-            // 22. LOCATIONS - Verde Geografia
+            // 22. TRANSPORTS - Grigio Moderno (Trasporto)
+            [
+                'objname' => 'transports',
+                'tablename' => 'transports',
+                'display_name' => 'Trasporto',
+                'icon_svg' => '<i class="bi bi-truck"></i>',
+                'color_from' => '#636e72',
+                'color_to' => '#2d3436',
+                'sort_order' => 22
+            ],
+            
+            // 23. TRANSPORT CARRIERS - Blu Logistica (Trasporto a mezzo)
+            [
+                'objname' => 'transport_carriers',
+                'tablename' => 'transport_carriers',
+                'display_name' => 'Trasporto a Mezzo',
+                'icon_svg' => '<i class="bi bi-person-badge"></i>',
+                'color_from' => '#3742fa',
+                'color_to' => '#2f3542',
+                'sort_order' => 23
+            ],
+            
+            // 24. LOCATIONS - Verde Geografia
             [
                 'objname' => 'locations',
                 'tablename' => 'locations',
@@ -253,10 +275,10 @@ class SystemPagebuilderSeeder extends Seeder
                 'icon_svg' => '<i class="bi bi-geo-alt"></i>',
                 'color_from' => '#00b894',
                 'color_to' => '#55a3ff',
-                'sort_order' => 22
+                'sort_order' => 24
             ],
             
-            // 23. UNIT OF MEASURES - Blu Scientifico
+            // 25. UNIT OF MEASURES - Blu Scientifico (Unità di misura)
             [
                 'objname' => 'unit_of_measures',
                 'tablename' => 'unit_of_measures',
@@ -264,21 +286,10 @@ class SystemPagebuilderSeeder extends Seeder
                 'icon_svg' => '<i class="bi bi-calculator"></i>',
                 'color_from' => '#2998ff',
                 'color_to' => '#5643fa',
-                'sort_order' => 23
+                'sort_order' => 25
             ],
             
-            // 24. ZONES - Arancione Geografia
-            [
-                'objname' => 'zones',
-                'tablename' => 'zones',
-                'display_name' => 'Zone',
-                'icon_svg' => '<i class="bi bi-globe"></i>',
-                'color_from' => '#ff7675',
-                'color_to' => '#fd79a8',
-                'sort_order' => 24
-            ],
-            
-            // 25. CURRENCIES - Verde Monetario
+            // 26. CURRENCIES - Verde Monetario
             [
                 'objname' => 'currencies',
                 'tablename' => 'currencies',
@@ -286,28 +297,17 @@ class SystemPagebuilderSeeder extends Seeder
                 'icon_svg' => '<i class="bi bi-currency-exchange"></i>',
                 'color_from' => '#00cec9',
                 'color_to' => '#55efc4',
-                'sort_order' => 25
-            ],
-            
-            // 26. TAX RATES - Rosso Fiscale
-            [
-                'objname' => 'tax_rates',
-                'tablename' => 'tax_rates',
-                'display_name' => 'Aliquote IVA',
-                'icon_svg' => '<i class="bi bi-percent"></i>',
-                'color_from' => '#d63031',
-                'color_to' => '#e17055',
                 'sort_order' => 26
             ],
             
-            // 27. PAYMENT METHODS - Oro Premium
+            // 27. ZONES - Arancione Geografia
             [
-                'objname' => 'payment_methods',
-                'tablename' => 'payment_methods',
-                'display_name' => 'Metodi Pagamento',
-                'icon_svg' => '<i class="bi bi-wallet2"></i>',
-                'color_from' => '#fdcb6e',
-                'color_to' => '#e84393',
+                'objname' => 'zones',
+                'tablename' => 'zones',
+                'display_name' => 'Zone',
+                'icon_svg' => '<i class="bi bi-globe"></i>',
+                'color_from' => '#ff7675',
+                'color_to' => '#fd79a8',
                 'sort_order' => 27
             ]
         ];

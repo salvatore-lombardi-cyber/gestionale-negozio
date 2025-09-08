@@ -104,24 +104,8 @@
         color: white;
         text-decoration: none;
         transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
     }
     
-    .modern-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
-    }
-    
-    .modern-btn:hover::before {
-        left: 0;
-    }
     
     .modern-btn:hover {
         transform: translateY(-3px);
@@ -607,9 +591,14 @@
             <h1 class="page-title">
                 <i class="bi bi-people"></i> {{ __('app.clients') }}
             </h1>
-            <a href="{{ route('clienti.create') }}" class="modern-btn">
-                <i class="bi bi-person-plus"></i> {{ __('app.new') }} {{ __('app.client') }}
-            </a>
+            <div>
+                <a href="{{ route('anagrafiche.index') }}" class="btn btn-secondary modern-btn me-2">
+                    <i class="bi bi-arrow-left"></i> Torna Indietro
+                </a>
+                <a href="{{ route('clienti.create') }}" class="modern-btn">
+                    <i class="bi bi-person-plus"></i> {{ __('app.new') }} {{ __('app.client') }}
+                </a>
+            </div>
         </div>
     </div>
     
@@ -711,10 +700,7 @@
                         <div class="empty-state">
                             <i class="bi bi-people"></i>
                             <h5>{{ __('app.no_clients_found') }}</h5>
-                            <p>Inizia aggiungendo il primo cliente al tuo database</p>
-                            <a href="{{ route('clienti.create') }}" class="modern-btn">
-                                <i class="bi bi-person-plus"></i> Aggiungi Primo Cliente
-                            </a>
+                            <p>Inizia aggiungendo il primo cliente utilizzando il pulsante in alto</p>
                         </div>
                     </td>
                 </tr>
@@ -787,10 +773,7 @@
         <div class="empty-state">
             <i class="bi bi-people"></i>
             <h5>{{ __('app.no_clients_found') }}</h5>
-            <p>Inizia aggiungendo il primo cliente al tuo database</p>
-            <a href="{{ route('clienti.create') }}" class="modern-btn">
-                <i class="bi bi-person-plus"></i> Aggiungi Primo Cliente
-            </a>
+            <p>Inizia aggiungendo il primo cliente utilizzando il pulsante in alto</p>
         </div>
     </div>
     @endforelse

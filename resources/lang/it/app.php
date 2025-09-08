@@ -22,6 +22,12 @@ return [
     'anagrafiche' => 'Anagrafiche',
     'anagrafiche_welcome' => 'Gestisci tutte le anagrafiche del tuo negozio',
     'fornitori' => 'Fornitori',
+    'supplier' => 'Fornitore',
+    'suppliers' => 'Fornitori',
+    'new_supplier' => 'Nuovo Fornitore',
+    'supplier_name' => 'Nome Fornitore',
+    'supplier_details' => 'Dettagli Fornitore',
+    'no_suppliers_found' => 'Nessun fornitore trovato',
     'vettori' => 'Vettori',
     'agenti' => 'Agenti',
     'products' => 'Articoli',
@@ -266,6 +272,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'sale' => 'Vendita',
+    'new_sale' => 'Nuova Vendita',
     'total' => 'Totale',
     'subtotal' => 'Subtotale',
     'final_total' => 'Totale Finale',

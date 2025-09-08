@@ -325,9 +325,9 @@
                         <div class="stats-icon success">
                             <i class="bi bi-building"></i>
                         </div>
-                        <h3 class="stats-number">0</h3>
+                        <h3 class="stats-number">{{ $stats['fornitori'] ?? 0 }}</h3>
                         <p class="stats-label">{{ __('app.fornitori') }}</p>
-                        <a href="#" class="stats-btn success">
+                        <a href="{{ route('fornitori.index') }}" class="stats-btn success">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.fornitori') }}
                         </a>
                     </div>
@@ -338,9 +338,9 @@
                         <div class="stats-icon info">
                             <i class="bi bi-truck"></i>
                         </div>
-                        <h3 class="stats-number">0</h3>
+                        <h3 class="stats-number">{{ $stats['vettori'] ?? 0 }}</h3>
                         <p class="stats-label">{{ __('app.vettori') }}</p>
-                        <a href="#" class="stats-btn info">
+                        <a href="{{ route('vettori.index') }}" class="stats-btn info">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.vettori') }}
                         </a>
                     </div>
@@ -351,7 +351,7 @@
                         <div class="stats-icon warning">
                             <i class="bi bi-person-badge"></i>
                         </div>
-                        <h3 class="stats-number">0</h3>
+                        <h3 class="stats-number">{{ $stats['agenti'] ?? 0 }}</h3>
                         <p class="stats-label">{{ __('app.agenti') }}</p>
                         <a href="#" class="stats-btn warning">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.agenti') }}
