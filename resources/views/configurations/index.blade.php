@@ -66,7 +66,7 @@
     }
     
     .config-card.company::before {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .config-card.banks::before {
@@ -96,7 +96,7 @@
     }
     
     .config-icon.company {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .config-icon.banks {
@@ -162,7 +162,7 @@
     }
     
     .config-btn.primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
     }
     
@@ -195,7 +195,7 @@
     }
     
     [data-bs-theme="dark"] .dashboard-title {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }

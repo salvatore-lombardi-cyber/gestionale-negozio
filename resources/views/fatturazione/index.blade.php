@@ -57,7 +57,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border-radius: 20px 20px 0 0;
     }
     
@@ -67,7 +67,7 @@
     }
     
     .stats-card.primary::before {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .stats-card.success::before {
@@ -97,7 +97,7 @@
     }
     
     .stats-icon.primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .stats-icon.success {
@@ -164,7 +164,7 @@
     }
     
     .stats-btn.primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
     }
     
@@ -194,9 +194,9 @@
     }
     
     @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
-        70% { box-shadow: 0 0 0 20px rgba(102, 126, 234, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+        0% { box-shadow: 0 0 0 0 rgba(2, 157, 126, 0.4); }
+        70% { box-shadow: 0 0 0 20px rgba(2, 157, 126, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(2, 157, 126, 0); }
     }
     
     .floating-elements {
@@ -325,7 +325,7 @@
     }
     
     .calc-btn.equals {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
         grid-column: span 2;
     }
@@ -413,7 +413,7 @@
     .search-input {
         width: 100%;
         padding: 15px 50px 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -423,7 +423,7 @@
     .search-input:focus {
         outline: none;
         border-color: #029D7E;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
     }
     
@@ -458,7 +458,7 @@
     
     .filter-chip:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 5px 15px rgba(2, 157, 126, 0.4);
     }
     
     .filter-chip.active {
@@ -503,14 +503,14 @@
     }
     
     .modern-table tbody tr:hover {
-        background: rgba(102, 126, 234, 0.05);
+        background: rgba(2, 157, 126, 0.05);
         transform: scale(1.01);
     }
     
     .modern-table tbody td {
         padding: 1rem;
         border: none;
-        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        border-bottom: 1px solid rgba(2, 157, 126, 0.1);
         vertical-align: middle;
         white-space: nowrap;
     }
@@ -555,7 +555,7 @@
     
     .product-code {
         font-family: 'Courier New', monospace;
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
         padding: 4px 8px;
         border-radius: 6px;
         font-size: 0.9rem;

@@ -123,6 +123,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::middleware(['throttle:100,1'])->group(function () {
             Route::get('/system-tables', [App\Http\Controllers\SystemTablesController::class, 'index'])->name('system-tables.index');
             Route::get('/system-tables/{table}', [App\Http\Controllers\SystemTablesController::class, 'show'])->name('system-tables.show');
+            Route::get('/system-tables/{table}/{id}', [App\Http\Controllers\SystemTablesController::class, 'edit'])->name('system-tables.edit');
             Route::post('/system-tables/{table}', [App\Http\Controllers\SystemTablesController::class, 'store'])->name('system-tables.store');
             Route::put('/system-tables/{table}/{id}', [App\Http\Controllers\SystemTablesController::class, 'update'])->name('system-tables.update');
             Route::delete('/system-tables/{table}/{id}', [App\Http\Controllers\SystemTablesController::class, 'destroy'])->name('system-tables.destroy');

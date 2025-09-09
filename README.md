@@ -38,11 +38,11 @@ Gestionale moderno per negozi con interfaccia glassmorphism e funzionalità comp
 
 ### **Palette Colori Principale**
 ```css
-/* Gradiente Primario */
-background: linear-gradient(135deg, #667eea, #764ba2);
+/* Gradiente Primario VERDE */
+background: linear-gradient(135deg, #029D7E, #4DC9A5);
 
 /* Colori di Stato */
-Success: linear-gradient(135deg, #28a745, #20c997)
+Success: linear-gradient(135deg, #029D7E, #4DC9A5)
 Warning: linear-gradient(135deg, #ffd60a, #ff8500)
 Danger: linear-gradient(135deg, #f72585, #c5025a)
 Info: linear-gradient(135deg, #48cae4, #0077b6)
@@ -326,7 +326,7 @@ public/
 ### **Buttons Style**
 ```css
 .modern-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #029D7E, #4DC9A5);
     border-radius: 15px;
     padding: 12px 24px;
     transition: all 0.3s ease;
@@ -336,7 +336,7 @@ public/
 ### **Tables Design**
 ```css
 .modern-table thead {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #029D7E, #4DC9A5);
     color: white;
 }
 ```
@@ -344,7 +344,7 @@ public/
 ### **Forms Pattern**
 ```css
 .modern-input {
-    border: 2px solid rgba(102, 126, 234, 0.2);
+    border: 2px solid rgba(2, 157, 126, 0.2);
     border-radius: 15px;
     transition: all 0.3s ease;
 }

@@ -22,7 +22,7 @@
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -41,7 +41,7 @@
     .section-title {
         font-size: 1.3rem;
         font-weight: 600;
-        color: #667eea;
+        color: #029D7E;
         margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
@@ -49,7 +49,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 15px 30px;
@@ -62,7 +62,7 @@
     
     .modern-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         color: white;
     }
     
@@ -87,14 +87,14 @@
         right: 12px;
         top: 50%;
         transform: translateY(-50%);
-        color: #667eea;
+        color: #029D7E;
         cursor: pointer;
         font-size: 1.1rem;
     }
     
     .form-control:focus, .form-select:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.25rem rgba(2, 157, 126, 0.25);
     }
     
     @media (max-width: 768px) {

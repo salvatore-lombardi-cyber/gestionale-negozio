@@ -15,7 +15,7 @@
         .modern-sidebar {
             background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(10px);
-            border-right: 1px solid rgba(102, 126, 234, 0.2);
+            border-right: 1px solid rgba(2, 157, 126, 0.2);
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             position: fixed;
@@ -74,7 +74,7 @@
         /* Dark Mode per Sidebar */
         [data-bs-theme="dark"] .modern-sidebar {
             background: rgba(33, 37, 41, 0.95) !important;
-            border-right-color: rgba(102, 126, 234, 0.3);
+            border-right-color: rgba(2, 157, 126, 0.3);
         }
         
         [data-bs-theme="dark"] .modern-sidebar .nav-link {
@@ -85,7 +85,7 @@
         .top-navbar {
             background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+            border-bottom: 1px solid rgba(2, 157, 126, 0.2);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
@@ -119,7 +119,7 @@
         .top-navbar .dropdown-menu {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(2, 157, 126, 0.2);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
@@ -151,7 +151,7 @@
         /* Dark Mode per top navbar */
         [data-bs-theme="dark"] .top-navbar {
             background: rgba(33, 37, 41, 0.95) !important;
-            border-bottom-color: rgba(102, 126, 234, 0.3);
+            border-bottom-color: rgba(2, 157, 126, 0.3);
         }
         
         [data-bs-theme="dark"] .top-navbar .nav-link {
@@ -179,7 +179,7 @@
         }
         
         [data-bs-theme="dark"] .dashboard-title {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #029D7E, #4DC9A5);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -203,13 +203,13 @@
         
         [data-bs-theme="dark"] .card {
             background: rgba(45, 55, 72, 0.95) !important;
-            border-color: rgba(102, 126, 234, 0.2) !important;
+            border-color: rgba(2, 157, 126, 0.2) !important;
             color: #e2e8f0 !important;
         }
         
         [data-bs-theme="dark"] .card-header {
             background: rgba(45, 55, 72, 0.8) !important;
-            border-color: rgba(102, 126, 234, 0.2) !important;
+            border-color: rgba(2, 157, 126, 0.2) !important;
             color: #e2e8f0 !important;
         }
         
@@ -220,20 +220,20 @@
         
         [data-bs-theme="dark"] .form-control {
             background: rgba(45, 55, 72, 0.8) !important;
-            border-color: rgba(102, 126, 234, 0.3) !important;
+            border-color: rgba(2, 157, 126, 0.3) !important;
             color: #e2e8f0 !important;
         }
         
         [data-bs-theme="dark"] .form-control:focus {
             background: rgba(45, 55, 72, 0.9) !important;
-            border-color: #667eea !important;
+            border-color: #029D7E !important;
             color: #e2e8f0 !important;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+            box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25) !important;
         }
         
         [data-bs-theme="dark"] .list-group-item {
             background: rgba(45, 55, 72, 0.8) !important;
-            border-color: rgba(102, 126, 234, 0.2) !important;
+            border-color: rgba(2, 157, 126, 0.2) !important;
             color: #e2e8f0 !important;
         }
         
@@ -477,7 +477,7 @@
 
     <!-- Calculator Widget Globale -->
     <div id="globalCalculatorWidget" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: linear-gradient(145deg, #ffffff, #f8f9fa); border: none; border-radius: 20px; z-index: 99999; box-shadow: 0 25px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.1); backdrop-filter: blur(20px);">
-        <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 18px 18px 0 0; text-align: center; font-weight: bold; font-size: 18px; position: relative; box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);">
+        <div style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; padding: 20px; border-radius: 18px 18px 0 0; text-align: center; font-weight: bold; font-size: 18px; position: relative; box-shadow: 0 2px 10px rgba(2, 157, 126, 0.3);">
             <i class="bi bi-calculator" style="margin-right: 8px;"></i>Calcolatrice Finson Pro
             <button type="button" onclick="document.getElementById('globalCalculatorWidget').style.display='none'" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'; this.style.transform='translateY(-50%) scale(1.1)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(-50%)'">×</button>
         </div>
@@ -488,23 +488,23 @@
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
                 <button onclick="globalClearAll()" style="padding: 12px; border: none; background: #ff6b6b; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">AC</button>
                 <button onclick="globalClearEntry()" style="padding: 12px; border: none; background: #ffa500; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">C</button>
-                <button onclick="globalAppendPercentage()" style="padding: 12px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">%</button>
-                <button onclick="globalAppendOperator('/')" style="padding: 12px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">÷</button>
+                <button onclick="globalAppendPercentage()" style="padding: 12px; border: none; background: #029D7E; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">%</button>
+                <button onclick="globalAppendOperator('/')" style="padding: 12px; border: none; background: #029D7E; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">÷</button>
                 
                 <button onclick="globalAppendNumber('7')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">7</button>
                 <button onclick="globalAppendNumber('8')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">8</button>
                 <button onclick="globalAppendNumber('9')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">9</button>
-                <button onclick="globalAppendOperator('*')" style="padding: 12px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">×</button>
+                <button onclick="globalAppendOperator('*')" style="padding: 12px; border: none; background: #029D7E; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">×</button>
                 
                 <button onclick="globalAppendNumber('4')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">4</button>
                 <button onclick="globalAppendNumber('5')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">5</button>
                 <button onclick="globalAppendNumber('6')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">6</button>
-                <button onclick="globalAppendOperator('-')" style="padding: 12px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">−</button>
+                <button onclick="globalAppendOperator('-')" style="padding: 12px; border: none; background: #029D7E; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">−</button>
                 
                 <button onclick="globalAppendNumber('1')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">1</button>
                 <button onclick="globalAppendNumber('2')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">2</button>
                 <button onclick="globalAppendNumber('3')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">3</button>
-                <button onclick="globalAppendOperator('+')" style="padding: 12px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">+</button>
+                <button onclick="globalAppendOperator('+')" style="padding: 12px; border: none; background: #029D7E; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">+</button>
                 
                 <button onclick="globalAppendNumber('0')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; grid-column: span 2; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">0</button>
                 <button onclick="globalAppendDecimal()" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">.</button>
@@ -530,12 +530,12 @@
                     <input type="text" id="calcChatInput" placeholder="Es: Calcola il 15% di 1200€..." 
                            style="flex: 1; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 20px; font-size: 0.85rem; outline: none; transition: all 0.2s ease;"
                            onkeypress="if(event.key==='Enter') sendCalculatorMessage()"
-                           onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 0.2rem rgba(102, 126, 234, 0.25)'"
+                           onfocus="this.style.borderColor='#029D7E'; this.style.boxShadow='0 0 0 0.2rem rgba(2, 157, 126, 0.25)'"
                            onblur="this.style.borderColor='#ced4da'; this.style.boxShadow='none'">
                     <button onclick="sendCalculatorMessage()" 
-                            style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s ease;"
+                            style="padding: 8px 16px; background: #029D7E; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s ease;"
                             onmouseover="this.style.background='#5a67d8'" 
-                            onmouseout="this.style.background='#667eea'">
+                            onmouseout="this.style.background='#029D7E'">
                         ▶️
                     </button>
                 </div>
@@ -551,25 +551,25 @@
             bottom: 30px;
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #029D7E, #4DC9A5);
             border: none;
             border-radius: 50%;
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 25px rgba(2, 157, 126, 0.3);
             transition: all 0.3s ease;
             z-index: 9999;
         }
         
         .calculator-toggle-btn-global:hover {
             transform: scale(1.1);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         }
         
         .calculator-toggle-btn-global:active {
             transform: scale(0.95);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.6);
+            box-shadow: 0 5px 15px rgba(2, 157, 126, 0.6);
         }
         
         /* Dark Mode */
@@ -597,7 +597,7 @@
             max-height: 160px;
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: #667eea #f8f9fa;
+            scrollbar-color: #029D7E #f8f9fa;
         }
         
         .calculator-chat .chat-messages::-webkit-scrollbar {
@@ -610,7 +610,7 @@
         }
         
         .calculator-chat .chat-messages::-webkit-scrollbar-thumb {
-            background: #667eea;
+            background: #029D7E;
             border-radius: 3px;
         }
         
@@ -842,7 +842,7 @@
                 if (chat.isUser) {
                     html += `
                         <div style="margin-bottom: 8px; text-align: right;">
-                            <div style="display: inline-block; background: #667eea; color: white; padding: 6px 12px; border-radius: 15px 15px 5px 15px; font-size: 0.8rem; max-width: 80%;">
+                            <div style="display: inline-block; background: #029D7E; color: white; padding: 6px 12px; border-radius: 15px 15px 5px 15px; font-size: 0.8rem; max-width: 80%;">
                                 ${chat.message}
                             </div>
                             <div style="font-size: 0.65rem; color: #adb5bd; margin-top: 2px;">${chat.timestamp}</div>

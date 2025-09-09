@@ -28,13 +28,13 @@
         left: 0;
         width: 100%;
         height: 4px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .product-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -54,7 +54,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 12px 24px;
@@ -124,7 +124,7 @@
         left: 0;
         width: 100%;
         height: 3px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .info-card:hover {
@@ -143,7 +143,7 @@
     }
     
     .card-title i {
-        color: #667eea;
+        color: #029D7E;
         font-size: 1.5rem;
     }
     
@@ -152,7 +152,7 @@
         justify-content: space-between;
         align-items: flex-start;
         padding: 0.75rem 0;
-        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        border-bottom: 1px solid rgba(2, 157, 126, 0.1);
         transition: all 0.3s ease;
     }
     
@@ -161,7 +161,7 @@
     }
     
     .info-item:hover {
-        background: rgba(102, 126, 234, 0.03);
+        background: rgba(2, 157, 126, 0.03);
         padding-left: 0.5rem;
         border-radius: 8px;
     }
@@ -176,7 +176,7 @@
     }
     
     .info-label i {
-        color: #667eea;
+        color: #029D7E;
         width: 16px;
     }
     
@@ -189,11 +189,11 @@
     
     .product-code {
         font-family: 'Courier New', monospace;
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
         padding: 6px 12px;
         border-radius: 8px;
         font-weight: 700;
-        color: #667eea;
+        color: #029D7E;
         font-size: 1rem;
     }
     
@@ -230,7 +230,7 @@
     }
     
     .category-badge {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
         padding: 6px 14px;
         border-radius: 20px;
@@ -240,7 +240,7 @@
     
     .brand-display {
         font-weight: 600;
-        color: #667eea;
+        color: #029D7E;
         font-size: 1.1rem;
     }
     
@@ -263,7 +263,7 @@
         left: 0;
         width: 100%;
         height: 3px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .description-text {
@@ -272,9 +272,9 @@
         color: #4a5568;
         margin: 0;
         padding: 1rem;
-        background: rgba(102, 126, 234, 0.05);
+        background: rgba(2, 157, 126, 0.05);
         border-radius: 12px;
-        border-left: 4px solid #667eea;
+        border-left: 4px solid #029D7E;
     }
     
     .datetime-display {
@@ -302,17 +302,17 @@
     }
     
     [data-bs-theme="dark"] .product-code {
-        background: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.2);
         color: #e2e8f0;
     }
     
     [data-bs-theme="dark"] .description-text {
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
         color: #e2e8f0;
     }
     
     [data-bs-theme="dark"] .info-item {
-        border-bottom-color: rgba(102, 126, 234, 0.2);
+        border-bottom-color: rgba(2, 157, 126, 0.2);
     }
     
     /* Responsive */

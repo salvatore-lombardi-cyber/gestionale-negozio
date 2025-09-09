@@ -81,7 +81,7 @@
     .search-input {
         width: 100%;
         padding: 15px 50px 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -91,7 +91,7 @@
     .search-input:focus {
         outline: none;
         border-color: #029D7E;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
     }
     
@@ -124,7 +124,7 @@
     
     .filter-chip:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 5px 15px rgba(2, 157, 126, 0.4);
     }
     
     .filter-chip.active {
@@ -132,7 +132,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 12px 24px;
@@ -144,7 +144,7 @@
     
     .modern-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         color: white;
     }
     

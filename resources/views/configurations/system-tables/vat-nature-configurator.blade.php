@@ -418,7 +418,7 @@
     
     /* Colori specifici per ogni card */
     .metric-card:nth-child(1)::before {
-        background: linear-gradient(135deg, #667eea, #764ba2); /* Viola gestionale */
+        background: linear-gradient(135deg, #029D7E, #4DC9A5); /* Viola gestionale */
     }
     
     .metric-card:nth-child(2)::before {
@@ -446,7 +446,7 @@
     
     /* Colori numeri abbinati ai border */
     .metric-card:nth-child(1) .metric-value {
-        color: #667eea; /* Viola gestionale */
+        color: #029D7E; /* Viola gestionale */
     }
     
     .metric-card:nth-child(2) .metric-value {

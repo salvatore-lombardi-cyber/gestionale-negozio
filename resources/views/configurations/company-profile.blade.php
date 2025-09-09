@@ -24,7 +24,7 @@
     .config-title {
         font-size: 2rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -58,13 +58,13 @@
     }
     
     .form-control:focus, .form-select:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
     }
     
     .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 12px 30px;
@@ -74,7 +74,7 @@
     
     .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 10px 25px rgba(2, 157, 126, 0.3);
     }
     
     .btn-outline-secondary {
@@ -122,14 +122,14 @@
     [data-bs-theme="dark"] .form-control,
     [data-bs-theme="dark"] .form-select {
         background: rgba(45, 55, 72, 0.8) !important;
-        border-color: rgba(102, 126, 234, 0.3) !important;
+        border-color: rgba(2, 157, 126, 0.3) !important;
         color: #e2e8f0 !important;
     }
     
     [data-bs-theme="dark"] .form-control:focus,
     [data-bs-theme="dark"] .form-select:focus {
         background: rgba(45, 55, 72, 0.9) !important;
-        border-color: #667eea !important;
+        border-color: #029D7E !important;
         color: #e2e8f0 !important;
     }
 </style>

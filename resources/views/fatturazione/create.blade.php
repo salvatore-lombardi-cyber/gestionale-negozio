@@ -22,7 +22,7 @@
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -45,7 +45,7 @@
     .section-title {
         font-size: 1.3rem;
         font-weight: 600;
-        color: #667eea;
+        color: #029D7E;
         margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
@@ -53,7 +53,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 15px 30px;
@@ -66,7 +66,7 @@
     
     .modern-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         color: white;
     }
     
@@ -116,20 +116,20 @@
         right: 12px;
         top: 50%;
         transform: translateY(-50%);
-        color: #667eea;
+        color: #029D7E;
         cursor: pointer;
         font-size: 1.1rem;
         transition: all 0.3s ease;
     }
     
     .input-icon:hover {
-        color: #764ba2;
+        color: #4DC9A5;
         transform: translateY(-50%) scale(1.1);
     }
     
     .form-control:focus, .form-select:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.25rem rgba(2, 157, 126, 0.25);
     }
     
     /* Calculator Widget Styles */
@@ -139,25 +139,25 @@
         bottom: 30px;
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 50%;
         color: white;
         font-size: 1.5rem;
         cursor: pointer;
-        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 10px 25px rgba(2, 157, 126, 0.3);
         transition: all 0.3s ease;
         z-index: 9999;
     }
     
     .calculator-toggle-btn:hover {
         transform: scale(1.1);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
     }
     
     .calculator-toggle-btn:active {
         transform: scale(0.95);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.6);
+        box-shadow: 0 5px 15px rgba(2, 157, 126, 0.6);
     }
     
     /* Assicuriamoci che il pulsante sia sempre visibile */
@@ -181,7 +181,7 @@
         z-index: 10000;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         opacity: 0;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
     }
     
     .calculator-widget.active {
@@ -190,7 +190,7 @@
     }
     
     .calculator-header {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
         padding: 1.5rem;
         border-radius: 18px 18px 0 0;
@@ -265,7 +265,7 @@
     }
     
     .calc-btn.operator {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
     }
     
@@ -636,7 +636,7 @@
 
 <!-- Calculator Widget -->
 <div id="calculatorWidget" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: linear-gradient(145deg, #ffffff, #f8f9fa); border: none; border-radius: 20px; z-index: 99999; box-shadow: 0 25px 60px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.1); backdrop-filter: blur(20px);">
-    <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 18px 18px 0 0; text-align: center; font-weight: bold; font-size: 18px; position: relative; box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);">
+    <div style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; padding: 20px; border-radius: 18px 18px 0 0; text-align: center; font-weight: bold; font-size: 18px; position: relative; box-shadow: 0 2px 10px rgba(2, 157, 126, 0.3);">
         <i class="bi bi-calculator" style="margin-right: 8px;"></i>Calcolatrice Finson Pro
         <button type="button" onclick="document.getElementById('calculatorWidget').style.display='none'" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; color: white; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'; this.style.transform='translateY(-50%) scale(1.1)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.transform='translateY(-50%)'">×</button>
     </div>
@@ -647,23 +647,23 @@
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
             <button onclick="clearAll()" style="padding: 12px; border: none; background: #ff6b6b; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">AC</button>
             <button onclick="clearEntry()" style="padding: 12px; border: none; background: #ffa500; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">C</button>
-            <button onclick="appendPercentage()" style="padding: 12px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">%</button>
-            <button onclick="appendOperator('/')" style="padding: 12px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">÷</button>
+            <button onclick="appendPercentage()" style="padding: 12px; border: none; background: #029D7E; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">%</button>
+            <button onclick="appendOperator('/')" style="padding: 12px; border: none; background: #029D7E; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">÷</button>
             
             <button onclick="appendNumber('7')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">7</button>
             <button onclick="appendNumber('8')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">8</button>
             <button onclick="appendNumber('9')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">9</button>
-            <button onclick="appendOperator('*')" style="padding: 12px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">×</button>
+            <button onclick="appendOperator('*')" style="padding: 12px; border: none; background: #029D7E; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">×</button>
             
             <button onclick="appendNumber('4')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">4</button>
             <button onclick="appendNumber('5')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">5</button>
             <button onclick="appendNumber('6')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">6</button>
-            <button onclick="appendOperator('-')" style="padding: 12px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">−</button>
+            <button onclick="appendOperator('-')" style="padding: 12px; border: none; background: #029D7E; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">−</button>
             
             <button onclick="appendNumber('1')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">1</button>
             <button onclick="appendNumber('2')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">2</button>
             <button onclick="appendNumber('3')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">3</button>
-            <button onclick="appendOperator('+')" style="padding: 12px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">+</button>
+            <button onclick="appendOperator('+')" style="padding: 12px; border: none; background: #029D7E; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.2)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">+</button>
             
             <button onclick="appendNumber('0')" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; grid-column: span 2; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">0</button>
             <button onclick="appendDecimal()" style="padding: 12px; border: none; background: #f8f9fa; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); color: #333;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'; this.style.background='#e9ecef'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'; this.style.background='#f8f9fa'">.</button>

@@ -47,6 +47,17 @@ class SystemPagebuilderSeeder extends Seeder
                 'sort_order' => 3
             ],
             
+            // 3.1 ASPETTO BENI - Arancione Enterprise (Nuova implementazione)
+            [
+                'objname' => 'aspetto_beni',
+                'tablename' => 'aspetto_beni',
+                'display_name' => 'Aspetto dei Beni',
+                'icon_svg' => '<i class="bi bi-box-seam"></i>',
+                'color_from' => '#f39c12',
+                'color_to' => '#e67e22',
+                'sort_order' => 31
+            ],
+            
             // 4. BANKS - Blu Corporate
             [
                 'objname' => 'banks',

@@ -67,7 +67,7 @@
         
         .btn-login:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 25px rgba(2, 157, 126, 0.4);
             color: white;
         }
         
@@ -81,7 +81,7 @@
             background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
             color: white;
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 25px rgba(2, 157, 126, 0.4);
         }
         
         .features {

@@ -7,7 +7,7 @@
     /* Mobile gradient background */
     @media (max-width: 768px) {
         body {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #029D7E, #4DC9A5);
             min-height: 100vh;
         }
     }
@@ -36,7 +36,7 @@
     .page-title {
         font-size: 2rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -174,14 +174,14 @@
         width: 120px;
         height: 120px;
         border-radius: 15px;
-        border: 3px solid rgba(102, 126, 234, 0.2);
+        border: 3px solid rgba(2, 157, 126, 0.2);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
     
     .product-details h2 {
         font-size: 1.8rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 1rem;
@@ -194,7 +194,7 @@
     }
     
     .meta-badge {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
         padding: 6px 14px;
         border-radius: 20px;
@@ -239,7 +239,7 @@
     }
     
     .section-title i {
-        color: #667eea;
+        color: #029D7E;
     }
     
     /* Grid Etichette */
@@ -252,7 +252,7 @@
     /* Stile Etichette */
     .label-card {
         background: white;
-        border: 2px solid #667eea;
+        border: 2px solid #029D7E;
         border-radius: 15px;
         padding: 1.5rem;
         display: flex;
@@ -264,8 +264,8 @@
     
     .label-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
-        border-color: #764ba2;
+        box-shadow: 0 10px 30px rgba(2, 157, 126, 0.2);
+        border-color: #4DC9A5;
     }
     
     .label-qr {
@@ -276,20 +276,20 @@
         width: 60px;
         height: 60px;
         border-radius: 10px;
-        border: 2px solid rgba(102, 126, 234, 0.3);
+        border: 2px solid rgba(2, 157, 126, 0.3);
     }
     
     .no-qr {
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-        border: 2px dashed rgba(102, 126, 234, 0.5);
+        background: linear-gradient(135deg, rgba(2, 157, 126, 0.1), rgba(118, 75, 162, 0.1));
+        border: 2px dashed rgba(2, 157, 126, 0.5);
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 10px;
-        color: #667eea;
+        color: #029D7E;
         font-weight: bold;
     }
     
@@ -301,8 +301,8 @@
         font-family: 'Courier New', monospace;
         font-size: 14px;
         font-weight: bold;
-        color: #667eea;
-        background: rgba(102, 126, 234, 0.1);
+        color: #029D7E;
+        background: rgba(2, 157, 126, 0.1);
         padding: 4px 8px;
         border-radius: 6px;
         display: inline-block;
@@ -331,7 +331,7 @@
     
     .label-brand {
         font-size: 10px;
-        color: #764ba2;
+        color: #4DC9A5;
         font-style: italic;
     }
     
@@ -380,7 +380,7 @@
     
     [data-bs-theme="dark"] .label-card {
         background: rgba(45, 55, 72, 0.95);
-        border-color: rgba(102, 126, 234, 0.5);
+        border-color: rgba(2, 157, 126, 0.5);
         color: #e2e8f0;
     }
     
@@ -394,7 +394,7 @@
     }
     
     [data-bs-theme="dark"] .label-code {
-        background: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.2);
         color: #a5b4fc;
     }
     

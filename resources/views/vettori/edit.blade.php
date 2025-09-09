@@ -120,7 +120,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 15px 30px;
@@ -133,7 +133,7 @@
     
     .modern-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         color: white;
     }
     

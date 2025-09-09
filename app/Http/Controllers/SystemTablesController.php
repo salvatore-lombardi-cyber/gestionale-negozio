@@ -18,6 +18,7 @@ use App\Models\VatNatureAssociation;
 use App\Models\VatNature;
 use App\Models\TaxRate;
 use App\Models\GoodAppearance;
+use App\Models\AspettoBeni;
 use App\Models\Bank;
 use App\Models\ProductCategory;
 use App\Models\CustomerCategory;
@@ -41,6 +42,7 @@ class SystemTablesController extends Controller
         'tax_rates' => TaxRate::class,
         'vat_natures' => VatNature::class,
         'good_appearances' => GoodAppearance::class,
+        'aspetto_beni' => AspettoBeni::class,
         'banks' => Bank::class,
         'product_categories' => ProductCategory::class,
         'customer_categories' => CustomerCategory::class,
@@ -116,6 +118,20 @@ class SystemTablesController extends Controller
                 'description' => 'required|string|max:255',
                 'category' => 'nullable|string|max:100',
                 'sort_order' => 'integer|min:0'
+            ]
+        ],
+        'aspetto_beni' => [
+            'name' => 'Aspetto dei Beni',
+            'icon' => 'bi-box-seam',
+            'color' => 'warning',
+            'validation_rules' => [
+                'codice_aspetto' => 'required|string|max:10|regex:/^[A-Z0-9_-]+$/',
+                'descrizione' => 'required|string|max:50|regex:/^[a-zA-ZÀ-ÿ0-9\s\-_\.]+$/',
+                'descrizione_estesa' => 'nullable|string|max:255|regex:/^[a-zA-ZÀ-ÿ0-9\s\-_\.\,\(\)]+$/',
+                'tipo_confezionamento' => 'required|in:primario,secondario,terziario',
+                'utilizzabile_ddt' => 'boolean',
+                'utilizzabile_fatture' => 'boolean',
+                'attivo' => 'boolean'
             ]
         ],
         'banks' => [
@@ -253,6 +269,21 @@ class SystemTablesController extends Controller
         }
         RateLimiter::hit($rateLimiterKey, 300);
 
+        // GESTIONE SPECIFICA PER ASPETTO_BENI (campi custom)
+        if ($table === 'aspetto_beni') {
+            return $this->showAspettoBeni($request);
+        }
+        
+        // GESTIONE SPECIFICA PER BANKS (vista custom)
+        if ($table === 'banks') {
+            return $this->showBanks($request);
+        }
+        
+        // GESTIONE SPECIFICA PER PRODUCT_CATEGORIES (gerarchia)
+        if ($table === 'product_categories') {
+            return $this->showProductCategories($request);
+        }
+
         // Carica dati con paginazione e filtri
         $query = $modelClass::query();
         
@@ -287,6 +318,192 @@ class SystemTablesController extends Controller
     }
 
     /**
+     * Gestione specifica per aspetto_beni (campi custom)
+     */
+    private function showAspettoBeni(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $codice = strtoupper(trim($request->get('check_duplicate')));
+            $exists = AspettoBeni::where('codice_aspetto', $codice)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = AspettoBeni::query();
+        
+        // Filtro di ricerca specifico per aspetto_beni
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('codice_aspetto', 'like', "%{$search}%")
+                  ->orWhere('descrizione', 'like', "%{$search}%")
+                  ->orWhere('descrizione_estesa', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtri aggiuntivi
+        if ($tipo = $request->get('tipo')) {
+            $query->where('tipo_confezionamento', $tipo);
+        }
+        
+        if ($status = $request->get('status')) {
+            $query->where('attivo', $status === '1');
+        }
+        
+        // Ordinamento specifico
+        $query->orderBy('codice_aspetto')->orderBy('descrizione');
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+        
+        // TODO: Ripristinare audit log quando SecurityAuditService è corretto
+        // $this->auditService->logConfigurationAccess("view_aspetto_beni", [
+        //     'search' => $search,
+        //     'tipo' => $tipo,
+        //     'status' => $status,
+        //     'page' => $request->get('page', 1)
+        // ]);
+
+        return view('configurations.system-tables.aspetto-beni', [
+            'table' => 'aspetto_beni',
+            'config' => self::TABLE_CONFIG['aspetto_beni'],
+            'items' => $items,
+            'search' => $search
+        ]);
+    }
+
+    /**
+     * Gestione specifica per banks (vista custom)
+     */
+    private function showBanks(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = Bank::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = Bank::query();
+        
+        // Filtro di ricerca specifico per banks
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('abi_code', 'like', "%{$search}%")
+                  ->orWhere('bic_swift', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtri aggiuntivi
+        if ($type = $request->get('type')) {
+            if ($type === 'italian') {
+                $query->where('is_italian', true);
+            } elseif ($type === 'foreign') {
+                $query->where('is_italian', false);
+            }
+        }
+        
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Ordinamento specifico
+        $query->orderBy('is_italian', 'desc')->orderBy('name');
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+
+        return view('configurations.system-tables.banks', [
+            'table' => 'banks',
+            'config' => self::TABLE_CONFIG['banks'],
+            'items' => $items,
+            'search' => $search
+        ]);
+    }
+
+    /**
+     * Gestione specifica per product_categories (gerarchia)
+     */
+    private function showProductCategories(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = ProductCategory::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = ProductCategory::query();
+        
+        // Filtro di ricerca specifico per categorie
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('path', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtri aggiuntivi
+        if ($level = $request->get('level')) {
+            if ($level === 'root') {
+                $query->whereNull('parent_id');
+            } else {
+                $query->where('level', (int)$level);
+            }
+        }
+        
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Ordinamento gerarchico
+        $query->orderBy('level')
+              ->orderBy('sort_order')
+              ->orderBy('name');
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+        
+        // Carica categorie padre per il form
+        $parentCategories = ProductCategory::rootLevel()
+                                          ->active()
+                                          ->ordered()
+                                          ->get();
+
+        return view('configurations.system-tables.product-categories', [
+            'table' => 'product_categories',
+            'config' => self::TABLE_CONFIG['product_categories'],
+            'items' => $items,
+            'search' => $search,
+            'parentCategories' => $parentCategories
+        ]);
+    }
+
+    /**
+     * Restituisce dati di un singolo record per modifica
+     */
+    public function edit(string $table, $id, Request $request)
+    {
+        $this->validateTableName($table);
+        
+        $modelClass = self::TABLE_MODELS[$table];
+        
+        // Trova il record
+        $record = $modelClass::find($id);
+        
+        if (!$record) {
+            return response()->json(['error' => 'Record non trovato'], 404);
+        }
+        
+        // Restituisci i dati del record in JSON
+        return response()->json($record);
+    }
+
+    /**
      * Crea nuovo record per una tabella
      */
     public function store(string $table, Request $request)
@@ -303,17 +520,65 @@ class SystemTablesController extends Controller
         }
         RateLimiter::hit($rateLimiterKey, 3600);
 
-        // Validazione con regole specifiche della tabella (OWASP Input Validation)
-        $validated = $request->validate($config['validation_rules'], [
-            'nome_associazione.required' => 'Il nome associazione è obbligatorio.',
-            'nome_associazione.min' => 'Il nome deve essere di almeno 3 caratteri.',
-            'nome_associazione.regex' => 'Il nome contiene caratteri non validi.',
-            'tax_rate_id.required' => 'L\'aliquota IVA è obbligatoria.',
-            'tax_rate_id.exists' => 'L\'aliquota IVA selezionata non è valida.',
-            'vat_nature_id.required' => 'La natura IVA è obbligatoria.',
-            'vat_nature_id.exists' => 'La natura IVA selezionata non è valida.',
-            'descrizione.regex' => 'La descrizione contiene caratteri non validi.'
-        ]);
+        // Validazione specifica per aspetto_beni
+        if ($table === 'aspetto_beni') {
+            $validated = $request->validate(AspettoBeni::validationRules(), [
+                'codice_aspetto.required' => 'Il codice aspetto è obbligatorio.',
+                'codice_aspetto.unique' => 'Il codice aspetto esiste già.',
+                'codice_aspetto.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'descrizione.required' => 'La descrizione è obbligatoria.',
+                'descrizione.regex' => 'La descrizione contiene caratteri non permessi.',
+                'tipo_confezionamento.required' => 'Il tipo di confezionamento è obbligatorio.',
+                'tipo_confezionamento.in' => 'Il tipo di confezionamento deve essere primario, secondario o terziario.'
+            ]);
+        } elseif ($table === 'banks') {
+            // Validazione specifica per banks
+            $validated = $request->validate(Bank::validationRules(), [
+                'code.required' => 'Il codice banca è obbligatorio.',
+                'code.unique' => 'Il codice banca esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della banca è obbligatorio.',
+                'abi_code.regex' => 'Il codice ABI deve essere di 5 cifre.',
+                'bic_swift.regex' => 'Il codice BIC/SWIFT non è valido.',
+                'email.email' => 'L\'indirizzo email non è valido.',
+                'website.url' => 'L\'URL del sito web non è valido.'
+            ]);
+        } elseif ($table === 'product_categories') {
+            // Validazione specifica per product_categories
+            $validated = $request->validate(ProductCategory::validationRules(), [
+                'code.required' => 'Il codice categoria è obbligatorio.',
+                'code.unique' => 'Il codice categoria esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della categoria è obbligatorio.',
+                'name.regex' => 'Il nome contiene caratteri non permessi.',
+                'parent_id.exists' => 'La categoria padre selezionata non è valida.',
+                'color_hex.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
+                'icon.regex' => 'L\'icona può contenere solo lettere minuscole, numeri e -.'
+            ]);
+            
+            // Controllo riferimento circolare
+            if ($request->parent_id) {
+                $parent = ProductCategory::find($request->parent_id);
+                if ($parent && $parent->hasCircularReference($request->parent_id)) {
+                    return response()->json([
+                        'success' => false,
+                        'errors' => ['parent_id' => ['Riferimento circolare non permesso.']]
+                    ], 422);
+                }
+            }
+        } else {
+            // Validazione standard per altre tabelle
+            $validated = $request->validate($config['validation_rules'], [
+                'nome_associazione.required' => 'Il nome associazione è obbligatorio.',
+                'nome_associazione.min' => 'Il nome deve essere di almeno 3 caratteri.',
+                'nome_associazione.regex' => 'Il nome contiene caratteri non validi.',
+                'tax_rate_id.required' => 'L\'aliquota IVA è obbligatoria.',
+                'tax_rate_id.exists' => 'L\'aliquota IVA selezionata non è valida.',
+                'vat_nature_id.required' => 'La natura IVA è obbligatoria.',
+                'vat_nature_id.exists' => 'La natura IVA selezionata non è valida.',
+                'descrizione.regex' => 'La descrizione contiene caratteri non validi.'
+            ]);
+        }
 
         // Validazione business logic per VAT associations
         if ($table === 'vat_nature_associations') {
@@ -375,6 +640,16 @@ class SystemTablesController extends Controller
         // Invalida cache
         $this->cacheService->invalidateSystemTablesCache($table);
 
+        // Gestione risposta AJAX per aspetto_beni e banks
+        if (($table === 'aspetto_beni' || $table === 'banks') && $request->expectsJson()) {
+            $message = $table === 'banks' ? 'Banca creata con successo!' : 'Aspetto dei beni creato con successo!';
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'item' => $item
+            ]);
+        }
+
         return back()->with('success', "{$config['name']}: associazione creata con successo!");
     }
 
@@ -397,15 +672,64 @@ class SystemTablesController extends Controller
         }
         RateLimiter::hit($rateLimiterKey, 900);
 
-        // Validazione
-        $rules = $config['validation_rules'];
-        
-        // Per l'aggiornamento, modifica regola univocità codice se presente
-        if (isset($rules['code']) && str_contains($rules['code'], 'unique:')) {
-            $rules['code'] = str_replace('unique:', "unique:,code,{$id},id,", $rules['code']);
+        // Validazione specifica per aspetto_beni
+        if ($table === 'aspetto_beni') {
+            $validated = $request->validate(AspettoBeni::validationRules($id), [
+                'codice_aspetto.required' => 'Il codice aspetto è obbligatorio.',
+                'codice_aspetto.unique' => 'Il codice aspetto esiste già.',
+                'codice_aspetto.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'descrizione.required' => 'La descrizione è obbligatoria.',
+                'descrizione.regex' => 'La descrizione contiene caratteri non permessi.',
+                'tipo_confezionamento.required' => 'Il tipo di confezionamento è obbligatorio.',
+                'tipo_confezionamento.in' => 'Il tipo di confezionamento deve essere primario, secondario o terziario.'
+            ]);
+        } elseif ($table === 'banks') {
+            // Validazione specifica per banks
+            $validated = $request->validate(Bank::validationRules($id), [
+                'code.required' => 'Il codice banca è obbligatorio.',
+                'code.unique' => 'Il codice banca esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della banca è obbligatorio.',
+                'abi_code.regex' => 'Il codice ABI deve essere di 5 cifre.',
+                'bic_swift.regex' => 'Il codice BIC/SWIFT non è valido.',
+                'email.email' => 'L\'indirizzo email non è valido.',
+                'website.url' => 'L\'URL del sito web non è valido.'
+            ]);
+        } elseif ($table === 'product_categories') {
+            // Validazione specifica per product_categories
+            $validated = $request->validate(ProductCategory::validationRules($id), [
+                'code.required' => 'Il codice categoria è obbligatorio.',
+                'code.unique' => 'Il codice categoria esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della categoria è obbligatorio.',
+                'name.regex' => 'Il nome contiene caratteri non permessi.',
+                'parent_id.exists' => 'La categoria padre selezionata non è valida.',
+                'color_hex.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
+                'icon.regex' => 'L\'icona può contenere solo lettere minuscole, numeri e -.'
+            ]);
+            
+            // Controllo riferimento circolare per update
+            if ($request->parent_id && $request->parent_id != $item->parent_id) {
+                $category = new ProductCategory();
+                $category->id = $id; // Simula categoria esistente per controllo circolare
+                if ($category->hasCircularReference($request->parent_id)) {
+                    return response()->json([
+                        'success' => false,
+                        'errors' => ['parent_id' => ['Riferimento circolare non permesso.']]
+                    ], 422);
+                }
+            }
+        } else {
+            // Validazione standard per altre tabelle
+            $rules = $config['validation_rules'];
+            
+            // Per l'aggiornamento, modifica regola univocità codice se presente
+            if (isset($rules['code']) && str_contains($rules['code'], 'unique:')) {
+                $rules['code'] = str_replace('unique:', "unique:,code,{$id},id,", $rules['code']);
+            }
+            
+            $validated = $request->validate($rules);
         }
-        
-        $validated = $request->validate($rules);
 
         // Backup dati originali per audit
         $originalData = $item->only(array_keys($validated));
@@ -420,6 +744,16 @@ class SystemTablesController extends Controller
 
         // Invalida cache
         $this->cacheService->invalidateSystemTablesCache($table);
+
+        // Gestione risposta AJAX per aspetto_beni e banks  
+        if (($table === 'aspetto_beni' || $table === 'banks') && $request->expectsJson()) {
+            $message = $table === 'banks' ? 'Banca aggiornata con successo!' : 'Aspetto dei beni aggiornato con successo!';
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'item' => $item
+            ]);
+        }
 
         return back()->with('success', "{$config['name']}: record aggiornato con successo!");
     }
@@ -455,6 +789,15 @@ class SystemTablesController extends Controller
         // Invalida cache
         $this->cacheService->invalidateSystemTablesCache($table);
 
+        // Gestione risposta AJAX per aspetto_beni e banks
+        if (($table === 'aspetto_beni' || $table === 'banks') && request()->expectsJson()) {
+            $message = $table === 'banks' ? 'Banca eliminata con successo!' : 'Aspetto dei beni eliminato con successo!';
+            return response()->json([
+                'success' => true,
+                'message' => $message
+            ]);
+        }
+
         return back()->with('success', "{$config['name']}: record rimosso con successo!");
     }
 
@@ -479,6 +822,24 @@ class SystemTablesController extends Controller
             'table' => $table,
             'count' => $items->count()
         ]);
+    }
+
+    /**
+     * Ottieni singolo item per AJAX (per modifica/visualizzazione)
+     */
+    public function getItem(string $table, int $id)
+    {
+        $this->validateTableName($table);
+        
+        $modelClass = self::TABLE_MODELS[$table];
+        $item = $modelClass::findOrFail($id);
+        
+        // Gestione specifica per aspetto_beni
+        if ($table === 'aspetto_beni') {
+            return response()->json($item);
+        }
+        
+        return response()->json($item);
     }
 
     /**
