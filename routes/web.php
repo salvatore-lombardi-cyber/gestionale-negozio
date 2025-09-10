@@ -119,7 +119,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/bank-accounts/{uuid}', [ConfigurationController::class, 'updateBankAccount'])->name('bank-accounts.update');
         Route::delete('/bank-accounts/{uuid}', [ConfigurationController::class, 'deleteBankAccount'])->name('bank-accounts.delete');
         
-        // Tabelle di Sistema - Dashboard Spettacolare 🌈
+        // Tabelle di Sistema - Dashboard 
         Route::middleware(['throttle:100,1'])->group(function () {
             Route::get('/system-tables', [App\Http\Controllers\SystemTablesController::class, 'index'])->name('system-tables.index');
             Route::get('/system-tables/{table}', [App\Http\Controllers\SystemTablesController::class, 'show'])->name('system-tables.show');

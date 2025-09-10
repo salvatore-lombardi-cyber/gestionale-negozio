@@ -26,6 +26,7 @@ use App\Models\SupplierCategory;
 use App\Models\SizeColor;
 use App\Models\WarehouseCause;
 use App\Models\ColorVariant;
+use App\Models\Condition;
 
 /**
  * Controller Enterprise per Gestione Tabelle di Sistema
@@ -50,7 +51,7 @@ class SystemTablesController extends Controller
         'size_colors' => SizeColor::class,
         'warehouse_causes' => WarehouseCause::class,
         'color_variants' => ColorVariant::class,
-        'conditions' => 'conditions',
+        'conditions' => Condition::class,
         'fixed_price_denominations' => 'fixed_price_denominations', 
         'deposits' => 'deposits',
         'price_lists' => 'price_lists',
@@ -162,6 +163,136 @@ class SystemTablesController extends Controller
                 'description' => 'nullable|string|max:500',
                 'color_hex' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
                 'icon' => 'nullable|string|max:50'
+            ]
+        ],
+        'customer_categories' => [
+            'name' => 'Categorie Clienti',
+            'icon' => 'bi-people-fill',
+            'color' => 'info',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:customer_categories,code',
+                'name' => 'required|string|max:100|regex:/^[a-zA-Z0-9\s\-_àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ]+$/',
+                'description' => 'nullable|string|max:1000',
+                'type' => 'required|in:B2B,B2C,WHOLESALE,RETAIL,VIP,STANDARD',
+                'discount_percentage' => 'required|numeric|min:0|max:100',
+                'credit_limit' => 'nullable|numeric|min:0|max:999999999.99',
+                'payment_terms_days' => 'required|integer|min:0|max:365',
+                'price_list' => 'required|in:LIST_1,LIST_2,LIST_3,WHOLESALE,RETAIL',
+                'color_hex' => 'required|regex:/^#[0-9A-Fa-f]{6}$/',
+                'icon' => 'required|string|max:50|regex:/^bi-[a-z0-9-]+$/',
+                'max_orders_per_day' => 'nullable|integer|min:1|max:1000',
+                'notes' => 'nullable|string|max:500'
+            ]
+        ],
+        'supplier_categories' => [
+            'name' => 'Categorie Fornitori',
+            'icon' => 'bi-building',
+            'color' => 'warning',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:supplier_categories,code',
+                'name' => 'required|string|max:100|regex:/^[a-zA-Z0-9\s\-_àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ]+$/',
+                'description' => 'nullable|string|max:1000',
+                'category_type' => 'required|in:STRATEGIC,PREFERRED,TRANSACTIONAL,PANEL,ON_HOLD',
+                'sector' => 'nullable|string|max:100',
+                'reliability_rating' => 'required|integer|min:1|max:5',
+                'quality_rating' => 'required|integer|min:1|max:5',
+                'performance_rating' => 'required|integer|min:1|max:5',
+                'payment_terms_days' => 'required|integer|min:0|max:365',
+                'discount_expected' => 'required|numeric|min:0|max:100',
+                'minimum_order_value' => 'nullable|numeric|min:0|max:999999999.99',
+                'preferred_contact_method' => 'required|in:EMAIL,PHONE,PORTAL,EDI',
+                'lead_time_days' => 'nullable|integer|min:0|max:365',
+                'security_clearance_level' => 'required|in:LOW,MEDIUM,HIGH,CRITICAL',
+                'audit_frequency_months' => 'nullable|integer|min:1|max:60',
+                'color_hex' => 'required|regex:/^#[0-9A-Fa-f]{6}$/',
+                'icon' => 'required|string|max:50|regex:/^bi-[a-z0-9-]+$/',
+                'contract_template' => 'nullable|string|max:100',
+                'notes' => 'nullable|string|max:500'
+            ]
+        ],
+        'size_colors' => [
+            'name' => 'Taglie e Colori',
+            'icon' => 'bi-palette2',
+            'color' => 'primary',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:size_colors,code',
+                'name' => 'required|string|max:100|regex:/^[a-zA-Z0-9\s\-_àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ\/]+$/',
+                'description' => 'nullable|string|max:1000',
+                'type' => 'required|in:size,color',
+                'hex_value' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/|required_if:type,color',
+                'rgb_value' => 'nullable|regex:/^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/',
+                'pantone_code' => 'nullable|string|max:20|regex:/^[A-Z0-9\s-]+$/i',
+                'size_category' => 'nullable|in:NUMERIC,LETTER,EU,US,UK,IT,FR,CUSTOM|required_if:type,size',
+                'size_system' => 'nullable|string|max:50|regex:/^[a-zA-Z0-9\s\-_]+$/',
+                'numeric_value' => 'nullable|numeric|min:0|max:999.99',
+                'eu_size' => 'nullable|string|max:10|regex:/^[A-Z0-9\/\-]+$/i',
+                'us_size' => 'nullable|string|max:10|regex:/^[A-Z0-9\/\-]+$/i',
+                'uk_size' => 'nullable|string|max:10|regex:/^[A-Z0-9\/\-]+$/i',
+                'chest_cm' => 'nullable|integer|min:1|max:300',
+                'waist_cm' => 'nullable|integer|min:1|max:300',
+                'hip_cm' => 'nullable|integer|min:1|max:300',
+                'price_modifier' => 'nullable|numeric|min:-999999.99|max:999999.99',
+                'barcode_prefix' => 'nullable|string|max:20|regex:/^[A-Z0-9_-]+$/',
+                'sku_suffix' => 'nullable|string|max:10|regex:/^[A-Z0-9_-]+$/',
+                'default_stock_level' => 'nullable|integer|min:0|max:99999',
+                'icon' => 'nullable|string|max:50|regex:/^bi-[a-z0-9-]+$/',
+                'css_class' => 'nullable|string|max:100|regex:/^[a-zA-Z0-9\s\-_]+$/',
+                'compliance_notes' => 'nullable|string|max:500',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ]
+        ],
+        'warehouse_causes' => [
+            'name' => 'Causali di Magazzino',
+            'icon' => 'bi-box-seam',
+            'color' => 'warning',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:warehouse_causes,code',
+                'description' => 'required|string|max:255|min:3',
+                'movement_type' => 'required|in:in,out,adjustment',
+                'affects_cost' => 'boolean',
+                'requires_document' => 'boolean',
+                'auto_calculate_cost' => 'boolean',
+                'fiscal_relevant' => 'boolean',
+                'fiscal_code' => 'nullable|string|max:10|regex:/^[A-Z0-9]+$/',
+                'category' => 'required|in:ORDINARY,INVENTORY,PRODUCTION,LOSS,TRANSFER,RETURN,SAMPLE',
+                'priority_level' => 'required|in:LOW,MEDIUM,HIGH,CRITICAL',
+                'approval_required' => 'boolean',
+                'notify_threshold' => 'nullable|numeric|min:0|max:999999.99',
+                'color_hex' => 'required|string|size:7|regex:/^#[A-Fa-f0-9]{6}$/',
+                'icon' => 'required|string|max:50|regex:/^[a-z0-9-]+$/',
+                'default_location' => 'nullable|string|max:100',
+                'auto_assign_lot' => 'boolean',
+                'compliance_notes' => 'nullable|string|max:500'
+            ]
+        ],
+        'color_variants' => [
+            'name' => 'Colori Varianti',
+            'icon' => 'bi-palette',
+            'color' => 'info',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:50|regex:/^[A-Z0-9_-]+$/|unique:color_variants,code',
+                'name' => 'required|string|max:255|min:2',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ]
+        ],
+        'conditions' => [
+            'name' => 'Condizioni',
+            'icon' => 'bi-file-check',
+            'color' => 'success',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:50|regex:/^[A-Z0-9_-]+$/|unique:conditions,code',
+                'name' => 'required|string|max:255|min:2',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
             ]
         ]
         // ... continua per tutte le altre tabelle
@@ -282,6 +413,36 @@ class SystemTablesController extends Controller
         // GESTIONE SPECIFICA PER PRODUCT_CATEGORIES (gerarchia)
         if ($table === 'product_categories') {
             return $this->showProductCategories($request);
+        }
+
+        // GESTIONE SPECIFICA PER CUSTOMER_CATEGORIES (segmentazione)
+        if ($table === 'customer_categories') {
+            return $this->showCustomerCategories($request);
+        }
+
+        // GESTIONE SPECIFICA PER SUPPLIER_CATEGORIES (procurement)
+        if ($table === 'supplier_categories') {
+            return $this->showSupplierCategories($request);
+        }
+
+        // GESTIONE SPECIFICA PER SIZE_COLORS (fashion retail)
+        if ($table === 'size_colors') {
+            return $this->showSizeColors($request);
+        }
+
+        // GESTIONE SPECIFICA PER WAREHOUSE_CAUSES (causali magazzino)
+        if ($table === 'warehouse_causes') {
+            return $this->showWarehouseCauses($request);
+        }
+
+        // GESTIONE SPECIFICA PER COLOR_VARIANTS (varianti colore)
+        if ($table === 'color_variants') {
+            return $this->showColorVariants($request);
+        }
+
+        // GESTIONE SPECIFICA PER CONDITIONS (condizioni)
+        if ($table === 'conditions') {
+            return $this->showConditions($request);
         }
 
         // Carica dati con paginazione e filtri
@@ -484,6 +645,427 @@ class SystemTablesController extends Controller
     }
 
     /**
+     * Gestione specifica per customer_categories (segmentazione clientela)
+     */
+    private function showCustomerCategories(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = CustomerCategory::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = CustomerCategory::query();
+        
+        // Filtro di ricerca specifico per categorie clienti
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('type', 'like', "%{$search}%")
+                  ->orWhere('notes', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtri segmentazione
+        if ($type = $request->get('type')) {
+            $query->where('type', $type);
+        }
+        
+        if ($priority = $request->get('priority_level')) {
+            $query->where('priority_level', $priority);
+        }
+        
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        if ($discount = $request->get('with_discount')) {
+            if ($discount === '1') {
+                $query->where('discount_percentage', '>', 0);
+            }
+        }
+        
+        // Ordinamento per priorità e tipo
+        $query->orderByRaw("FIELD(priority_level, 'PREMIUM', 'HIGH', 'MEDIUM', 'LOW')")
+              ->orderByRaw("FIELD(type, 'VIP', 'B2B', 'WHOLESALE', 'RETAIL', 'B2C', 'STANDARD')")
+              ->orderBy('name');
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+        
+        // Statistiche per dashboard
+        $stats = [
+            'total' => CustomerCategory::count(),
+            'active' => CustomerCategory::where('active', true)->count(),
+            'vip' => CustomerCategory::where('type', 'VIP')->count(),
+            'b2b' => CustomerCategory::where('type', 'B2B')->count(),
+            'with_discount' => CustomerCategory::where('discount_percentage', '>', 0)->count()
+        ];
+
+        return view('configurations.system-tables.categorie-clienti', [
+            'table' => 'customer_categories',
+            'config' => self::TABLE_CONFIG['customer_categories'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specifica per supplier_categories (procurement e vendor management)
+     */
+    private function showSupplierCategories(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = SupplierCategory::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = SupplierCategory::query();
+        
+        // Filtro di ricerca specifico per categorie fornitori
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('category_type', 'like', "%{$search}%")
+                  ->orWhere('sector', 'like', "%{$search}%")
+                  ->orWhere('notes', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtri procurement avanzati
+        if ($categoryType = $request->get('category_type')) {
+            $query->where('category_type', $categoryType);
+        }
+        
+        if ($sector = $request->get('sector')) {
+            $query->where('sector', 'like', "%{$sector}%");
+        }
+        
+        if ($securityLevel = $request->get('security_level')) {
+            $query->where('security_clearance_level', $securityLevel);
+        }
+        
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        if ($minRating = $request->get('min_rating')) {
+            $query->where('reliability_rating', '>=', (int)$minRating);
+        }
+        
+        if ($needsAudit = $request->get('needs_audit')) {
+            if ($needsAudit === '1') {
+                $query->needsAudit();
+            }
+        }
+        
+        // Ordinamento strategico
+        $query->orderByRaw("FIELD(category_type, 'STRATEGIC', 'PREFERRED', 'TRANSACTIONAL', 'PANEL', 'ON_HOLD')")
+              ->orderBy('reliability_rating', 'desc')
+              ->orderBy('name');
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+        
+        // Statistiche per dashboard procurement
+        $stats = [
+            'total' => SupplierCategory::count(),
+            'active' => SupplierCategory::where('active', true)->count(),
+            'strategic' => SupplierCategory::where('category_type', 'STRATEGIC')->count(),
+            'preferred' => SupplierCategory::where('category_type', 'PREFERRED')->count(),
+            'high_security' => SupplierCategory::whereIn('security_clearance_level', ['HIGH', 'CRITICAL'])->count(),
+            'high_performance' => SupplierCategory::where('reliability_rating', '>=', 4)->count(),
+            'needs_audit' => SupplierCategory::query()->needsAudit()->count()
+        ];
+
+        return view('configurations.system-tables.categorie-fornitori', [
+            'table' => 'supplier_categories',
+            'config' => self::TABLE_CONFIG['supplier_categories'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specifica per size_colors (fashion retail e gestione varianti)
+     */
+    private function showSizeColors(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = SizeColor::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = SizeColor::query();
+        
+        // Filtro di ricerca specifico per taglie e colori
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('hex_value', 'like', "%{$search}%")
+                  ->orWhere('pantone_code', 'like', "%{$search}%")
+                  ->orWhere('eu_size', 'like', "%{$search}%")
+                  ->orWhere('us_size', 'like', "%{$search}%")
+                  ->orWhere('uk_size', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtri fashion avanzati
+        if ($type = $request->get('type')) {
+            $query->where('type', $type);
+        }
+        
+        if ($sizeCategory = $request->get('size_category')) {
+            $query->where('size_category', $sizeCategory);
+        }
+        
+        if ($seasonal = $request->get('seasonal')) {
+            $query->where('seasonal', $seasonal === '1');
+        }
+        
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        if ($requiresApproval = $request->get('requires_approval')) {
+            if ($requiresApproval === '1') {
+                $query->where('requires_approval', true);
+            }
+        }
+        
+        if ($priceModifier = $request->get('with_price_modifier')) {
+            if ($priceModifier === '1') {
+                $query->where('price_modifier', '!=', 0);
+            }
+        }
+        
+        // Ordinamento fashion-specific
+        $query->orderByRaw("FIELD(type, 'color', 'size')")
+              ->orderBy('sort_order')
+              ->orderBy('name');
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+        
+        // Statistiche per dashboard varianti colore
+        $stats = [
+            'total' => SizeColor::count(),
+            'active' => SizeColor::where('active', true)->count(),
+            'colors' => SizeColor::where('type', 'color')->count(),
+            'sizes' => SizeColor::where('type', 'size')->count(),
+            'seasonal' => SizeColor::where('seasonal', true)->count(),
+            'with_price_modifier' => SizeColor::where('price_modifier', '!=', 0)->count(),
+            'requires_approval' => SizeColor::where('requires_approval', true)->count(),
+            'popular' => SizeColor::where('usage_count', '>', 10)->count()
+        ];
+
+        return view('configurations.system-tables.taglie-colori', [
+            'table' => 'size_colors',
+            'config' => self::TABLE_CONFIG['size_colors'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specifica per warehouse_causes (causali di magazzino)
+     */
+    private function showWarehouseCauses(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = WarehouseCause::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = WarehouseCause::query();
+        
+        // Filtro di ricerca specifico per causali di magazzino
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('fiscal_code', 'like', "%{$search}%")
+                  ->orWhere('default_location', 'like', "%{$search}%")
+                  ->orWhere('compliance_notes', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtri specifici per magazzino
+        if ($movementType = $request->get('movement_type')) {
+            $query->where('movement_type', $movementType);
+        }
+        
+        if ($category = $request->get('category')) {
+            $query->where('category', $category);
+        }
+        
+        if ($priority = $request->get('priority_level')) {
+            $query->where('priority_level', $priority);
+        }
+        
+        if ($fiscalRelevant = $request->get('fiscal_relevant')) {
+            $query->where('fiscal_relevant', $fiscalRelevant === '1');
+        }
+        
+        if ($requiresApproval = $request->get('requires_approval')) {
+            $query->where('approval_required', $requiresApproval === '1');
+        }
+        
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Ordinamento specifico per warehouse management
+        $query->orderByRaw("FIELD(movement_type, 'in', 'out', 'adjustment')")
+              ->orderByRaw("FIELD(priority_level, 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW')")
+              ->orderByRaw("FIELD(category, 'ORDINARY', 'INVENTORY', 'PRODUCTION', 'LOSS', 'TRANSFER', 'RETURN', 'SAMPLE')")
+              ->orderBy('code');
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+        
+        // Statistiche per dashboard magazzino
+        $stats = [
+            'total' => WarehouseCause::count(),
+            'active' => WarehouseCause::where('active', true)->count(),
+            'incoming' => WarehouseCause::where('movement_type', 'in')->count(),
+            'outgoing' => WarehouseCause::where('movement_type', 'out')->count(),
+            'adjustments' => WarehouseCause::where('movement_type', 'adjustment')->count(),
+            'fiscal_relevant' => WarehouseCause::where('fiscal_relevant', true)->count(),
+            'requires_approval' => WarehouseCause::where('approval_required', true)->count(),
+            'critical_priority' => WarehouseCause::where('priority_level', 'CRITICAL')->count(),
+            'most_used' => WarehouseCause::orderBy('usage_count', 'desc')->limit(5)->get(),
+            'recently_used' => WarehouseCause::whereNotNull('last_used_at')
+                                ->orderBy('last_used_at', 'desc')
+                                ->limit(5)->get()
+        ];
+
+        return view('configurations.system-tables.causali-magazzino', [
+            'table' => 'warehouse_causes',
+            'config' => self::TABLE_CONFIG['warehouse_causes'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specifica per color_variants (colori varianti)
+     */
+    private function showColorVariants(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = ColorVariant::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = ColorVariant::query();
+        
+        // Filtro di ricerca semplice
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtro stato
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => ColorVariant::count(),
+            'active' => ColorVariant::where('active', true)->count(),
+            'inactive' => ColorVariant::where('active', false)->count()
+        ];
+
+        return view('configurations.system-tables.colori-varianti', [
+            'table' => 'color_variants',
+            'config' => self::TABLE_CONFIG['color_variants'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specifica per conditions (condizioni)
+     */
+    private function showConditions(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = Condition::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = Condition::query();
+        
+        // Filtro di ricerca semplice
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtro stato
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => Condition::count(),
+            'active' => Condition::where('active', true)->count(),
+            'inactive' => Condition::where('active', false)->count()
+        ];
+
+        return view('configurations.system-tables.condizioni', [
+            'table' => 'conditions',
+            'config' => self::TABLE_CONFIG['conditions'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
      * Restituisce dati di un singolo record per modifica
      */
     public function edit(string $table, $id, Request $request)
@@ -555,6 +1137,42 @@ class SystemTablesController extends Controller
                 'color_hex.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
                 'icon.regex' => 'L\'icona può contenere solo lettere minuscole, numeri e -.'
             ]);
+        } elseif ($table === 'customer_categories') {
+            // Validazione specifica per customer_categories
+            $validated = $request->validate(CustomerCategory::validationRules(), [
+                'code.required' => 'Il codice categoria cliente è obbligatorio.',
+                'code.unique' => 'Il codice categoria cliente esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della categoria cliente è obbligatorio.',
+                'name.regex' => 'Il nome contiene caratteri non permessi.',
+                'type.required' => 'Il tipo di categoria è obbligatorio.',
+                'type.in' => 'Il tipo di categoria deve essere valido (B2B, B2C, VIP, ecc.).',
+                'discount_percentage.required' => 'La percentuale di sconto è obbligatoria.',
+                'discount_percentage.numeric' => 'La percentuale di sconto deve essere un numero.',
+                'discount_percentage.min' => 'La percentuale di sconto non può essere negativa.',
+                'discount_percentage.max' => 'La percentuale di sconto non può superare il 100%.',
+                'color_hex.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
+                'icon.regex' => 'L\'icona deve iniziare con "bi-" seguito da caratteri validi.'
+            ]);
+        } elseif ($table === 'supplier_categories') {
+            // Validazione specifica per supplier_categories
+            $validated = $request->validate(SupplierCategory::validationRules(), [
+                'code.required' => 'Il codice categoria fornitore è obbligatorio.',
+                'code.unique' => 'Il codice categoria fornitore esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della categoria fornitore è obbligatorio.',
+                'name.regex' => 'Il nome contiene caratteri non permessi.',
+                'category_type.required' => 'Il tipo di categoria è obbligatorio.',
+                'category_type.in' => 'Il tipo deve essere valido (STRATEGIC, PREFERRED, ecc.).',
+                'reliability_rating.required' => 'Il rating di affidabilità è obbligatorio.',
+                'reliability_rating.integer' => 'Il rating deve essere un numero intero.',
+                'reliability_rating.min' => 'Il rating deve essere almeno 1.',
+                'reliability_rating.max' => 'Il rating non può superare 5.',
+                'security_clearance_level.required' => 'Il livello di sicurezza è obbligatorio.',
+                'security_clearance_level.in' => 'Il livello di sicurezza deve essere valido.',
+                'color_hex.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
+                'icon.regex' => 'L\'icona deve iniziare con "bi-" seguito da caratteri validi.'
+            ]);
             
             // Controllo riferimento circolare
             if ($request->parent_id) {
@@ -566,6 +1184,79 @@ class SystemTablesController extends Controller
                     ], 422);
                 }
             }
+        } elseif ($table === 'size_colors') {
+            // Validazione specifica per size_colors
+            $validated = $request->validate(SizeColor::validationRules(), [
+                'code.required' => 'Il codice taglia/colore è obbligatorio.',
+                'code.unique' => 'Il codice taglia/colore esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della taglia/colore è obbligatorio.',
+                'name.regex' => 'Il nome contiene caratteri non permessi.',
+                'type.required' => 'Il tipo (taglia/colore) è obbligatorio.',
+                'type.in' => 'Il tipo deve essere "size" o "color".',
+                'hex_value.required_if' => 'Il valore esadecimale è obbligatorio per i colori.',
+                'hex_value.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
+                'size_category.required_if' => 'La categoria di taglia è obbligatoria per le taglie.',
+                'size_category.in' => 'La categoria di taglia deve essere valida.',
+                'numeric_value.numeric' => 'Il valore numerico deve essere un numero.',
+                'chest_cm.integer' => 'La circonferenza petto deve essere un numero intero.',
+                'waist_cm.integer' => 'La circonferenza vita deve essere un numero intero.',
+                'hip_cm.integer' => 'La circonferenza fianchi deve essere un numero intero.',
+                'price_modifier.numeric' => 'Il modificatore prezzo deve essere un numero.',
+                'default_stock_level.integer' => 'Il livello stock deve essere un numero intero.',
+                'icon.regex' => 'L\'icona deve iniziare con "bi-" seguito da caratteri validi.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.'
+            ]);
+        } elseif ($table === 'warehouse_causes') {
+            // Validazione specifica per warehouse_causes
+            $validated = $request->validate(WarehouseCause::validationRules(), [
+                'code.required' => 'Il codice causale è obbligatorio.',
+                'code.unique' => 'Il codice causale esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'description.required' => 'La descrizione è obbligatoria.',
+                'description.min' => 'La descrizione deve essere di almeno 3 caratteri.',
+                'movement_type.required' => 'Il tipo di movimento è obbligatorio.',
+                'movement_type.in' => 'Il tipo di movimento deve essere valido (in, out, adjustment).',
+                'category.required' => 'La categoria è obbligatoria.',
+                'category.in' => 'La categoria deve essere valida.',
+                'priority_level.required' => 'Il livello di priorità è obbligatorio.',
+                'priority_level.in' => 'Il livello di priorità deve essere valido.',
+                'fiscal_code.regex' => 'Il codice fiscale può contenere solo lettere maiuscole e numeri.',
+                'notify_threshold.numeric' => 'La soglia di notifica deve essere un numero.',
+                'notify_threshold.min' => 'La soglia di notifica non può essere negativa.',
+                'color_hex.required' => 'Il colore identificativo è obbligatorio.',
+                'color_hex.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
+                'icon.required' => 'L\'icona è obbligatoria.',
+                'icon.regex' => 'L\'icona può contenere solo lettere minuscole, numeri e -.',
+                'default_location.max' => 'L\'ubicazione predefinita non può superare i 100 caratteri.',
+                'compliance_notes.max' => 'Le note di conformità non possono superare i 500 caratteri.'
+            ]);
+        } elseif ($table === 'color_variants') {
+            // Validazione semplice per color_variants
+            $validated = $request->validate(ColorVariant::validationRules(), [
+                'code.required' => 'Il codice colore è obbligatorio.',
+                'code.unique' => 'Il codice colore esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome del colore è obbligatorio.',
+                'name.min' => 'Il nome deve essere di almeno 2 caratteri.',
+                'description.max' => 'La descrizione non può superare i 500 caratteri.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
+                'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
+            ]);
+        } elseif ($table === 'conditions') {
+            // Validazione semplice per conditions
+            $validated = $request->validate(Condition::validationRules(), [
+                'code.required' => 'Il codice condizione è obbligatorio.',
+                'code.unique' => 'Il codice condizione esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della condizione è obbligatorio.',
+                'name.min' => 'Il nome deve essere di almeno 2 caratteri.',
+                'description.max' => 'La descrizione non può superare i 500 caratteri.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
+                'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
+            ]);
         } else {
             // Validazione standard per altre tabelle
             $validated = $request->validate($config['validation_rules'], [
@@ -640,12 +1331,19 @@ class SystemTablesController extends Controller
         // Invalida cache
         $this->cacheService->invalidateSystemTablesCache($table);
 
-        // Gestione risposta AJAX per aspetto_beni e banks
-        if (($table === 'aspetto_beni' || $table === 'banks') && $request->expectsJson()) {
-            $message = $table === 'banks' ? 'Banca creata con successo!' : 'Aspetto dei beni creato con successo!';
+        // Gestione risposta AJAX per aspetto_beni, banks, size_colors, warehouse_causes, color_variants e conditions
+        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions']) && $request->expectsJson()) {
+            $messages = [
+                'banks' => 'Banca creata con successo!',
+                'aspetto_beni' => 'Aspetto dei beni creato con successo!',
+                'size_colors' => 'Taglia/Colore creato con successo!',
+                'warehouse_causes' => 'Causale di Magazzino creata con successo!',
+                'color_variants' => 'Colore Variante creato con successo!',
+                'conditions' => 'Condizione creata con successo!'
+            ];
             return response()->json([
                 'success' => true,
-                'message' => $message,
+                'message' => $messages[$table],
                 'item' => $item
             ]);
         }
@@ -707,6 +1405,42 @@ class SystemTablesController extends Controller
                 'color_hex.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
                 'icon.regex' => 'L\'icona può contenere solo lettere minuscole, numeri e -.'
             ]);
+        } elseif ($table === 'customer_categories') {
+            // Validazione specifica per customer_categories (update)
+            $validated = $request->validate(CustomerCategory::validationRules($id), [
+                'code.required' => 'Il codice categoria cliente è obbligatorio.',
+                'code.unique' => 'Il codice categoria cliente esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della categoria cliente è obbligatorio.',
+                'name.regex' => 'Il nome contiene caratteri non permessi.',
+                'type.required' => 'Il tipo di categoria è obbligatorio.',
+                'type.in' => 'Il tipo di categoria deve essere valido (B2B, B2C, VIP, ecc.).',
+                'discount_percentage.required' => 'La percentuale di sconto è obbligatoria.',
+                'discount_percentage.numeric' => 'La percentuale di sconto deve essere un numero.',
+                'discount_percentage.min' => 'La percentuale di sconto non può essere negativa.',
+                'discount_percentage.max' => 'La percentuale di sconto non può superare il 100%.',
+                'color_hex.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
+                'icon.regex' => 'L\'icona deve iniziare con "bi-" seguito da caratteri validi.'
+            ]);
+        } elseif ($table === 'supplier_categories') {
+            // Validazione specifica per supplier_categories (update)
+            $validated = $request->validate(SupplierCategory::validationRules($id), [
+                'code.required' => 'Il codice categoria fornitore è obbligatorio.',
+                'code.unique' => 'Il codice categoria fornitore esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della categoria fornitore è obbligatorio.',
+                'name.regex' => 'Il nome contiene caratteri non permessi.',
+                'category_type.required' => 'Il tipo di categoria è obbligatorio.',
+                'category_type.in' => 'Il tipo deve essere valido (STRATEGIC, PREFERRED, ecc.).',
+                'reliability_rating.required' => 'Il rating di affidabilità è obbligatorio.',
+                'reliability_rating.integer' => 'Il rating deve essere un numero intero.',
+                'reliability_rating.min' => 'Il rating deve essere almeno 1.',
+                'reliability_rating.max' => 'Il rating non può superare 5.',
+                'security_clearance_level.required' => 'Il livello di sicurezza è obbligatorio.',
+                'security_clearance_level.in' => 'Il livello di sicurezza deve essere valido.',
+                'color_hex.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
+                'icon.regex' => 'L\'icona deve iniziare con "bi-" seguito da caratteri validi.'
+            ]);
             
             // Controllo riferimento circolare per update
             if ($request->parent_id && $request->parent_id != $item->parent_id) {
@@ -719,6 +1453,79 @@ class SystemTablesController extends Controller
                     ], 422);
                 }
             }
+        } elseif ($table === 'size_colors') {
+            // Validazione specifica per size_colors (update)
+            $validated = $request->validate(SizeColor::validationRules($id), [
+                'code.required' => 'Il codice taglia/colore è obbligatorio.',
+                'code.unique' => 'Il codice taglia/colore esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della taglia/colore è obbligatorio.',
+                'name.regex' => 'Il nome contiene caratteri non permessi.',
+                'type.required' => 'Il tipo (taglia/colore) è obbligatorio.',
+                'type.in' => 'Il tipo deve essere "size" o "color".',
+                'hex_value.required_if' => 'Il valore esadecimale è obbligatorio per i colori.',
+                'hex_value.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
+                'size_category.required_if' => 'La categoria di taglia è obbligatoria per le taglie.',
+                'size_category.in' => 'La categoria di taglia deve essere valida.',
+                'numeric_value.numeric' => 'Il valore numerico deve essere un numero.',
+                'chest_cm.integer' => 'La circonferenza petto deve essere un numero intero.',
+                'waist_cm.integer' => 'La circonferenza vita deve essere un numero intero.',
+                'hip_cm.integer' => 'La circonferenza fianchi deve essere un numero intero.',
+                'price_modifier.numeric' => 'Il modificatore prezzo deve essere un numero.',
+                'default_stock_level.integer' => 'Il livello stock deve essere un numero intero.',
+                'icon.regex' => 'L\'icona deve iniziare con "bi-" seguito da caratteri validi.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.'
+            ]);
+        } elseif ($table === 'warehouse_causes') {
+            // Validazione specifica per warehouse_causes (update)
+            $validated = $request->validate(WarehouseCause::validationRulesForUpdate($id), [
+                'code.required' => 'Il codice causale è obbligatorio.',
+                'code.unique' => 'Il codice causale esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'description.required' => 'La descrizione è obbligatoria.',
+                'description.min' => 'La descrizione deve essere di almeno 3 caratteri.',
+                'movement_type.required' => 'Il tipo di movimento è obbligatorio.',
+                'movement_type.in' => 'Il tipo di movimento deve essere valido (in, out, adjustment).',
+                'category.required' => 'La categoria è obbligatoria.',
+                'category.in' => 'La categoria deve essere valida.',
+                'priority_level.required' => 'Il livello di priorità è obbligatorio.',
+                'priority_level.in' => 'Il livello di priorità deve essere valido.',
+                'fiscal_code.regex' => 'Il codice fiscale può contenere solo lettere maiuscole e numeri.',
+                'notify_threshold.numeric' => 'La soglia di notifica deve essere un numero.',
+                'notify_threshold.min' => 'La soglia di notifica non può essere negativa.',
+                'color_hex.required' => 'Il colore identificativo è obbligatorio.',
+                'color_hex.regex' => 'Il colore deve essere in formato esadecimale (es: #FF5733).',
+                'icon.required' => 'L\'icona è obbligatoria.',
+                'icon.regex' => 'L\'icona può contenere solo lettere minuscole, numeri e -.',
+                'default_location.max' => 'L\'ubicazione predefinita non può superare i 100 caratteri.',
+                'compliance_notes.max' => 'Le note di conformità non possono superare i 500 caratteri.'
+            ]);
+        } elseif ($table === 'color_variants') {
+            // Validazione semplice per color_variants (update)
+            $validated = $request->validate(ColorVariant::validationRulesForUpdate($id), [
+                'code.required' => 'Il codice colore è obbligatorio.',
+                'code.unique' => 'Il codice colore esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome del colore è obbligatorio.',
+                'name.min' => 'Il nome deve essere di almeno 2 caratteri.',
+                'description.max' => 'La descrizione non può superare i 500 caratteri.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
+                'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
+            ]);
+        } elseif ($table === 'conditions') {
+            // Validazione semplice per conditions (update)
+            $validated = $request->validate(Condition::validationRulesForUpdate($id), [
+                'code.required' => 'Il codice condizione è obbligatorio.',
+                'code.unique' => 'Il codice condizione esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della condizione è obbligatorio.',
+                'name.min' => 'Il nome deve essere di almeno 2 caratteri.',
+                'description.max' => 'La descrizione non può superare i 500 caratteri.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
+                'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
+            ]);
         } else {
             // Validazione standard per altre tabelle
             $rules = $config['validation_rules'];
@@ -745,12 +1552,19 @@ class SystemTablesController extends Controller
         // Invalida cache
         $this->cacheService->invalidateSystemTablesCache($table);
 
-        // Gestione risposta AJAX per aspetto_beni e banks  
-        if (($table === 'aspetto_beni' || $table === 'banks') && $request->expectsJson()) {
-            $message = $table === 'banks' ? 'Banca aggiornata con successo!' : 'Aspetto dei beni aggiornato con successo!';
+        // Gestione risposta AJAX per aspetto_beni, banks, size_colors, warehouse_causes, color_variants e conditions
+        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions']) && $request->expectsJson()) {
+            $messages = [
+                'banks' => 'Banca aggiornata con successo!',
+                'aspetto_beni' => 'Aspetto dei beni aggiornato con successo!',
+                'size_colors' => 'Taglia/Colore aggiornato con successo!',
+                'warehouse_causes' => 'Causale di Magazzino aggiornata con successo!',
+                'color_variants' => 'Colore Variante aggiornato con successo!',
+                'conditions' => 'Condizione aggiornata con successo!'
+            ];
             return response()->json([
                 'success' => true,
-                'message' => $message,
+                'message' => $messages[$table],
                 'item' => $item
             ]);
         }
@@ -789,12 +1603,19 @@ class SystemTablesController extends Controller
         // Invalida cache
         $this->cacheService->invalidateSystemTablesCache($table);
 
-        // Gestione risposta AJAX per aspetto_beni e banks
-        if (($table === 'aspetto_beni' || $table === 'banks') && request()->expectsJson()) {
-            $message = $table === 'banks' ? 'Banca eliminata con successo!' : 'Aspetto dei beni eliminato con successo!';
+        // Gestione risposta AJAX per aspetto_beni, banks, size_colors, warehouse_causes, color_variants e conditions
+        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions']) && request()->expectsJson()) {
+            $messages = [
+                'banks' => 'Banca eliminata con successo!',
+                'aspetto_beni' => 'Aspetto dei beni eliminato con successo!',
+                'size_colors' => 'Taglia/Colore eliminato con successo!',
+                'warehouse_causes' => 'Causale di Magazzino eliminata con successo!',
+                'color_variants' => 'Colore Variante eliminato con successo!',
+                'conditions' => 'Condizione eliminata con successo!'
+            ];
             return response()->json([
                 'success' => true,
-                'message' => $message
+                'message' => $messages[$table]
             ]);
         }
 
