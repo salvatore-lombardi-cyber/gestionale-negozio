@@ -14,7 +14,13 @@
       "Bash(composer show:*)",
       "Bash(php -l:*)",
       "Bash(find:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)",
+      "WebFetch(domain:cheatsheetseries.owasp.org)",
+      "WebFetch(domain:mallow-tech.com)",
+      "Bash(rm:*)",
+      "Bash(cp:*)"
     ],
     "deny": [],
     "ask": []

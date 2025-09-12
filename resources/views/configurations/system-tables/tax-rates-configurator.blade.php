@@ -2,18 +2,18 @@
 
 @section('content')
 <style>
-    .tax-rates-page {
+    body {
         background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         min-height: 100vh;
     }
     
-    .dashboard-container {
+    .management-container {
         padding: 2rem;
         min-height: calc(100vh - 70px);
     }
     
-    /* Header stile gestionale */
-    .dashboard-header {
+    /* Header con pulsanti */
+    .management-header {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
         border-radius: 20px;
@@ -23,7 +23,7 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
-    .dashboard-title {
+    .management-title {
         font-size: 2rem;
         font-weight: 700;
         background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
@@ -32,27 +32,436 @@
         margin: 0;
         display: flex;
         align-items: center;
-        gap: 1rem;
     }
     
-    .back-button {
-        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
-        color: white;
-        padding: 0.5rem 1rem;
+    /* Pulsanti modern-btn coerenti */
+    .modern-btn {
+        padding: 12px 24px;
+        border: none;
         border-radius: 12px;
+        font-weight: 600;
         text-decoration: none;
-        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         transition: all 0.3s ease;
+        font-size: 0.95rem;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .modern-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(2, 157, 126, 0.3);
+    }
+    
+    .modern-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Gradiente standard per tutti i button */
+    .modern-btn.btn-primary,
+    .btn-primary.modern-btn {
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+        color: white;
         border: none;
     }
     
-    .back-button:hover {
+    .modern-btn.btn-secondary,
+    .btn-secondary.modern-btn {
+        background: linear-gradient(135deg, #6c757d, #545b62);
+        color: white;
+        border: none;
+    }
+    
+    .modern-btn.btn-success,
+    .btn-success.modern-btn {
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+        color: white;
+        border: none;
+    }
+    
+    /* Metriche Performance - Stile Golden Standard */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .metric-card {
+        background: white;
+        border-radius: 20px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+    
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        border-radius: 20px 20px 0 0;
+    }
+    
+    /* Colori specifici per ogni card secondo Golden Standard */
+    .metric-card:nth-child(1)::before {
+        background: linear-gradient(135deg, #4ecdc4, #44a08d); /* Turchese-Verde */
+    }
+    
+    .metric-card:nth-child(2)::before {
+        background: linear-gradient(135deg, #48cae4, #0077b6); /* Azzurro-Blu */
+    }
+    
+    .metric-card:nth-child(3)::before {
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2); /* Viola-Magenta */
+    }
+    
+    .metric-card:nth-child(4)::before {
+        background: linear-gradient(135deg, #ffd60a, #ff8500); /* Giallo-Arancione */
+    }
+    
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+    }
+    
+    .metric-label {
+        font-size: 1rem;
+        color: #718096;
+        margin-top: 0.5rem;
+        font-weight: 600;
+    }
+    
+    /* Colori numeri abbinati ai border */
+    .metric-card:nth-child(1) .metric-value {
+        color: #4ecdc4; /* Turchese-Verde */
+    }
+    
+    .metric-card:nth-child(2) .metric-value {
+        color: #48cae4; /* Azzurro-Blu */
+    }
+    
+    .metric-card:nth-child(3) .metric-value {
+        color: #9c27b0; /* Viola-Magenta */
+    }
+    
+    .metric-card:nth-child(4) .metric-value {
+        color: #ffd60a; /* Giallo-Arancione */
+    }
+    
+    /* Contenitore ricerca e filtri */
+    .search-filters {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .search-input {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .search-input:focus {
+        outline: none;
+        border-color: #029D7E;
+        box-shadow: 0 0 0 3px rgba(2, 157, 126, 0.1);
+    }
+    
+    .filter-select {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .filter-select:focus {
+        outline: none;
+        border-color: #029D7E;
+        box-shadow: 0 0 0 3px rgba(2, 157, 126, 0.1);
+    }
+    
+    /* Pulsanti Azioni */
+    .action-btn {
+        border: none;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin: 0 2px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    
+    .action-btn.view {
+        background: linear-gradient(135deg, #48cae4, #0077b6);
+        color: white;
+        padding: 8px;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .action-btn.edit {
+        background: linear-gradient(135deg, #ffd60a, #ff8500);
+        color: white;
+        padding: 8px;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .action-btn.delete {
+        background: linear-gradient(135deg, #f72585, #c5025a);
+        color: white;
+        padding: 8px;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .action-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(2, 157, 126, 0.3);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+        color: white;
+    }
+    
+    .action-btn.view:hover,
+    .action-btn.edit:hover,
+    .action-btn.delete:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Tabella moderna */
+    .modern-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .modern-table {
+        margin: 0;
+        width: 100%;
+    }
+    
+    .modern-table thead th {
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+        color: white;
+        font-weight: 600;
+        border: none;
+        padding: 1rem;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+    
+    .modern-table tbody td {
+        padding: 1rem;
+        border: none;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+        text-align: center;
+    }
+    
+    .modern-table tbody tr:hover {
+        background: rgba(2, 157, 126, 0.05);
+    }
+    
+    /* Badge percentuali */
+    .percentage-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 70px;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: white;
+        text-align: center;
+    }
+    
+    .percentage-22 { background: linear-gradient(135deg, #d63031, #c42021); }
+    .percentage-10 { background: linear-gradient(135deg, #00b894, #00a085); }
+    .percentage-4 { background: linear-gradient(135deg, #0984e3, #0670c7); }
+    .percentage-0 { background: linear-gradient(135deg, #636e72, #4a5258); }
+    .percentage-custom { background: linear-gradient(135deg, #6c5ce7, #5f3dc4); }
+    
+    /* Status badge - Stile come aspetto-beni */
+    .status-badge {
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .status-badge.active {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .status-badge.inactive {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    
+    /* Mobile Cards - Nasconde tabella, mostra card */
+    .mobile-cards {
+        display: none;
+    }
+    
+    .rate-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .rate-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .rate-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .rate-card-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin: 0;
+    }
+    
+    .rate-card-code {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #718096;
+    }
+    
+    .rate-card-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .rate-detail {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .rate-detail-label {
+        font-size: 0.8rem;
+        color: #6c757d;
+        font-weight: 600;
+        margin-bottom: 0.2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .rate-detail-value {
+        font-weight: 500;
+        color: #2d3748;
+    }
+    
+    .rate-card-actions {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .mobile-action-btn {
+        flex: 1;
+        min-width: 80px;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        text-align: center;
+    }
+    
+    .mobile-action-btn i {
+        font-size: 1.2rem;
+    }
+    
+    .mobile-action-btn.view {
+        background: linear-gradient(135deg, #48cae4, #0077b6);
+        color: white;
+    }
+    
+    .mobile-action-btn.edit {
+        background: linear-gradient(135deg, #ffd60a, #ff8500);
+        color: white;
+    }
+    
+    .mobile-action-btn.delete {
+        background: linear-gradient(135deg, #f72585, #c5025a);
+        color: white;
+    }
+    
+    .mobile-action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         color: white;
         text-decoration: none;
     }
-    
+
+    /* Form styling */
     .config-section {
         background: white;
         border-radius: 20px;
@@ -66,822 +475,440 @@
         font-size: 1.25rem;
         font-weight: 600;
         color: #2d3748;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
-        gap: 0.7rem;
+        gap: 0.5rem;
     }
     
-    /* Form styling premium */
     .form-label {
-        font-weight: 700;
+        font-weight: 600;
         color: #2d3748;
-        margin-bottom: 0.7rem;
-        font-size: 0.95rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
     }
     
     .form-control, .form-select {
-        border: 2px solid #e2e8f0;
-        border-radius: 15px;
-        padding: 1rem 1.2rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        background: rgba(255, 255, 255, 0.9);
-        font-size: 1rem;
-        font-weight: 500;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+        background: white;
     }
     
     .form-control:focus, .form-select:focus {
-        border-color: #d63031;
-        box-shadow: 0 0 0 4px rgba(214, 48, 49, 0.15);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 3px rgba(2, 157, 126, 0.1);
         outline: none;
-        background: white;
-        transform: translateY(-2px);
     }
     
-    /* Validazione percentuali con stile premium */
-    .percentage-input {
-        position: relative;
-    }
-    
-    .percentage-input::after {
-        content: '%';
-        position: absolute;
-        right: 1.2rem;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #d63031;
-        pointer-events: none;
-    }
-    
-    .percentage-input input {
-        padding-right: 3rem;
-        text-align: center;
-        font-size: 1.1rem;
-        font-weight: 700;
-    }
-    
-    /* Pulsanti premium */
-    .btn-success {
-        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
-        border: none;
-        padding: 1rem 2rem;
-        border-radius: 15px;
-        font-weight: 700;
-        font-size: 1rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 8px 25px rgba(2, 157, 126, 0.3);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .btn-success:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(2, 157, 126, 0.4);
-    }
-    
-    .btn-outline-secondary {
-        border: 2px solid #718096;
-        color: #718096;
-        padding: 1rem 2rem;
-        border-radius: 15px;
-        font-weight: 700;
-        font-size: 1rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .btn-outline-secondary:hover {
-        background: #718096;
-        color: white;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(113, 128, 150, 0.3);
-    }
-    
-    /* Alert premium */
-    .alert {
-        border-radius: 20px;
-        border: none;
-        padding: 1.5rem 2rem;
-        margin-bottom: 2rem;
-        font-weight: 600;
-        backdrop-filter: blur(10px);
-    }
-    
-    .alert-success {
-        background: linear-gradient(135deg, rgba(40, 167, 69, 0.9), rgba(25, 135, 84, 0.9));
-        color: white;
-    }
-    
-    .alert-danger {
-        background: linear-gradient(135deg, rgba(220, 53, 69, 0.9), rgba(176, 42, 55, 0.9));
-        color: white;
-    }
-    
-    /* Tabella moderna allineata con Nature IVA */
-    .premium-table-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        transition: all 0.3s ease;
-    }
-    
-    .premium-table-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
-    }
-    
-    .premium-table {
-        margin: 0;
-        width: 100%;
-    }
-    
-    .premium-table thead th {
-        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
-        color: white;
-        font-weight: 600;
-        border: none;
-        padding: 1rem;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        white-space: nowrap;
-    }
-    
-    .premium-table tbody tr {
-        transition: all 0.3s ease;
-        border: none;
-    }
-    
-    .premium-table tbody tr:hover {
-        background: rgba(2, 157, 126, 0.05);
-        transform: scale(1.01);
-    }
-    
-    .premium-table tbody td {
-        padding: 1rem;
-        border: none;
-        border-bottom: 1px solid rgba(2, 157, 126, 0.1);
-        vertical-align: middle;
-    }
-    
-    /* Badge percentuali premium */
-    .percentage-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 80px;
-        padding: 0.8rem 1.2rem;
-        border-radius: 50px;
-        font-size: 1.1rem;
-        font-weight: 900;
-        color: white;
-        text-align: center;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .percentage-badge:hover {
-        transform: translateY(-2px) scale(1.05);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
-    }
-    
-    .percentage-22 { background: linear-gradient(135deg, #d63031, #c42021); }
-    .percentage-10 { background: linear-gradient(135deg, #00b894, #00a085); }
-    .percentage-4 { background: linear-gradient(135deg, #0984e3, #0670c7); }
-    .percentage-0 { background: linear-gradient(135deg, #636e72, #4a5258); }
-    .percentage-custom { background: linear-gradient(135deg, #6c5ce7, #5f3dc4); }
-    
-    /* Status badge premium */
-    .status-badge {
-        padding: 0.5rem 1rem;
-        border-radius: 25px;
-        font-size: 0.9rem;
-        font-weight: 700;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .status-badge.active {
-        background: linear-gradient(135deg, #00b894, #00a085);
-        color: white;
-        box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
-    }
-    
-    .status-badge.inactive {
-        background: linear-gradient(135deg, #636e72, #4a5258);
-        color: white;
-        box-shadow: 0 4px 15px rgba(99, 110, 114, 0.3);
-    }
-    
-    /* Action buttons premium */
-    .action-btn {
-        border: none;
-        border-radius: 12px;
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        font-weight: 700;
-        margin: 0 3px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 40px;
-        height: 40px;
-        text-align: center;
-    }
-    
-    .action-btn.edit {
-        background: linear-gradient(135deg, #ffd60a, #ff8500);
-        color: white;
-        box-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
-    }
-    
-    .action-btn.delete {
-        background: linear-gradient(135deg, #f72585, #c5025a);
-        color: white;
-        box-shadow: 0 4px 15px rgba(247, 37, 133, 0.3);
-    }
-    
-    .action-btn:hover {
-        transform: translateY(-3px) scale(1.1);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        color: white;
-    }
-    
-    /* Metriche dashboard premium */
-    .metrics-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1.5rem;
-        margin-top: 2rem;
-    }
-    
-    .metric-card {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 25px;
-        padding: 2rem;
-        text-align: center;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        backdrop-filter: blur(15px);
-    }
-    
-    .metric-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 6px;
-        border-radius: 25px 25px 0 0;
-    }
-    
-    /* Colori premium per le metriche */
-    .metric-card:nth-child(1)::before {
-        background: linear-gradient(135deg, #029D7E, #4DC9A5);
-    }
-    
-    .metric-card:nth-child(2)::before {
-        background: linear-gradient(135deg, #00b894, #00a085);
-    }
-    
-    .metric-card:nth-child(3)::before {
-        background: linear-gradient(135deg, #0984e3, #0670c7);
-    }
-    
-    .metric-card:nth-child(4)::before {
-        background: linear-gradient(135deg, #6c5ce7, #5f3dc4);
-    }
-    
-    .metric-card:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
-    }
-    
-    .metric-value {
-        font-size: 2.5rem;
-        font-weight: 900;
-        margin: 0;
-        line-height: 1;
-    }
-    
-    /* Colori per i valori delle metriche */
-    .metric-card:nth-child(1) .metric-value {
-        color: #d63031;
-    }
-    
-    .metric-card:nth-child(2) .metric-value {
-        color: #00b894;
-    }
-    
-    .metric-card:nth-child(3) .metric-value {
-        color: #0984e3;
-    }
-    
-    .metric-card:nth-child(4) .metric-value {
-        color: #6c5ce7;
-    }
-    
-    .metric-label {
-        font-size: 1rem;
-        color: #718096;
-        margin-top: 0.8rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    /* Quick setup aliquote standard */
-    .quick-setup {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-top: 1.5rem;
-    }
-    
-    .quick-rate-card {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
-        padding: 1.5rem;
-        text-align: center;
-        border: 2px solid transparent;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .quick-rate-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        border-radius: 20px 20px 0 0;
-    }
-    
-    .quick-rate-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        border-color: rgba(2, 157, 126, 0.3);
-    }
-    
-    .quick-rate-percentage {
-        font-size: 2rem;
-        font-weight: 900;
-        margin: 0;
-    }
-    
-    .quick-rate-name {
-        font-size: 0.9rem;
-        color: #718096;
-        margin-top: 0.5rem;
-        font-weight: 600;
-    }
-    
-    /* Responsive */
+    /* Responsive Design per Mobile */
     @media (max-width: 768px) {
-        .dashboard-title {
+        .management-container {
+            padding: 1rem;
+        }
+        
+        .management-header, .search-filters {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .management-title {
             font-size: 1.8rem;
         }
         
-        .metrics-grid, .quick-setup {
+        .modern-btn {
+            padding: 10px 16px;
+            font-size: 0.9rem;
+        }
+        
+        .metrics-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-        
-        .premium-table-card .table-responsive {
-            border-radius: 20px;
-        }
-        
-        .config-section {
-            padding: 1.5rem;
+            gap: 0.8rem;
         }
         
         .metric-card {
-            padding: 1.5rem;
+            padding: 1rem;
         }
         
         .metric-value {
-            font-size: 2rem;
+            font-size: 1.5rem;
         }
         
-        .premium-table thead th {
-            font-size: 0.8rem;
-            padding: 0.75rem 0.5rem;
+        /* Nasconde tabella su mobile */
+        .modern-card .table-responsive {
+            display: none;
         }
         
-        .premium-table tbody td {
-            padding: 0.75rem 0.5rem;
+        .mobile-cards {
+            display: block;
+        }
+        
+        .rate-card {
+            padding: 1rem;
+        }
+        
+        .rate-card-details {
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+        }
+        
+        .mobile-action-btn {
+            padding: 10px 6px;
+            font-size: 0.7rem;
+            min-width: 70px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .management-header .d-flex {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+        
+        .modern-btn {
+            padding: 10px 16px;
             font-size: 0.9rem;
+            width: 100%;
+            justify-content: center;
         }
-    }
-    
-    /* Animazioni premium */
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .animate-slide-up {
-        animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-    
-    /* Particelle di sfondo premium */
-    .premium-bg::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: 
-            radial-gradient(circle at 20% 50%, rgba(214, 48, 49, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(225, 112, 85, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 80%, rgba(214, 48, 49, 0.05) 0%, transparent 50%);
-        pointer-events: none;
-        z-index: -1;
     }
 </style>
 
-<div class="tax-rates-page">
-<div class="dashboard-container premium-bg">
-    <!-- Alert Messages Premium -->
+<div class="management-container">
+    <!-- Alert Messages -->
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show animate-slide-up" role="alert">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="bi bi-check-circle me-2"></i>
-            <strong>Perfetto!</strong> {{ session('success') }}
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     
     @if($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show animate-slide-up" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-triangle me-2"></i>
-            <strong>Attenzione!</strong> Controlla i seguenti errori:
+            <strong>Attenzione!</strong> Sono stati rilevati dei problemi:
             <ul class="mb-0 mt-2">
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
     
-    <!-- Header Premium Enterprise -->
-    <div class="dashboard-header animate-slide-up">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="dashboard-title">
-                <i class="bi bi-percent" style="color: #029D7E;"></i>
-                Configuratore Aliquote IVA
-            </h1>
-            <a href="{{ route('configurations.system-tables.index') }}" class="back-button">
-                <i class="bi bi-arrow-left"></i> Indietro
-            </a>
+    <!-- Header -->
+    <div class="management-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div class="d-flex align-items-center">
+                <h1 class="management-title">
+                    <i class="bi bi-percent me-3" style="color: #029D7E; font-size: 2rem;"></i>
+                    Aliquote IVA
+                </h1>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{{ route('configurations.system-tables.index') }}" class="btn btn-secondary modern-btn">
+                    <i class="bi bi-arrow-left"></i> Torna Indietro
+                </a>
+                <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#createModal">
+                    <i class="bi bi-plus-lg"></i> Nuova Aliquota
+                </button>
+            </div>
         </div>
         
-        <p class="mt-3 mb-0" style="color: #718096; font-size: 1.1rem; font-weight: 500;">
-            <i class="bi bi-shield-check text-success me-2"></i>
-            Sistema gestionale per aliquote IVA - Superiore ad Aruba e concorrenti
+        <p class="mt-3 mb-0 text-muted">
+            Sistema di gestione aliquote IVA per il tuo gestionale
         </p>
-        
-        <!-- Statistiche Integrate Premium -->
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <h3 class="metric-value">{{ $stats['total_rates'] }}</h3>
-                <p class="metric-label"><i class="bi bi-list-ul"></i> Totali</p>
+    </div>
+
+    <!-- Cards Statistiche secondo il Golden Standard -->
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <h3 class="metric-value">{{ $stats['total_rates'] ?? 0 }}</h3>
+            <p class="metric-label">Aliquote Totali</p>
+        </div>
+        <div class="metric-card">
+            <h3 class="metric-value">{{ $stats['active_rates'] ?? 0 }}</h3>
+            <p class="metric-label">Aliquote Attive</p>
+        </div>
+        <div class="metric-card">
+            <h3 class="metric-value">{{ $stats['standard_rates'] ?? 0 }}</h3>
+            <p class="metric-label">Aliquote Standard</p>
+        </div>
+        <div class="metric-card">
+            <h3 class="metric-value">{{ $stats['custom_rates'] ?? 0 }}</h3>
+            <p class="metric-label">Personalizzate</p>
+        </div>
+    </div>
+
+    <!-- Filtri e ricerca -->
+    <div class="search-filters">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control search-input" id="searchInput" placeholder="Cerca per codice o nome..." onkeyup="filterTable()">
             </div>
-            <div class="metric-card">
-                <h3 class="metric-value">{{ $stats['active_rates'] }}</h3>
-                <p class="metric-label"><i class="bi bi-check-circle"></i> Attive</p>
+            <div class="col-md-3">
+                <select class="form-select filter-select" id="statusFilter" onchange="filterTable()">
+                    <option value="">Tutti gli stati</option>
+                    <option value="1">Attive</option>
+                    <option value="0">Inattive</option>
+                </select>
             </div>
-            <div class="metric-card">
-                <h3 class="metric-value">{{ $stats['standard_rates'] }}</h3>
-                <p class="metric-label"><i class="bi bi-award"></i> Standard</p>
+            <div class="col-md-3">
+                <select class="form-select filter-select" id="percentageFilter" onchange="filterTable()">
+                    <option value="">Tutte le percentuali</option>
+                    <option value="22">22%</option>
+                    <option value="10">10%</option>
+                    <option value="4">4%</option>
+                    <option value="0">0%</option>
+                </select>
             </div>
-            <div class="metric-card">
-                <h3 class="metric-value">{{ $stats['custom_rates'] }}</h3>
-                <p class="metric-label"><i class="bi bi-gear"></i> Personalizzate</p>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-secondary modern-btn w-100" onclick="resetFilters()">
+                    <i class="bi bi-arrow-clockwise"></i> Reset
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Form Nuova Aliquota Premium -->
-    <div class="config-section animate-slide-up">
-        <div class="section-title">
-            <i class="bi bi-plus-circle" style="color: #d63031;"></i>
-            Crea Nuova Aliquota IVA
-        </div>
-        
-        <form method="POST" action="{{ route('configurations.system-tables.store', 'tax_rates') }}" class="row g-4">
-            @csrf
-            
-            <div class="col-md-6">
-                <label for="code" class="form-label">
-                    <i class="bi bi-tag me-2"></i>Codice Aliquota *
-                </label>
-                <input type="text" class="form-control" id="code" name="code" 
-                       placeholder="es. IVA22, IVA10" value="{{ old('code') }}" required
-                       pattern="[A-Z0-9_-]+" title="Solo lettere maiuscole, numeri, underscore e trattini">
-                @error('code')
-                    <div class="text-danger small mt-2"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
-                @enderror
-            </div>
-            
-            <div class="col-md-6">
-                <label for="name" class="form-label">
-                    <i class="bi bi-type me-2"></i>Nome Aliquota *
-                </label>
-                <input type="text" class="form-control" id="name" name="name" 
-                       placeholder="es. Aliquota Ordinaria" value="{{ old('name') }}" required>
-                @error('name')
-                    <div class="text-danger small mt-2"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
-                @enderror
-            </div>
-            
-            <div class="col-md-12">
-                <label for="description" class="form-label">
-                    <i class="bi bi-file-text me-2"></i>Descrizione *
-                </label>
-                <input type="text" class="form-control" id="description" name="description" 
-                       placeholder="es. Aliquota IVA ordinaria del 22%" value="{{ old('description') }}" required>
-                @error('description')
-                    <div class="text-danger small mt-2"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
-                @enderror
-            </div>
-            
-            <div class="col-md-6">
-                <label for="percentuale" class="form-label">
-                    <i class="bi bi-percent me-2"></i>Percentuale IVA *
-                </label>
-                <div class="percentage-input">
-                    <input type="number" class="form-control" id="percentuale" name="percentuale" 
-                           min="0" max="100" step="0.01" placeholder="22.00" value="{{ old('percentuale') }}" required>
-                </div>
-                @error('percentuale')
-                    <div class="text-danger small mt-2"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
-                @enderror
-            </div>
-            
-            <div class="col-md-6">
-                <label for="sort_order" class="form-label">
-                    <i class="bi bi-sort-numeric-up me-2"></i>Ordine Visualizzazione
-                </label>
-                <input type="number" class="form-control" id="sort_order" name="sort_order" 
-                       min="0" placeholder="1" value="{{ old('sort_order', 0) }}">
-                @error('sort_order')
-                    <div class="text-danger small mt-2"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
-                @enderror
-            </div>
-            
-            <div class="col-12">
-                <label for="riferimento_normativo" class="form-label">
-                    <i class="bi bi-book me-2"></i>Riferimento Normativo
-                </label>
-                <textarea class="form-control" id="riferimento_normativo" name="riferimento_normativo" 
-                          rows="3" placeholder="es. Art. 16 DPR 633/72">{{ old('riferimento_normativo') }}</textarea>
-                @error('riferimento_normativo')
-                    <div class="text-danger small mt-2"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
-                @enderror
-            </div>
-            
-            <div class="col-12">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="active" name="active" value="1" 
-                           {{ old('active', true) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="active" style="font-weight: 600;">
-                        <i class="bi bi-check-circle me-2"></i>Aliquota attiva e disponibile per l'uso
-                    </label>
-                </div>
-            </div>
-            
-            <div class="col-12">
-                <button type="submit" class="btn btn-success">
-                    <i class="bi bi-check-circle me-2"></i>Crea Aliquota
-                </button>
-                <button type="reset" class="btn btn-outline-secondary ms-3">
-                    <i class="bi bi-arrow-clockwise me-2"></i>Reset Form
-                </button>
-            </div>
-        </form>
-        
-        <!-- Quick Setup Aliquote Standard -->
-        <div class="mt-4">
-            <h6 class="text-muted mb-3">
-                <i class="bi bi-lightning me-2"></i>Setup Rapido Aliquote Standard Italiane:
-            </h6>
-            <div class="quick-setup">
-                @foreach($standardRates as $rate)
-                <div class="quick-rate-card" style="--rate-color: {{ $rate['color'] }}" 
-                     onclick="fillStandardRate('{{ $rate['code'] }}', '{{ $rate['name'] }}', {{ $rate['percentuale'] }}, '{{ $rate['color'] }}')">
-                    <div class="quick-rate-percentage" style="color: {{ $rate['color'] }}">{{ $rate['percentuale'] }}%</div>
-                    <div class="quick-rate-name">{{ $rate['name'] }}</div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-
-    <!-- Tabella Aliquote Configurate Premium -->
-    <div class="config-section animate-slide-up">
-        <div class="section-title">
-            <i class="bi bi-table" style="color: #029D7E;"></i>
-            Aliquote IVA Configurate ({{ $taxRates->count() }} totali)
-        </div>
-        
-        @if($taxRates->count() > 0)
-            <div class="premium-table-card">
-                <div class="table-responsive">
-                    <table class="table premium-table" id="taxRatesTable">
-                        <thead>
-                            <tr>
-                                <th><i class="bi bi-tag"></i> Codice</th>
-                                <th><i class="bi bi-type"></i> Nome</th>
-                                <th><i class="bi bi-percent"></i> Aliquota</th>
-                                <th><i class="bi bi-file-text"></i> Descrizione</th>
-                                <th><i class="bi bi-book"></i> Normativa</th>
-                                <th><i class="bi bi-check-circle"></i> Stato</th>
-                                <th><i class="bi bi-calendar"></i> Creata</th>
-                                <th><i class="bi bi-gear"></i> Azioni</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($taxRates as $rate)
-                            <tr class="tax-rate-row animate-slide-up" style="animation-delay: {{ $loop->index * 0.1 }}s">
-                                <td>
-                                    <strong style="color: #2d3748; font-weight: 800;">{{ $rate->code }}</strong>
-                                </td>
-                                <td>
-                                    <div style="font-weight: 700; color: #2d3748;">{{ $rate->name }}</div>
-                                </td>
-                                <td>
-                                    @php
-                                        $percentageClass = 'percentage-custom';
-                                        if ($rate->percentuale == 22) $percentageClass = 'percentage-22';
-                                        elseif ($rate->percentuale == 10) $percentageClass = 'percentage-10';
-                                        elseif ($rate->percentuale == 4) $percentageClass = 'percentage-4';
-                                        elseif ($rate->percentuale == 0) $percentageClass = 'percentage-0';
-                                    @endphp
-                                    <span class="percentage-badge {{ $percentageClass }}">
-                                        {{ number_format($rate->percentuale, 2) }}%
+    <!-- Tabella dati -->
+    @if($taxRates->count() > 0)
+        <div class="modern-card">
+            <div class="table-responsive">
+                <table class="table modern-table" id="taxRatesTable">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-tag"></i> Codice</th>
+                            <th><i class="bi bi-type"></i> Nome</th>
+                            <th><i class="bi bi-percent"></i> Aliquota</th>
+                            <th><i class="bi bi-file-text"></i> Descrizione</th>
+                            <th><i class="bi bi-check-circle"></i> Stato</th>
+                            <th><i class="bi bi-calendar"></i> Data Creazione</th>
+                            <th><i class="bi bi-gear"></i> Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($taxRates as $rate)
+                        <tr class="tax-rate-row">
+                            <td>
+                                <strong>{{ $rate->code }}</strong>
+                            </td>
+                            <td>
+                                <div style="font-weight: 600;">{{ $rate->name }}</div>
+                            </td>
+                            <td>
+                                @php
+                                    $percentageClass = 'percentage-custom';
+                                    if ($rate->percentuale == 22) $percentageClass = 'percentage-22';
+                                    elseif ($rate->percentuale == 10) $percentageClass = 'percentage-10';
+                                    elseif ($rate->percentuale == 4) $percentageClass = 'percentage-4';
+                                    elseif ($rate->percentuale == 0) $percentageClass = 'percentage-0';
+                                @endphp
+                                <span class="percentage-badge {{ $percentageClass }}">
+                                    {{ number_format($rate->percentuale, 2) }}%
+                                </span>
+                            </td>
+                            <td>
+                                <div>{{ $rate->description }}</div>
+                            </td>
+                            <td>
+                                @if($rate->active)
+                                    <span class="status-badge active">
+                                        <i class="bi bi-check-circle"></i> Attiva
                                     </span>
-                                </td>
-                                <td>
-                                    <div style="color: #718096; font-style: italic;">{{ $rate->description }}</div>
-                                </td>
-                                <td>
-                                    @if($rate->riferimento_normativo)
-                                        <small class="text-muted">{{ Str::limit($rate->riferimento_normativo, 30) }}</small>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    @if($rate->active)
-                                        <span class="status-badge active">
-                                            <i class="bi bi-check-circle"></i> Attiva
-                                        </span>
-                                    @else
-                                        <span class="status-badge inactive">
-                                            <i class="bi bi-x-circle"></i> Inattiva
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="text-muted" style="font-size: 0.9rem;">
-                                    {{ $rate->created_at ? $rate->created_at->format('d/m/Y') : '-' }}
-                                </td>
-                                <td>
-                                    <button type="button" class="action-btn edit" title="Modifica aliquota" 
-                                            onclick="editRate({{ $rate->id }}, '{{ $rate->code }}', '{{ $rate->name }}', '{{ $rate->description }}', {{ $rate->percentuale }}, '{{ $rate->riferimento_normativo }}', {{ $rate->active ? 'true' : 'false' }}, {{ $rate->sort_order }})">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <form method="POST" action="{{ route('configurations.system-tables.destroy', ['table' => 'tax_rates', 'id' => $rate->id]) }}" 
-                                          style="display: inline-block;" onsubmit="return confirmDelete('{{ $rate->name }}')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="action-btn delete" title="Elimina aliquota">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                                @else
+                                    <span class="status-badge inactive">
+                                        <i class="bi bi-x-circle"></i> Inattiva
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="text-muted">
+                                {{ $rate->created_at ? $rate->created_at->format('d/m/Y H:i') : '-' }}
+                            </td>
+                            <td>
+                                <button type="button" class="action-btn view" onclick="viewRate({{ $rate->id }})" title="Visualizza">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button type="button" class="action-btn edit" onclick="editRate({{ $rate->id }})" title="Modifica">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button type="button" class="action-btn delete" onclick="deleteRate({{ $rate->id }})" title="Elimina">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-        @else
-            <div class="premium-table-card">
-                <div class="text-center py-5">
-                    <i class="bi bi-inbox" style="font-size: 4rem; color: #d63031; opacity: 0.3;"></i>
-                    <h5 class="text-muted mt-4">Nessuna aliquota configurata</h5>
-                    <p class="text-muted">Crea la prima aliquota IVA utilizzando il form sopra o il setup rapido.</p>
-                </div>
-            </div>
-        @endif
-    </div>
-</div>
-
-<!-- Modal Modifica Aliquota Premium -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="border-radius: 25px; border: none; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);">
-            <div class="modal-header" style="background: linear-gradient(135deg, #d63031, #e17055); color: white; border-radius: 25px 25px 0 0; padding: 2rem;">
-                <h5 class="modal-title" id="editModalLabel" style="font-weight: 800; font-size: 1.3rem;">
-                    <i class="bi bi-pencil me-2"></i>Modifica Aliquota IVA
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="padding: 2rem;">
-                <form id="editForm" method="POST" action="">
-                    @csrf
-                    @method('PUT')
+        </div>
+        
+        <!-- Cards Mobile -->
+        <div class="mobile-cards">
+            @foreach($taxRates as $rate)
+                <div class="rate-card mobile-rate-row" 
+                     data-status="{{ $rate->active ? '1' : '0' }}"
+                     data-percentage="{{ $rate->percentuale }}">
                     
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="edit_code" class="form-label">Codice Aliquota</label>
-                            <input type="text" class="form-control" id="edit_code" name="code" required>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="edit_name" class="form-label">Nome Aliquota</label>
-                            <input type="text" class="form-control" id="edit_name" name="name" required>
-                        </div>
-                        
-                        <div class="col-12">
-                            <label for="edit_description" class="form-label">Descrizione</label>
-                            <input type="text" class="form-control" id="edit_description" name="description" required>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="edit_percentuale" class="form-label">Percentuale IVA</label>
-                            <div class="percentage-input">
-                                <input type="number" class="form-control" id="edit_percentuale" name="percentuale" 
-                                       min="0" max="100" step="0.01" required>
+                    <div class="rate-card-header">
+                        <h3 class="rate-card-title">{{ $rate->name }}</h3>
+                        <div class="d-flex flex-column align-items-end">
+                            <span class="rate-card-code">{{ $rate->code }}</span>
+                            <div class="mt-1">
+                                @php
+                                    $percentageClass = 'percentage-custom';
+                                    if ($rate->percentuale == 22) $percentageClass = 'percentage-22';
+                                    elseif ($rate->percentuale == 10) $percentageClass = 'percentage-10';
+                                    elseif ($rate->percentuale == 4) $percentageClass = 'percentage-4';
+                                    elseif ($rate->percentuale == 0) $percentageClass = 'percentage-0';
+                                @endphp
+                                <span class="percentage-badge {{ $percentageClass }}" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">
+                                    {{ number_format($rate->percentuale, 2) }}%
+                                </span>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="rate-card-details">
+                        <div class="rate-detail">
+                            <span class="rate-detail-label">Descrizione</span>
+                            <span class="rate-detail-value">{{ $rate->description }}</span>
+                        </div>
+                        <div class="rate-detail">
+                            <span class="rate-detail-label">Stato</span>
+                            <span class="rate-detail-value">
+                                @if($rate->active)
+                                    <span class="status-badge active" style="font-size: 0.7rem;">
+                                        <i class="bi bi-check-circle"></i> Attiva
+                                    </span>
+                                @else
+                                    <span class="status-badge inactive" style="font-size: 0.7rem;">
+                                        <i class="bi bi-x-circle"></i> Inattiva
+                                    </span>
+                                @endif
+                            </span>
+                        </div>
+                        <div class="rate-detail">
+                            <span class="rate-detail-label">Data Creazione</span>
+                            <span class="rate-detail-value">{{ $rate->created_at ? $rate->created_at->format('d/m/Y') : '-' }}</span>
+                        </div>
+                        <div class="rate-detail">
+                            <span class="rate-detail-label">Riferimento Normativo</span>
+                            <span class="rate-detail-value">{{ $rate->riferimento_normativo ? Str::limit($rate->riferimento_normativo, 30) : 'N/A' }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="rate-card-actions">
+                        <button type="button" class="mobile-action-btn view" onclick="viewRate({{ $rate->id }})">
+                            <i class="bi bi-eye"></i>
+                            <span>Visualizza</span>
+                        </button>
+                        <button type="button" class="mobile-action-btn edit" onclick="editRate({{ $rate->id }})">
+                            <i class="bi bi-pencil"></i>
+                            <span>Modifica</span>
+                        </button>
+                        <button type="button" class="mobile-action-btn delete" onclick="deleteRate({{ $rate->id }})">
+                            <i class="bi bi-trash"></i>
+                            <span>Elimina</span>
+                        </button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <div class="modern-card">
+            <div class="text-center py-5">
+                <i class="bi bi-percent" style="font-size: 4rem; color: #029D7E; opacity: 0.3;"></i>
+                <h4>Nessuna aliquota IVA configurata</h4>
+                <p class="text-muted">Crea la prima aliquota IVA utilizzando il pulsante "Nuova Aliquota".</p>
+            </div>
+        </div>
+    @endif
+</div>
+
+<!-- Modal Nuova Aliquota -->
+<div class="modal fade" id="createModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; border-radius: 20px 20px 0 0;">
+                <h5 class="modal-title">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Nuova Aliquota IVA
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="createForm" method="POST" action="{{ route('configurations.system-tables.store', 'tax_rates') }}">
+                @csrf
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="modal_code" class="form-label">Codice Aliquota *</label>
+                            <input type="text" class="form-control" id="modal_code" name="code" required maxlength="20">
+                            <div class="form-text">Massimo 20 caratteri, solo lettere maiuscole, numeri, _ e -</div>
+                        </div>
                         
                         <div class="col-md-6">
-                            <label for="edit_sort_order" class="form-label">Ordine Visualizzazione</label>
-                            <input type="number" class="form-control" id="edit_sort_order" name="sort_order" min="0">
+                            <label for="modal_name" class="form-label">Nome Aliquota *</label>
+                            <input type="text" class="form-control" id="modal_name" name="name" minlength="3" maxlength="255" required>
+                            <div class="form-text">Minimo 3 caratteri, massimo 255</div>
                         </div>
                         
                         <div class="col-12">
-                            <label for="edit_riferimento_normativo" class="form-label">Riferimento Normativo</label>
-                            <textarea class="form-control" id="edit_riferimento_normativo" name="riferimento_normativo" rows="3"></textarea>
+                            <label for="modal_description" class="form-label">Descrizione *</label>
+                            <input type="text" class="form-control" id="modal_description" name="description" minlength="5" maxlength="500" required>
+                            <div class="form-text">Minimo 5 caratteri, massimo 500</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="modal_percentuale" class="form-label">Percentuale IVA *</label>
+                            <input type="number" class="form-control" id="modal_percentuale" name="percentuale" 
+                                   min="0" max="100" step="0.01" required>
+                            <div class="form-text">Valore da 0 a 100, con max 2 decimali (es. 22.00)</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="modal_sort_order" class="form-label">Ordine Visualizzazione</label>
+                            <input type="number" class="form-control" id="modal_sort_order" name="sort_order" min="0">
+                            <div class="form-text">Numero per ordinamento (opzionale)</div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label for="modal_riferimento_normativo" class="form-label">Riferimento Normativo</label>
+                            <textarea class="form-control" id="modal_riferimento_normativo" name="riferimento_normativo" rows="3" maxlength="1000"></textarea>
+                            <div class="form-text">Massimo 1000 caratteri (opzionale)</div>
                         </div>
                         
                         <div class="col-12">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="edit_active" name="active" value="1">
-                                <label class="form-check-label" for="edit_active">
-                                    Aliquota attiva
+                                <!-- Hidden field per assicurare che venga sempre inviato un valore -->
+                                <input type="hidden" name="active" value="0">
+                                <input class="form-check-input" type="checkbox" id="modal_active" name="active" value="1" checked>
+                                <label class="form-check-label" for="modal_active">
+                                    <strong>Aliquota attiva</strong>
+                                    <small class="text-muted d-block">Se disattivata, l'aliquota non sarà disponibile per nuovi documenti</small>
                                 </label>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer" style="padding: 2rem; border: none;">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x me-2"></i>Annulla
-                </button>
-                <button type="submit" form="editForm" class="btn btn-success">
-                    <i class="bi bi-check-circle me-2"></i>Salva Modifiche
-                </button>
-            </div>
+                </div>
+                <div class="modal-footer" style="padding: 1.5rem 2rem; border-top: 1px solid #e9ecef;">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Aliquota
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
 </div>
 @endsection
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto-dismiss alerts premium
+    // Auto-dismiss alerts dopo 5 secondi
     const alerts = document.querySelectorAll('.alert');
     alerts.forEach(function(alert, index) {
         setTimeout(function() {
@@ -891,138 +918,244 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 5000 + (index * 1000));
     });
-    
-    // Validazione form premium con feedback visivo
-    const form = document.querySelector('form[method="POST"]');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            let isValid = true;
-            
-            // Validazione codice
-            const code = document.getElementById('code');
-            if (code && code.value.trim().length < 2) {
-                showFieldError(code, 'Il codice deve essere di almeno 2 caratteri');
-                isValid = false;
-            }
-            
-            // Validazione percentuale
-            const percentuale = document.getElementById('percentuale');
-            if (percentuale) {
-                const value = parseFloat(percentuale.value);
-                if (isNaN(value) || value < 0 || value > 100) {
-                    showFieldError(percentuale, 'La percentuale deve essere tra 0 e 100');
-                    isValid = false;
-                }
-            }
-            
-            if (!isValid) {
-                e.preventDefault();
-            }
-        });
-    }
-    
-    // Animazioni premium per le righe
-    const rows = document.querySelectorAll('.tax-rate-row');
-    rows.forEach((row, index) => {
-        row.style.opacity = '0';
-        row.style.transform = 'translateY(30px)';
-        
-        setTimeout(() => {
-            row.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            row.style.opacity = '1';
-            row.style.transform = 'translateY(0)';
-        }, index * 100);
-    });
-    
-    // Preview percentuale in tempo reale
-    const percentualeInput = document.getElementById('percentuale');
-    if (percentualeInput) {
-        percentualeInput.addEventListener('input', function() {
-            const value = parseFloat(this.value);
-            if (!isNaN(value)) {
-                updatePercentagePreview(value);
-            }
-        });
-    }
 });
 
-// Funzioni utility premium
-function fillStandardRate(code, name, percentage, color) {
-    document.getElementById('code').value = code;
-    document.getElementById('name').value = name;
-    document.getElementById('percentuale').value = percentage.toFixed(2);
+// Funzioni filtri e ricerca
+function filterTable() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+    const percentageFilter = document.getElementById('percentageFilter').value;
     
-    // Genera descrizione automatica
-    document.getElementById('description').value = `${name} del ${percentage}%`;
+    // Filtra righe tabella desktop
+    const rows = document.querySelectorAll('#taxRatesTable tbody tr');
+    rows.forEach(row => {
+        const code = row.cells[0].textContent.toLowerCase();
+        const name = row.cells[1].textContent.toLowerCase();
+        const percentage = row.cells[2].textContent.replace('%', '').trim();
+        const status = row.cells[4].textContent.includes('Attiva') ? '1' : '0';
+
+        const matchesSearch = code.includes(searchTerm) || name.includes(searchTerm);
+        const matchesStatus = statusFilter === '' || status === statusFilter;
+        const matchesPercentage = percentageFilter === '' || percentage.startsWith(percentageFilter);
+
+        if (matchesSearch && matchesStatus && matchesPercentage) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
     
-    // Aggiungi riferimento normativo automatico
-    let normativa = '';
-    switch(percentage) {
-        case 22:
-            normativa = 'Art. 16 DPR 633/72';
-            break;
-        case 10:
-            normativa = 'Art. 16 DPR 633/72 - Tab. A parte II';
-            break;
-        case 4:
-            normativa = 'Art. 16 DPR 633/72 - Tab. A parte III';
-            break;
-        case 0:
-            normativa = 'Art. 8-bis DPR 633/72';
-            break;
+    // Filtra card mobile
+    const cards = document.querySelectorAll('.mobile-rate-row');
+    cards.forEach(card => {
+        const code = card.querySelector('.rate-card-code').textContent.toLowerCase();
+        const name = card.querySelector('.rate-card-title').textContent.toLowerCase();
+        const percentage = card.dataset.percentage;
+        const status = card.dataset.status;
+
+        const matchesSearch = code.includes(searchTerm) || name.includes(searchTerm);
+        const matchesStatus = statusFilter === '' || status === statusFilter;
+        const matchesPercentage = percentageFilter === '' || percentage.startsWith(percentageFilter);
+
+        if (matchesSearch && matchesStatus && matchesPercentage) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function resetFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('percentageFilter').value = '';
+    filterTable();
+}
+
+// Funzioni per i pulsanti azioni
+function viewRate(id) {
+    // Carica dati per visualizzazione
+    fetch(`{{ route("configurations.system-tables.show", "tax_rates") }}/${id}`)
+        .then(response => response.json())
+        .then(rate => {
+            // Crea modale di visualizzazione
+            const modalContent = `
+                <div class="modal fade" id="viewRateModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content" style="border-radius: 20px; border: none;">
+                            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; border-radius: 20px 20px 0 0;">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-eye me-2"></i>Dettagli Aliquota IVA
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body" style="padding: 2rem;">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Codice</label>
+                                        <div class="p-2 bg-light rounded">${rate.code || 'N/A'}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Nome</label>
+                                        <div class="p-2 bg-light rounded">${rate.name || 'N/A'}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Percentuale</label>
+                                        <div class="p-2 bg-light rounded">${rate.percentuale || 0}%</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Stato</label>
+                                        <div class="p-2 bg-light rounded">${rate.active ? 'Attiva' : 'Inattiva'}</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-muted">Descrizione</label>
+                                        <div class="p-2 bg-light rounded">${rate.description || 'N/A'}</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-muted">Riferimento Normativo</label>
+                                        <div class="p-2 bg-light rounded">${rate.riferimento_normativo || 'N/A'}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Data Creazione</label>
+                                        <div class="p-2 bg-light rounded">${new Date(rate.created_at).toLocaleDateString('it-IT')}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="padding: 1.5rem 2rem; border-top: 1px solid #e9ecef;">
+                                <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-lg"></i> Chiudi
+                                </button>
+                                <button type="button" class="btn btn-primary modern-btn" onclick="editRate(${rate.id}); bootstrap.Modal.getInstance(document.getElementById('viewRateModal')).hide();">
+                                    <i class="bi bi-pencil"></i> Modifica
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Rimuovi modale esistente se presente
+            const existingModal = document.getElementById('viewRateModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            // Aggiungi nuova modale al DOM
+            document.body.insertAdjacentHTML('beforeend', modalContent);
+            
+            // Mostra modale
+            const modal = new bootstrap.Modal(document.getElementById('viewRateModal'));
+            modal.show();
+            
+            // Rimuovi dal DOM quando si chiude
+            document.getElementById('viewRateModal').addEventListener('hidden.bs.modal', function () {
+                this.remove();
+            });
+        })
+        .catch(error => {
+            console.error('Errore:', error);
+            alert('Errore nel caricamento dei dettagli');
+        });
+}
+
+function editRate(id) {
+    // Carica i dati dell'aliquota da modificare
+    fetch(`{{ route("configurations.system-tables.show", "tax_rates") }}/${id}`)
+        .then(response => response.json())
+        .then(rate => {
+            // Popola il form di creazione con i dati esistenti
+            document.getElementById('modal_code').value = rate.code || '';
+            document.getElementById('modal_name').value = rate.name || '';
+            document.getElementById('modal_description').value = rate.description || '';
+            document.getElementById('modal_percentuale').value = rate.percentuale || '';
+            document.getElementById('modal_sort_order').value = rate.sort_order || '';
+            document.getElementById('modal_riferimento_normativo').value = rate.riferimento_normativo || '';
+            document.getElementById('modal_active').checked = rate.active || false;
+            
+            // Cambia il titolo della modale
+            const modalTitle = document.querySelector('#createModal .modal-title');
+            modalTitle.innerHTML = '<i class="bi bi-pencil me-2"></i>Modifica Aliquota IVA';
+            
+            // Cambia l'action del form per l'update
+            const form = document.getElementById('createForm');
+            form.action = `{{ route("configurations.system-tables.update", ["table" => "tax_rates", "id" => ":id"]) }}`.replace(':id', id);
+            
+            // Aggiungi campo hidden per il metodo PUT
+            let methodField = form.querySelector('input[name="_method"]');
+            if (!methodField) {
+                methodField = document.createElement('input');
+                methodField.type = 'hidden';
+                methodField.name = '_method';
+                methodField.value = 'PUT';
+                form.appendChild(methodField);
+            }
+            
+            // Cambia il testo del pulsante di submit
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Aliquota';
+            
+            // Mostra la modale
+            const modal = new bootstrap.Modal(document.getElementById('createModal'));
+            modal.show();
+        })
+        .catch(error => {
+            console.error('Errore:', error);
+            alert('Errore nel caricamento dei dati per la modifica');
+        });
+}
+
+function deleteRate(id) {
+    if (confirm('Sei sicuro di voler eliminare questa aliquota IVA?')) {
+        fetch(`{{ route("configurations.system-tables.destroy", ["table" => "tax_rates", "id" => ":id"]) }}`.replace(':id', id), {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Errore nell\'eliminazione');
+            }
+        });
     }
-    document.getElementById('riferimento_normativo').value = normativa;
-    
-    // Focus al primo campo per UX
-    document.getElementById('code').focus();
-    
-    // Animazione di conferma
-    const card = event.target.closest('.quick-rate-card');
-    card.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-        card.style.transform = 'scale(1)';
-    }, 150);
 }
 
-function editRate(id, code, name, description, percentage, normativa, active, sortOrder) {
-    // Popola modal
-    document.getElementById('edit_code').value = code;
-    document.getElementById('edit_name').value = name;
-    document.getElementById('edit_description').value = description;
-    document.getElementById('edit_percentuale').value = percentage;
-    document.getElementById('edit_riferimento_normativo').value = normativa || '';
-    document.getElementById('edit_active').checked = active;
-    document.getElementById('edit_sort_order').value = sortOrder || 0;
+// Reset form quando si chiude il modal
+document.getElementById('createModal').addEventListener('hidden.bs.modal', function () {
+    const form = document.getElementById('createForm');
+    form.reset();
     
-    // Imposta action del form
-    const editForm = document.getElementById('editForm');
-    editForm.action = `/configurations/system-tables/tax_rates/${id}`;
+    // Ripristina il form alla modalità creazione
+    resetFormToCreateMode();
+});
+
+function resetFormToCreateMode() {
+    const form = document.getElementById('createForm');
+    const modalTitle = document.querySelector('#createModal .modal-title');
+    const submitBtn = form.querySelector('button[type="submit"]');
     
-    // Mostra modal
-    const editModal = new bootstrap.Modal(document.getElementById('editModal'));
-    editModal.show();
+    // Ripristina titolo
+    modalTitle.innerHTML = '<i class="bi bi-plus-circle me-2"></i>Nuova Aliquota IVA';
+    
+    // Ripristina action del form
+    form.action = '{{ route("configurations.system-tables.store", "tax_rates") }}';
+    
+    // Rimuovi campo method PUT se presente
+    const methodField = form.querySelector('input[name="_method"]');
+    if (methodField) {
+        methodField.remove();
+    }
+    
+    // Ripristina testo pulsante
+    submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Crea Aliquota';
 }
 
-function confirmDelete(rateName) {
-    return confirm(`⚠️ ATTENZIONE!\n\nStai per eliminare l'aliquota IVA "${rateName}".\n\nQuesta azione è IRREVERSIBILE e potrebbe compromettere i documenti fiscali esistenti.\n\nSei sicuro di voler procedere?`);
-}
-
-function showFieldError(field, message) {
-    field.style.borderColor = '#f72585';
-    field.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
-    
-    // Rimuovi errore dopo 3 secondi
-    setTimeout(() => {
-        field.style.borderColor = '';
-        field.style.boxShadow = '';
-    }, 3000);
-    
-    // Mostra tooltip con messaggio
-    field.title = message;
-}
-
-function updatePercentagePreview(value) {
-    // Aggiorna preview in tempo reale (se necessario)
-    console.log(`Preview: ${value}%`);
-}
+// Aggiungi listener per il pulsante "Nuova Aliquota"
+document.querySelector('[data-bs-target="#createModal"]').addEventListener('click', function() {
+    resetFormToCreateMode();
+});
 </script>

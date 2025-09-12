@@ -27,6 +27,22 @@ use App\Models\SizeColor;
 use App\Models\WarehouseCause;
 use App\Models\ColorVariant;
 use App\Models\Condition;
+use App\Models\FixedPriceDenomination;
+use App\Models\Deposit;
+use App\Models\PriceList;
+use App\Models\PaymentMethod;
+use App\Models\VatType;
+use App\Models\ShippingTerm;
+use App\Models\MerchandiseSector;
+use App\Models\SizeVariant;
+use App\Models\SizeType;
+use App\Models\PaymentType;
+use App\Models\Transport;
+use App\Models\TransportCarrier;
+use App\Models\Location;
+use App\Models\UnitOfMeasure;
+use App\Models\Currency;
+use App\Models\Zone;
 
 /**
  * Controller Enterprise per Gestione Tabelle di Sistema
@@ -40,6 +56,7 @@ class SystemTablesController extends Controller
     // Mapping table -> model class
     private const TABLE_MODELS = [
         'vat_nature_associations' => VatNatureAssociation::class,
+        'associazioni-nature-iva' => VatNatureAssociation::class,
         'tax_rates' => TaxRate::class,
         'vat_natures' => VatNature::class,
         'good_appearances' => GoodAppearance::class,
@@ -52,26 +69,40 @@ class SystemTablesController extends Controller
         'warehouse_causes' => WarehouseCause::class,
         'color_variants' => ColorVariant::class,
         'conditions' => Condition::class,
-        'fixed_price_denominations' => 'fixed_price_denominations', 
-        'deposits' => 'deposits',
-        'price_lists' => 'price_lists',
-        'payment_methods' => 'payment_methods',
-        'shipping_terms' => 'shipping_terms',
-        'merchandising_sectors' => 'merchandising_sectors',
-        'size_variants' => 'size_variants',
-        'size_types' => 'size_types',
-        'payment_types' => 'payment_types',
-        'transports' => 'transports',
-        'transport_carriers' => 'transport_carriers',
-        'locations' => 'locations',
-        'unit_of_measures' => 'unit_of_measures',
-        'currencies' => 'currencies',
-        'zones' => 'zones',
+        'fixed_price_denominations' => FixedPriceDenomination::class,
+        'deposits' => Deposit::class,
+        'price_lists' => PriceList::class,
+        'payment_methods' => PaymentMethod::class,
+        'vat_types' => VatType::class,
+        'shipping_terms' => ShippingTerm::class,
+        'merchandising_sectors' => MerchandiseSector::class,
+        'size_variants' => SizeVariant::class,
+        'size_types' => SizeType::class,
+        'payment_types' => PaymentType::class,
+        'transports' => Transport::class,
+        'transport_carriers' => TransportCarrier::class,
+        'locations' => Location::class,
+        'unit_of_measures' => UnitOfMeasure::class,
+        'currencies' => Currency::class,
+        'zones' => Zone::class,
     ];
 
     // Configurazione per ogni tabella
     private const TABLE_CONFIG = [
         'vat_nature_associations' => [
+            'name' => 'Associazioni Nature IVA',
+            'icon' => 'bi-link-45deg',
+            'color' => 'primary',
+            'special_configurator' => true,
+            'validation_rules' => [
+                'nome_associazione' => 'required|string|max:255|regex:/^[\p{L}\p{N}\s\-\._%]+$/u|min:3',
+                'descrizione' => 'nullable|string|max:500|regex:/^[\p{L}\p{N}\s\-\.,;:!?()\[\]{}"\'\/\\@#&*+=_]+$/u',
+                'tax_rate_id' => 'required|integer|exists:tax_rates,id',
+                'vat_nature_id' => 'required|integer|exists:vat_natures,id',
+                'is_default' => 'nullable|boolean'
+            ]
+        ],
+        'associazioni-nature-iva' => [
             'name' => 'Associazioni Nature IVA',
             'icon' => 'bi-link-45deg',
             'color' => 'primary',
@@ -96,18 +127,6 @@ class SystemTablesController extends Controller
                 'percentuale' => 'required|numeric|min:0|max:100|decimal:0,2',
                 'sort_order' => 'nullable|integer|min:0',
                 'active' => 'nullable|boolean'
-            ]
-        ],
-        'vat_natures' => [
-            'name' => 'Nature IVA',
-            'icon' => 'bi-file-earmark-text',
-            'color' => 'info',
-            'validation_rules' => [
-                'code' => 'required|string|max:10|regex:/^[A-Z0-9_-]+$/',
-                'description' => 'required|string|max:255',
-                'fiscal_code' => 'nullable|string|max:5',
-                'is_taxable' => 'boolean',
-                'notes' => 'nullable|string|max:1000'
             ]
         ],
         'good_appearances' => [
@@ -294,7 +313,369 @@ class SystemTablesController extends Controller
                 'active' => 'boolean',
                 'sort_order' => 'nullable|integer|min:0|max:9999'
             ]
-        ]
+        ],
+        'fixed_price_denominations' => [
+            'name' => 'Denominazioni Prezzi Fissi',
+            'icon' => 'bi-cash-coin',
+            'color' => 'warning',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:50|regex:/^[A-Z0-9_-]+$/|unique:fixed_price_denominations,code',
+                'name' => 'required|string|max:255|min:2',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ]
+        ],
+        'deposits' => [
+            'name' => 'Depositi',
+            'icon' => 'bi-building',
+            'color' => 'primary',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:50|regex:/^[A-Z0-9_-]+$/|unique:deposits,code',
+                'description' => 'required|string|max:255|min:2',
+                'address' => 'nullable|string|max:255',
+                'city' => 'nullable|string|max:100',
+                'state' => 'nullable|string|max:100',
+                'province' => 'nullable|string|max:5',
+                'postal_code' => 'nullable|string|max:10|regex:/^[0-9]{5}$/',
+                'phone' => 'nullable|string|max:20|regex:/^[0-9\s\+\-\(\)]+$/',
+                'fax' => 'nullable|string|max:20|regex:/^[0-9\s\+\-\(\)]+$/',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ]
+        ],
+        'price_lists' => [
+            'name' => 'Listini Prezzi',
+            'icon' => 'bi-percent',
+            'color' => 'success',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:50|regex:/^[A-Z0-9_-]+$/|unique:price_lists,code',
+                'description' => 'required|string|max:255|min:2',
+                'discount_percentage' => 'required|numeric|between:-100,1000',
+                'valid_from' => 'required|date|after_or_equal:today',
+                'valid_to' => 'nullable|date|after:valid_from',
+                'is_default' => 'boolean',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ]
+        ],
+        'payment_methods' => [
+            'name' => 'Modalità di Pagamento',
+            'icon' => 'bi-wallet2',
+            'color' => 'info',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:10|regex:/^[A-Z0-9_-]+$/|unique:payment_methods,code',
+                'description' => 'required|string|max:100|min:2',
+                'electronic_invoice_code' => 'nullable|string|max:4|regex:/^MP[0-9]{2}$/',
+                'type' => 'required|in:immediate,deferred,installment',
+                'default_due_days' => 'nullable|integer|min:0|max:365',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ]
+        ],
+        'vat_types' => [
+            'name' => 'Nature IVA',
+            'icon' => 'bi-receipt-cutoff',
+            'color' => 'warning',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:10|regex:/^[N][0-9]+(\.[0-9]+)?$/|unique:vat_types,code',
+                'name' => 'required|string|max:100|min:2',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ]
+        ],
+        'shipping_terms' => [
+            'name' => 'Termini di Porto',
+            'icon' => 'bi-truck',
+            'color' => 'primary',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:shipping_terms,code',
+                'name' => 'required|string|max:100|min:2',
+                'description' => 'nullable|string|max:500',
+                'incoterm_code' => 'nullable|string|max:10|regex:/^[A-Z]{2,4}$/',
+                'type' => 'required|in:factory,delivery,mixed',
+                'customer_pays_shipping' => 'boolean',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ]
+        ],
+        
+        'merchandising_sectors' => [
+            'name' => 'Settori Merceologici',
+            'icon' => 'bi-diagram-3',
+            'color' => 'success',
+            'hierarchical' => false,
+            'validation_rules' => [
+                // OWASP: Enhanced code validation with stricter regex
+                'code' => [
+                    'required',
+                    'string',
+                    'min:2',
+                    'max:20',
+                    'regex:/^[A-Z]{2,3}[0-9]{3}$/', // Formato specifico: 2-3 lettere + 3 numeri
+                    'unique:merchandising_sectors,code'
+                ],
+                // OWASP: Sanitized name with XSS prevention
+                'name' => [
+                    'required',
+                    'string',
+                    'min:2',
+                    'max:150',
+                    'regex:/^[a-zA-Z0-9\s\-\_àèéìòù\.]+$/' // Solo caratteri alfanumerici e accentati
+                ],
+                // OWASP: HTML-safe description
+                'description' => [
+                    'nullable',
+                    'string',
+                    'max:1000',
+                    'regex:/^[a-zA-Z0-9\s\-\_\.\,\:\;\àèéìòù\(\)]+$/' // Caratteri sicuri
+                ],
+                // OWASP: Strict category whitelist
+                'category' => 'required|in:alimentare,moda,elettronica,casa,salute,bellezza,sport,tempo_libero,automotive,servizi,industriale,generale',
+                // OWASP: Boolean validation
+                'requires_certifications' => 'required|boolean',
+                // OWASP: Array validation with sanitization
+                'certifications' => 'nullable|array|max:10', // Limite massimo 10 certificazioni
+                'certifications.*' => [
+                    'string',
+                    'max:100',
+                    'regex:/^[A-Z0-9\s\-\_]+$/' // Solo caratteri sicuri per certificazioni
+                ],
+                // OWASP: Numeric validation with precision
+                'average_margin' => [
+                    'nullable',
+                    'numeric',
+                    'min:0',
+                    'max:99.99',
+                    'regex:/^\d{1,2}(\.\d{1,2})?$/' // Max 2 decimali
+                ],
+                // OWASP: Strict risk level validation
+                'risk_level' => 'required|in:basso,medio,alto',
+                // OWASP: Boolean validation
+                'seasonal' => 'required|boolean',
+                'active' => 'required|boolean',
+                // OWASP: Integer validation with range
+                'sort_order' => [
+                    'nullable',
+                    'integer',
+                    'min:0',
+                    'max:9999'
+                ]
+            ],
+            // OWASP: Additional security configurations
+            'security_config' => [
+                'rate_limit' => 60, // Max 60 richieste per minuto
+                'max_results' => 1000, // Max 1000 risultati per query
+                'audit_log' => true, // Abilita audit logging
+                'csrf_protection' => true, // Richiedi token CSRF
+                'input_sanitization' => true, // Abilita sanitizzazione input
+                'sql_injection_prevention' => true // Prevenzione SQL injection
+            ]
+        ],
+        'size_variants' => [
+            'name' => 'Taglie Varianti',
+            'icon' => 'bi-rulers',
+            'color' => 'primary',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:size_variants,code',
+                'name' => 'required|string|max:150|min:2',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ],
+            'security_config' => [
+                'rate_limit' => 60, // Max 60 richieste per minuto
+                'max_results' => 1000, // Max 1000 risultati per query
+                'audit_log' => true, // Abilita audit logging
+                'csrf_protection' => true, // Richiedi token CSRF
+                'input_sanitization' => true, // Abilita sanitizzazione input
+                'sql_injection_prevention' => true // Prevenzione SQL injection
+            ]
+        ],
+        'size_types' => [
+            'name' => 'Tipo di Taglie',
+            'icon' => 'bi-bar-chart',
+            'color' => 'info',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:size_types,code',
+                'name' => 'required|string|max:150|min:2',
+                'description' => 'nullable|string|max:500',
+                'category' => 'nullable|string|in:clothing,shoes,children,accessories,underwear,sportswear,formal,casual',
+                'measurement_unit' => 'nullable|string|in:cm,inches,mixed,numeric,letter',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ],
+            'security_config' => [
+                'rate_limit' => 60, // Max 60 richieste per minuto
+                'max_results' => 1000, // Max 1000 risultati per query
+                'audit_log' => true, // Abilita audit logging
+                'csrf_protection' => true, // Richiedi token CSRF
+                'input_sanitization' => true, // Abilita sanitizzazione input
+                'sql_injection_prevention' => true // Prevenzione SQL injection
+            ]
+        ],
+        'payment_types' => [
+            'name' => 'Tipo di Pagamento',
+            'icon' => 'bi-credit-card',
+            'color' => 'warning',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:payment_types,code',
+                'name' => 'required|string|max:150|min:2',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ],
+            'security_config' => [
+                'rate_limit' => 60, // Max 60 richieste per minuto
+                'max_results' => 1000, // Max 1000 risultati per query
+                'audit_log' => true, // Abilita audit logging
+                'csrf_protection' => true, // Richiedi token CSRF
+                'input_sanitization' => true, // Abilita sanitizzazione input
+                'sql_injection_prevention' => true // Prevenzione SQL injection
+            ]
+        ],
+        'transports' => [
+            'name' => 'Trasporto',
+            'icon' => 'bi-truck',
+            'color' => 'secondary',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:transports,code',
+                'name' => 'required|string|max:150|min:2',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ],
+            'security_config' => [
+                'rate_limit' => 60, // Max 60 richieste per minuto
+                'max_results' => 1000, // Max 1000 risultati per query
+                'audit_log' => true, // Abilita audit logging completo
+                'csrf_protection' => true, // Richiedi token CSRF
+                'input_sanitization' => true, // Abilita sanitizzazione input
+                'sql_injection_prevention' => true, // Prevenzione SQL injection
+                'tls_required' => true // TLS obbligatorio per dati trasporti
+            ]
+        ],
+        'transport_carriers' => [
+            'name' => 'Trasporto a Mezzo',
+            'icon' => 'bi-person-badge',
+            'color' => 'primary',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:transport_carriers,code',
+                'name' => 'required|string|max:150|min:2',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ],
+            'security_config' => [
+                'rate_limit' => 60, // Max 60 richieste per minuto
+                'max_results' => 1000, // Max 1000 risultati per query
+                'audit_log' => true, // Abilita audit logging completo
+                'csrf_protection' => true, // Richiedi token CSRF
+                'input_sanitization' => true, // Abilita sanitizzazione input
+                'sql_injection_prevention' => true, // Prevenzione SQL injection
+                'tls_required' => true // TLS obbligatorio per dati vettori
+            ]
+        ],
+        'locations' => [
+            'name' => 'Ubicazioni',
+            'icon' => 'bi-geo-alt',
+            'color' => 'success',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:locations,code',
+                'name' => 'required|string|max:150|min:2',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ],
+            'security_config' => [
+                'rate_limit' => 60, // Max 60 richieste per minuto
+                'max_results' => 1000, // Max 1000 risultati per query
+                'audit_log' => true, // Abilita audit logging completo
+                'csrf_protection' => true, // Richiedi token CSRF
+                'input_sanitization' => true, // Abilita sanitizzazione input
+                'sql_injection_prevention' => true, // Prevenzione SQL injection
+                'tls_required' => true // TLS obbligatorio per dati ubicazioni
+            ]
+        ],
+        'unit_of_measures' => [
+            'name' => 'Unità di Misura',
+            'icon' => 'bi-rulers',
+            'color' => 'primary',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:unit_of_measures,code',
+                'name' => 'required|string|max:150|min:1',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ],
+            'security_config' => [
+                'rate_limit' => 60, // Max 60 richieste per minuto
+                'max_results' => 1000, // Max 1000 risultati per query
+                'audit_log' => true, // Abilita audit logging completo
+                'csrf_protection' => true, // Richiedi token CSRF
+                'input_sanitization' => true, // Abilita sanitizzazione input
+                'sql_injection_prevention' => true, // Prevenzione SQL injection
+                'tls_required' => true // TLS obbligatorio per dati unità di misura
+            ]
+        ],
+        'currencies' => [
+            'name' => 'Valute',
+            'icon' => 'bi-currency-exchange',
+            'color' => 'info',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:3|min:3|unique:currencies,code|regex:/^[A-Z]{3}$/',
+                'name' => 'required|string|max:150|min:2',
+                'symbol' => 'nullable|string|max:10',
+                'exchange_rate' => 'required|numeric|min:0.000001|max:999999.999999',
+                'active' => 'boolean'
+            ],
+            'security_config' => [
+                'rate_limit' => 30, // Max 30 richieste per minuto (dati finanziari sensibili)
+                'max_results' => 500, // Max 500 risultati per query
+                'audit_log' => true, // Abilita audit logging completo per valute
+                'csrf_protection' => true, // Richiedi token CSRF
+                'input_sanitization' => true, // Abilita sanitizzazione input
+                'sql_injection_prevention' => true, // Prevenzione SQL injection
+                'tls_required' => true // TLS obbligatorio per dati finanziari
+            ]
+        ],
+        'zones' => [
+            'name' => 'Zone',
+            'icon' => 'bi-globe-americas',
+            'color' => 'success',
+            'hierarchical' => false,
+            'validation_rules' => [
+                'code' => 'required|string|max:20|unique:zones,code|regex:/^[A-Z0-9_-]+$/',
+                'name' => 'required|string|max:150|min:2',
+                'description' => 'nullable|string|max:500',
+                'active' => 'boolean',
+                'sort_order' => 'nullable|integer|min:0|max:9999'
+            ],
+            'security_config' => [
+                'rate_limit' => 60, // Max 60 richieste per minuto
+                'max_results' => 1000, // Max 1000 risultati per query
+                'audit_log' => true, // Abilita audit logging per zone
+                'csrf_protection' => true, // Richiedi token CSRF
+                'input_sanitization' => true, // Abilita sanitizzazione input
+                'sql_injection_prevention' => true, // Prevenzione SQL injection
+                'tls_required' => false // Non obbligatorio per zone geografiche
+            ]
+        ],
         // ... continua per tutte le altre tabelle
     ];
 
@@ -445,6 +826,77 @@ class SystemTablesController extends Controller
             return $this->showConditions($request);
         }
 
+        // GESTIONE SPECIFICA PER FIXED_PRICE_DENOMINATIONS (denominazioni prezzi fissi)
+        if ($table === 'fixed_price_denominations') {
+            return $this->showFixedPriceDenominations($request);
+        }
+
+        // GESTIONE SPECIFICA PER DEPOSITS (depositi)
+        if ($table === 'deposits') {
+            return $this->showDeposits($request);
+        }
+
+        // GESTIONE SPECIFICA PER PRICE_LISTS (listini)
+        if ($table === 'price_lists') {
+            return $this->showPriceLists($request);
+        }
+
+        // GESTIONE SPECIFICA PER PAYMENT_METHODS (modalità di pagamento)
+        if ($table === 'payment_methods') {
+            return $this->showPaymentMethods($request);
+        }
+
+        // GESTIONE SPECIFICA PER VAT_TYPES (nature IVA)
+        if ($table === 'vat_types') {
+            return $this->showVatTypes($request);
+        }
+
+        // GESTIONE SPECIFICA PER SHIPPING_TERMS (termini di porto)
+        if ($table === 'shipping_terms') {
+            return $this->showShippingTerms($request);
+        }
+
+        // GESTIONE SPECIFICA PER MERCHANDISING_SECTORS (settori merceologici)
+        if ($table === 'merchandising_sectors') {
+            return $this->showMerchandiseSectors($request);
+        }
+        // GESTIONE SPECIFICA PER SIZE_VARIANTS (taglie varianti)
+        if ($table === 'size_variants') {
+            return $this->showSizeVariants($request);
+        }
+        // GESTIONE SPECIFICA PER SIZE_TYPES (tipo di taglie)
+        if ($table === 'size_types') {
+            return $this->showSizeTypes($request);
+        }
+        // GESTIONE SPECIFICA PER PAYMENT_TYPES (tipo di pagamento)
+        if ($table === 'payment_types') {
+            return $this->showPaymentTypes($request);
+        }
+        // GESTIONE SPECIFICA PER TRANSPORTS (trasporto)
+        if ($table === 'transports') {
+            return $this->showTransports($request);
+        }
+        // GESTIONE SPECIFICA PER TRANSPORT_CARRIERS (trasporto a mezzo)
+        if ($table === 'transport_carriers') {
+            return $this->showTransportCarriers($request);
+        }
+        // GESTIONE SPECIFICA PER LOCATIONS (ubicazioni)
+        if ($table === 'locations') {
+            return $this->showLocations($request);
+        }
+        // GESTIONE SPECIFICA PER UNIT_OF_MEASURES (unità di misura)
+        if ($table === 'unit_of_measures') {
+            return $this->showUnitOfMeasures($request);
+        }
+        // GESTIONE SPECIFICA PER CURRENCIES (valute)
+        if ($table === 'currencies') {
+            return $this->showCurrencies($request);
+        }
+        // GESTIONE SPECIFICA PER ZONES (zone)
+        if ($table === 'zones') {
+            return $this->showZones($request);
+        }
+
         // Carica dati con paginazione e filtri
         $query = $modelClass::query();
         
@@ -516,6 +968,14 @@ class SystemTablesController extends Controller
         // Paginazione
         $items = $query->paginate(20)->withQueryString();
         
+        // Statistiche per aspetto beni
+        $stats = [
+            'total' => AspettoBeni::count(),
+            'active' => AspettoBeni::where('attivo', true)->count(),
+            'primario' => AspettoBeni::where('tipo_confezionamento', 'primario')->count(),
+            'ddt_enabled' => AspettoBeni::where('utilizzabile_ddt', true)->count(),
+        ];
+        
         // TODO: Ripristinare audit log quando SecurityAuditService è corretto
         // $this->auditService->logConfigurationAccess("view_aspetto_beni", [
         //     'search' => $search,
@@ -528,7 +988,8 @@ class SystemTablesController extends Controller
             'table' => 'aspetto_beni',
             'config' => self::TABLE_CONFIG['aspetto_beni'],
             'items' => $items,
-            'search' => $search
+            'search' => $search,
+            'stats' => $stats
         ]);
     }
 
@@ -1066,6 +1527,481 @@ class SystemTablesController extends Controller
     }
 
     /**
+     * Gestione specifica per fixed_price_denominations (denominazioni prezzi fissi)
+     */
+    private function showFixedPriceDenominations(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = FixedPriceDenomination::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = FixedPriceDenomination::query();
+        
+        // Filtro di ricerca semplice
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtro stato
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => FixedPriceDenomination::count(),
+            'active' => FixedPriceDenomination::where('active', true)->count(),
+            'inactive' => FixedPriceDenomination::where('active', false)->count()
+        ];
+
+        return view('configurations.system-tables.denominazioni-prezzi-fissi', [
+            'table' => 'fixed_price_denominations',
+            'config' => self::TABLE_CONFIG['fixed_price_denominations'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specifica per deposits (depositi)
+     */
+    private function showDeposits(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = Deposit::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = Deposit::query();
+        
+        // Filtro di ricerca semplice
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('city', 'like', "%{$search}%")
+                  ->orWhere('province', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtro stato
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Paginazione
+        $items = $query->paginate(20)->withQueryString();
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => Deposit::count(),
+            'active' => Deposit::where('active', true)->count(),
+            'inactive' => Deposit::where('active', false)->count()
+        ];
+
+        return view('configurations.system-tables.depositi', [
+            'table' => 'deposits',
+            'config' => self::TABLE_CONFIG['deposits'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specifica per price_lists (listini)
+     */
+    private function showPriceLists(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = PriceList::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = PriceList::query();
+        
+        // Filtro di ricerca semplice
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtro stato
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Filtro validità
+        if ($validity = $request->get('validity')) {
+            if ($validity === 'valid') {
+                $query->valid();
+            } elseif ($validity === 'expired') {
+                $today = now()->toDateString();
+                $query->where('valid_to', '<', $today);
+            }
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Paginazione
+        $items = $query->paginate(20)->appends($request->query());
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => PriceList::count(),
+            'active' => PriceList::where('active', true)->count(),
+            'inactive' => PriceList::where('active', false)->count(),
+            'valid' => PriceList::valid()->count(),
+            'default' => PriceList::where('is_default', true)->count()
+        ];
+
+        return view('configurations.system-tables.listini', [
+            'table' => 'price_lists',
+            'config' => self::TABLE_CONFIG['price_lists'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specifica per payment_methods (modalità di pagamento)
+     */
+    private function showPaymentMethods(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = PaymentMethod::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = PaymentMethod::query();
+        
+        // Filtro di ricerca semplice
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('electronic_invoice_code', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtro stato
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Filtro tipo
+        if ($type = $request->get('type')) {
+            $query->where('type', $type);
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Paginazione
+        $items = $query->paginate(20)->appends($request->query());
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => PaymentMethod::count(),
+            'active' => PaymentMethod::where('active', true)->count(),
+            'inactive' => PaymentMethod::where('active', false)->count(),
+            'immediate' => PaymentMethod::where('type', 'immediate')->count(),
+            'deferred' => PaymentMethod::where('type', 'deferred')->count()
+        ];
+
+        return view('configurations.system-tables.modalita-pagamento', [
+            'table' => 'payment_methods',
+            'config' => self::TABLE_CONFIG['payment_methods'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specifica per vat_types (nature IVA)
+     */
+    private function showVatTypes(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = VatType::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = VatType::query();
+        
+        // Filtro di ricerca semplice
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtro stato
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Paginazione
+        $items = $query->paginate(20)->appends($request->query());
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => VatType::count(),
+            'active' => VatType::where('active', true)->count(),
+            'inactive' => VatType::where('active', false)->count(),
+            'escluso' => VatType::where('code', 'like', 'N1%')->count(),
+            'non_soggetto' => VatType::where('code', 'like', 'N2%')->count(),
+            'non_imponibile' => VatType::where('code', 'like', 'N3%')->count()
+        ];
+
+        return view('configurations.system-tables.nature-iva', [
+            'table' => 'vat_types',
+            'config' => self::TABLE_CONFIG['vat_types'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specifica per shipping_terms (termini di porto)
+     */
+    private function showShippingTerms(Request $request)
+    {
+        // Controllo duplicati per AJAX
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            $exists = ShippingTerm::where('code', $code)->exists();
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = ShippingTerm::query();
+        
+        // Filtro di ricerca semplice
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('incoterm_code', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filtro stato
+        if ($status = $request->get('status')) {
+            $query->where('active', $status === '1');
+        }
+        
+        // Filtro tipo
+        if ($type = $request->get('type')) {
+            $query->where('type', $type);
+        }
+        
+        // Filtro spese trasporto
+        if ($shipping = $request->get('shipping')) {
+            $query->where('customer_pays_shipping', $shipping === '1');
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Paginazione
+        $items = $query->paginate(20)->appends($request->query());
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => ShippingTerm::count(),
+            'active' => ShippingTerm::where('active', true)->count(),
+            'inactive' => ShippingTerm::where('active', false)->count(),
+            'factory' => ShippingTerm::where('type', 'factory')->count(),
+            'delivery' => ShippingTerm::where('type', 'delivery')->count(),
+            'customer_pays' => ShippingTerm::where('customer_pays_shipping', true)->count()
+        ];
+
+        return view('configurations.system-tables.porto', [
+            'table' => 'shipping_terms',
+            'config' => self::TABLE_CONFIG['shipping_terms'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestione specializzata per settori merceologici - OWASP Security Enhanced
+     */
+    private function showMerchandiseSectors(Request $request)
+    {
+        // OWASP: Rate limiting per prevenire attacchi brute force
+        $rateLimitKey = 'merchandise_sectors_' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 60)) {
+            Log::warning('Rate limit exceeded for merchandise_sectors', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+            abort(429, 'Too Many Attempts');
+        }
+        RateLimiter::hit($rateLimitKey, 60);
+
+        // OWASP: Controllo duplicati per AJAX con input sanitization
+        if ($request->has('check_duplicate')) {
+            // Input validation e sanitization
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            
+            // OWASP: Validazione rigorosa del formato codice
+            if (!preg_match('/^[A-Z0-9_-]{2,20}$/', $code)) {
+                return response()->json(['exists' => false, 'error' => 'Invalid code format']);
+            }
+            
+            $exists = MerchandiseSector::where('code', $code)->exists();
+            
+            // OWASP: Logging per audit trail
+            Log::info('Duplicate check performed', [
+                'table' => 'merchandise_sectors',
+                'code' => $code,
+                'exists' => $exists,
+                'user_id' => Auth::id(),
+                'ip' => $request->ip()
+            ]);
+            
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = MerchandiseSector::query();
+        
+        // OWASP: Filtro di ricerca con input sanitization e validazione
+        if ($search = $request->get('search')) {
+            // Input sanitization - rimuovi caratteri pericolosi
+            $search = strip_tags(trim($search));
+            $search = preg_replace('/[<>"\']/', '', $search);
+            
+            // Limita lunghezza per prevenire DoS
+            if (strlen($search) > 100) {
+                $search = substr($search, 0, 100);
+            }
+            
+            // OWASP: Escape per LIKE query sicura
+            $search = str_replace(['%', '_'], ['\%', '\_'], $search);
+            
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('category', 'like', "%{$search}%");
+            });
+        }
+        
+        // OWASP: Filtro stato con validazione sicura
+        if ($status = $request->get('status')) {
+            // Whitelist validation per prevenire SQL injection
+            if (in_array($status, ['0', '1'], true)) {
+                $query->where('active', $status === '1');
+            }
+        }
+        
+        // OWASP: Filtro categoria con whitelist validation
+        if ($category = $request->get('category')) {
+            $allowedCategories = [
+                'alimentare', 'moda', 'elettronica', 'casa', 'salute', 
+                'bellezza', 'sport', 'tempo_libero', 'automotive', 
+                'servizi', 'industriale', 'generale'
+            ];
+            
+            if (in_array($category, $allowedCategories, true)) {
+                $query->where('category', $category);
+            }
+        }
+        
+        // OWASP: Filtro livello di rischio con validazione
+        if ($riskLevel = $request->get('risk_level')) {
+            $allowedRiskLevels = ['basso', 'medio', 'alto'];
+            
+            if (in_array($riskLevel, $allowedRiskLevels, true)) {
+                $query->where('risk_level', $riskLevel);
+            }
+        }
+        
+        // OWASP: Filtro stagionale con validazione booleana
+        if ($seasonal = $request->get('seasonal')) {
+            if (in_array($seasonal, ['0', '1'], true)) {
+                $query->where('seasonal', $seasonal === '1');
+            }
+        }
+        
+        // OWASP: Filtro certificazioni con validazione booleana
+        if ($certifications = $request->get('certifications')) {
+            if (in_array($certifications, ['0', '1'], true)) {
+                $query->where('requires_certifications', $certifications === '1');
+            }
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Carica tutti i risultati (niente paginazione)
+        $items = $query->get();
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => MerchandiseSector::count(),
+            'active' => MerchandiseSector::where('active', true)->count(),
+            'inactive' => MerchandiseSector::where('active', false)->count(),
+            'alimentare' => MerchandiseSector::where('category', 'alimentare')->count(),
+            'moda' => MerchandiseSector::where('category', 'moda')->count(),
+            'elettronica' => MerchandiseSector::where('category', 'elettronica')->count(),
+            'casa' => MerchandiseSector::where('category', 'casa')->count(),
+            'servizi' => MerchandiseSector::where('category', 'servizi')->count(),
+            'requires_certifications' => MerchandiseSector::where('requires_certifications', true)->count(),
+            'seasonal' => MerchandiseSector::where('seasonal', true)->count(),
+            'high_risk' => MerchandiseSector::where('risk_level', 'alto')->count()
+        ];
+
+        return view('configurations.system-tables.settori-merceologici', [
+            'table' => 'merchandising_sectors',
+            'config' => self::TABLE_CONFIG['merchandising_sectors'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
      * Restituisce dati di un singolo record per modifica
      */
     public function edit(string $table, $id, Request $request)
@@ -1257,6 +2193,58 @@ class SystemTablesController extends Controller
                 'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
                 'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
             ]);
+        } elseif ($table === 'fixed_price_denominations') {
+            // Validazione semplice per fixed_price_denominations
+            $validated = $request->validate(FixedPriceDenomination::validationRules(), [
+                'code.required' => 'Il codice denominazione è obbligatorio.',
+                'code.unique' => 'Il codice denominazione esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della denominazione è obbligatorio.',
+                'name.min' => 'Il nome deve essere di almeno 2 caratteri.',
+                'description.max' => 'La descrizione non può superare i 500 caratteri.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
+                'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
+            ]);
+        } elseif ($table === 'deposits') {
+            // Validazione semplice per deposits
+            $validated = $request->validate(Deposit::validationRules(), [
+                'code.required' => 'Il codice deposito è obbligatorio.',
+                'code.unique' => 'Il codice deposito esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'description.required' => 'La descrizione del deposito è obbligatoria.',
+                'description.min' => 'La descrizione deve essere di almeno 2 caratteri.',
+                'address.max' => 'L\'indirizzo non può superare i 255 caratteri.',
+                'city.max' => 'La località non può superare i 100 caratteri.',
+                'state.max' => 'Lo stato non può superare i 100 caratteri.',
+                'province.max' => 'La provincia non può superare i 5 caratteri.',
+                'postal_code.regex' => 'Il CAP deve essere di 5 cifre.',
+                'phone.regex' => 'Il telefono può contenere solo numeri, spazi e caratteri +-()',
+                'fax.regex' => 'Il fax può contenere solo numeri, spazi e caratteri +-()',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
+                'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
+            ]);
+        } elseif ($table === 'price_lists') {
+            // Validazione semplice per price_lists  
+            $validated = $request->validate(PriceList::validationRules(), [
+                'code.required' => 'Il codice listino è obbligatorio.',
+                'code.unique' => 'Il codice listino esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'description.required' => 'La descrizione del listino è obbligatoria.',
+                'description.min' => 'La descrizione deve essere di almeno 2 caratteri.',
+                'discount_percentage.required' => 'La percentuale è obbligatoria.',
+                'discount_percentage.numeric' => 'La percentuale deve essere un numero.',
+                'discount_percentage.between' => 'La percentuale deve essere tra -100% e +1000%.',
+                'valid_from.required' => 'La data di inizio validità è obbligatoria.',
+                'valid_from.date' => 'La data di inizio validità non è valida.',
+                'valid_from.after_or_equal' => 'La data di inizio non può essere nel passato.',
+                'valid_to.date' => 'La data di fine validità non è valida.',
+                'valid_to.after' => 'La data di fine deve essere successiva alla data di inizio.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
+                'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
+            ]);
         } else {
             // Validazione standard per altre tabelle
             $validated = $request->validate($config['validation_rules'], [
@@ -1272,7 +2260,7 @@ class SystemTablesController extends Controller
         }
 
         // Validazione business logic per VAT associations
-        if ($table === 'vat_nature_associations') {
+        if ($table === 'vat_nature_associations' || $table === 'associazioni-nature-iva') {
             // Verifica che non esista già questa associazione
             $existingAssociation = $modelClass::where('tax_rate_id', $validated['tax_rate_id'])
                 ->where('vat_nature_id', $validated['vat_nature_id'])
@@ -1331,15 +2319,18 @@ class SystemTablesController extends Controller
         // Invalida cache
         $this->cacheService->invalidateSystemTablesCache($table);
 
-        // Gestione risposta AJAX per aspetto_beni, banks, size_colors, warehouse_causes, color_variants e conditions
-        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions']) && $request->expectsJson()) {
+        // Gestione risposta AJAX per aspetto_beni, banks, size_colors, warehouse_causes, color_variants, conditions, fixed_price_denominations, deposits e price_lists
+        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions', 'fixed_price_denominations', 'deposits', 'price_lists']) && $request->expectsJson()) {
             $messages = [
                 'banks' => 'Banca creata con successo!',
                 'aspetto_beni' => 'Aspetto dei beni creato con successo!',
                 'size_colors' => 'Taglia/Colore creato con successo!',
                 'warehouse_causes' => 'Causale di Magazzino creata con successo!',
                 'color_variants' => 'Colore Variante creato con successo!',
-                'conditions' => 'Condizione creata con successo!'
+                'conditions' => 'Condizione creata con successo!',
+                'fixed_price_denominations' => 'Denominazione Prezzo Fisso creata con successo!',
+                'deposits' => 'Deposito creato con successo!',
+                'price_lists' => 'Listino creato con successo!'
             ];
             return response()->json([
                 'success' => true,
@@ -1526,13 +2517,65 @@ class SystemTablesController extends Controller
                 'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
                 'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
             ]);
+        } elseif ($table === 'fixed_price_denominations') {
+            // Validazione semplice per fixed_price_denominations (update)
+            $validated = $request->validate(FixedPriceDenomination::validationRulesForUpdate($id), [
+                'code.required' => 'Il codice denominazione è obbligatorio.',
+                'code.unique' => 'Il codice denominazione esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'name.required' => 'Il nome della denominazione è obbligatorio.',
+                'name.min' => 'Il nome deve essere di almeno 2 caratteri.',
+                'description.max' => 'La descrizione non può superare i 500 caratteri.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
+                'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
+            ]);
+        } elseif ($table === 'deposits') {
+            // Validazione semplice per deposits (update)
+            $validated = $request->validate(Deposit::validationRulesForUpdate($id), [
+                'code.required' => 'Il codice deposito è obbligatorio.',
+                'code.unique' => 'Il codice deposito esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'description.required' => 'La descrizione del deposito è obbligatoria.',
+                'description.min' => 'La descrizione deve essere di almeno 2 caratteri.',
+                'address.max' => 'L\'indirizzo non può superare i 255 caratteri.',
+                'city.max' => 'La località non può superare i 100 caratteri.',
+                'state.max' => 'Lo stato non può superare i 100 caratteri.',
+                'province.max' => 'La provincia non può superare i 5 caratteri.',
+                'postal_code.regex' => 'Il CAP deve essere di 5 cifre.',
+                'phone.regex' => 'Il telefono può contenere solo numeri, spazi e caratteri +-()',
+                'fax.regex' => 'Il fax può contenere solo numeri, spazi e caratteri +-()',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
+                'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
+            ]);
+        } elseif ($table === 'price_lists') {
+            // Validazione semplice per price_lists (update)
+            $validated = $request->validate(PriceList::validationRulesForUpdate($id), [
+                'code.required' => 'Il codice listino è obbligatorio.',
+                'code.unique' => 'Il codice listino esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'description.required' => 'La descrizione del listino è obbligatoria.',
+                'description.min' => 'La descrizione deve essere di almeno 2 caratteri.',
+                'discount_percentage.required' => 'La percentuale è obbligatoria.',
+                'discount_percentage.numeric' => 'La percentuale deve essere un numero.',
+                'discount_percentage.between' => 'La percentuale deve essere tra -100% e +1000%.',
+                'valid_from.required' => 'La data di inizio validità è obbligatoria.',
+                'valid_from.date' => 'La data di inizio validità non è valida.',
+                'valid_to.date' => 'La data di fine validità non è valida.',
+                'valid_to.after' => 'La data di fine deve essere successiva alla data di inizio.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
+                'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
+            ]);
         } else {
             // Validazione standard per altre tabelle
             $rules = $config['validation_rules'];
             
             // Per l'aggiornamento, modifica regola univocità codice se presente
             if (isset($rules['code']) && str_contains($rules['code'], 'unique:')) {
-                $rules['code'] = str_replace('unique:', "unique:,code,{$id},id,", $rules['code']);
+                // Formato corretto: unique:table_name,column_name,ignore_id
+                $rules['code'] = preg_replace('/unique:([^,|]+),([^,|]+)/', "unique:$1,$2,{$id}", $rules['code']);
             }
             
             $validated = $request->validate($rules);
@@ -1552,15 +2595,18 @@ class SystemTablesController extends Controller
         // Invalida cache
         $this->cacheService->invalidateSystemTablesCache($table);
 
-        // Gestione risposta AJAX per aspetto_beni, banks, size_colors, warehouse_causes, color_variants e conditions
-        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions']) && $request->expectsJson()) {
+        // Gestione risposta AJAX per aspetto_beni, banks, size_colors, warehouse_causes, color_variants, conditions, fixed_price_denominations, deposits e price_lists
+        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions', 'fixed_price_denominations', 'deposits', 'price_lists']) && $request->expectsJson()) {
             $messages = [
                 'banks' => 'Banca aggiornata con successo!',
                 'aspetto_beni' => 'Aspetto dei beni aggiornato con successo!',
                 'size_colors' => 'Taglia/Colore aggiornato con successo!',
                 'warehouse_causes' => 'Causale di Magazzino aggiornata con successo!',
                 'color_variants' => 'Colore Variante aggiornato con successo!',
-                'conditions' => 'Condizione aggiornata con successo!'
+                'conditions' => 'Condizione aggiornata con successo!',
+                'fixed_price_denominations' => 'Denominazione Prezzo Fisso aggiornata con successo!',
+                'deposits' => 'Deposito aggiornato con successo!',
+                'price_lists' => 'Listino aggiornato con successo!'
             ];
             return response()->json([
                 'success' => true,
@@ -1604,14 +2650,17 @@ class SystemTablesController extends Controller
         $this->cacheService->invalidateSystemTablesCache($table);
 
         // Gestione risposta AJAX per aspetto_beni, banks, size_colors, warehouse_causes, color_variants e conditions
-        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions']) && request()->expectsJson()) {
+        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions', 'fixed_price_denominations', 'deposits', 'price_lists']) && request()->expectsJson()) {
             $messages = [
                 'banks' => 'Banca eliminata con successo!',
                 'aspetto_beni' => 'Aspetto dei beni eliminato con successo!',
                 'size_colors' => 'Taglia/Colore eliminato con successo!',
                 'warehouse_causes' => 'Causale di Magazzino eliminata con successo!',
                 'color_variants' => 'Colore Variante eliminato con successo!',
-                'conditions' => 'Condizione eliminata con successo!'
+                'conditions' => 'Condizione eliminata con successo!',
+                'fixed_price_denominations' => 'Denominazione Prezzo Fisso eliminata con successo!',
+                'deposits' => 'Deposito eliminato con successo!',
+                'price_lists' => 'Listino eliminato con successo!'
             ];
             return response()->json([
                 'success' => true,
@@ -1666,15 +2715,15 @@ class SystemTablesController extends Controller
     /**
      * Configuratore speciale per Associazioni Nature IVA
      */
-    public function vatNatureConfigurator()
+    public function associazioniNatureIva()
     {
-        $this->auditService->logConfigurationAccess('view_vat_nature_configurator');
+        $this->auditService->logConfigurationAccess('view_associazioni_nature_iva');
         
         $taxRates = TaxRate::where('active', true)->get();
         $vatNatures = VatNature::where('active', true)->get();
         $associations = VatNatureAssociation::with(['taxRate', 'vatNature'])->where('active', true)->get();
         
-        return view('configurations.system-tables.vat-nature-configurator', [
+        return view('configurations.system-tables.associazioni-nature-iva', [
             'taxRates' => $taxRates,
             'vatNatures' => $vatNatures,
             'associations' => $associations
@@ -1833,6 +2882,833 @@ class SystemTablesController extends Controller
         return response()->json(['message' => 'Tabella rimossa dai preferiti!']);
     }
     
+    /**
+     * OWASP: Gestione sicura taglie varianti senza paginazione
+     */
+    private function showSizeVariants(Request $request)
+    {
+        // OWASP: Rate limiting per prevenire attacchi brute force
+        $rateLimitKey = 'size_variants_' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 60)) {
+            Log::warning('Rate limit exceeded for size_variants', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+            abort(429, 'Too Many Attempts');
+        }
+        RateLimiter::hit($rateLimitKey, 60);
+
+        // OWASP: Controllo duplicati per AJAX con input sanitization
+        if ($request->has('check_duplicate')) {
+            // Input validation e sanitization
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            
+            // OWASP: Validazione rigorosa del formato codice
+            if (!preg_match('/^[A-Z0-9_-]{2,20}$/', $code)) {
+                return response()->json(['exists' => false, 'error' => 'Invalid code format']);
+            }
+            
+            $exists = SizeVariant::where('code', $code)->exists();
+            
+            // OWASP: Logging per audit trail
+            Log::info('Duplicate check performed', [
+                'table' => 'size_variants',
+                'code' => $code,
+                'exists' => $exists,
+                'user_id' => Auth::id(),
+                'ip' => $request->ip()
+            ]);
+            
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = SizeVariant::query();
+        
+        // OWASP: Filtro di ricerca con input sanitization e validazione
+        if ($search = $request->get('search')) {
+            // Input sanitization - rimuovi caratteri pericolosi
+            $search = strip_tags(trim($search));
+            $search = preg_replace('/[<>"\']/', '', $search);
+            
+            // Limita lunghezza per prevenire DoS
+            if (strlen($search) > 100) {
+                $search = substr($search, 0, 100);
+            }
+            
+            // OWASP: Escape per LIKE query sicura
+            $search = str_replace(['%', '_'], ['\%', '\_'], $search);
+            
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        
+        // OWASP: Filtro stato con validazione sicura
+        if ($status = $request->get('status')) {
+            // Whitelist validation per prevenire SQL injection
+            if (in_array($status, ['0', '1'], true)) {
+                $query->where('active', $status === '1');
+            }
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Carica tutti i risultati (niente paginazione)
+        $items = $query->get();
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => SizeVariant::count(),
+            'active' => SizeVariant::where('active', true)->count(),
+            'inactive' => SizeVariant::where('active', false)->count(),
+        ];
+        
+        return view('configurations.system-tables.taglie-varianti', [
+            'table' => 'size_variants',
+            'config' => self::TABLE_CONFIG['size_variants'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * OWASP: Gestione sicura tipo di taglie senza paginazione
+     */
+    private function showSizeTypes(Request $request)
+    {
+        // OWASP: Rate limiting per prevenire attacchi brute force
+        $rateLimitKey = 'size_types_' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 60)) {
+            Log::warning('Rate limit exceeded for size_types', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+            abort(429, 'Too Many Attempts');
+        }
+        RateLimiter::hit($rateLimitKey, 60);
+
+        // OWASP: Controllo duplicati per AJAX con input sanitization
+        if ($request->has('check_duplicate')) {
+            // Input validation e sanitization
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            
+            // OWASP: Validazione rigorosa del formato codice
+            if (!preg_match('/^[A-Z0-9_-]{2,20}$/', $code)) {
+                return response()->json(['exists' => false, 'error' => 'Invalid code format']);
+            }
+            
+            $exists = SizeType::where('code', $code)->exists();
+            
+            // OWASP: Logging per audit trail
+            Log::info('Duplicate check performed', [
+                'table' => 'size_types',
+                'code' => $code,
+                'exists' => $exists,
+                'user_id' => Auth::id(),
+                'ip' => request()->ip()
+            ]);
+            
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = SizeType::query();
+        
+        // OWASP: Filtro di ricerca con input sanitization e validazione
+        if ($search = $request->get('search')) {
+            // Input sanitization - rimuovi caratteri pericolosi
+            $search = strip_tags(trim($search));
+            $search = preg_replace('/[<>"\']/', '', $search);
+            
+            // Limita lunghezza per prevenire DoS
+            if (strlen($search) > 100) {
+                $search = substr($search, 0, 100);
+            }
+            
+            // OWASP: Escape per LIKE query sicura
+            $search = str_replace(['%', '_'], ['\%', '\_'], $search);
+            
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+        
+        // OWASP: Filtro stato con validazione sicura
+        if ($status = $request->get('status')) {
+            // Whitelist validation per prevenire SQL injection
+            if (in_array($status, ['0', '1'], true)) {
+                $query->where('active', $status === '1');
+            }
+        }
+
+        // OWASP: Filtro categoria con whitelist validation
+        if ($category = $request->get('category')) {
+            $allowedCategories = [
+                'clothing', 'shoes', 'children', 'accessories', 
+                'underwear', 'sportswear', 'formal', 'casual'
+            ];
+            
+            if (in_array($category, $allowedCategories, true)) {
+                $query->where('category', $category);
+            }
+        }
+
+        // OWASP: Filtro unità di misura con whitelist validation  
+        if ($measurementUnit = $request->get('measurement_unit')) {
+            $allowedUnits = ['cm', 'inches', 'mixed', 'numeric', 'letter'];
+            
+            if (in_array($measurementUnit, $allowedUnits, true)) {
+                $query->where('measurement_unit', $measurementUnit);
+            }
+        }
+        
+        // Ordinamento semplice
+        $query->ordered();
+        
+        // Carica tutti i risultati (niente paginazione)
+        $items = $query->get();
+        
+        // Statistiche complete con nuovi campi
+        $stats = [
+            'total' => SizeType::count(),
+            'active' => SizeType::where('active', true)->count(),
+            'inactive' => SizeType::where('active', false)->count(),
+            'clothing' => SizeType::where('category', 'clothing')->count(),
+            'shoes' => SizeType::where('category', 'shoes')->count(),
+            'children' => SizeType::where('category', 'children')->count(),
+            'accessories' => SizeType::where('category', 'accessories')->count(),
+            'cm' => SizeType::where('measurement_unit', 'cm')->count(),
+            'inches' => SizeType::where('measurement_unit', 'inches')->count(),
+            'mixed' => SizeType::where('measurement_unit', 'mixed')->count(),
+        ];
+        
+        return view('configurations.system-tables.tipo-di-taglie', [
+            'table' => 'size_types',
+            'config' => self::TABLE_CONFIG['size_types'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * OWASP: Gestione sicura tipo di pagamento senza paginazione
+     */
+    private function showPaymentTypes(Request $request)
+    {
+        // OWASP: Rate limiting per prevenire attacchi brute force
+        $rateLimitKey = 'payment_types_' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 60)) {
+            Log::warning('Rate limit exceeded for payment_types', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+            abort(429, 'Too Many Attempts');
+        }
+        RateLimiter::hit($rateLimitKey, 60);
+
+        // OWASP: Controllo duplicati per AJAX con input sanitization
+        if ($request->has('check_duplicate')) {
+            // Input validation e sanitization
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            
+            // OWASP: Validazione rigorosa del formato codice
+            if (!preg_match('/^[A-Z0-9_-]{2,20}$/', $code)) {
+                return response()->json(['exists' => false, 'error' => 'Invalid code format']);
+            }
+            
+            $exists = PaymentType::where('code', $code)->exists();
+            
+            // OWASP: Logging per audit trail
+            Log::info('Duplicate check performed', [
+                'table' => 'payment_types',
+                'code' => $code,
+                'exists' => $exists,
+                'user_id' => Auth::id(),
+                'ip' => request()->ip()
+            ]);
+            
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = PaymentType::query();
+        
+        // OWASP: Filtro di ricerca con input sanitization e validazione
+        if ($search = $request->get('search')) {
+            // Input sanitization - rimuovi caratteri pericolosi
+            $search = strip_tags(trim($search));
+            $search = preg_replace('/[<>"\'&]/', '', $search);
+            
+            // Limita lunghezza per prevenire DoS
+            if (strlen($search) > 100) {
+                $search = substr($search, 0, 100);
+            }
+            
+            // OWASP: Escape per LIKE query sicura
+            $searchTerm = '%' . addcslashes($search, '%_\\') . '%';
+            
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('code', 'like', $searchTerm)
+                  ->orWhere('name', 'like', $searchTerm)
+                  ->orWhere('description', 'like', $searchTerm);
+            });
+        }
+        
+        // OWASP: Ordinamento sicuro con whitelist
+        $query->orderBy('sort_order')->orderBy('name');
+        
+        // Carica tutti i risultati (niente paginazione)
+        $items = $query->get();
+        
+        // Statistiche semplici
+        $stats = [
+            'total' => PaymentType::count(),
+            'active' => PaymentType::where('active', true)->count(),
+            'inactive' => PaymentType::where('active', false)->count(),
+        ];
+        
+        return view('configurations.system-tables.tipo-di-pagamento', [
+            'table' => 'payment_types',
+            'config' => self::TABLE_CONFIG['payment_types'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * OWASP: Gestione sicura trasporti senza paginazione
+     * Sicurezza elevata per dati logistici sensibili
+     */
+    private function showTransports(Request $request)
+    {
+        // OWASP: Rate limiting aggressivo per trasporti (dati sensibili)
+        $rateLimitKey = 'transports_' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 50)) { // Limite ridotto per trasporti
+            Log::warning('Rate limit exceeded for transports', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'timestamp' => now()
+            ]);
+            abort(429, 'Too Many Attempts');
+        }
+        RateLimiter::hit($rateLimitKey, 60);
+
+        // OWASP: Controllo duplicati per AJAX con input sanitization
+        if ($request->has('check_duplicate')) {
+            // Input validation e sanitization rigorosa
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            
+            // OWASP: Validazione rigorosa del formato codice trasporto
+            if (!preg_match('/^[A-Z0-9_-]{2,20}$/', $code)) {
+                return response()->json(['exists' => false, 'error' => 'Invalid transport code format']);
+            }
+            
+            $exists = Transport::where('code', $code)->exists();
+            
+            // OWASP: Logging completo per audit trail trasporti
+            Log::info('Transport duplicate check performed', [
+                'table' => 'transports',
+                'code' => $code,
+                'exists' => $exists,
+                'user_id' => Auth::id(),
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'timestamp' => now()
+            ]);
+            
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = Transport::query();
+        
+        // OWASP: Filtro di ricerca con input sanitization avanzata per trasporti
+        if ($search = $request->get('search')) {
+            // Input sanitization - rimuovi caratteri pericolosi
+            $search = strip_tags(trim($search));
+            $search = preg_replace('/[<>"\'&]/', '', $search);
+            
+            // Limita lunghezza per prevenire DoS
+            if (strlen($search) > 50) { // Limite ridotto per trasporti
+                $search = substr($search, 0, 50);
+            }
+            
+            // OWASP: Escape per LIKE query sicura
+            $searchTerm = '%' . addcslashes($search, '%_\\') . '%';
+            
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('code', 'like', $searchTerm)
+                  ->orWhere('name', 'like', $searchTerm)
+                  ->orWhere('description', 'like', $searchTerm);
+            });
+        }
+        
+        // OWASP: Ordinamento sicuro con whitelist
+        $query->orderBy('sort_order')->orderBy('name');
+        
+        // Carica tutti i risultati (niente paginazione)
+        $items = $query->get();
+        
+        // Statistiche per trasporti
+        $stats = [
+            'total' => Transport::count(),
+            'active' => Transport::where('active', true)->count(),
+            'inactive' => Transport::where('active', false)->count(),
+        ];
+        
+        return view('configurations.system-tables.trasporto', [
+            'table' => 'transports',
+            'config' => self::TABLE_CONFIG['transports'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * OWASP: Gestione sicura trasporto a mezzo (vettori) senza paginazione
+     * Sicurezza elevata per dati vettori/corrieri sensibili
+     */
+    private function showTransportCarriers(Request $request)
+    {
+        // OWASP: Rate limiting per vettori (dati sensibili)
+        $rateLimitKey = 'transport_carriers_' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 60)) {
+            Log::warning('Rate limit exceeded for transport_carriers', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'timestamp' => now()
+            ]);
+            abort(429, 'Too Many Attempts');
+        }
+        RateLimiter::hit($rateLimitKey, 60);
+
+        // OWASP: Controllo duplicati per AJAX con input sanitization
+        if ($request->has('check_duplicate')) {
+            // Input validation e sanitization rigorosa per vettori
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            
+            // OWASP: Validazione rigorosa del formato codice vettore
+            if (!preg_match('/^[A-Z0-9_-]{2,20}$/', $code)) {
+                return response()->json(['exists' => false, 'error' => 'Invalid carrier code format']);
+            }
+            
+            $exists = TransportCarrier::where('code', $code)->exists();
+            
+            // OWASP: Logging completo per audit trail vettori
+            Log::info('TransportCarrier duplicate check performed', [
+                'table' => 'transport_carriers',
+                'code' => $code,
+                'exists' => $exists,
+                'user_id' => Auth::id(),
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'timestamp' => now()
+            ]);
+            
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = TransportCarrier::query();
+        
+        // OWASP: Filtro di ricerca con input sanitization per vettori
+        if ($search = $request->get('search')) {
+            // Input sanitization - rimuovi caratteri pericolosi
+            $search = strip_tags(trim($search));
+            $search = preg_replace('/[<>"\'&]/', '', $search);
+            
+            // Limita lunghezza per prevenire DoS
+            if (strlen($search) > 50) {
+                $search = substr($search, 0, 50);
+            }
+            
+            // OWASP: Escape per LIKE query sicura
+            $searchTerm = '%' . addcslashes($search, '%_\\') . '%';
+            
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('code', 'like', $searchTerm)
+                  ->orWhere('name', 'like', $searchTerm)
+                  ->orWhere('description', 'like', $searchTerm);
+            });
+        }
+        
+        // OWASP: Ordinamento sicuro con whitelist
+        $query->orderBy('sort_order')->orderBy('name');
+        
+        // Carica tutti i risultati (niente paginazione)
+        $items = $query->get();
+        
+        // Statistiche per vettori
+        $stats = [
+            'total' => TransportCarrier::count(),
+            'active' => TransportCarrier::where('active', true)->count(),
+            'inactive' => TransportCarrier::where('active', false)->count(),
+        ];
+        
+        return view('configurations.system-tables.trasporto-a-mezzo', [
+            'table' => 'transport_carriers',
+            'config' => self::TABLE_CONFIG['transport_carriers'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * OWASP: Gestione sicura ubicazioni senza paginazione
+     * Sicurezza elevata per dati magazzino/ubicazioni sensibili
+     */
+    private function showLocations(Request $request)
+    {
+        // OWASP: Rate limiting per ubicazioni (dati sensibili magazzino)
+        $rateLimitKey = 'locations_' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 60)) {
+            Log::warning('Rate limit exceeded for locations', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'timestamp' => now()
+            ]);
+            abort(429, 'Too Many Attempts');
+        }
+        RateLimiter::hit($rateLimitKey, 60);
+
+        // OWASP: Controllo duplicati per AJAX con input sanitization
+        if ($request->has('check_duplicate')) {
+            // Input validation e sanitization rigorosa per ubicazioni
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            
+            // OWASP: Validazione rigorosa del formato codice ubicazione
+            if (!preg_match('/^[A-Z0-9_-]{2,20}$/', $code)) {
+                return response()->json(['exists' => false, 'error' => 'Invalid location code format']);
+            }
+            
+            $exists = Location::where('code', $code)->exists();
+            
+            // OWASP: Logging completo per audit trail ubicazioni
+            Log::info('Location duplicate check performed', [
+                'table' => 'locations',
+                'code' => $code,
+                'exists' => $exists,
+                'user_id' => Auth::id(),
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'timestamp' => now()
+            ]);
+            
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = Location::query();
+        
+        // OWASP: Filtro di ricerca con input sanitization per ubicazioni
+        if ($search = $request->get('search')) {
+            // Input sanitization - rimuovi caratteri pericolosi
+            $search = strip_tags(trim($search));
+            $search = preg_replace('/[<>"\'&]/', '', $search);
+            
+            // Limita lunghezza per prevenire DoS
+            if (strlen($search) > 50) {
+                $search = substr($search, 0, 50);
+            }
+            
+            // OWASP: Escape per LIKE query sicura
+            $searchTerm = '%' . addcslashes($search, '%_\\') . '%';
+            
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('code', 'like', $searchTerm)
+                  ->orWhere('name', 'like', $searchTerm)
+                  ->orWhere('description', 'like', $searchTerm);
+            });
+        }
+        
+        // OWASP: Ordinamento sicuro con whitelist
+        $query->orderBy('sort_order')->orderBy('name');
+        
+        // Carica tutti i risultati (niente paginazione)
+        $items = $query->get();
+        
+        // Statistiche per ubicazioni
+        $stats = [
+            'total' => Location::count(),
+            'active' => Location::where('active', true)->count(),
+            'inactive' => Location::where('active', false)->count(),
+        ];
+        
+        return view('configurations.system-tables.ubicazioni', [
+            'table' => 'locations',
+            'config' => self::TABLE_CONFIG['locations'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * OWASP: Gestione sicura unità di misura senza paginazione
+     * Sicurezza elevata per dati inventario/misurazione sensibili
+     */
+    private function showUnitOfMeasures(Request $request)
+    {
+        // OWASP: Rate limiting per unità di misura (dati sensibili inventario)
+        $rateLimitKey = 'unit_of_measures_' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 60)) {
+            Log::warning('Rate limit exceeded for unit_of_measures', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'timestamp' => now()
+            ]);
+            abort(429, 'Too Many Attempts');
+        }
+        RateLimiter::hit($rateLimitKey, 60);
+
+        // OWASP: Controllo duplicati per AJAX con input sanitization
+        if ($request->has('check_duplicate')) {
+            // Input validation e sanitization rigorosa per unità di misura
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            
+            // OWASP: Validazione rigorosa del formato codice unità di misura
+            if (!preg_match('/^[A-Z0-9_-]{1,20}$/', $code)) {
+                return response()->json(['exists' => false, 'error' => 'Invalid unit code format']);
+            }
+            
+            $exists = UnitOfMeasure::where('code', $code)->exists();
+            
+            // OWASP: Logging completo per audit trail unità di misura
+            Log::info('UnitOfMeasure duplicate check performed', [
+                'table' => 'unit_of_measures',
+                'code' => $code,
+                'exists' => $exists,
+                'user_id' => Auth::id(),
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'timestamp' => now()
+            ]);
+            
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = UnitOfMeasure::query();
+        
+        // OWASP: Filtro di ricerca con input sanitization per unità di misura
+        if ($search = $request->get('search')) {
+            // Input sanitization - rimuovi caratteri pericolosi
+            $search = strip_tags(trim($search));
+            $search = preg_replace('/[<>"\'&]/', '', $search);
+            
+            // Limita lunghezza per prevenire DoS
+            if (strlen($search) > 50) {
+                $search = substr($search, 0, 50);
+            }
+            
+            // OWASP: Escape per LIKE query sicura
+            $searchTerm = '%' . addcslashes($search, '%_\\') . '%';
+            
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('code', 'like', $searchTerm)
+                  ->orWhere('name', 'like', $searchTerm)
+                  ->orWhere('description', 'like', $searchTerm);
+            });
+        }
+        
+        // OWASP: Ordinamento sicuro con whitelist
+        $query->orderBy('sort_order')->orderBy('name');
+        
+        // Carica tutti i risultati (niente paginazione)
+        $items = $query->get();
+        
+        // Statistiche per unità di misura
+        $stats = [
+            'total' => UnitOfMeasure::count(),
+            'active' => UnitOfMeasure::where('active', true)->count(),
+            'inactive' => UnitOfMeasure::where('active', false)->count(),
+        ];
+        
+        return view('configurations.system-tables.unita-di-misura', [
+            'table' => 'unit_of_measures',
+            'config' => self::TABLE_CONFIG['unit_of_measures'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * OWASP: Gestione sicura valute senza paginazione
+     * Sicurezza massima per dati finanziari sensibili
+     */
+    private function showCurrencies(Request $request)
+    {
+        // OWASP: Rate limiting per valute (dati finanziari ultra-sensibili)
+        $rateLimitKey = 'currencies_' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 30)) {
+            Log::warning('Rate limit exceeded for currencies', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'timestamp' => now()
+            ]);
+            abort(429, 'Too Many Attempts');
+        }
+        RateLimiter::hit($rateLimitKey, 30);
+
+        // OWASP: Controllo duplicati per AJAX con input sanitization
+        if ($request->has('check_duplicate')) {
+            // Input validation e sanitization rigorosa per codici valuta ISO 4217
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            
+            // OWASP: Validazione rigorosa del formato codice valuta ISO 4217
+            if (!preg_match('/^[A-Z]{3}$/', $code)) {
+                return response()->json(['exists' => false, 'error' => 'Invalid currency code format']);
+            }
+            
+            $exists = Currency::where('code', $code)->exists();
+            
+            // OWASP: Logging completo per audit trail valute
+            Log::info('Currency duplicate check performed', [
+                'table' => 'currencies',
+                'code' => $code,
+                'exists' => $exists,
+                'user_id' => Auth::id(),
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'timestamp' => now()
+            ]);
+            
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = Currency::query();
+        
+        // OWASP: Filtro di ricerca con input sanitization per valute
+        if ($search = $request->get('search')) {
+            // Input sanitization - rimuovi caratteri pericolosi
+            $search = strip_tags(trim($search));
+            $search = preg_replace('/[<>"\'&]/', '', $search);
+            
+            // Limita lunghezza per prevenire DoS
+            if (strlen($search) > 50) {
+                $search = substr($search, 0, 50);
+            }
+            
+            // OWASP: Escape per LIKE query sicura
+            $searchTerm = '%' . addcslashes($search, '%_\\') . '%';
+            
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('code', 'like', $searchTerm)
+                  ->orWhere('name', 'like', $searchTerm)
+                  ->orWhere('symbol', 'like', $searchTerm);
+            });
+        }
+        
+        // OWASP: Ordinamento sicuro con whitelist
+        $query->orderBy('name');
+        
+        // Carica tutti i risultati (niente paginazione)
+        $items = $query->get();
+        
+        // Statistiche per valute
+        $stats = [
+            'total' => Currency::count(),
+            'active' => Currency::where('active', true)->count(),
+            'inactive' => Currency::where('active', false)->count(),
+        ];
+        
+        return view('configurations.system-tables.valute', [
+            'table' => 'currencies',
+            'config' => self::TABLE_CONFIG['currencies'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
+    /**
+     * Gestisce la visualizzazione delle zone con OWASP security
+     */
+    private function showZones(Request $request)
+    {
+        // OWASP: Rate limiting per zone
+        $rateLimitKey = 'zones_' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 60)) {
+            Log::warning('Rate limit exceeded for zones', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'timestamp' => now()
+            ]);
+            abort(429, 'Too Many Attempts');
+        }
+        RateLimiter::hit($rateLimitKey, 60);
+
+        // OWASP: Controllo duplicati per AJAX con input sanitization
+        if ($request->has('check_duplicate')) {
+            $code = strtoupper(trim($request->get('check_duplicate')));
+            
+            // OWASP: Validazione rigorosa del formato codice zona
+            if (!preg_match('/^[A-Z0-9_-]+$/', $code)) {
+                return response()->json(['exists' => false, 'error' => 'Invalid zone code format']);
+            }
+            
+            $exists = Zone::where('code', $code)->exists();
+            
+            // OWASP: Logging per audit trail zone
+            Log::info('Zone duplicate check performed', [
+                'table' => 'zones',
+                'code' => $code,
+                'exists' => $exists,
+                'user_id' => Auth::id(),
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'timestamp' => now()
+            ]);
+            
+            return response()->json(['exists' => $exists]);
+        }
+        
+        $query = Zone::query();
+        
+        // OWASP: Filtro di ricerca con input sanitization per zone
+        if ($search = $request->get('search')) {
+            $search = strip_tags(trim($search));
+            $search = preg_replace('/[<>"\'&]/', '', $search);
+            
+            if (strlen($search) > 50) {
+                $search = substr($search, 0, 50);
+            }
+            
+            $searchTerm = '%' . addcslashes($search, '%_\\') . '%';
+            
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('code', 'like', $searchTerm)
+                  ->orWhere('name', 'like', $searchTerm)
+                  ->orWhere('description', 'like', $searchTerm);
+            });
+        }
+        
+        // OWASP: Ordinamento sicuro
+        $query->orderBy('sort_order')->orderBy('name');
+        
+        $items = $query->get();
+        
+        // Statistiche per zone
+        $stats = [
+            'total' => Zone::count(),
+            'active' => Zone::where('active', true)->count(),
+            'inactive' => Zone::where('active', false)->count(),
+        ];
+        
+        return view('configurations.system-tables.zone', [
+            'table' => 'zones',
+            'config' => self::TABLE_CONFIG['zones'],
+            'items' => $items,
+            'search' => $search,
+            'stats' => $stats
+        ]);
+    }
+
     /**
      * Traccia utilizzo di una tabella
      */

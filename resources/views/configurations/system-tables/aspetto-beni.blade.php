@@ -266,13 +266,18 @@
     .action-btn {
         border: none;
         border-radius: 8px;
-        padding: 6px 12px;
         font-size: 0.8rem;
         font-weight: 600;
         margin: 0 2px;
         transition: all 0.3s ease;
         text-decoration: none;
-        display: inline-block;
+        cursor: pointer;
+        padding: 8px;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .action-btn.view {
@@ -292,8 +297,14 @@
     
     .action-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
         color: white;
+    }
+    
+    .action-btn.view:hover,
+    .action-btn.edit:hover,
+    .action-btn.delete:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
     }
     
     /* Mobile Cards - Nasconde tabella, mostra card */
@@ -494,9 +505,113 @@
         margin-bottom: 1rem;
         color: #4a5568;
     }
+    
+    /* Statistiche Cards - Stile Dashboard */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .metric-card {
+        background: white;
+        border-radius: 20px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+    
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        border-radius: 20px 20px 0 0;
+    }
+    
+    /* Colori specifici per ogni card */
+    .metric-card:nth-child(1)::before {
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    }
+    
+    .metric-card:nth-child(2)::before {
+        background: linear-gradient(135deg, #48cae4, #0077b6);
+    }
+    
+    .metric-card:nth-child(3)::before {
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+    }
+    
+    .metric-card:nth-child(4)::before {
+        background: linear-gradient(135deg, #ffd60a, #ff8500);
+    }
+    
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+    }
+    
+    /* Colori numeri abbinati ai border */
+    .metric-card:nth-child(1) .metric-value {
+        color: #4ecdc4;
+    }
+    
+    .metric-card:nth-child(2) .metric-value {
+        color: #48cae4;
+    }
+    
+    .metric-card:nth-child(3) .metric-value {
+        color: #9c27b0;
+    }
+    
+    .metric-card:nth-child(4) .metric-value {
+        color: #ffd60a;
+    }
+    
+    .metric-label {
+        font-size: 0.9rem;
+        color: #718096;
+        margin-top: 0.5rem;
+    }
 </style>
 
 <div class="management-container">
+    <!-- Alert Messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Attenzione!</strong> Sono stati rilevati dei problemi:
+            <ul class="mb-0 mt-2">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
     <!-- Header con titolo e pulsanti -->
     <div class="management-header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
@@ -513,10 +628,27 @@
                 <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#createModal">
                     <i class="bi bi-plus-lg"></i> Nuovo Aspetto
                 </button>
-                <button type="button" class="btn btn-warning modern-btn" onclick="exportData()">
-                    <i class="bi bi-download"></i> Esporta
-                </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Statistiche Aspetto Beni -->
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-value">{{ ($stats['total'] ?? 0) }}</div>
+            <div class="metric-label">Totale Aspetti</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">{{ ($stats['active'] ?? 0) }}</div>
+            <div class="metric-label">Aspetti Attivi</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">{{ ($stats['primario'] ?? 0) }}</div>
+            <div class="metric-label">Packaging Primario</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value">{{ ($stats['ddt_enabled'] ?? 0) }}</div>
+            <div class="metric-label">Utilizzabili DDT</div>
         </div>
     </div>
 
@@ -985,8 +1117,114 @@ async function submitForm(event, action) {
 }
 
 function viewItem(id) {
-    // Implementa visualizzazione dettaglio
-    window.open(`{{ route("configurations.system-tables.show", "aspetto_beni") }}/${id}`, '_blank');
+    // Carica dati per visualizzazione
+    fetch(`{{ route("configurations.system-tables.show", "aspetto_beni") }}/${id}`)
+        .then(response => response.json())
+        .then(item => {
+            // Mostra dettagli in modale
+            const modalContent = `
+                <div class="modal fade" id="viewModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content" style="border-radius: 20px; border: none;">
+                            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; border-radius: 20px 20px 0 0;">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-eye me-2"></i>Dettagli Aspetto dei Beni
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body" style="padding: 2rem;">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Codice Aspetto</label>
+                                        <div class="p-2 bg-light rounded">${item.codice_aspetto}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Tipo Confezionamento</label>
+                                        <div class="p-2">
+                                            <span class="tipo-badge tipo-${item.tipo_confezionamento}">
+                                                ${item.tipo_confezionamento.charAt(0).toUpperCase() + item.tipo_confezionamento.slice(1)}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-muted">Descrizione</label>
+                                        <div class="p-2 bg-light rounded">${item.descrizione}</div>
+                                    </div>
+                                    ${item.descrizione_estesa ? `
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-muted">Descrizione Estesa</label>
+                                        <div class="p-2 bg-light rounded">${item.descrizione_estesa}</div>
+                                    </div>
+                                    ` : ''}
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Stato</label>
+                                        <div class="p-2">
+                                            <span class="status-badge ${item.attivo ? 'status-active' : 'status-inactive'}">
+                                                ${item.attivo ? 'Attivo' : 'Inattivo'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Utilizzabile DDT</label>
+                                        <div class="p-2">
+                                            <div class="utilizzo-icon ${item.utilizzabile_ddt ? 'utilizzo-ddt' : 'utilizzo-disabled'}">
+                                                <i class="bi bi-truck"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Utilizzabile Fatture</label>
+                                        <div class="p-2">
+                                            <div class="utilizzo-icon ${item.utilizzabile_fatture ? 'utilizzo-fatture' : 'utilizzo-disabled'}">
+                                                <i class="bi bi-receipt"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Data Creazione</label>
+                                        <div class="p-2 bg-light rounded">${new Date(item.created_at).toLocaleDateString('it-IT')}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Ultimo Aggiornamento</label>
+                                        <div class="p-2 bg-light rounded">${new Date(item.updated_at).toLocaleDateString('it-IT')}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="padding: 1.5rem 2rem;">
+                                <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-lg"></i> Chiudi
+                                </button>
+                                <button type="button" class="btn btn-primary modern-btn" onclick="editItem(${item.id}); bootstrap.Modal.getInstance(document.getElementById('viewModal')).hide();">
+                                    <i class="bi bi-pencil"></i> Modifica
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Rimuovi modale esistente se presente
+            const existingModal = document.getElementById('viewModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            // Aggiungi nuova modale al DOM
+            document.body.insertAdjacentHTML('beforeend', modalContent);
+            
+            // Mostra modale
+            const modal = new bootstrap.Modal(document.getElementById('viewModal'));
+            modal.show();
+            
+            // Rimuovi dal DOM quando si chiude
+            document.getElementById('viewModal').addEventListener('hidden.bs.modal', function () {
+                this.remove();
+            });
+        })
+        .catch(error => {
+            console.error('Errore:', error);
+            alert('Errore nel caricamento dei dettagli');
+        });
 }
 
 function editItem(id) {
@@ -1032,9 +1270,6 @@ function deleteItem(id) {
     }
 }
 
-function exportData() {
-    window.open('{{ route("configurations.system-tables.export", "aspetto_beni") }}', '_blank');
-}
 
 // Reset form quando si chiude il modal
 document.getElementById('createModal').addEventListener('hidden.bs.modal', function () {
@@ -1051,6 +1286,17 @@ document.getElementById('codice_aspetto').addEventListener('input', function(e) 
 
 // Inizializza tooltip Bootstrap
 document.addEventListener('DOMContentLoaded', function() {
+    // Auto-dismiss alerts dopo 5 secondi
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert, index) {
+        setTimeout(function() {
+            if (bootstrap.Alert.getOrCreateInstance) {
+                const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                bsAlert.close();
+            }
+        }, 5000 + (index * 1000));
+    });
+    
     // Inizializza tutti i tooltip
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

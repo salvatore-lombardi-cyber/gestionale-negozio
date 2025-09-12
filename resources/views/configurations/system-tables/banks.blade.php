@@ -245,13 +245,18 @@
     .action-btn {
         border: none;
         border-radius: 8px;
-        padding: 6px 12px;
         font-size: 0.8rem;
         font-weight: 600;
         margin: 0 2px;
         transition: all 0.3s ease;
         text-decoration: none;
-        display: inline-block;
+        cursor: pointer;
+        padding: 8px;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .action-btn.view {
@@ -271,8 +276,20 @@
     
     .action-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
         color: white;
+    }
+    
+    .action-btn.view:hover,
+    .action-btn.edit:hover,
+    .action-btn.delete:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Allineamento perfetto pulsanti azioni */
+    td .action-btn {
+        vertical-align: middle;
+        line-height: 1;
     }
     
     /* Mobile Cards - Nasconde tabella, mostra card */
@@ -473,6 +490,28 @@
 </style>
 
 <div class="management-container">
+    <!-- Alert Messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Attenzione!</strong> Sono stati rilevati dei problemi:
+            <ul class="mb-0 mt-2">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
     <!-- Header con titolo e pulsanti -->
     <div class="management-header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
@@ -488,9 +527,6 @@
                 </a>
                 <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#createModal">
                     <i class="bi bi-plus-lg"></i> Nuova Banca
-                </button>
-                <button type="button" class="btn btn-warning modern-btn" onclick="exportData()">
-                    <i class="bi bi-download"></i> Esporta
                 </button>
             </div>
         </div>
@@ -530,13 +566,13 @@
             <table class="modern-table" id="banksTable">
                 <thead>
                     <tr>
-                        <th style="width: 15%">Codice</th>
-                        <th style="width: 25%">Nome Banca</th>
+                        <th style="width: 12%">Codice</th>
+                        <th style="width: 20%">Nome Banca</th>
                         <th style="width: 15%">ABI/SWIFT</th>
-                        <th style="width: 15%">Localizzazione</th>
+                        <th style="width: 10.5%">Localizzazione</th>
                         <th style="width: 10%">Tipo</th>
                         <th style="width: 10%">Stato</th>
-                        <th style="width: 20%">Azioni</th>
+                        <th style="width: 22.5%; text-align: center;">Azioni</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -581,7 +617,7 @@
                                     {{ $item->active ? 'Attivo' : 'Inattivo' }}
                                 </span>
                             </td>
-                            <td>
+                            <td class="text-center" style="vertical-align: middle;">
                                 <button type="button" class="action-btn view" onclick="viewItem({{ $item->id }})" title="Visualizza">
                                     <i class="bi bi-eye"></i>
                                 </button>
@@ -1023,9 +1059,6 @@ function deleteItem(id) {
     }
 }
 
-function exportData() {
-    window.open('{{ route("configurations.system-tables.export", "banks") }}', '_blank');
-}
 
 // Reset form quando si chiude il modal
 document.getElementById('createModal').addEventListener('hidden.bs.modal', function () {
@@ -1082,6 +1115,17 @@ document.getElementById('code').addEventListener('input', function(e) {
 
 // Inizializza tooltip Bootstrap
 document.addEventListener('DOMContentLoaded', function() {
+    // Auto-dismiss alerts dopo 5 secondi
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert, index) {
+        setTimeout(function() {
+            if (bootstrap.Alert.getOrCreateInstance) {
+                const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                bsAlert.close();
+            }
+        }, 5000 + (index * 1000));
+    });
+    
     // Inizializza tutti i tooltip
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

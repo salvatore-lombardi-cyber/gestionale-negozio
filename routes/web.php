@@ -129,7 +129,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('/system-tables/{table}/{id}', [App\Http\Controllers\SystemTablesController::class, 'destroy'])->name('system-tables.destroy');
             Route::get('/system-tables/{table}/export', [App\Http\Controllers\SystemTablesController::class, 'export'])->name('system-tables.export');
             Route::get('/system-tables/{table}/api', [App\Http\Controllers\SystemTablesController::class, 'apiData'])->name('system-tables.api');
-            Route::get('/vat-nature-configurator', [App\Http\Controllers\SystemTablesController::class, 'vatNatureConfigurator'])->name('vat-nature-configurator');
+            Route::get('/associazioni-nature-iva', [App\Http\Controllers\SystemTablesController::class, 'associazioniNatureIva'])->name('associazioni-nature-iva');
             Route::get('/tax-rates-configurator', [App\Http\Controllers\SystemTablesController::class, 'taxRatesConfigurator'])->name('tax-rates-configurator');
             
             // Route per gestione preferiti (NEW!)

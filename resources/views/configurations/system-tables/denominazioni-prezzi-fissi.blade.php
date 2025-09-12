@@ -7,8 +7,8 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div class="d-flex align-items-center">
                 <h1 class="management-title">
-                    <i class="bi bi-file-check me-3" style="color: #029D7E; font-size: 2rem;"></i>
-                    Condizioni
+                    <i class="bi bi-cash-coin me-3" style="color: #029D7E; font-size: 2rem;"></i>
+                    Denominazioni Prezzi Fissi
                 </h1>
             </div>
             <div class="d-flex gap-2">
@@ -16,7 +16,7 @@
                     <i class="bi bi-arrow-left"></i> Torna Indietro
                 </a>
                 <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#createModal">
-                    <i class="bi bi-plus-lg"></i> Nuova Condizione
+                    <i class="bi bi-plus-lg"></i> Nuova Denominazione
                 </button>
                 <button type="button" class="btn btn-warning modern-btn" onclick="exportData()">
                     <i class="bi bi-download"></i> Esporta
@@ -30,11 +30,11 @@
         <div class="col-md-4">
             <div class="stat-card">
                 <div class="stat-icon">
-                    <i class="bi bi-file-check-fill"></i>
+                    <i class="bi bi-cash-coin"></i>
                 </div>
                 <div class="stat-content">
                     <h3>{{ $stats['total'] }}</h3>
-                    <p>Condizioni Totali</p>
+                    <p>Denominazioni Totali</p>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
     <div class="search-filters">
         <div class="row g-3">
             <div class="col-md-6">
-                <input type="text" class="form-control search-input" id="searchInput" placeholder="Cerca condizioni..." onkeyup="filterTable()">
+                <input type="text" class="form-control search-input" id="searchInput" placeholder="Cerca denominazioni..." onkeyup="filterTable()">
             </div>
             <div class="col-md-4">
                 <select class="form-select filter-select" id="statusFilter" onchange="filterTable()">
@@ -86,7 +86,7 @@
     <!-- Tabella Desktop -->
     <div class="table-container">
         <div class="table-responsive">
-            <table class="modern-table" id="conditionsTable">
+            <table class="modern-table" id="denominationsTable">
                 <thead>
                     <tr>
                         <th>CODICE</th>
@@ -127,10 +127,10 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="action-btn edit" title="Modifica condizione" onclick="editItem({{ $item->id }})">
+                                    <button type="button" class="action-btn edit" title="Modifica denominazione" onclick="editItem({{ $item->id }})">
                                         <i class="bi bi-pencil"></i>
                                     </button>
-                                    <button type="button" class="action-btn delete" title="Elimina condizione" onclick="deleteItem({{ $item->id }}, '{{ $item->name }}')">
+                                    <button type="button" class="action-btn delete" title="Elimina denominazione" onclick="deleteItem({{ $item->id }}, '{{ $item->name }}')">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
@@ -140,9 +140,9 @@
                         <tr id="noResults">
                             <td colspan="6" class="text-center py-5">
                                 <div class="empty-state">
-                                    <i class="bi bi-file-check display-1 text-muted mb-3"></i>
-                                    <h4>Nessuna condizione trovata</h4>
-                                    <p class="text-muted">Inizia creando la prima condizione per il tuo sistema.</p>
+                                    <i class="bi bi-cash-coin display-1 text-muted mb-3"></i>
+                                    <h4>Nessuna denominazione trovata</h4>
+                                    <p class="text-muted">Inizia creando la prima denominazione prezzo fisso.</p>
                                 </div>
                             </td>
                         </tr>
@@ -207,9 +207,9 @@
             </div>
         @empty
             <div class="empty-state">
-                <i class="bi bi-file-check display-1 text-muted mb-3"></i>
-                <h4>Nessuna condizione trovata</h4>
-                <p class="text-muted">Inizia creando la prima condizione per il tuo sistema.</p>
+                <i class="bi bi-cash-coin display-1 text-muted mb-3"></i>
+                <h4>Nessuna denominazione trovata</h4>
+                <p class="text-muted">Inizia creando la prima denominazione prezzo fisso.</p>
             </div>
         @endforelse
     </div>
@@ -228,25 +228,26 @@
         <div class="modal-content" style="border-radius: 20px; border: none;">
             <div class="modal-header" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; border-radius: 20px 20px 0 0;">
                 <h5 class="modal-title">
-                    <i class="bi bi-file-check me-2"></i>
-                    <span id="modalTitle">Nuova Condizione</span>
+                    <i class="bi bi-cash-coin me-2"></i>
+                    <span id="modalTitle">Nuova Denominazione Prezzo Fisso</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <form id="conditionForm">
+            <form id="denominationForm">
                 <div class="modal-body" style="padding: 2rem;">
                     
                     <div class="mb-3">
-                        <label for="code" class="form-label">Codice Condizione *</label>
+                        <label for="code" class="form-label">Codice Denominazione *</label>
                         <input type="text" class="form-control" id="code" name="code" required maxlength="50" style="text-transform: uppercase;" oninput="validateCode()">
                         <div class="invalid-feedback" id="codeError"></div>
-                        <small class="form-text text-muted">Solo lettere maiuscole, numeri, _ e -</small>
+                        <small class="form-text text-muted">Solo lettere maiuscole, numeri, _ e - (es: PREZZO_5, EUR_10)</small>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="name" class="form-label">Nome Condizione *</label>
+                        <label for="name" class="form-label">Nome Denominazione *</label>
                         <input type="text" class="form-control" id="name" name="name" required maxlength="255">
                         <div class="invalid-feedback" id="nameError"></div>
+                        <small class="form-text text-muted">Nome visualizzato (es: 5,00 €, 10,00 €, Prezzo Base)</small>
                     </div>
                     
                     <div class="mb-3">
@@ -265,7 +266,7 @@
                     
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="active" name="active" checked>
-                        <label class="form-check-label" for="active">Condizione attiva</label>
+                        <label class="form-check-label" for="active">Denominazione attiva</label>
                         <div class="invalid-feedback" id="activeError"></div>
                     </div>
                     
@@ -275,7 +276,7 @@
                         <i class="bi bi-x-lg"></i> Annulla
                     </button>
                     <button type="submit" class="btn btn-success modern-btn" id="saveBtn">
-                        <i class="bi bi-check-lg"></i> Salva Condizione
+                        <i class="bi bi-check-lg"></i> Salva Denominazione
                     </button>
                 </div>
             </form>
@@ -703,7 +704,7 @@ function validateCode() {
     const code = codeInput.value.toUpperCase().trim();
     
     if (code.length >= 2) {
-        fetch(`/configurations/system-tables/conditions?check_duplicate=${encodeURIComponent(code)}`)
+        fetch(`/configurations/system-tables/fixed_price_denominations?check_duplicate=${encodeURIComponent(code)}`)
             .then(response => response.json())
             .then(data => {
                 const errorDiv = document.getElementById('codeError');
@@ -724,11 +725,11 @@ function validateCode() {
 function editItem(id) {
     editingId = id;
     
-    fetch(`/configurations/system-tables/conditions/${id}`)
+    fetch(`/configurations/system-tables/fixed_price_denominations/${id}`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById('modalTitle').textContent = 'Modifica Condizione';
-            document.getElementById('saveBtn').innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Condizione';
+            document.getElementById('modalTitle').textContent = 'Modifica Denominazione Prezzo Fisso';
+            document.getElementById('saveBtn').innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Denominazione';
             
             // Popola i campi
             document.getElementById('code').value = data.code || '';
@@ -746,12 +747,12 @@ function editItem(id) {
 }
 
 function deleteItem(id, name) {
-    if (confirm(`Sei sicuro di voler eliminare la condizione "${name}"?\n\nQuesta azione non può essere annullata.`)) {
+    if (confirm(`Sei sicuro di voler eliminare la denominazione "${name}"?\n\nQuesta azione non può essere annullata.`)) {
         const formData = new FormData();
         formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
         formData.append('_method', 'DELETE');
         
-        fetch(`/configurations/system-tables/conditions/${id}`, {
+        fetch(`/configurations/system-tables/fixed_price_denominations/${id}`, {
             method: 'POST',
             body: formData,
             headers: {
@@ -769,13 +770,13 @@ function deleteItem(id, name) {
         })
         .catch(error => {
             console.error('Errore eliminazione:', error);
-            alert('Errore durante l\'eliminazione della condizione');
+            alert('Errore durante l\'eliminazione della denominazione');
         });
     }
 }
 
-function saveCondition() {
-    const form = document.getElementById('conditionForm');
+function saveDenomination() {
+    const form = document.getElementById('denominationForm');
     const formData = new FormData(form);
     
     // Fix per checkbox active
@@ -784,11 +785,11 @@ function saveCondition() {
     
     formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
     
-    let url = '/configurations/system-tables/conditions';
+    let url = '/configurations/system-tables/fixed_price_denominations';
     let method = 'POST';
     
     if (editingId) {
-        url = `/configurations/system-tables/conditions/${editingId}`;
+        url = `/configurations/system-tables/fixed_price_denominations/${editingId}`;
         formData.append('_method', 'PUT');
     }
     
@@ -830,15 +831,15 @@ function saveCondition() {
     })
     .catch(error => {
         console.error('Errore salvataggio:', error);
-        alert('Errore durante il salvataggio della condizione');
+        alert('Errore durante il salvataggio della denominazione');
     });
 }
 
 function resetCreateForm() {
     editingId = null;
-    document.getElementById('modalTitle').textContent = 'Nuova Condizione';
-    document.getElementById('saveBtn').innerHTML = '<i class="bi bi-check-lg"></i> Salva Condizione';
-    document.getElementById('conditionForm').reset();
+    document.getElementById('modalTitle').textContent = 'Nuova Denominazione Prezzo Fisso';
+    document.getElementById('saveBtn').innerHTML = '<i class="bi bi-check-lg"></i> Salva Denominazione';
+    document.getElementById('denominationForm').reset();
     document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
     document.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
     document.getElementById('sort_order').value = 0;
@@ -846,17 +847,17 @@ function resetCreateForm() {
 }
 
 function exportData() {
-    window.location.href = `/configurations/system-tables/conditions/export`;
+    window.location.href = `/configurations/system-tables/fixed_price_denominations/export`;
 }
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
     // Form submit
-    const form = document.getElementById('conditionForm');
+    const form = document.getElementById('denominationForm');
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            saveCondition();
+            saveDenomination();
         });
     }
     

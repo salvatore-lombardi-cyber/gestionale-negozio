@@ -64,13 +64,16 @@
         transform: translateY(-10px);
         box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
     }
+
+
+
     
     .config-card.company::before {
         background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .config-card.banks::before {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .config-card.tables::before {

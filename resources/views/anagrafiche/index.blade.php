@@ -67,11 +67,11 @@
     }
     
     .stats-card.primary::before {
-        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
     }
     
     .stats-card.success::before {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2);
     }
     
     .stats-card.info::before {
@@ -96,13 +96,15 @@
         overflow: hidden;
     }
     
-    .stats-icon.primary {
-        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+    .stats-icon.primary { 
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+
     }
     
     .stats-icon.success {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
-    }
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+    }        
+
     
     .stats-icon.info {
         background: linear-gradient(135deg, #48cae4, #0077b6);
@@ -164,12 +166,12 @@
     }
     
     .stats-btn.primary {
-        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+         background: linear-gradient(135deg, #4ecdc4, #44a08d);
         color: white;
     }
     
     .stats-btn.success {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+       background: linear-gradient(135deg, #9c27b0, #7b1fa2);
         color: white;
     }
     

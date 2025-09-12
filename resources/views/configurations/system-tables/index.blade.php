@@ -73,7 +73,7 @@
     
     /* Colori specifici per ogni card */
     .metric-card:nth-child(1)::before {
-        background: linear-gradient(135deg, #029D7E, #4DC9A5); /* Viola gestionale */
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2);
     }
     
     .metric-card:nth-child(2)::before {
@@ -101,7 +101,7 @@
     
     /* Colori numeri abbinati ai border */
     .metric-card:nth-child(1) .metric-value {
-        color: #029D7E; /* Viola gestionale */
+        color: #9c27b0; /* Viola gestionale */
     }
     
     .metric-card:nth-child(2) .metric-value {
@@ -479,7 +479,7 @@
         <!-- Metriche Performance -->
         <div class="metrics-grid">
             <div class="metric-card">
-                <div class="metric-value text-primary">{{ $metrics['total_tables'] }}</div>
+                <div class="metric-value ">{{ $metrics['total_tables'] }}</div>
                 <div class="metric-label">Tabelle Totali</div>
             </div>
             <div class="metric-card">
@@ -518,7 +518,7 @@
                         $cardUrl = '#';
                         if ($canRead) {
                             if ($systemTable->objname === 'vat_nature_associations') {
-                                $cardUrl = route('configurations.vat-nature-configurator');
+                                $cardUrl = route('configurations.associazioni-nature-iva');
                             } elseif ($systemTable->objname === 'tax_rates') {
                                 $cardUrl = route('configurations.tax-rates-configurator');
                             } else {
@@ -604,7 +604,7 @@
                 $cardUrl = '#';
                 if ($canRead) {
                     if ($table->objname === 'vat_nature_associations') {
-                        $cardUrl = route('configurations.vat-nature-configurator');
+                        $cardUrl = route('configurations.associazioni-nature-iva');
                     } elseif ($table->objname === 'tax_rates') {
                         $cardUrl = route('configurations.tax-rates-configurator');
                     } else {

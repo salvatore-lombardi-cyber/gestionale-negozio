@@ -7,13 +7,13 @@
         min-height: 100vh;
     }
     
-    .dashboard-container {
+    .management-container {
         padding: 2rem;
         min-height: calc(100vh - 70px);
     }
     
-    /* Header stile gestionale */
-    .dashboard-header {
+    /* Header con pulsanti */
+    .management-header {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
         border-radius: 20px;
@@ -23,7 +23,7 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
-    .dashboard-title {
+    .management-title {
         font-size: 2rem;
         font-weight: 700;
         background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
@@ -32,25 +32,55 @@
         margin: 0;
         display: flex;
         align-items: center;
-        gap: 1rem;
     }
     
-    .back-button {
-        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
-        color: white;
-        padding: 0.5rem 1rem;
+    /* Pulsanti modern-btn coerenti */
+    .modern-btn {
+        padding: 12px 24px;
+        border: none;
         border-radius: 12px;
+        font-weight: 600;
         text-decoration: none;
-        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         transition: all 0.3s ease;
+        font-size: 0.95rem;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .modern-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(2, 157, 126, 0.3);
+    }
+    
+    .modern-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Gradiente standard per tutti i button */
+    .modern-btn.btn-primary,
+    .btn-primary.modern-btn {
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+        color: white;
         border: none;
     }
     
-    .back-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(2, 157, 126, 0.3);
+    .modern-btn.btn-secondary,
+    .btn-secondary.modern-btn {
+        background: linear-gradient(135deg, #6c757d, #545b62);
         color: white;
-        text-decoration: none;
+        border: none;
+    }
+    
+    .modern-btn.btn-success,
+    .btn-success.modern-btn {
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+        color: white;
+        border: none;
     }
     
     .config-section {
@@ -200,7 +230,7 @@
         text-align: left;
     }
     
-    .action-btn {
+    /* .action-btn {
         border: none;
         border-radius: 8px;
         padding: 6px 12px;
@@ -212,7 +242,7 @@
         display: inline-block;
         min-width: 32px;
         text-align: center;
-    }
+    } */
     
     .action-btn.delete {
         background: linear-gradient(135deg, #f72585, #c5025a);
@@ -227,8 +257,14 @@
     
     .action-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
         color: white;
+    }
+    
+    .action-btn.view:hover,
+    .action-btn.edit:hover,
+    .action-btn.delete:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
     }
     
     .action-btn.delete:hover {
@@ -271,23 +307,25 @@
     }
     
     .status-badge {
-        padding: 0.25rem 0.75rem;
-        border-radius: 12px;
-        font-size: 0.875rem;
-        font-weight: 500;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
         display: inline-flex;
         align-items: center;
         gap: 0.3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     .status-badge.default {
-        background: linear-gradient(135deg, #ffd60a, #ff8500);
-        color: white;
+        background-color: #fff3e0;
+        color: #ef6c00;
     }
     
     .status-badge.normal {
-        background: rgba(2, 157, 126, 0.1);
-        color: #029D7E;
+        background-color: #e3f2fd;
+        color: #1565c0;
     }
     
     /* Mobile Cards */
@@ -390,7 +428,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1rem;
-        margin-top: 1.5rem;
+        margin-bottom: 2rem;
     }
     
     .metric-card {
@@ -416,21 +454,21 @@
         border-radius: 20px 20px 0 0;
     }
     
-    /* Colori specifici per ogni card */
+    /* Colori specifici per ogni card secondo Golden Standard */
     .metric-card:nth-child(1)::before {
-        background: linear-gradient(135deg, #029D7E, #4DC9A5); /* Viola gestionale */
+        background: linear-gradient(135deg, #4ecdc4, #44a08d); /* Turchese-Verde */
     }
     
     .metric-card:nth-child(2)::before {
-        background: linear-gradient(135deg, #029D7E, #4DC9A5); /* Verde gestionale */
+        background: linear-gradient(135deg, #48cae4, #0077b6); /* Azzurro-Blu */
     }
     
     .metric-card:nth-child(3)::before {
-        background: linear-gradient(135deg, #48cae4, #0077b6); /* Azzurro gestionale */
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2); /* Viola-Magenta */
     }
     
     .metric-card:nth-child(4)::before {
-        background: linear-gradient(135deg, #ffd60a, #ff8500); /* Giallo gestionale */
+        background: linear-gradient(135deg, #ffd60a, #ff8500); /* Giallo-Arancione */
     }
     
     .metric-card:hover {
@@ -444,21 +482,113 @@
         margin: 0;
     }
     
+    /* Contenitore ricerca e filtri */
+    .search-filters {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .search-input {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .search-input:focus {
+        outline: none;
+        border-color: #029D7E;
+        box-shadow: 0 0 0 3px rgba(2, 157, 126, 0.1);
+    }
+    
+    .filter-select {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .filter-select:focus {
+        outline: none;
+        border-color: #029D7E;
+        box-shadow: 0 0 0 3px rgba(2, 157, 126, 0.1);
+    }
+    
+    /* Pulsanti Azioni */
+    .action-btn {
+        border: none;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin: 0 2px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    
+    .action-btn.view {
+        background: linear-gradient(135deg, #48cae4, #0077b6);
+        color: white;
+        padding: 8px;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .action-btn.edit {
+        background: linear-gradient(135deg, #ffd60a, #ff8500);
+        color: white;
+        padding: 8px;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .action-btn.delete {
+        background: linear-gradient(135deg, #f72585, #c5025a);
+        color: white;
+    }
+    
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+        color: white;
+    }
+    
+    .action-btn.view:hover,
+    .action-btn.edit:hover,
+    .action-btn.delete:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+    }
+    
     /* Colori numeri abbinati ai border */
     .metric-card:nth-child(1) .metric-value {
-        color: #029D7E; /* Viola gestionale */
+        color: #4ecdc4; /* Turchese-Verde */
     }
     
     .metric-card:nth-child(2) .metric-value {
-        color: #029D7E; /* Verde gestionale */
+        color: #48cae4; /* Azzurro-Blu */
     }
     
     .metric-card:nth-child(3) .metric-value {
-        color: #48cae4; /* Azzurro gestionale */
+        color: #9c27b0; /* Viola-Magenta */
     }
     
     .metric-card:nth-child(4) .metric-value {
-        color: #ffd60a; /* Giallo gestionale */
+        color: #ffd60a; /* Giallo-Arancione */
     }
     
     .metric-label {
@@ -475,6 +605,24 @@
         
         .mobile-cards {
             display: block;
+        }
+        
+        .management-container {
+            padding: 1rem;
+        }
+        
+        .management-header, .search-filters {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .management-title {
+            font-size: 1.8rem;
+        }
+        
+        .modern-btn {
+            padding: 10px 16px;
+            font-size: 0.9rem;
         }
         
         .card-details {
@@ -495,9 +643,24 @@
             font-size: 1.5rem;
         }
     }
+    
+    @media (max-width: 576px) {
+        .management-header .d-flex {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+        
+        .modern-btn {
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            width: 100%;
+            justify-content: center;
+        }
+    }
 </style>
 
-<div class="dashboard-container">
+<div class="management-container">
     <!-- Alert Messages -->
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -521,15 +684,22 @@
     @endif
     
     <!-- Header -->
-    <div class="dashboard-header">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="dashboard-title">
-                <i class="bi bi-link-45deg text-success"></i>
-                Configuratore Nature IVA
-            </h1>
-            <a href="{{ route('configurations.system-tables.index') }}" class="back-button">
-                <i class="bi bi-arrow-left"></i> Indietro
-            </a>
+    <div class="management-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div class="d-flex align-items-center">
+                <h1 class="management-title">
+                    <i class="bi bi-link-45deg me-3" style="color: #029D7E; font-size: 2rem;"></i>
+                    Associazioni Nature IVA
+                </h1>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{{ route('configurations.system-tables.index') }}" class="btn btn-secondary modern-btn">
+                    <i class="bi bi-arrow-left"></i> Torna Indietro
+                </a>
+                <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#associationModal" onclick="openAddModal()">
+                    <i class="bi bi-plus-lg"></i> Nuova Associazione
+                </button>
+            </div>
         </div>
         
         <p class="mt-3 mb-0 text-muted">
@@ -537,14 +707,63 @@
         </p>
     </div>
 
-    <!-- Form Nuova Associazione -->
-    <div class="config-section">
+    <!-- Cards Statistiche secondo il Golden Standard -->
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <h3 class="metric-value">{{ $associations->count() }}</h3>
+            <p class="metric-label">Associazioni Totali</p>
+        </div>
+        <div class="metric-card">
+            <h3 class="metric-value">{{ $taxRates->count() }}</h3>
+            <p class="metric-label">Aliquote IVA</p>
+        </div>
+        <div class="metric-card">
+            <h3 class="metric-value">{{ $vatNatures->count() }}</h3>
+            <p class="metric-label">Nature IVA Attive</p>
+        </div>
+        <div class="metric-card">
+            <h3 class="metric-value">{{ $associations->where('is_default', true)->count() }}</h3>
+            <p class="metric-label">Predefinite</p>
+        </div>
+    </div>
+
+    <!-- Filtri e ricerca -->
+    <div class="search-filters">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control search-input" id="searchInput" placeholder="Cerca per nome associazione o aliquota..." onkeyup="filterTable()">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select filter-select" id="taxRateFilter" onchange="filterTable()">
+                    <option value="">Tutte le aliquote</option>
+                    @foreach($taxRates as $rate)
+                        <option value="{{ $rate->id }}">{{ $rate->code }} - {{ $rate->rate }}%</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select filter-select" id="defaultFilter" onchange="filterTable()">
+                    <option value="">Tutti gli stati</option>
+                    <option value="1">Predefinite</option>
+                    <option value="0">Non predefinite</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-secondary modern-btn w-100" onclick="resetFilters()">
+                    <i class="bi bi-arrow-clockwise"></i> Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Nuova Associazione (Nascosto, compatibilità) -->
+    <div class="config-section" style="display: none;" id="legacy-form-section">
         <div class="section-title">
             <i class="bi bi-plus-circle text-success"></i>
             Crea Nuova Associazione
         </div>
         
-        <form method="POST" action="{{ route('configurations.system-tables.store', 'vat_nature_associations') }}" class="row g-3">
+        <form method="POST" action="{{ route('configurations.system-tables.store', 'associazioni-nature-iva') }}" class="row g-3">
             @csrf
             
             <div class="col-md-6">
@@ -616,19 +835,7 @@
         </form>
     </div>
 
-    <!-- Header Associazioni Configurate -->
-    <div class="dashboard-header">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="dashboard-title" style="font-size: 1.8rem;">
-                <i class="bi bi-list-ul text-success"></i>
-                Associazioni Configurate
-            </h2>
-        </div>
-        <p class="mt-3 mb-0 text-muted">
-            Elenco delle associazioni tra aliquote IVA e nature fiscali configurate ({{ $associations->count() }} totali)
-        </p>
-    </div>
-
+    <!-- Tabella dati -->
     @if($associations->count() > 0)
         <!-- Tabella Desktop -->
         <div class="modern-card">
@@ -683,14 +890,15 @@
                                     {{ $association->created_at ? $association->created_at->format('d/m/Y H:i') : '-' }}
                                 </td>
                                 <td>
-                                    <form method="POST" action="{{ route('configurations.system-tables.destroy', ['table' => 'vat_nature_associations', 'id' => $association->id]) }}" 
-                                          style="display: inline-block;" onsubmit="return confirmDelete('{{ $association->nome_associazione ?? 'questa associazione' }}')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="action-btn delete" title="Elimina associazione">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="action-btn view" onclick="viewAssociation({{ $association->id }})" title="Visualizza">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button type="button" class="action-btn edit" onclick="editAssociation({{ $association->id }})" title="Modifica">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button type="button" class="action-btn delete" onclick="deleteAssociation({{ $association->id }})" title="Elimina">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                             @endforeach
@@ -749,7 +957,7 @@
                     </div>
                     
                     <div class="d-flex justify-content-center mt-3">
-                        <form method="POST" action="{{ route('configurations.system-tables.destroy', ['table' => 'vat_nature_associations', 'id' => $association->id]) }}" 
+                        <form method="POST" action="{{ route('configurations.system-tables.destroy', ['table' => 'associazioni-nature-iva', 'id' => $association->id]) }}" 
                               style="width: 100%;" onsubmit="return confirmDelete('{{ $association->nome_associazione ?? 'questa associazione' }}')">
                             @csrf
                             @method('DELETE')
@@ -772,43 +980,113 @@
         </div>
     @endif
 
-    <!-- Header Statistiche Sistema -->
-    <div class="dashboard-header" style="margin-top: 2rem;">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="dashboard-title" style="font-size: 1.8rem;">
-                <i class="bi bi-bar-chart text-success"></i>
-                Statistiche Sistema
-            </h2>
-        </div>
-        <p class="mt-3 mb-0 text-muted">
-            Panoramica dei dati configurati nel sistema Nature IVA
-        </p>
-        
-        <!-- Cards Statistiche Integrate nel Banner -->
-        <div class="metrics-grid mt-4">
-            <div class="metric-card">
-                <h3 class="metric-value">{{ $taxRates->count() }}</h3>
-                <p class="metric-label">Aliquote IVA</p>
+</div>
+
+<!-- Modal Nuova Associazione -->
+<div class="modal fade" id="associationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border-radius: 20px; border: none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; border-radius: 20px 20px 0 0;">
+                <h5 class="modal-title" id="associationModalTitle">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Nuova Associazione Nature IVA
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="metric-card">
-                <h3 class="metric-value">{{ $vatNatures->count() }}</h3>
-                <p class="metric-label">Nature IVA</p>
-            </div>
-            <div class="metric-card">
-                <h3 class="metric-value">{{ $associations->count() }}</h3>
-                <p class="metric-label">Associazioni</p>
-            </div>
-            <div class="metric-card">
-                <h3 class="metric-value">{{ $associations->where('is_default', true)->count() }}</h3>
-                <p class="metric-label">Predefinite</p>
-            </div>
+            <form id="associationForm" method="POST" action="{{ route('configurations.system-tables.store', 'associazioni-nature-iva') }}">
+                @csrf
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="modal_nome_associazione" class="form-label">Nome Associazione *</label>
+                            <input type="text" class="form-control" id="modal_nome_associazione" name="nome_associazione" 
+                                   placeholder="es. IVA 22% Natura N1" minlength="3" maxlength="255" required>
+                            <div class="form-text">Minimo 3 caratteri, massimo 255</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="modal_descrizione" class="form-label">Descrizione</label>
+                            <input type="text" class="form-control" id="modal_descrizione" name="descrizione" 
+                                   placeholder="Descrizione dettagliata dell'associazione" maxlength="500">
+                            <div class="form-text">Massimo 500 caratteri (opzionale)</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="modal_tax_rate_id" class="form-label">Aliquota IVA *</label>
+                            <select class="form-select" id="modal_tax_rate_id" name="tax_rate_id" required>
+                                <option value="">Seleziona aliquota IVA...</option>
+                                @foreach($taxRates as $taxRate)
+                                <option value="{{ $taxRate->id }}">
+                                    {{ $taxRate->code }} - {{ $taxRate->description }} ({{ $taxRate->rate }}%)
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="modal_vat_nature_id" class="form-label">Natura IVA *</label>
+                            <select class="form-select" id="modal_vat_nature_id" name="vat_nature_id" required>
+                                <option value="">Seleziona natura IVA...</option>
+                                @foreach($vatNatures as $vatNature)
+                                <option value="{{ $vatNature->id }}">
+                                    {{ $vatNature->code }} - {{ $vatNature->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="modal_is_default" name="is_default" value="1">
+                                <label class="form-check-label" for="modal_is_default">
+                                    Imposta come associazione predefinita per questa aliquota IVA
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding: 1.5rem 2rem; border-top: 1px solid #e9ecef;">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Associazione
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
 @endsection
 
 <!-- Script per migliorare l'esperienza utente -->
 <script>
+// Funzione per aprire modale nuova associazione
+function openAddModal() {
+    // Reset form
+    document.getElementById('associationForm').reset();
+    
+    // Focus al primo campo
+    setTimeout(() => {
+        document.getElementById('modal_nome_associazione').focus();
+    }, 500);
+}
+
+// Funzione per toggle form legacy (compatibilità)
+function toggleLegacyForm() {
+    const section = document.getElementById('legacy-form-section');
+    const toggle = document.querySelector('a[onclick="toggleLegacyForm()"]');
+    
+    if (section.style.display === 'none') {
+        section.style.display = 'block';
+        toggle.innerHTML = '<i class="bi bi-toggle-on"></i> Nascondi form tradizionale';
+    } else {
+        section.style.display = 'none';
+        toggle.innerHTML = '<i class="bi bi-toggle-off"></i> Mostra form tradizionale';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-dismiss alerts dopo 5 secondi
     const alerts = document.querySelectorAll('.alert');
@@ -929,4 +1207,164 @@ document.addEventListener('DOMContentLoaded', function() {
 function confirmDelete(associationName) {
     return confirm(`Sei sicuro di voler eliminare l'associazione "${associationName}"?\\n\\nQuesta azione non può essere annullata.`);
 }
+
+// Funzioni per i pulsanti azioni
+function viewAssociation(id) {
+    // Carica dati per visualizzazione
+    fetch(`{{ route("configurations.system-tables.show", "associazioni-nature-iva") }}/${id}`)
+        .then(response => response.json())
+        .then(association => {
+            // Crea modale di visualizzazione
+            const modalContent = `
+                <div class="modal fade" id="viewAssociationModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content" style="border-radius: 20px; border: none;">
+                            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; border-radius: 20px 20px 0 0;">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-eye me-2"></i>Dettagli Associazione Nature IVA
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body" style="padding: 2rem;">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Nome Associazione</label>
+                                        <div class="p-2 bg-light rounded">${association.nome_associazione || 'N/A'}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Descrizione</label>
+                                        <div class="p-2 bg-light rounded">${association.descrizione || 'N/A'}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Aliquota IVA</label>
+                                        <div class="p-2 bg-light rounded">${association.tax_rate?.code || 'N/A'} - ${association.tax_rate?.rate || 0}%</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Natura IVA</label>
+                                        <div class="p-2 bg-light rounded">${association.vat_nature?.code || 'N/A'}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Predefinita</label>
+                                        <div class="p-2 bg-light rounded">${association.is_default ? 'Sì' : 'No'}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Data Creazione</label>
+                                        <div class="p-2 bg-light rounded">${new Date(association.created_at).toLocaleDateString('it-IT')}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="padding: 1.5rem 2rem; border-top: 1px solid #e9ecef;">
+                                <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-lg"></i> Chiudi
+                                </button>
+                                <button type="button" class="btn btn-primary modern-btn" onclick="editAssociation(${association.id}); bootstrap.Modal.getInstance(document.getElementById('viewAssociationModal')).hide();">
+                                    <i class="bi bi-pencil"></i> Modifica
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Rimuovi modale esistente se presente
+            const existingModal = document.getElementById('viewAssociationModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            // Aggiungi nuova modale al DOM
+            document.body.insertAdjacentHTML('beforeend', modalContent);
+            
+            // Mostra modale
+            const modal = new bootstrap.Modal(document.getElementById('viewAssociationModal'));
+            modal.show();
+            
+            // Rimuovi dal DOM quando si chiude
+            document.getElementById('viewAssociationModal').addEventListener('hidden.bs.modal', function () {
+                this.remove();
+            });
+        })
+        .catch(error => {
+            console.error('Errore:', error);
+            alert('Errore nel caricamento dei dettagli');
+        });
+}
+
+function editAssociation(id) {
+    // Carica dati per modifica
+    fetch(`{{ route("configurations.system-tables.show", "associazioni-nature-iva") }}/${id}`)
+        .then(response => response.json())
+        .then(association => {
+            // Popola form di modifica nel modale esistente
+            const form = document.getElementById('associationForm');
+            form.action = `{{ route("configurations.system-tables.update", ["table" => "associazioni-nature-iva", "id" => ":id"]) }}`.replace(':id', id);
+            
+            // Rimuovi eventuali campi _method esistenti
+            const existingMethod = form.querySelector('input[name="_method"]');
+            if (existingMethod) {
+                existingMethod.remove();
+            }
+            
+            // Aggiungi campo method per PUT
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'PUT';
+            form.appendChild(methodInput);
+            
+            // Popola i campi del form
+            document.getElementById('modal_nome_associazione').value = association.nome_associazione || '';
+            document.getElementById('modal_descrizione').value = association.descrizione || '';
+            document.getElementById('modal_tax_rate_id').value = association.tax_rate_id || '';
+            document.getElementById('modal_vat_nature_id').value = association.vat_nature_id || '';
+            document.getElementById('modal_is_default').checked = association.is_default || false;
+            
+            // Cambia titolo del modale
+            document.getElementById('associationModalTitle').innerHTML = '<i class="bi bi-pencil me-2"></i>Modifica Associazione Nature IVA';
+            
+            // Mostra modale
+            const modal = new bootstrap.Modal(document.getElementById('associationModal'));
+            modal.show();
+        })
+        .catch(error => {
+            console.error('Errore:', error);
+            alert('Errore nel caricamento dei dati per la modifica');
+        });
+}
+
+function deleteAssociation(id) {
+    if (confirm('Sei sicuro di voler eliminare questa associazione?')) {
+        fetch(`{{ route("configurations.system-tables.destroy", ["table" => "associazioni-nature-iva", "id" => ":id"]) }}`.replace(':id', id), {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Errore nell\'eliminazione');
+            }
+        });
+    }
+}
+
+// Reset form quando si chiude il modal per ripristinare modalità "Crea"
+document.getElementById('associationModal').addEventListener('hidden.bs.modal', function () {
+    const form = document.getElementById('associationForm');
+    form.reset();
+    form.action = `{{ route("configurations.system-tables.store", "associazioni-nature-iva") }}`;
+    
+    // Rimuovi campo _method se presente
+    const methodField = form.querySelector('input[name="_method"]');
+    if (methodField) {
+        methodField.remove();
+    }
+    
+    // Ripristina titolo originale
+    document.getElementById('associationModalTitle').innerHTML = '<i class="bi bi-plus-circle me-2"></i>Nuova Associazione Nature IVA';
+});
 </script>

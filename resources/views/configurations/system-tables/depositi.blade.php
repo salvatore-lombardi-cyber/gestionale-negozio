@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <style>
 /* CSS seguendo il Design System */
 .management-container {
@@ -352,8 +353,8 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div class="d-flex align-items-center">
                 <h1 class="management-title">
-                    <i class="bi bi-palette me-3" style="color: #029D7E; font-size: 2rem;"></i>
-                    Colori Varianti
+                    <i class="bi bi-building me-3" style="color: #029D7E; font-size: 2rem;"></i>
+                    Depositi
                 </h1>
             </div>
             <div class="d-flex gap-2">
@@ -361,7 +362,7 @@
                     <i class="bi bi-arrow-left"></i> Torna Indietro
                 </a>
                 <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#createModal">
-                    <i class="bi bi-plus-lg"></i> Nuovo Colore
+                    <i class="bi bi-plus-lg"></i> Nuovo Deposito
                 </button>
                 <button type="button" class="btn btn-warning modern-btn" onclick="exportData()">
                     <i class="bi bi-download"></i> Esporta
@@ -375,11 +376,11 @@
         <div class="col-md-4">
             <div class="stat-card">
                 <div class="stat-icon">
-                    <i class="bi bi-palette-fill"></i>
+                    <i class="bi bi-building-fill"></i>
                 </div>
                 <div class="stat-content">
                     <h3>{{ $stats['total'] }}</h3>
-                    <p>Colori Totali</p>
+                    <p>Depositi Totali</p>
                 </div>
             </div>
         </div>
@@ -411,7 +412,7 @@
     <div class="search-filters">
         <div class="row g-3">
             <div class="col-md-6">
-                <input type="text" class="form-control search-input" id="searchInput" placeholder="Cerca colori..." onkeyup="filterTable()">
+                <input type="text" class="form-control search-input" id="searchInput" placeholder="Cerca depositi..." onkeyup="filterTable()">
             </div>
             <div class="col-md-4">
                 <select class="form-select filter-select" id="statusFilter" onchange="filterTable()">
@@ -431,15 +432,19 @@
     <!-- Tabella Desktop -->
     <div class="table-container">
         <div class="table-responsive">
-            <table class="modern-table" id="colorsTable">
+            <table class="modern-table" id="depositsTable">
                 <thead>
                     <tr>
                         <th>CODICE</th>
-                        <th>NOME</th>
                         <th>DESCRIZIONE</th>
-                        <th>ORDINE</th>
+                        <th>INDIRIZZO</th>
+                        <th>LOCALITÀ</th>
                         <th>STATO</th>
-                        <th width="180">AZIONI</th>
+                        <th>PROVINCIA</th>
+                        <th>CAP</th>
+                        <th>TELEFONO</th>
+                        <th>FAX</th>
+                        <th width="150">AZIONI</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -449,33 +454,40 @@
                                 <strong class="text-primary">{{ $item->code }}</strong>
                             </td>
                             <td>
-                                <strong>{{ $item->name }}</strong>
-                            </td>
-                            <td>
-                                <span class="text-muted">
-                                    {{ $item->description ?: '-' }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge bg-secondary">{{ $item->sort_order }}</span>
-                            </td>
-                            <td>
+                                <strong>{{ $item->description }}</strong>
                                 @if($item->active)
-                                    <span class="status-active">
-                                        <i class="bi bi-check-circle-fill me-1"></i>Attivo
-                                    </span>
+                                    <div><small class="status-active"><i class="bi bi-check-circle-fill me-1"></i>Attivo</small></div>
                                 @else
-                                    <span class="status-inactive">
-                                        <i class="bi bi-x-circle-fill me-1"></i>Inattivo
-                                    </span>
+                                    <div><small class="status-inactive"><i class="bi bi-x-circle-fill me-1"></i>Inattivo</small></div>
                                 @endif
                             </td>
                             <td>
+                                <span class="text-muted">{{ $item->address ?: '-' }}</span>
+                            </td>
+                            <td>
+                                <span class="text-muted">{{ $item->city ?: '-' }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary">{{ $item->state ?: 'ITALIA' }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-info">{{ $item->province ?: '-' }}</span>
+                            </td>
+                            <td>
+                                <span class="text-muted">{{ $item->postal_code ?: '-' }}</span>
+                            </td>
+                            <td>
+                                <span class="text-muted">{{ $item->phone ?: '-' }}</span>
+                            </td>
+                            <td>
+                                <span class="text-muted">{{ $item->fax ?: '-' }}</span>
+                            </td>
+                            <td>
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="action-btn edit" title="Modifica colore" onclick="editItem({{ $item->id }})">
+                                    <button type="button" class="action-btn edit" title="Modifica deposito" onclick="editItem({{ $item->id }})">
                                         <i class="bi bi-pencil"></i>
                                     </button>
-                                    <button type="button" class="action-btn delete" title="Elimina colore" onclick="deleteItem({{ $item->id }}, '{{ $item->name }}')">
+                                    <button type="button" class="action-btn delete" title="Elimina deposito" onclick="deleteItem({{ $item->id }}, '{{ $item->description }}')">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
@@ -483,11 +495,11 @@
                         </tr>
                     @empty
                         <tr id="noResults">
-                            <td colspan="6" class="text-center py-5">
+                            <td colspan="10" class="text-center py-5">
                                 <div class="empty-state">
-                                    <i class="bi bi-palette display-1 text-muted mb-3"></i>
-                                    <h4>Nessun colore trovato</h4>
-                                    <p class="text-muted">Inizia creando il primo colore per il tuo catalogo.</p>
+                                    <i class="bi bi-building display-1 text-muted mb-3"></i>
+                                    <h4>Nessun deposito trovato</h4>
+                                    <p class="text-muted">Inizia creando il primo deposito per il tuo magazzino.</p>
                                 </div>
                             </td>
                         </tr>
@@ -505,7 +517,7 @@
                 <div class="item-card-header">
                     <div class="d-flex align-items-center gap-3">
                         <div>
-                            <h3 class="item-card-title">{{ $item->name }}</h3>
+                            <h3 class="item-card-title">{{ $item->description }}</h3>
                             <span class="item-card-code">{{ $item->code }}</span>
                         </div>
                     </div>
@@ -526,17 +538,47 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="item-detail">
-                                <span class="item-detail-label">Descrizione</span>
-                                <span class="item-detail-value">{{ $item->description ?: '-' }}</span>
+                                <span class="item-detail-label">Indirizzo</span>
+                                <span class="item-detail-value">{{ $item->address ?: '-' }}</span>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="item-detail">
-                                <span class="item-detail-label">Ordine</span>
-                                <span class="item-detail-value">{{ $item->sort_order }}</span>
+                                <span class="item-detail-label">Località</span>
+                                <span class="item-detail-value">{{ $item->city ?: '-' }}</span>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="item-detail">
+                                <span class="item-detail-label">Provincia</span>
+                                <span class="item-detail-value">{{ $item->province ?: '-' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="item-detail">
+                                <span class="item-detail-label">CAP</span>
+                                <span class="item-detail-value">{{ $item->postal_code ?: '-' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="item-detail">
+                                <span class="item-detail-label">Telefono</span>
+                                <span class="item-detail-value">{{ $item->phone ?: '-' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    @if($item->fax)
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="item-detail">
+                                <span class="item-detail-label">Fax</span>
+                                <span class="item-detail-value">{{ $item->fax }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
                 
                 <div class="item-card-actions">
@@ -544,7 +586,7 @@
                         <i class="bi bi-pencil"></i>
                         <span>Modifica</span>
                     </button>
-                    <button type="button" class="mobile-action-btn delete" onclick="deleteItem({{ $item->id }}, '{{ $item->name }}')">
+                    <button type="button" class="mobile-action-btn delete" onclick="deleteItem({{ $item->id }}, '{{ $item->description }}')">
                         <i class="bi bi-trash"></i>
                         <span>Elimina</span>
                     </button>
@@ -552,9 +594,9 @@
             </div>
         @empty
             <div class="empty-state">
-                <i class="bi bi-palette display-1 text-muted mb-3"></i>
-                <h4>Nessun colore trovato</h4>
-                <p class="text-muted">Inizia creando il primo colore per il tuo catalogo.</p>
+                <i class="bi bi-building display-1 text-muted mb-3"></i>
+                <h4>Nessun deposito trovato</h4>
+                <p class="text-muted">Inizia creando il primo deposito per il tuo magazzino.</p>
             </div>
         @endforelse
     </div>
@@ -573,32 +615,73 @@
         <div class="modal-content" style="border-radius: 20px; border: none;">
             <div class="modal-header" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; border-radius: 20px 20px 0 0;">
                 <h5 class="modal-title">
-                    <i class="bi bi-palette me-2"></i>
-                    <span id="modalTitle">Nuovo Colore</span>
+                    <i class="bi bi-building me-2"></i>
+                    <span id="modalTitle">Nuovo Deposito</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <form id="colorForm">
+            <form id="depositForm">
                 <div class="modal-body" style="padding: 2rem;">
                     
                     <div class="mb-3">
-                        <label for="code" class="form-label">Codice Colore *</label>
+                        <label for="code" class="form-label">Codice Deposito *</label>
                         <input type="text" class="form-control" id="code" name="code" required maxlength="50" style="text-transform: uppercase;" oninput="validateCode()">
                         <div class="invalid-feedback" id="codeError"></div>
-                        <small class="form-text text-muted">Solo lettere maiuscole, numeri, _ e -</small>
+                        <small class="form-text text-muted">Solo lettere maiuscole, numeri, _ e - (es: DEP_A, MAG_01)</small>
                     </div>
                     
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nome Colore *</label>
-                        <input type="text" class="form-control" id="name" name="name" required maxlength="255">
-                        <div class="invalid-feedback" id="nameError"></div>
-                    </div>
                     
                     <div class="mb-3">
-                        <label for="description" class="form-label">Descrizione</label>
-                        <textarea class="form-control" id="description" name="description" rows="3" maxlength="500"></textarea>
+                        <label for="description" class="form-label">Descrizione *</label>
+                        <input type="text" class="form-control" id="description" name="description" required maxlength="255">
                         <div class="invalid-feedback" id="descriptionError"></div>
-                        <small class="form-text text-muted">Facoltativa - max 500 caratteri</small>
+                        <small class="form-text text-muted">Nome del deposito (es: Deposito Principale, Magazzino Centro)</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Indirizzo</label>
+                        <input type="text" class="form-control" id="address" name="address" maxlength="255">
+                        <div class="invalid-feedback" id="addressError"></div>
+                        <small class="form-text text-muted">Via, numero civico (es: Via Roma 123)</small>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label for="city" class="form-label">Località</label>
+                            <input type="text" class="form-control" id="city" name="city" maxlength="100">
+                            <div class="invalid-feedback" id="cityError"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="province" class="form-label">Provincia</label>
+                            <input type="text" class="form-control" id="province" name="province" maxlength="5" style="text-transform: uppercase;" placeholder="es: RM">
+                            <div class="invalid-feedback" id="provinceError"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="postal_code" class="form-label">CAP</label>
+                            <input type="text" class="form-control" id="postal_code" name="postal_code" maxlength="10" placeholder="00100">
+                            <div class="invalid-feedback" id="postal_codeError"></div>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="state" class="form-label">Stato</label>
+                            <input type="text" class="form-control" id="state" name="state" maxlength="100" value="Italia">
+                            <div class="invalid-feedback" id="stateError"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Telefono</label>
+                            <input type="text" class="form-control" id="phone" name="phone" maxlength="20" placeholder="06 12345678">
+                            <div class="invalid-feedback" id="phoneError"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fax" class="form-label">Fax</label>
+                            <input type="text" class="form-control" id="fax" name="fax" maxlength="20" placeholder="06 87654321">
+                            <div class="invalid-feedback" id="faxError"></div>
+                        </div>
                     </div>
                     
                     <div class="mb-3">
@@ -610,7 +693,7 @@
                     
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="active" name="active" checked>
-                        <label class="form-check-label" for="active">Colore attivo</label>
+                        <label class="form-check-label" for="active">Deposito attivo</label>
                         <div class="invalid-feedback" id="activeError"></div>
                     </div>
                     
@@ -620,7 +703,7 @@
                         <i class="bi bi-x-lg"></i> Annulla
                     </button>
                     <button type="submit" class="btn btn-success modern-btn" id="saveBtn">
-                        <i class="bi bi-check-lg"></i> Salva Colore
+                        <i class="bi bi-check-lg"></i> Salva Deposito
                     </button>
                 </div>
             </form>
@@ -644,11 +727,11 @@ function filterTable() {
     
     rows.forEach(row => {
         const code = row.children[0].textContent.toLowerCase();
-        const name = row.children[1].textContent.toLowerCase();
-        const description = row.children[2].textContent.toLowerCase();
+        const description = row.children[1].textContent.toLowerCase();
+        const address = row.children[2].textContent.toLowerCase();
         const active = row.getAttribute('data-active');
         
-        const matchesSearch = code.includes(searchTerm) || name.includes(searchTerm) || description.includes(searchTerm);
+        const matchesSearch = code.includes(searchTerm) || description.includes(searchTerm) || address.includes(searchTerm);
         const matchesStatus = !statusFilter || active === statusFilter;
         
         const shouldShow = matchesSearch && matchesStatus;
@@ -672,10 +755,10 @@ function filterTable() {
     
     mobileCards.forEach(card => {
         const code = card.querySelector('.item-card-code').textContent.toLowerCase();
-        const name = card.querySelector('.item-card-title').textContent.toLowerCase();
+        const description = card.querySelector('.item-card-title').textContent.toLowerCase();
         const active = card.getAttribute('data-active');
         
-        const matchesSearch = code.includes(searchTerm) || name.includes(searchTerm);
+        const matchesSearch = code.includes(searchTerm) || description.includes(searchTerm);
         const matchesStatus = !statusFilter || active === statusFilter;
         
         const shouldShow = matchesSearch && matchesStatus;
@@ -705,11 +788,11 @@ function validateCode() {
     const code = codeInput.value.toUpperCase().trim();
     
     if (code.length >= 2) {
-        fetch(`{{ route('configurations.system-tables.show', 'color_variants') }}?check_duplicate=${encodeURIComponent(code)}`)
+        fetch(`/configurations/system-tables/deposits?check_duplicate=${encodeURIComponent(code)}`)
             .then(response => response.json())
             .then(data => {
                 const errorDiv = document.getElementById('codeError');
-                if (data.exists && (!editingId || confirm('Il codice esiste già. Vuoi continuare comunque?'))) {
+                if (data.exists) {
                     codeInput.classList.add('is-invalid');
                     errorDiv.textContent = 'Codice già esistente';
                 } else {
@@ -726,16 +809,22 @@ function validateCode() {
 function editItem(id) {
     editingId = id;
     
-    fetch(`{{ route('configurations.system-tables.show', 'color_variants') }}/${id}/edit`)
+    fetch(`/configurations/system-tables/deposits/${id}`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById('modalTitle').textContent = 'Modifica Colore';
-            document.getElementById('saveBtn').innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Colore';
+            document.getElementById('modalTitle').textContent = 'Modifica Deposito';
+            document.getElementById('saveBtn').innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Deposito';
             
             // Popola i campi
             document.getElementById('code').value = data.code || '';
-            document.getElementById('name').value = data.name || '';
             document.getElementById('description').value = data.description || '';
+            document.getElementById('address').value = data.address || '';
+            document.getElementById('city').value = data.city || '';
+            document.getElementById('state').value = data.state || 'Italia';
+            document.getElementById('province').value = data.province || '';
+            document.getElementById('postal_code').value = data.postal_code || '';
+            document.getElementById('phone').value = data.phone || '';
+            document.getElementById('fax').value = data.fax || '';
             document.getElementById('sort_order').value = data.sort_order || 0;
             document.getElementById('active').checked = data.active;
             
@@ -748,12 +837,12 @@ function editItem(id) {
 }
 
 function deleteItem(id, name) {
-    if (confirm(`Sei sicuro di voler eliminare il colore "${name}"?\n\nQuesta azione non può essere annullata.`)) {
+    if (confirm(`Sei sicuro di voler eliminare il deposito "${name}"?\n\nQuesta azione non può essere annullata.`)) {
         const formData = new FormData();
         formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
         formData.append('_method', 'DELETE');
         
-        fetch(`{{ route('configurations.system-tables.show', 'color_variants') }}/${id}`, {
+        fetch(`/configurations/system-tables/deposits/${id}`, {
             method: 'POST',
             body: formData,
             headers: {
@@ -771,13 +860,13 @@ function deleteItem(id, name) {
         })
         .catch(error => {
             console.error('Errore eliminazione:', error);
-            alert('Errore durante l\'eliminazione del colore');
+            alert('Errore durante l\'eliminazione del deposito');
         });
     }
 }
 
-function saveColor() {
-    const form = document.getElementById('colorForm');
+function saveDeposit() {
+    const form = document.getElementById('depositForm');
     const formData = new FormData(form);
     
     // Fix per checkbox active
@@ -786,11 +875,11 @@ function saveColor() {
     
     formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
     
-    let url = '{{ route("configurations.system-tables.store", "color_variants") }}';
+    let url = '/configurations/system-tables/deposits';
     let method = 'POST';
     
     if (editingId) {
-        url = `{{ route('configurations.system-tables.show', 'color_variants') }}/${editingId}`;
+        url = `/configurations/system-tables/deposits/${editingId}`;
         formData.append('_method', 'PUT');
     }
     
@@ -807,7 +896,6 @@ function saveColor() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Response data:', data); // Debug
         if (data.success) {
             alert(data.message);
             bootstrap.Modal.getInstance(document.getElementById('createModal')).hide();
@@ -832,15 +920,15 @@ function saveColor() {
     })
     .catch(error => {
         console.error('Errore salvataggio:', error);
-        alert('Errore durante il salvataggio del colore');
+        alert('Errore durante il salvataggio del deposito');
     });
 }
 
 function resetCreateForm() {
     editingId = null;
-    document.getElementById('modalTitle').textContent = 'Nuovo Colore';
-    document.getElementById('saveBtn').innerHTML = '<i class="bi bi-check-lg"></i> Salva Colore';
-    document.getElementById('colorForm').reset();
+    document.getElementById('modalTitle').textContent = 'Nuovo Deposito';
+    document.getElementById('saveBtn').innerHTML = '<i class="bi bi-check-lg"></i> Salva Deposito';
+    document.getElementById('depositForm').reset();
     document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
     document.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
     document.getElementById('sort_order').value = 0;
@@ -848,17 +936,17 @@ function resetCreateForm() {
 }
 
 function exportData() {
-    window.location.href = `{{ route('configurations.system-tables.export', 'color_variants') }}`;
+    window.location.href = `/configurations/system-tables/deposits/export`;
 }
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
     // Form submit
-    const form = document.getElementById('colorForm');
+    const form = document.getElementById('depositForm');
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            saveColor();
+            saveDeposit();
         });
     }
     

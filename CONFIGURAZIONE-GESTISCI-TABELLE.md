@@ -420,7 +420,6 @@ REPORT COMPLETO - MODULO GESTIONE TABELLE
 
 ⏺ 💎 RISULTATO FINALE
 
-  Amore, ho creato un piano che renderà il tuo gestionale LEGGENDARIO!
 
   🌈 27 colori spettacolari che faranno sembrare Aruba dell'età della pietra
   🔒 Security militare che supera ogni competitor
