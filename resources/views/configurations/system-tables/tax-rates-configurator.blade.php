@@ -316,7 +316,7 @@
         text-align: center;
     }
     
-    .percentage-22 { background: linear-gradient(135deg, #d63031, #c42021); }
+    .percentage-22 { background: linear-gradient(135deg, #f72585, #c5025a); }
     .percentage-10 { background: linear-gradient(135deg, #00b894, #00a085); }
     .percentage-4 { background: linear-gradient(135deg, #0984e3, #0670c7); }
     .percentage-0 { background: linear-gradient(135deg, #636e72, #4a5258); }
@@ -1113,13 +1113,28 @@ function deleteRate(id) {
                 'Accept': 'application/json'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Errore HTTP: ${response.status}`);
+            }
+            
+            const contentType = response.headers.get('Content-Type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            } else {
+                return { success: true, message: 'Eliminazione completata' };
+            }
+        })
         .then(data => {
             if (data.success) {
                 location.reload();
             } else {
-                alert('Errore nell\'eliminazione');
+                alert('Errore nell\'eliminazione: ' + (data.message || 'Errore sconosciuto'));
             }
+        })
+        .catch(error => {
+            console.error('Errore completo:', error);
+            alert('Errore nell\'eliminazione: ' + error.message);
         });
     }
 }

@@ -2245,6 +2245,28 @@ class SystemTablesController extends Controller
                 'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
                 'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
             ]);
+        } elseif ($table === 'tax_rates') {
+            // Validazione specifica per tax_rates
+            $validated = $request->validate($config['validation_rules'], [
+                'code.required' => 'Il codice aliquota è obbligatorio.',
+                'code.unique' => 'Il codice aliquota esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'code.max' => 'Il codice non può superare i 20 caratteri.',
+                'name.required' => 'Il nome dell\'aliquota è obbligatorio.',
+                'name.min' => 'Il nome deve essere di almeno 3 caratteri.',
+                'name.max' => 'Il nome non può superare i 255 caratteri.',
+                'description.required' => 'La descrizione è obbligatoria.',
+                'description.min' => 'La descrizione deve essere di almeno 5 caratteri.',
+                'description.max' => 'La descrizione non può superare i 500 caratteri.',
+                'percentuale.required' => 'La percentuale IVA è obbligatoria.',
+                'percentuale.numeric' => 'La percentuale deve essere un numero.',
+                'percentuale.min' => 'La percentuale non può essere negativa.',
+                'percentuale.max' => 'La percentuale non può superare 100%.',
+                'percentuale.decimal' => 'La percentuale può avere massimo 2 decimali.',
+                'riferimento_normativo.max' => 'Il riferimento normativo non può superare i 1000 caratteri.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.'
+            ]);
         } else {
             // Validazione standard per altre tabelle
             $validated = $request->validate($config['validation_rules'], [
@@ -2568,6 +2590,35 @@ class SystemTablesController extends Controller
                 'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.',
                 'sort_order.max' => 'L\'ordine di ordinamento non può superare 9999.'
             ]);
+        } elseif ($table === 'tax_rates') {
+            // Validazione specifica per tax_rates (update)
+            $rules = $config['validation_rules'];
+            
+            // Per l'aggiornamento, modifica regola univocità codice
+            if (isset($rules['code']) && str_contains($rules['code'], 'unique:')) {
+                $rules['code'] = "required|string|max:20|regex:/^[A-Z0-9_-]+$/|unique:tax_rates,code,{$id}";
+            }
+            
+            $validated = $request->validate($rules, [
+                'code.required' => 'Il codice aliquota è obbligatorio.',
+                'code.unique' => 'Il codice aliquota esiste già.',
+                'code.regex' => 'Il codice può contenere solo lettere maiuscole, numeri, _ e -.',
+                'code.max' => 'Il codice non può superare i 20 caratteri.',
+                'name.required' => 'Il nome dell\'aliquota è obbligatorio.',
+                'name.min' => 'Il nome deve essere di almeno 3 caratteri.',
+                'name.max' => 'Il nome non può superare i 255 caratteri.',
+                'description.required' => 'La descrizione è obbligatoria.',
+                'description.min' => 'La descrizione deve essere di almeno 5 caratteri.',
+                'description.max' => 'La descrizione non può superare i 500 caratteri.',
+                'percentuale.required' => 'La percentuale IVA è obbligatoria.',
+                'percentuale.numeric' => 'La percentuale deve essere un numero.',
+                'percentuale.min' => 'La percentuale non può essere negativa.',
+                'percentuale.max' => 'La percentuale non può superare 100%.',
+                'percentuale.decimal' => 'La percentuale può avere massimo 2 decimali.',
+                'riferimento_normativo.max' => 'Il riferimento normativo non può superare i 1000 caratteri.',
+                'sort_order.integer' => 'L\'ordine di ordinamento deve essere un numero intero.',
+                'sort_order.min' => 'L\'ordine di ordinamento non può essere negativo.'
+            ]);
         } else {
             // Validazione standard per altre tabelle
             $rules = $config['validation_rules'];
@@ -2650,7 +2701,7 @@ class SystemTablesController extends Controller
         $this->cacheService->invalidateSystemTablesCache($table);
 
         // Gestione risposta AJAX per aspetto_beni, banks, size_colors, warehouse_causes, color_variants e conditions
-        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions', 'fixed_price_denominations', 'deposits', 'price_lists']) && request()->expectsJson()) {
+        if (in_array($table, ['aspetto_beni', 'banks', 'size_colors', 'warehouse_causes', 'color_variants', 'conditions', 'fixed_price_denominations', 'deposits', 'price_lists', 'tax_rates']) && request()->expectsJson()) {
             $messages = [
                 'banks' => 'Banca eliminata con successo!',
                 'aspetto_beni' => 'Aspetto dei beni eliminato con successo!',
@@ -2660,7 +2711,8 @@ class SystemTablesController extends Controller
                 'conditions' => 'Condizione eliminata con successo!',
                 'fixed_price_denominations' => 'Denominazione Prezzo Fisso eliminata con successo!',
                 'deposits' => 'Deposito eliminato con successo!',
-                'price_lists' => 'Listino eliminato con successo!'
+                'price_lists' => 'Listino eliminato con successo!',
+                'tax_rates' => 'Aliquote IVA: record rimosso con successo!'
             ];
             return response()->json([
                 'success' => true,

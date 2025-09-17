@@ -1030,13 +1030,183 @@ async function submitForm(event, action) {
 }
 
 function viewItem(id) {
-    // Implementa visualizzazione dettaglio
-    window.open(`{{ route("configurations.system-tables.show", "banks") }}/${id}`, '_blank');
+    // Carica dati per visualizzazione
+    fetch(`{{ route("configurations.system-tables.show", "banks") }}/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Errore HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(item => {
+            if (!item || item.error) {
+                throw new Error(item?.message || 'Dati non validi ricevuti dal server');
+            }
+            
+            // Mostra dettagli in modale
+            const modalContent = `
+                <div class="modal fade" id="viewModal" tabindex="-1">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content" style="border-radius: 20px; border: none;">
+                            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; border-radius: 20px 20px 0 0;">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-eye me-2"></i>Dettagli Banca
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body" style="padding: 2rem;">
+                                <div class="row g-4">
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Codice Banca</label>
+                                        <div class="p-2 bg-light rounded">
+                                            <span class="bank-code">${item.code}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Nome Banca</label>
+                                        <div class="p-2 bg-light rounded">${item.name}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Tipo</label>
+                                        <div class="p-2">
+                                            <span class="bank-badge ${item.is_italian ? 'bank-italian' : 'bank-foreign'}">
+                                                ${item.is_italian ? 'Italiana' : 'Estera'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    ${item.description ? `
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-muted">Descrizione</label>
+                                        <div class="p-2 bg-light rounded">${item.description}</div>
+                                    </div>
+                                    ` : ''}
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Codici Bancari</label>
+                                        <div class="p-2 bg-light rounded">
+                                            ${item.abi_code ? `<span class="bank-abi">ABI: ${item.abi_code}</span><br>` : ''}
+                                            ${item.bic_swift ? `<span class="bank-swift">${item.bic_swift}</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Localizzazione</label>
+                                        <div class="p-2 bg-light rounded">
+                                            ${item.city ? `<strong>${item.city}</strong><br>` : ''}
+                                            ${item.country || ''}
+                                        </div>
+                                    </div>
+                                    ${item.address ? `
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-muted">Indirizzo</label>
+                                        <div class="p-2 bg-light rounded">${item.address}</div>
+                                    </div>
+                                    ` : ''}
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Telefono</label>
+                                        <div class="p-2 bg-light rounded">${item.phone || '-'}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Email</label>
+                                        <div class="p-2 bg-light rounded">${item.email || '-'}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Sito Web</label>
+                                        <div class="p-2 bg-light rounded">
+                                            ${item.website ? `<a href="${item.website}" target="_blank">${item.website}</a>` : '-'}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Stato</label>
+                                        <div class="p-2">
+                                            <span class="status-badge ${item.active ? 'status-active' : 'status-inactive'}">
+                                                ${item.active ? 'Attivo' : 'Inattivo'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Ultimo Aggiornamento</label>
+                                        <div class="p-2 bg-light rounded">${new Date(item.updated_at).toLocaleDateString('it-IT')}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="padding: 1.5rem 2rem;">
+                                <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-lg"></i> Chiudi
+                                </button>
+                                <button type="button" class="btn btn-primary modern-btn" onclick="editItem(${item.id}); bootstrap.Modal.getInstance(document.getElementById('viewModal')).hide();">
+                                    <i class="bi bi-pencil"></i> Modifica
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Rimuovi modal esistente se presente
+            const existingModal = document.getElementById('viewModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            // Aggiungi il nuovo modal al DOM
+            document.body.insertAdjacentHTML('beforeend', modalContent);
+            
+            // Mostra il modal
+            new bootstrap.Modal(document.getElementById('viewModal')).show();
+        })
+        .catch(error => {
+            console.error('Errore nel caricamento dei dati:', error);
+            alert('🔌 Errore nel caricamento dei dati. Verifica la connessione al server.');
+        });
 }
 
 function editItem(id) {
-    // Carica dati per modifica - implementa quando necessario
-    alert('Funzione di modifica in implementazione');
+    // Carica i dati della banca per modifica
+    fetch(`{{ route("configurations.system-tables.show", "banks") }}/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Errore HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data || data.error) {
+                throw new Error(data?.message || 'Dati non validi ricevuti dal server');
+            }
+            // Popola il modal con i dati per modifica
+            document.getElementById('code').value = data.code || '';
+            document.getElementById('name').value = data.name || '';
+            document.getElementById('abi_code').value = data.abi_code || '';
+            document.getElementById('bic_swift').value = data.bic_swift || '';
+            document.getElementById('city').value = data.city || '';
+            document.getElementById('country').value = data.country || '';
+            document.getElementById('address').value = data.address || '';
+            document.getElementById('phone').value = data.phone || '';
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('website').value = data.website || '';
+            document.getElementById('description').value = data.description || '';
+            document.getElementById('active').checked = data.active;
+            document.getElementById('is_italian').checked = data.is_italian;
+            
+            // Abilita tutti i campi (modalità modifica)
+            const form = document.getElementById('createForm');
+            const inputs = form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => input.disabled = false);
+            
+            // Mostra il pulsante salva
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) submitBtn.style.display = 'inline-flex';
+            
+            // Cambia il titolo del modal e imposta modalità modifica
+            document.getElementById('createModalLabel').innerHTML = '<i class="bi bi-pencil me-2"></i>Modifica Banca';
+            form.dataset.itemId = id;
+            
+            // Apri il modal
+            new bootstrap.Modal(document.getElementById('createModal')).show();
+        })
+        .catch(error => {
+            console.error('Errore nel caricamento dei dati:', error);
+            alert('🔌 Errore nel caricamento dei dati. Verifica la connessione al server.');
+        });
 }
 
 function deleteItem(id) {
@@ -1065,6 +1235,16 @@ document.getElementById('createModal').addEventListener('hidden.bs.modal', funct
     const form = document.getElementById('createForm');
     form.reset();
     form.dataset.itemId = '';
+    
+    // Riabilita tutti i campi
+    const inputs = form.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => input.disabled = false);
+    
+    // Mostra il pulsante salva
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.style.display = 'inline-flex';
+    
+    // Ripristina il titolo normale
     document.getElementById('createModalLabel').innerHTML = '<i class="bi bi-plus-lg me-2"></i>Nuova Banca';
 });
 

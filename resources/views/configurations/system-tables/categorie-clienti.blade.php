@@ -12,6 +12,7 @@
         min-height: calc(100vh - 70px);
     }
     
+    /* Header */
     .management-header {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
@@ -23,14 +24,17 @@
     }
     
     .management-title {
-        color: #029D7E;
+        font-size: 2rem;
         font-weight: 700;
+        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         margin: 0;
-        font-size: 2.5rem;
         display: flex;
         align-items: center;
     }
     
+    /* Pulsanti */
     .modern-btn {
         padding: 12px 24px;
         border: none;
@@ -47,33 +51,59 @@
         overflow: hidden;
     }
     
+    .modern-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(2, 157, 126, 0.3);
+    }
+    
     .modern-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
     
-    .btn-success {
+    .modern-btn.btn-primary,
+    .btn-primary.modern-btn {
         background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
+        border: none;
     }
     
-    .btn-secondary {
+    .modern-btn.btn-secondary,
+    .btn-secondary.modern-btn {
         background: linear-gradient(135deg, #6c757d, #545b62);
         color: white;
+        border: none;
     }
     
-    .btn-warning {
-        background: linear-gradient(135deg, #ffd60a, #ff8500);
+    .modern-btn.btn-success,
+    .btn-success.modern-btn {
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
+        border: none;
     }
     
+    .modern-btn.btn-warning,
+    .btn-warning.modern-btn {
+        background: linear-gradient(135deg, #ffc107, #e0a800);
+        color: #212529;
+        border: none;
+    }
+    
+    .modern-btn.btn-danger,
+    .btn-danger.modern-btn {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+        border: none;
+    }
+    
+    /* Filtri ricerca */
     .search-filters {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 2rem;
+        border-radius: 16px;
+        padding: 1.5rem;
         margin-bottom: 2rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
@@ -92,10 +122,7 @@
         box-shadow: 0 0 0 3px rgba(2, 157, 126, 0.1);
     }
     
-    .table-container {
-        overflow: hidden;
-    }
-    
+    /* Tabella */
     .modern-table {
         width: 100%;
         border-collapse: separate;
@@ -137,47 +164,47 @@
         transform: scale(1.01);
     }
     
-    .action-btn {
-        border: none;
-        border-radius: 8px;
+    .modern-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    /* Badge stati */
+    .status-badge {
         padding: 6px 12px;
+        border-radius: 20px;
         font-size: 0.8rem;
         font-weight: 600;
-        margin: 0 2px;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
-    .action-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        color: white;
+    .status-active {
+        background-color: #d4edda;
+        color: #155724;
     }
     
-    .action-btn.view {
-        background: linear-gradient(135deg, #48cae4, #0077b6);
-        color: white;
+    .status-inactive {
+        background-color: #f8d7da;
+        color: #721c24;
     }
     
-    .action-btn.edit {
-        background: linear-gradient(135deg, #ffd60a, #ff8500);
-        color: white;
-    }
-    
-    .action-btn.delete {
-        background: linear-gradient(135deg, #f72585, #c5025a);
-        color: white;
-    }
-    
-    .actions-container {
+    .category-info {
         display: flex;
-        gap: 4px;
-        flex-wrap: nowrap;
-        justify-content: center;
-        min-width: 180px;
+        flex-direction: column;
+        gap: 0.2rem;
     }
     
+    .category-code {
+        font-family: 'Courier New', monospace;
+        background: rgba(2, 157, 126, 0.1);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        color: #023e8a;
+        font-weight: 600;
+    }
+    
+    /* Badge tipi clienti */
     .type-badge {
         padding: 4px 8px;
         border-radius: 12px;
@@ -216,6 +243,7 @@
         color: #495057;
     }
     
+    /* Badge priorità */
     .priority-badge {
         padding: 2px 6px;
         border-radius: 8px;
@@ -243,41 +271,56 @@
         color: #721c24;
     }
     
-    .stats-row {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
-    }
-    
-    .stat-card {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 12px;
-        padding: 1rem;
-        flex: 1;
-        min-width: 120px;
-        text-align: center;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    .stat-number {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #029D7E;
-    }
-    
-    .stat-label {
+    /* Pulsanti azioni */
+    .action-btn {
+        border: none;
+        border-radius: 8px;
         font-size: 0.8rem;
-        color: #6c757d;
-        margin-top: 0.25rem;
+        font-weight: 600;
+        margin: 0 2px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        cursor: pointer;
+        padding: 8px;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
     
-    /* Mobile Cards */
+    .action-btn.view {
+        background: linear-gradient(135deg, #48cae4, #0077b6);
+        color: white;
+    }
+    
+    .action-btn.edit {
+        background: linear-gradient(135deg, #ffd60a, #ff8500);
+        color: white;
+    }
+    
+    .action-btn.delete {
+        background: linear-gradient(135deg, #f72585, #c5025a);
+        color: white;
+    }
+    
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+        color: white;
+    }
+    
+    td .action-btn {
+        vertical-align: middle;
+        line-height: 1;
+    }
+    
+    /* Mobile cards */
     .mobile-cards {
         display: none;
     }
     
-    .mobile-item-row {
+    .category-card {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
         border-radius: 15px;
@@ -286,72 +329,63 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
-        opacity: 1;
-        transform: translateY(0);
     }
     
-    .mobile-item-row:hover {
+    .category-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     }
     
-    .item-card-header {
+    .category-card-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
         margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
     
-    .item-card-title {
-        font-size: 1.1rem;
+    .category-card-title {
+        font-size: 1.2rem;
         font-weight: 700;
         margin: 0;
-        color: #2d3748;
+        flex: 1;
+        min-width: 0;
     }
     
-    .item-card-code {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #029D7E;
-        background: rgba(2, 157, 126, 0.1);
-        padding: 4px 8px;
-        border-radius: 8px;
+    .category-card-codes {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        gap: 0.3rem;
+        flex-shrink: 0;
     }
     
-    .item-card-details {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .item-detail {
+    .category-detail {
         display: flex;
         flex-direction: column;
     }
     
-    .item-detail-label {
-        font-size: 0.75rem;
+    .category-detail-label {
+        font-size: 0.8rem;
         color: #6c757d;
-        text-transform: uppercase;
         font-weight: 600;
+        margin-bottom: 0.2rem;
+        text-transform: uppercase;
         letter-spacing: 0.5px;
     }
     
-    .item-detail-value {
-        font-size: 0.9rem;
-        font-weight: 600;
+    .category-detail-value {
+        font-weight: 500;
         color: #2d3748;
-        margin-top: 0.25rem;
     }
     
-    .mobile-card-actions {
+    .category-card-actions {
         display: flex;
         gap: 0.5rem;
         justify-content: center;
-        border-top: 1px solid rgba(226, 232, 240, 0.3);
-        padding-top: 1rem;
-        margin-top: 1rem;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
     }
     
     .mobile-action-btn {
@@ -371,10 +405,8 @@
         text-align: center;
     }
     
-    .mobile-action-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        color: white;
+    .mobile-action-btn i {
+        font-size: 1.2rem;
     }
     
     .mobile-action-btn.view {
@@ -392,41 +424,14 @@
         color: white;
     }
     
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-        color: #6c757d;
+    .mobile-action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        color: white;
     }
     
-    .empty-state i {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-        color: #029D7E;
-        opacity: 0.5;
-    }
-    
-    .empty-state h4 {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-    
-    .no-results {
-        text-align: center;
-        padding: 2rem;
-        color: #6c757d;
-        font-style: italic;
-    }
-    
+    /* Responsive */
     @media (max-width: 768px) {
-        .table-container .table-responsive {
-            display: none;
-        }
-        
-        .mobile-cards {
-            display: block;
-        }
-        
         .management-container {
             padding: 1rem;
         }
@@ -437,16 +442,20 @@
         }
         
         .management-title {
-            font-size: 2rem;
+            font-size: 1.8rem;
         }
         
-        .stats-row {
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        .modern-btn {
+            padding: 10px 16px;
+            font-size: 0.9rem;
         }
         
-        .item-card-details {
-            grid-template-columns: 1fr;
-            gap: 0.5rem;
+        .table-container .table-responsive {
+            display: none;
+        }
+        
+        .mobile-cards {
+            display: block;
         }
     }
     
@@ -457,29 +466,67 @@
             text-align: center;
         }
         
+        .category-card {
+            padding: 1rem;
+        }
+        
         .mobile-action-btn {
             padding: 10px 6px;
             font-size: 0.7rem;
             min-width: 70px;
         }
         
-        .stats-row {
-            flex-direction: column;
+        .mobile-action-btn i {
+            font-size: 1rem;
         }
-        
-        .stat-card {
-            min-width: auto;
-        }
+    }
+    
+    /* Empty state */
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #718096;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+    
+    .empty-state h4 {
+        margin-bottom: 1rem;
+        color: #4a5568;
     }
 </style>
 
 <div class="management-container">
-    <!-- Header della pagina -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Attenzione!</strong> Sono stati rilevati dei problemi:
+            <ul class="mb-0 mt-2">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
     <div class="management-header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div class="d-flex align-items-center">
                 <h1 class="management-title">
-                    <i class="bi bi-people-fill me-3" style="color: #029D7E; font-size: 2rem;"></i>
+                    <i class="bi bi-people me-3" style="color: #48cae4; font-size: 2rem;"></i>
                     Categorie Clienti
                 </h1>
             </div>
@@ -490,40 +537,10 @@
                 <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#createModal">
                     <i class="bi bi-plus-lg"></i> Nuova Categoria
                 </button>
-                <button type="button" class="btn btn-warning modern-btn" onclick="exportData()">
-                    <i class="bi bi-download"></i> Esporta
-                </button>
             </div>
         </div>
     </div>
 
-    <!-- Statistiche rapide -->
-    @if(isset($stats))
-    <div class="stats-row">
-        <div class="stat-card">
-            <div class="stat-number">{{ $stats['total'] }}</div>
-            <div class="stat-label">Totale</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ $stats['active'] }}</div>
-            <div class="stat-label">Attive</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ $stats['vip'] }}</div>
-            <div class="stat-label">VIP</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ $stats['b2b'] }}</div>
-            <div class="stat-label">B2B</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ $stats['with_discount'] }}</div>
-            <div class="stat-label">Con Sconto</div>
-        </div>
-    </div>
-    @endif
-
-    <!-- Filtri e ricerca -->
     <div class="search-filters">
         <div class="row g-3">
             <div class="col-md-3">
@@ -563,18 +580,17 @@
                     <option value="without">Senza sconto</option>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <button type="button" class="btn btn-secondary modern-btn w-100" onclick="resetFilters()">
-                    <i class="bi bi-arrow-clockwise"></i> Reset
+                    <i class="bi bi-arrow-clockwise"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Tabella Desktop -->
     <div class="table-container">
         <div class="table-responsive">
-            <table class="modern-table">
+            <table class="modern-table" id="categoriesTable">
                 <thead>
                     <tr>
                         <th>Codice</th>
@@ -589,7 +605,7 @@
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    @forelse($items as $item)
+                    @forelse($items ?? [] as $item)
                         <tr class="table-row" 
                             data-code="{{ strtolower($item->code) }}" 
                             data-name="{{ strtolower($item->name) }}"
@@ -598,7 +614,7 @@
                             data-status="{{ $item->active ? '1' : '0' }}"
                             data-discount="{{ $item->discount_percentage > 0 ? 'with' : 'without' }}">
                             <td>
-                                <span class="item-card-code">{{ $item->code }}</span>
+                                <span class="category-code">{{ $item->code }}</span>
                             </td>
                             <td>
                                 <strong>{{ $item->name }}</strong>
@@ -608,7 +624,7 @@
                             </td>
                             <td>
                                 <span class="type-badge type-{{ strtolower($item->type) }}">
-                                    {{ $item->type_translated }}
+                                    {{ $item->type_translated ?? $item->type }}
                                 </span>
                             </td>
                             <td>
@@ -618,20 +634,18 @@
                             </td>
                             <td>
                                 <strong class="{{ $item->discount_percentage > 0 ? 'text-success' : 'text-muted' }}">
-                                    {{ $item->formatted_discount }}
+                                    {{ $item->formatted_discount ?? ($item->discount_percentage ?? 0) . '%' }}
                                 </strong>
                             </td>
-                            <td>{{ $item->formatted_credit_limit }}</td>
+                            <td>{{ $item->formatted_credit_limit ?? ($item->credit_limit ? '€' . number_format($item->credit_limit, 2) : 'Illimitato') }}</td>
                             <td>{{ $item->payment_terms_days ?? 30 }} giorni</td>
                             <td>
-                                @if($item->active)
-                                    <span class="badge bg-success">Attiva</span>
-                                @else
-                                    <span class="badge bg-danger">Inattiva</span>
-                                @endif
+                                <span class="status-badge {{ $item->active ? 'status-active' : 'status-inactive' }}">
+                                    {{ $item->active ? 'Attivo' : 'Inattivo' }}
+                                </span>
                             </td>
-                            <td>
-                                <div class="actions-container">
+                            <td class="text-center">
+                                <div class="d-flex gap-1 justify-content-center">
                                     <button type="button" class="action-btn view" title="Visualizza" onclick="viewItem({{ $item->id }})">
                                         <i class="bi bi-eye"></i>
                                     </button>
@@ -646,70 +660,87 @@
                         </tr>
                     @empty
                         <tr id="noResults">
-                            <td colspan="9" class="no-results">
-                                <i class="bi bi-people me-2"></i>
-                                Nessuna categoria cliente trovata. <a href="#" data-bs-toggle="modal" data-bs-target="#createModal">Crea la prima categoria</a>
+                            <td colspan="9">
+                                <div class="empty-state">
+                                    <i class="bi bi-people"></i>
+                                    <h4>Nessuna categoria clienti configurata</h4>
+                                    <p>Inizia creando la prima categoria per organizzare i tuoi clienti.</p>
+                                </div>
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+        
+        @if(isset($items) && $items->hasPages())
+            <div class="d-flex justify-content-center mt-4">
+                {{ $items->links() }}
+            </div>
+        @endif
     </div>
 
-    <!-- Cards Mobile -->
+    <!-- Mobile cards -->
     <div class="mobile-cards" id="mobileCards">
-        @forelse($items as $item)
-            <div class="mobile-item-row" 
-                data-code="{{ strtolower($item->code) }}" 
-                data-name="{{ strtolower($item->name) }}"
-                data-type="{{ $item->type }}"
-                data-priority="{{ $item->priority_level ?? 'MEDIUM' }}"
-                data-status="{{ $item->active ? '1' : '0' }}"
-                data-discount="{{ $item->discount_percentage > 0 ? 'with' : 'without' }}">
+        @forelse($items ?? [] as $item)
+            <div class="category-card mobile-category-row"
+                 data-code="{{ strtolower($item->code) }}" 
+                 data-name="{{ strtolower($item->name) }}"
+                 data-type="{{ $item->type }}"
+                 data-priority="{{ $item->priority_level ?? 'MEDIUM' }}"
+                 data-status="{{ $item->active ? '1' : '0' }}"
+                 data-discount="{{ $item->discount_percentage > 0 ? 'with' : 'without' }}">
                 
-                <div class="item-card-header">
-                    <h3 class="item-card-title">{{ $item->name }}</h3>
-                    <div class="d-flex flex-column align-items-end gap-2">
-                        <span class="item-card-code">{{ $item->code }}</span>
-                        <span class="type-badge type-{{ strtolower($item->type) }}">
-                            {{ $item->type_translated }}
-                        </span>
+                <div class="category-card-header">
+                    <h3 class="category-card-title">{{ $item->name }}</h3>
+                    <div class="category-card-codes">
+                        <span class="category-code">{{ $item->code }}</span>
+                        <div class="mt-1">
+                            <span class="type-badge type-{{ strtolower($item->type) }}" style="font-size: 0.65rem;">
+                                {{ $item->type_translated ?? $item->type }}
+                            </span>
+                        </div>
+                        <div class="mt-1">
+                            <span class="status-badge {{ $item->active ? 'status-active' : 'status-inactive' }}" style="font-size: 0.7rem;">
+                                {{ $item->active ? 'Attivo' : 'Inattivo' }}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="item-card-details">
-                    <div class="item-detail">
-                        <span class="item-detail-label">Priorità</span>
-                        <span class="item-detail-value">
+                <div class="category-card-details">
+                    <div class="category-detail">
+                        <span class="category-detail-label">Priorità</span>
+                        <span class="category-detail-value">
                             <span class="priority-badge priority-{{ strtolower($item->priority_level ?? 'medium') }}">
                                 {{ ucfirst(strtolower($item->priority_level ?? 'Medium')) }}
                             </span>
                         </span>
                     </div>
-                    <div class="item-detail">
-                        <span class="item-detail-label">Sconto</span>
-                        <span class="item-detail-value {{ $item->discount_percentage > 0 ? 'text-success' : 'text-muted' }}">
-                            {{ $item->formatted_discount }}
+                    <div class="category-detail">
+                        <span class="category-detail-label">Sconto</span>
+                        <span class="category-detail-value {{ $item->discount_percentage > 0 ? 'text-success' : 'text-muted' }}">
+                            {{ $item->formatted_discount ?? ($item->discount_percentage ?? 0) . '%' }}
                         </span>
                     </div>
-                    <div class="item-detail">
-                        <span class="item-detail-label">Limite Credito</span>
-                        <span class="item-detail-value">{{ $item->formatted_credit_limit }}</span>
+                    <div class="category-detail">
+                        <span class="category-detail-label">Limite Credito</span>
+                        <span class="category-detail-value">{{ $item->formatted_credit_limit ?? ($item->credit_limit ? '€' . number_format($item->credit_limit, 2) : 'Illimitato') }}</span>
                     </div>
-                    <div class="item-detail">
-                        <span class="item-detail-label">Stato</span>
-                        <span class="item-detail-value">
-                            @if($item->active)
-                                <span class="badge bg-success">Attiva</span>
-                            @else
-                                <span class="badge bg-danger">Inattiva</span>
-                            @endif
-                        </span>
+                    <div class="category-detail">
+                        <span class="category-detail-label">Termini Pag.</span>
+                        <span class="category-detail-value">{{ $item->payment_terms_days ?? 30 }} giorni</span>
                     </div>
                 </div>
                 
-                <div class="mobile-card-actions">
+                @if($item->description)
+                    <div class="category-detail mb-3">
+                        <span class="category-detail-label">Descrizione</span>
+                        <span class="category-detail-value">{{ $item->description }}</span>
+                    </div>
+                @endif
+                
+                <div class="category-card-actions">
                     <button type="button" class="mobile-action-btn view" onclick="viewItem({{ $item->id }})">
                         <i class="bi bi-eye"></i>
                         <span>Visualizza</span>
@@ -727,39 +758,25 @@
         @empty
             <div class="empty-state">
                 <i class="bi bi-people"></i>
-                <h4>Nessuna categoria cliente</h4>
-                <p>Inizia creando la prima categoria per segmentare i tuoi clienti</p>
-                <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#createModal">
-                    <i class="bi bi-plus-lg"></i> Crea Prima Categoria
-                </button>
+                <h4>Nessuna categoria clienti configurata</h4>
+                <p>Inizia creando la prima categoria per organizzare i tuoi clienti.</p>
             </div>
         @endforelse
     </div>
-
-    <!-- Paginazione -->
-    @if($items->hasPages())
-        <div class="d-flex justify-content-center mt-4">
-            {{ $items->links() }}
-        </div>
-    @endif
 </div>
 
-<!-- Modal Creazione/Modifica -->
-<div class="modal fade" id="createModal" tabindex="-1">
-    <div class="modal-dialog modal-xl">
+<!-- Modal creazione/modifica -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content" style="border-radius: 20px; border: none;">
             <div class="modal-header" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; border-radius: 20px 20px 0 0;">
-                <h5 class="modal-title">
-                    <i class="bi bi-people-fill me-2"></i>
-                    <span id="modalTitle">Nuova Categoria Cliente</span>
+                <h5 class="modal-title" id="createModalLabel">
+                    <i class="bi bi-plus-lg me-2"></i>Nuova Categoria Cliente
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="categoryForm" method="POST">
+            <form id="createForm" onsubmit="submitForm(event, 'create')">
                 @csrf
-                <input type="hidden" id="methodField" name="_method" value="">
-                <input type="hidden" id="categoryId" name="id" value="">
-                
                 <div class="modal-body" style="padding: 2rem;">
                     <div class="row g-4">
                         <!-- Informazioni Base -->
@@ -863,35 +880,11 @@
                             </div>
                         </div>
                         
-                        <!-- Personalizzazione e Sicurezza -->
+                        
+                        <!-- Controlli -->
                         <div class="col-12 mt-4">
                             <h6 class="text-primary mb-3">
-                                <i class="bi bi-palette me-2"></i>Personalizzazione UI/UX
-                            </h6>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="color_hex" class="form-label">Colore Categoria</label>
-                            <div class="input-group">
-                                <input type="color" class="form-control form-control-color" id="color_hex" name="color_hex" value="#029D7E">
-                                <input type="text" class="form-control" id="color_hex_text" placeholder="#029D7E" readonly>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="icon" class="form-label">Icona Bootstrap</label>
-                            <input type="text" class="form-control" id="icon" name="icon" value="bi-person" 
-                                   placeholder="es: bi-person">
-                            <div class="form-text">
-                                <i class="bi bi-info-circle me-1"></i>
-                                Vedi icone: <a href="https://icons.getbootstrap.com/" target="_blank">Bootstrap Icons</a>
-                            </div>
-                        </div>
-                        
-                        <!-- Controlli OWASP -->
-                        <div class="col-12 mt-4">
-                            <h6 class="text-primary mb-3">
-                                <i class="bi bi-shield-check me-2"></i>Controlli Sicurezza OWASP
+                                <i class="bi bi-shield-check me-2"></i>Controlli e Opzioni
                             </h6>
                         </div>
                         
@@ -916,6 +909,13 @@
                                     Supporto prioritario
                                 </label>
                             </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="active" name="active" checked>
+                                <label class="form-check-label" for="active">
+                                    <i class="bi bi-toggle-on me-1"></i>
+                                    Attivo
+                                </label>
+                            </div>
                         </div>
                         
                         <!-- Note -->
@@ -926,13 +926,12 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="modal-footer" style="padding: 1.5rem 2rem; border-top: 1px solid #e9ecef;">
                     <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
                         <i class="bi bi-x-lg"></i> Annulla
                     </button>
-                    <button type="submit" class="btn btn-success modern-btn" id="saveButton">
-                        <i class="bi bi-check-lg"></i> <span id="saveButtonText">Salva Categoria</span>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Salva Categoria
                     </button>
                 </div>
             </form>
@@ -941,86 +940,88 @@
 </div>
 
 <script>
-// Sincronizza color picker con input text
-document.getElementById('color_hex').addEventListener('change', function() {
-    document.getElementById('color_hex_text').value = this.value;
-});
+let allItems = [];
 
-document.getElementById('color_hex_text').addEventListener('input', function() {
-    if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
-        document.getElementById('color_hex').value = this.value;
+// Controllo duplicati
+async function checkCodeDuplicate(code) {
+    if (!code || code.trim() === '') return false;
+    
+    try {
+        const response = await fetch(`{{ route("configurations.system-tables.index", "categorie_clienti") }}?check_duplicate=${encodeURIComponent(code)}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data.exists || false;
+        }
+    } catch (error) {
+        console.warn('Errore controllo duplicati:', error);
     }
-});
+    return false;
+}
 
-// Filtro tabella e mobile cards
+// Filtri
 function filterTable() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     const typeFilter = document.getElementById('typeFilter').value;
     const priorityFilter = document.getElementById('priorityFilter').value;
     const statusFilter = document.getElementById('statusFilter').value;
     const discountFilter = document.getElementById('discountFilter').value;
-
-    // Filtro tabella desktop
+    
     const rows = document.querySelectorAll('#tableBody tr:not(#noResults)');
     let visibleCount = 0;
-
+    
     rows.forEach(row => {
-        const code = row.dataset.code || '';
-        const name = row.dataset.name || '';
-        const type = row.dataset.type || '';
-        const priority = row.dataset.priority || '';
-        const status = row.dataset.status || '';
-        const discount = row.dataset.discount || '';
-
+        const code = row.dataset.code;
+        const name = row.dataset.name;
+        const type = row.dataset.type;
+        const priority = row.dataset.priority;
+        const status = row.dataset.status;
+        const discount = row.dataset.discount;
+        
         const matchesSearch = code.includes(searchTerm) || name.includes(searchTerm);
         const matchesType = !typeFilter || type === typeFilter;
         const matchesPriority = !priorityFilter || priority === priorityFilter;
         const matchesStatus = !statusFilter || status === statusFilter;
         const matchesDiscount = !discountFilter || discount === discountFilter;
-
-        const shouldShow = matchesSearch && matchesType && matchesPriority && matchesStatus && matchesDiscount;
-
-        if (shouldShow) {
+        
+        if (matchesSearch && matchesType && matchesPriority && matchesStatus && matchesDiscount) {
             row.style.display = '';
             visibleCount++;
         } else {
             row.style.display = 'none';
         }
     });
-
-    // Mostra/nascondi messaggio "nessun risultato"
-    const noResults = document.getElementById('noResults');
-    if (noResults) {
-        noResults.style.display = visibleCount === 0 ? '' : 'none';
-    }
-
-    // Filtro mobile cards
-    const mobileCards = document.querySelectorAll('.mobile-item-row');
+    
+    const mobileCards = document.querySelectorAll('.mobile-category-row');
     let mobileVisibleCount = 0;
-
+    
     mobileCards.forEach(card => {
-        const code = card.dataset.code || '';
-        const name = card.dataset.name || '';
-        const type = card.dataset.type || '';
-        const priority = card.dataset.priority || '';
-        const status = card.dataset.status || '';
-        const discount = card.dataset.discount || '';
-
+        const code = card.dataset.code;
+        const name = card.dataset.name;
+        const type = card.dataset.type;
+        const priority = card.dataset.priority;
+        const status = card.dataset.status;
+        const discount = card.dataset.discount;
+        
         const matchesSearch = code.includes(searchTerm) || name.includes(searchTerm);
         const matchesType = !typeFilter || type === typeFilter;
         const matchesPriority = !priorityFilter || priority === priorityFilter;
         const matchesStatus = !statusFilter || status === statusFilter;
         const matchesDiscount = !discountFilter || discount === discountFilter;
-
-        const shouldShow = matchesSearch && matchesType && matchesPriority && matchesStatus && matchesDiscount;
-
-        if (shouldShow) {
+        
+        if (matchesSearch && matchesType && matchesPriority && matchesStatus && matchesDiscount) {
             card.style.display = '';
+            mobileVisibleCount++;
             setTimeout(() => {
                 card.style.opacity = '1';
                 card.style.transform = 'translateY(0)';
             }, 100);
-            mobileVisibleCount++;
         } else {
             card.style.opacity = '0';
             card.style.transform = 'translateY(-20px)';
@@ -1029,6 +1030,11 @@ function filterTable() {
             }, 300);
         }
     });
+    
+    const noResults = document.getElementById('noResults');
+    if (noResults) {
+        noResults.style.display = (visibleCount === 0 && mobileVisibleCount === 0) ? '' : 'none';
+    }
 }
 
 function resetFilters() {
@@ -1040,113 +1046,332 @@ function resetFilters() {
     filterTable();
 }
 
-// Funzioni CRUD
-function viewItem(id) {
-    window.open(`/system-tables/customer_categories/${id}`, '_blank');
+// Submit form
+async function submitForm(event, action) {
+    event.preventDefault();
+    
+    const form = event.target;
+    
+    if (action === 'create') {
+        const code = form.code.value.trim().toUpperCase();
+        if (await checkCodeDuplicate(code)) {
+            alert('⚠️ Errore: Il codice "' + code + '" esiste già!\nScegli un codice diverso.');
+            form.code.focus();
+            return;
+        }
+    }
+    
+    const formData = new FormData(form);
+    formData.set('active', form.active.checked ? '1' : '0');
+    
+    const url = action === 'create' 
+        ? '{{ route("configurations.system-tables.store", "categorie_clienti") }}'
+        : `{{ route("configurations.system-tables.update", ["table" => "categorie_clienti", "id" => ":id"]) }}`.replace(':id', form.dataset.itemId);
+    
+    const method = action === 'create' ? 'POST' : 'PUT';
+    
+    if (method === 'PUT') {
+        formData.append('_method', 'PUT');
+    }
+    
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            let errorMessage = data.message || 'Operazione fallita';
+            
+            if (errorMessage.includes('Duplicate entry')) {
+                const code = errorMessage.match(/'([^']+)'/)?.[1] || 'sconosciuto';
+                errorMessage = `⚠️ Codice "${code}" già esistente!\nScegli un codice diverso.`;
+            }
+            
+            if (data.errors) {
+                errorMessage = 'Errori di validazione:\n';
+                Object.values(data.errors).forEach(errors => {
+                    errors.forEach(error => errorMessage += `• ${error}\n`);
+                });
+            }
+            
+            alert('🚨 ' + errorMessage);
+        }
+    })
+    .catch(error => {
+        console.error('Errore:', error);
+        alert('🔌 Errore di comunicazione con il server');
+    });
 }
 
-function editItem(id) {
-    // Carica dati categoria via AJAX
-    fetch(`/system-tables/customer_categories/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            // Popola il form
-            document.getElementById('categoryId').value = data.id;
-            document.getElementById('methodField').value = 'PUT';
-            document.getElementById('modalTitle').textContent = 'Modifica Categoria Cliente';
-            document.getElementById('saveButtonText').textContent = 'Aggiorna Categoria';
+// Visualizza categoria
+function viewItem(id) {
+    fetch(`{{ route("configurations.system-tables.show", "categorie_clienti") }}/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Errore HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(item => {
+            if (!item || item.error) {
+                throw new Error(item?.message || 'Dati non validi ricevuti dal server');
+            }
             
-            // Compila i campi
+            const modalContent = `
+                <div class="modal fade" id="viewModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content" style="border-radius: 20px; border: none;">
+                            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; border-radius: 20px 20px 0 0;">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-eye me-2"></i>Dettagli Categoria Cliente
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body" style="padding: 2rem;">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Codice Categoria</label>
+                                        <div class="p-2 bg-light rounded">
+                                            <span class="category-code">${item.code}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Nome Categoria</label>
+                                        <div class="p-2 bg-light rounded">${item.name}</div>
+                                    </div>
+                                    ${item.description ? `
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-muted">Descrizione</label>
+                                        <div class="p-2 bg-light rounded">${item.description}</div>
+                                    </div>
+                                    ` : ''}
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Tipo Cliente</label>
+                                        <div class="p-2 bg-light rounded">${item.type_translated || item.type}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Priorità</label>
+                                        <div class="p-2 bg-light rounded">${item.priority_level || 'Medium'}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Sconto</label>
+                                        <div class="p-2 bg-light rounded">${item.discount_percentage || 0}%</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Termini Pag.</label>
+                                        <div class="p-2 bg-light rounded">${item.payment_terms_days || 30} giorni</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold text-muted">Limite Credito</label>
+                                        <div class="p-2 bg-light rounded">${item.credit_limit ? '€' + item.credit_limit : 'Illimitato'}</div>
+                                    </div>
+                                    ${item.max_orders_per_day ? `
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Limite Ordini/Giorno</label>
+                                        <div class="p-2 bg-light rounded">${item.max_orders_per_day}</div>
+                                    </div>
+                                    ` : ''}
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Stato</label>
+                                        <div class="p-2">
+                                            <span class="status-badge ${item.active ? 'status-active' : 'status-inactive'}">
+                                                ${item.active ? 'Attivo' : 'Inattivo'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    ${item.notes ? `
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-muted">Note Interne</label>
+                                        <div class="p-2 bg-light rounded">${item.notes}</div>
+                                    </div>
+                                    ` : ''}
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Data Creazione</label>
+                                        <div class="p-2 bg-light rounded">${new Date(item.created_at).toLocaleDateString('it-IT')}</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-muted">Ultimo Aggiornamento</label>
+                                        <div class="p-2 bg-light rounded">${new Date(item.updated_at).toLocaleDateString('it-IT')}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="padding: 1.5rem 2rem;">
+                                <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-lg"></i> Chiudi
+                                </button>
+                                <button type="button" class="btn btn-primary modern-btn" onclick="editItem(${item.id}); bootstrap.Modal.getInstance(document.getElementById('viewModal')).hide();">
+                                    <i class="bi bi-pencil"></i> Modifica
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const existingModal = document.getElementById('viewModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+            
+            document.body.insertAdjacentHTML('beforeend', modalContent);
+            new bootstrap.Modal(document.getElementById('viewModal')).show();
+        })
+        .catch(error => {
+            console.error('Errore nel caricamento dei dati:', error);
+            alert('🔌 Errore nel caricamento dei dati. Verifica la connessione al server.');
+        });
+}
+
+// Modifica categoria
+function editItem(id) {
+    fetch(`{{ route("configurations.system-tables.show", "categorie_clienti") }}/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Errore HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data || data.error) {
+                throw new Error(data?.message || 'Dati non validi ricevuti dal server');
+            }
+            
             document.getElementById('code').value = data.code || '';
             document.getElementById('name').value = data.name || '';
             document.getElementById('description').value = data.description || '';
-            document.getElementById('type').value = data.type || 'STANDARD';
+            document.getElementById('type').value = data.type || '';
             document.getElementById('priority_level').value = data.priority_level || 'MEDIUM';
+            document.getElementById('price_list').value = data.price_list || 'LIST_1';
             document.getElementById('discount_percentage').value = data.discount_percentage || 0;
             document.getElementById('payment_terms_days').value = data.payment_terms_days || 30;
             document.getElementById('credit_limit').value = data.credit_limit || '';
-            document.getElementById('price_list').value = data.price_list || 'LIST_1';
-            document.getElementById('color_hex').value = data.color_hex || '#029D7E';
-            document.getElementById('color_hex_text').value = data.color_hex || '#029D7E';
-            document.getElementById('icon').value = data.icon || 'bi-person';
             document.getElementById('max_orders_per_day').value = data.max_orders_per_day || '';
             document.getElementById('require_approval').checked = data.require_approval || false;
             document.getElementById('priority_support').checked = data.priority_support || false;
             document.getElementById('notes').value = data.notes || '';
+            document.getElementById('active').checked = data.active;
             
-            // Aggiorna URL del form
-            document.getElementById('categoryForm').action = `/system-tables/customer_categories/${id}`;
+            const form = document.getElementById('createForm');
+            const inputs = form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => input.disabled = false);
             
-            // Mostra modal
-            const modal = new bootstrap.Modal(document.getElementById('createModal'));
-            modal.show();
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) submitBtn.style.display = 'inline-flex';
+            
+            document.getElementById('createModalLabel').innerHTML = '<i class="bi bi-pencil me-2"></i>Modifica Categoria Cliente';
+            form.dataset.itemId = id;
+            
+            new bootstrap.Modal(document.getElementById('createModal')).show();
         })
         .catch(error => {
             console.error('Errore nel caricamento dei dati:', error);
-            alert('Errore nel caricamento dei dati');
+            alert('🔌 Errore nel caricamento dei dati. Verifica la connessione al server.');
         });
 }
 
+// Elimina categoria
 function deleteItem(id) {
-    if (confirm('Sei sicuro di voler eliminare questa categoria cliente?\nQuesta azione non può essere annullata.')) {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `/system-tables/customer_categories/${id}`;
-        
-        const csrfToken = document.createElement('input');
-        csrfToken.type = 'hidden';
-        csrfToken.name = '_token';
-        csrfToken.value = document.querySelector('meta[name="csrf-token"]').content;
-        
-        const methodField = document.createElement('input');
-        methodField.type = 'hidden';
-        methodField.name = '_method';
-        methodField.value = 'DELETE';
-        
-        form.appendChild(csrfToken);
-        form.appendChild(methodField);
-        document.body.appendChild(form);
-        form.submit();
+    if (confirm('Sei sicuro di voler eliminare questa categoria cliente?')) {
+        fetch(`{{ route("configurations.system-tables.destroy", ["table" => "categorie_clienti", "id" => ":id"]) }}`.replace(':id', id), {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Errore nell\'eliminazione');
+            }
+        });
     }
 }
 
-function exportData() {
-    window.location.href = '/system-tables/customer_categories/export';
-}
+// Reset modal
+document.getElementById('createModal').addEventListener('hidden.bs.modal', function () {
+    const form = document.getElementById('createForm');
+    form.reset();
+    form.dataset.itemId = '';
+    
+    const inputs = form.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => input.disabled = false);
+    
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.style.display = 'inline-flex';
+    
+    document.getElementById('createModalLabel').innerHTML = '<i class="bi bi-plus-lg me-2"></i>Nuova Categoria Cliente';
+});
 
-// Reset form quando si apre modal per creazione
-document.getElementById('createModal').addEventListener('show.bs.modal', function (event) {
-    if (!event.relatedTarget || !event.relatedTarget.onclick.toString().includes('editItem')) {
-        // Reset per nuovo elemento
-        document.getElementById('categoryId').value = '';
-        document.getElementById('methodField').value = '';
-        document.getElementById('modalTitle').textContent = 'Nuova Categoria Cliente';
-        document.getElementById('saveButtonText').textContent = 'Salva Categoria';
-        document.getElementById('categoryForm').action = '/system-tables/customer_categories';
-        document.getElementById('categoryForm').reset();
-        document.getElementById('color_hex').value = '#029D7E';
-        document.getElementById('color_hex_text').value = '#029D7E';
-        document.getElementById('priority_level').value = 'MEDIUM';
-        document.getElementById('type').value = 'STANDARD';
-        document.getElementById('discount_percentage').value = 0;
-        document.getElementById('payment_terms_days').value = 30;
-        document.getElementById('price_list').value = 'LIST_1';
-        document.getElementById('icon').value = 'bi-person';
+// Validazione codice
+let checkTimeout;
+document.getElementById('code').addEventListener('input', function(e) {
+    e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9_-]/g, '');
+    
+    const code = e.target.value.trim();
+    const statusDiv = document.getElementById('codeStatus');
+    const messageDiv = document.getElementById('codeMessage');
+    
+    document.getElementById('codeLoading').style.display = 'none';
+    document.getElementById('codeOk').style.display = 'none';
+    document.getElementById('codeDuplicate').style.display = 'none';
+    messageDiv.style.display = 'none';
+    statusDiv.style.display = 'none';
+    
+    if (code.length >= 3) {
+        statusDiv.style.display = 'block';
+        document.getElementById('codeLoading').style.display = 'inline';
+        
+        clearTimeout(checkTimeout);
+        checkTimeout = setTimeout(async () => {
+            const isDuplicate = await checkCodeDuplicate(code);
+            
+            document.getElementById('codeLoading').style.display = 'none';
+            
+            if (isDuplicate) {
+                document.getElementById('codeDuplicate').style.display = 'inline';
+                messageDiv.textContent = `Codice "${code}" già esistente. Scegli un codice diverso.`;
+                messageDiv.style.display = 'block';
+                e.target.classList.add('is-invalid');
+            } else {
+                document.getElementById('codeOk').style.display = 'inline';
+                e.target.classList.remove('is-invalid');
+                e.target.classList.add('is-valid');
+            }
+        }, 500);
+    } else {
+        e.target.classList.remove('is-invalid', 'is-valid');
     }
 });
 
-// Auto-complete del codice basato sul tipo
-document.getElementById('type').addEventListener('change', function() {
-    if (!document.getElementById('code').value) {
-        const typePrefix = this.value === 'VIP' ? 'VIP' : 
-                          this.value === 'B2B' ? 'B2B' : 
-                          this.value === 'B2C' ? 'B2C' : 
-                          this.value === 'WHOLESALE' ? 'WHL' : 
-                          this.value === 'RETAIL' ? 'RTL' : 'STD';
-        
-        const timestamp = Date.now().toString().slice(-4);
-        document.getElementById('code').value = typePrefix + '_' + timestamp;
-    }
+// Inizializzazione
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert, index) {
+        setTimeout(function() {
+            if (bootstrap.Alert.getOrCreateInstance) {
+                const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                bsAlert.close();
+            }
+        }, 5000 + (index * 1000));
+    });
+    
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl, {
+            html: true,
+            delay: { show: 300, hide: 100 }
+        });
+    });
 });
 </script>
 @endsection

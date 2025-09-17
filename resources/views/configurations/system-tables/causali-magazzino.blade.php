@@ -267,9 +267,6 @@
                 <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#createModal" style="background: var(--action-success);">
                     <i class="bi bi-plus-lg"></i> Nuova Causale
                 </button>
-                <button type="button" class="btn btn-warning modern-btn" onclick="exportData()" style="background: var(--action-warning);">
-                    <i class="bi bi-download"></i> Esporta
-                </button>
             </div>
         </div>
     </div>

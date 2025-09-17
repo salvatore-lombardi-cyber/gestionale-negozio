@@ -363,9 +363,6 @@
                 <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#createModal">
                     <i class="bi bi-plus-lg"></i> Nuovo Colore
                 </button>
-                <button type="button" class="btn btn-warning modern-btn" onclick="exportData()">
-                    <i class="bi bi-download"></i> Esporta
-                </button>
             </div>
         </div>
     </div>

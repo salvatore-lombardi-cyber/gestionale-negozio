@@ -373,9 +373,6 @@
                 <button type="button" class="btn modern-btn" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white;" data-bs-toggle="modal" data-bs-target="#createModal">
                     <i class="bi bi-plus-lg"></i> Nuova Variante
                 </button>
-                <button type="button" class="btn btn-warning modern-btn" onclick="exportData()">
-                    <i class="bi bi-download"></i> Esporta
-                </button>
             </div>
         </div>
     </div>
