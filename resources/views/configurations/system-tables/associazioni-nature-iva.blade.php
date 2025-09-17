@@ -412,6 +412,16 @@
         font-size: 1.2rem;
     }
     
+    .mobile-action-btn.view {
+        background: linear-gradient(135deg, #48cae4, #0077b6);
+        color: white;
+    }
+    
+    .mobile-action-btn.edit {
+        background: linear-gradient(135deg, #ffd60a, #ff8500);
+        color: white;
+    }
+    
     .mobile-action-btn.delete {
         background: linear-gradient(135deg, #f72585, #c5025a);
         color: white;
@@ -956,16 +966,19 @@
                         </div>
                     </div>
                     
-                    <div class="d-flex justify-content-center mt-3">
-                        <form method="POST" action="{{ route('configurations.system-tables.destroy', ['table' => 'associazioni-nature-iva', 'id' => $association->id]) }}" 
-                              style="width: 100%;" onsubmit="return confirmDelete('{{ $association->nome_associazione ?? 'questa associazione' }}')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="mobile-action-btn delete" style="width: 100%;" title="Elimina associazione">
-                                <i class="bi bi-trash"></i>
-                                <span>Elimina</span>
-                            </button>
-                        </form>
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="button" class="mobile-action-btn view" onclick="viewAssociation({{ $association->id }})">
+                            <i class="bi bi-eye"></i>
+                            <span>Visualizza</span>
+                        </button>
+                        <button type="button" class="mobile-action-btn edit" onclick="editAssociation({{ $association->id }})">
+                            <i class="bi bi-pencil"></i>
+                            <span>Modifica</span>
+                        </button>
+                        <button type="button" class="mobile-action-btn delete" onclick="deleteAssociation({{ $association->id }})">
+                            <i class="bi bi-trash"></i>
+                            <span>Elimina</span>
+                        </button>
                     </div>
                 </div>
                 @endforeach
@@ -1352,19 +1365,29 @@ function deleteAssociation(id) {
     }
 }
 
-// Reset form quando si chiude il modal per ripristinare modalità "Crea"
-document.getElementById('associationModal').addEventListener('hidden.bs.modal', function () {
-    const form = document.getElementById('associationForm');
-    form.reset();
-    form.action = `{{ route("configurations.system-tables.store", "associazioni-nature-iva") }}`;
-    
-    // Rimuovi campo _method se presente
-    const methodField = form.querySelector('input[name="_method"]');
-    if (methodField) {
-        methodField.remove();
+document.addEventListener('DOMContentLoaded', function() {
+    // Reset form quando si chiude il modal per ripristinare modalità "Crea"
+    const associationModal = document.getElementById('associationModal');
+    if (associationModal) {
+        associationModal.addEventListener('hidden.bs.modal', function () {
+            const form = document.getElementById('associationForm');
+            if (form) {
+                form.reset();
+                form.action = `{{ route("configurations.system-tables.store", "associazioni-nature-iva") }}`;
+                
+                // Rimuovi campo _method se presente
+                const methodField = form.querySelector('input[name="_method"]');
+                if (methodField) {
+                    methodField.remove();
+                }
+                
+                // Ripristina titolo originale
+                const modalTitle = document.getElementById('associationModalTitle');
+                if (modalTitle) {
+                    modalTitle.innerHTML = '<i class="bi bi-plus-circle me-2"></i>Nuova Associazione Nature IVA';
+                }
+            }
+        });
     }
-    
-    // Ripristina titolo originale
-    document.getElementById('associationModalTitle').innerHTML = '<i class="bi bi-plus-circle me-2"></i>Nuova Associazione Nature IVA';
 });
 </script>
