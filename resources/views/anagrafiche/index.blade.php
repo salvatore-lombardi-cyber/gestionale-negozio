@@ -57,7 +57,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border-radius: 20px 20px 0 0;
     }
     
@@ -67,11 +67,11 @@
     }
     
     .stats-card.primary::before {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
     }
     
     .stats-card.success::before {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2);
     }
     
     .stats-card.info::before {
@@ -96,13 +96,15 @@
         overflow: hidden;
     }
     
-    .stats-icon.primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+    .stats-icon.primary { 
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+
     }
     
     .stats-icon.success {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
-    }
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+    }        
+
     
     .stats-icon.info {
         background: linear-gradient(135deg, #48cae4, #0077b6);
@@ -164,12 +166,12 @@
     }
     
     .stats-btn.primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+         background: linear-gradient(135deg, #4ecdc4, #44a08d);
         color: white;
     }
     
     .stats-btn.success {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+       background: linear-gradient(135deg, #9c27b0, #7b1fa2);
         color: white;
     }
     
@@ -194,9 +196,9 @@
     }
     
     @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
-        70% { box-shadow: 0 0 0 20px rgba(102, 126, 234, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+        0% { box-shadow: 0 0 0 0 rgba(2, 157, 126, 0.4); }
+        70% { box-shadow: 0 0 0 20px rgba(2, 157, 126, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(2, 157, 126, 0); }
     }
     
     .floating-elements {
@@ -325,9 +327,9 @@
                         <div class="stats-icon success">
                             <i class="bi bi-building"></i>
                         </div>
-                        <h3 class="stats-number">0</h3>
+                        <h3 class="stats-number">{{ $stats['fornitori'] ?? 0 }}</h3>
                         <p class="stats-label">{{ __('app.fornitori') }}</p>
-                        <a href="#" class="stats-btn success">
+                        <a href="{{ route('fornitori.index') }}" class="stats-btn success">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.fornitori') }}
                         </a>
                     </div>
@@ -338,9 +340,9 @@
                         <div class="stats-icon info">
                             <i class="bi bi-truck"></i>
                         </div>
-                        <h3 class="stats-number">0</h3>
+                        <h3 class="stats-number">{{ $stats['vettori'] ?? 0 }}</h3>
                         <p class="stats-label">{{ __('app.vettori') }}</p>
-                        <a href="#" class="stats-btn info">
+                        <a href="{{ route('vettori.index') }}" class="stats-btn info">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.vettori') }}
                         </a>
                     </div>
@@ -351,7 +353,7 @@
                         <div class="stats-icon warning">
                             <i class="bi bi-person-badge"></i>
                         </div>
-                        <h3 class="stats-number">0</h3>
+                        <h3 class="stats-number">{{ $stats['agenti'] ?? 0 }}</h3>
                         <p class="stats-label">{{ __('app.agenti') }}</p>
                         <a href="#" class="stats-btn warning">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.agenti') }}

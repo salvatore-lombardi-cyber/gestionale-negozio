@@ -22,7 +22,7 @@
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -47,7 +47,7 @@
     
     .mode-card {
         background: rgba(255, 255, 255, 0.9);
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         padding: 1.5rem;
         text-align: center;
@@ -60,12 +60,12 @@
     .mode-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        border-color: #667eea;
+        border-color: #029D7E;
     }
     
     .mode-card.active {
-        border-color: #667eea;
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        border-color: #029D7E;
+        background: linear-gradient(135deg, rgba(2, 157, 126, 0.1), rgba(118, 75, 162, 0.1));
     }
     
     .mode-card.active::before {
@@ -75,7 +75,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .mode-icon {
@@ -194,7 +194,7 @@
     }
     
     .scanner-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 50px;
         padding: 15px 30px;
@@ -210,7 +210,7 @@
     
     .scanner-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 10px 25px rgba(2, 157, 126, 0.4);
     }
     
     .scanner-btn:disabled {
@@ -340,7 +340,7 @@
     
     [data-bs-theme="dark"] .mode-card {
         background: rgba(45, 55, 72, 0.9);
-        border-color: rgba(102, 126, 234, 0.3);
+        border-color: rgba(2, 157, 126, 0.3);
         color: #e2e8f0;
     }
     
@@ -409,7 +409,7 @@
       .section-title {
         font-size: 1.3rem;
         font-weight: 600;
-        color: #667eea;
+        color: #029D7E;
         margin-bottom: 1.5rem;
         display: flex;
         align-items: center;

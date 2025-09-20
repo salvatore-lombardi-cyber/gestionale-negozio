@@ -57,7 +57,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border-radius: 20px 20px 0 0;
     }
     
@@ -67,15 +67,16 @@
     }
     
     .stats-card.primary::before {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-    }
-    
-    .stats-card.success::before {
         background: linear-gradient(135deg, #4ecdc4, #44a08d);
     }
     
-    .stats-card.info::before {
+    .stats-card.success::before {
         background: linear-gradient(135deg, #48cae4, #0077b6);
+    }
+    
+    .stats-card.info::before {
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+
     }
     
     .stats-card.warning::before {
@@ -97,15 +98,14 @@
     }
     
     .stats-icon.primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-    }
-    
-    .stats-icon.success {
         background: linear-gradient(135deg, #4ecdc4, #44a08d);
     }
-    
-    .stats-icon.info {
+
+    .stats-icon.success {
         background: linear-gradient(135deg, #48cae4, #0077b6);
+    }
+    .stats-icon.info {
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2);
     }
     
     .stats-icon.warning {
@@ -164,17 +164,17 @@
     }
     
     .stats-btn.primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-    }
-    
-    .stats-btn.success {
         background: linear-gradient(135deg, #4ecdc4, #44a08d);
         color: white;
     }
     
-    .stats-btn.info {
+    .stats-btn.success {
         background: linear-gradient(135deg, #48cae4, #0077b6);
+        color: white;
+    }
+    
+    .stats-btn.info {
+        background: linear-gradient(135deg, #9c27b0, #7b1fa2);
         color: white;
     }
     
@@ -194,9 +194,9 @@
     }
     
     @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
-        70% { box-shadow: 0 0 0 20px rgba(102, 126, 234, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+        0% { box-shadow: 0 0 0 0 rgba(2, 157, 126, 0.4); }
+        70% { box-shadow: 0 0 0 20px rgba(2, 157, 126, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(2, 157, 126, 0); }
     }
     
     .floating-elements {

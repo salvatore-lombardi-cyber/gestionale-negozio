@@ -28,13 +28,13 @@
         left: 0;
         width: 100%;
         height: 4px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .page-title {
         font-size: 2.2rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -47,7 +47,7 @@
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -56,7 +56,7 @@
         font-size: 1.5rem;
         margin-right: 1rem;
         border: 3px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 8px 20px rgba(2, 157, 126, 0.3);
     }
     
     .form-card {
@@ -78,7 +78,7 @@
         left: 0;
         width: 100%;
         height: 3px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .form-section {
@@ -94,11 +94,11 @@
         align-items: center;
         gap: 0.5rem;
         padding-bottom: 0.5rem;
-        border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+        border-bottom: 2px solid rgba(2, 157, 126, 0.1);
     }
     
     .section-title i {
-        color: #667eea;
+        color: #029D7E;
         font-size: 1.4rem;
     }
     
@@ -117,7 +117,7 @@
     }
     
     .form-label i {
-        color: #667eea;
+        color: #029D7E;
         font-size: 1rem;
     }
     
@@ -129,7 +129,7 @@
     .modern-input {
         width: 100%;
         padding: 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -139,8 +139,8 @@
     
     .modern-input:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
         transform: translateY(-2px);
     }
@@ -153,7 +153,7 @@
     .modern-textarea {
         width: 100%;
         padding: 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -166,15 +166,15 @@
     
     .modern-textarea:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
     }
     
     .modern-select {
         width: 100%;
         padding: 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -185,8 +185,8 @@
     
     .modern-select:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
     }
     
@@ -208,7 +208,7 @@
         justify-content: flex-end;
         margin-top: 2.5rem;
         padding-top: 2rem;
-        border-top: 2px solid rgba(102, 126, 234, 0.1);
+        border-top: 2px solid rgba(2, 157, 126, 0.1);
     }
     
     .modern-btn {
@@ -249,7 +249,7 @@
     }
     
     .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
     }
     
@@ -300,7 +300,7 @@
     [data-bs-theme="dark"] .modern-textarea,
     [data-bs-theme="dark"] .modern-select {
         background: rgba(45, 55, 72, 0.8);
-        border-color: rgba(102, 126, 234, 0.3);
+        border-color: rgba(2, 157, 126, 0.3);
         color: #e2e8f0;
     }
     
@@ -312,8 +312,8 @@
     
     [data-bs-theme="dark"] .section-title,
     [data-bs-theme="dark"] .form-actions {
-        border-bottom-color: rgba(102, 126, 234, 0.2);
-        border-top-color: rgba(102, 126, 234, 0.2);
+        border-bottom-color: rgba(2, 157, 126, 0.2);
+        border-top-color: rgba(2, 157, 126, 0.2);
     }
     
     /* Responsive */

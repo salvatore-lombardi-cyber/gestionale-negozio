@@ -22,7 +22,7 @@
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -41,7 +41,7 @@
     .section-title {
         font-size: 1.3rem;
         font-weight: 600;
-        color: #667eea;
+        color: #029D7E;
         margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
@@ -49,7 +49,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 12px;
         padding: 10px 20px;  /* ← PIÙ PICCOLI */
@@ -86,7 +86,7 @@
     
     .modern-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         color: white;
     }
     
@@ -122,7 +122,7 @@
     
     .info-label {
         font-weight: 600;
-        color: #667eea;
+        color: #029D7E;
         min-width: 120px;
         display: flex;
         align-items: center;
@@ -151,7 +151,7 @@
     }
     
     .status-confermato {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
     }
     
@@ -171,7 +171,7 @@
     }
     
     .modern-table thead th {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
         font-weight: 600;
         border: none;
@@ -187,20 +187,20 @@
     }
     
     .modern-table tbody tr:hover {
-        background: rgba(102, 126, 234, 0.05);
+        background: rgba(2, 157, 126, 0.05);
         transform: scale(1.01);
     }
     
     .modern-table tbody td {
         padding: 1rem;
         border: none;
-        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        border-bottom: 1px solid rgba(2, 157, 126, 0.1);
         vertical-align: middle;
     }
     
     .modern-table tfoot th {
-        background: rgba(102, 126, 234, 0.1);
-        color: #667eea;
+        background: rgba(2, 157, 126, 0.1);
+        color: #029D7E;
         font-weight: 700;
         font-size: 1.1rem;
         padding: 1rem;
@@ -215,9 +215,9 @@
     }
     
     .size-badge {
-        background: rgba(102, 126, 234, 0.1);
-        color: #667eea;
-        border: 1px solid rgba(102, 126, 234, 0.3);
+        background: rgba(2, 157, 126, 0.1);
+        color: #029D7E;
+        border: 1px solid rgba(2, 157, 126, 0.3);
     }
     
     .color-badge {
@@ -227,7 +227,7 @@
     }
     
     .ddt-number-badge {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
         padding: 8px 16px;
         border-radius: 15px;
@@ -257,21 +257,21 @@
     }
     
     [data-bs-theme="dark"] .modern-table tbody tr:hover {
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
     }
     
     [data-bs-theme="dark"] .modern-table tbody td {
         color: #e2e8f0;
-        border-bottom-color: rgba(102, 126, 234, 0.2);
+        border-bottom-color: rgba(2, 157, 126, 0.2);
     }
     
     [data-bs-theme="dark"] .modern-table tfoot th {
-        background: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.2);
         color: #e2e8f0;
     }
     
     [data-bs-theme="dark"] .size-badge {
-        background: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.2);
         color: #e2e8f0;
     }
     
@@ -554,7 +554,7 @@
         <h3 class="section-title">
             <i class="bi bi-chat-text"></i> {{ __('app.notes') }}
         </h3>
-        <div style="background: rgba(102, 126, 234, 0.1); padding: 1.5rem; border-radius: 15px; color: #495057; font-size: 1rem; line-height: 1.6;">
+        <div style="background: rgba(2, 157, 126, 0.1); padding: 1.5rem; border-radius: 15px; color: #495057; font-size: 1rem; line-height: 1.6;">
             {{ $ddt->note }}
         </div>
     </div>

@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProdottoController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\FornitoriController;
+use App\Http\Controllers\VettoriController;
 use App\Http\Controllers\VenditaController;
 use App\Http\Controllers\MagazzinoController;
 use App\Http\Controllers\DdtController;
@@ -56,6 +58,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route del gestionale
     Route::resource('prodotti', ProdottoController::class)->parameter('prodotti', 'prodotto');
     Route::resource('clienti', ClienteController::class)->parameter('clienti', 'cliente');
+    Route::resource('fornitori', FornitoriController::class)->parameter('fornitori', 'fornitore');
+    Route::resource('vettori', VettoriController::class)->parameter('vettori', 'vettore');
     Route::resource('vendite', VenditaController::class)->parameter('vendite', 'vendita');
     
     Route::get('/magazzino/caricamento-multiplo', [MagazzinoController::class, 'caricamentoMultiplo'])->name('magazzino.caricamento-multiplo');
@@ -85,6 +89,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/scanner', [LabelController::class, 'scanner'])->name('scanner');
         Route::post('/decode', [LabelController::class, 'decode'])->name('decode');
     });
+    
+    // Route speciali per Fornitori Enterprise
+    Route::prefix('fornitori')->name('fornitori.')->group(function () {
+        Route::get('/search', [FornitoriController::class, 'search'])->name('search'); // AJAX
+        Route::get('/export-csv', [FornitoriController::class, 'exportCsv'])->name('export-csv');
+        Route::post('/{fornitore}/verifica-dati', [FornitoriController::class, 'verificaDati'])->name('verifica-dati');
+    });
+
+    // Route speciali per Vettori Enterprise
+    Route::prefix('vettori')->name('vettori.')->group(function () {
+        Route::get('/search', [VettoriController::class, 'search'])->name('search'); // AJAX
+        Route::get('/export-csv', [VettoriController::class, 'exportCsv'])->name('export-csv');
+        Route::post('/{vettore}/verifica-dati', [VettoriController::class, 'verificaDati'])->name('verifica-dati');
+        Route::post('/calcola-costo', [VettoriController::class, 'calcolaCosto'])->name('calcola-costo'); // AJAX
+    });
 
     // Route Configurazioni
     Route::prefix('configurations')->name('configurations.')->group(function () {
@@ -100,8 +119,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/bank-accounts/{uuid}', [ConfigurationController::class, 'updateBankAccount'])->name('bank-accounts.update');
         Route::delete('/bank-accounts/{uuid}', [ConfigurationController::class, 'deleteBankAccount'])->name('bank-accounts.delete');
         
-        // Tabelle di Sistema
-        Route::get('/system-tables', [ConfigurationController::class, 'systemTables'])->name('system-tables');
+        // Tabelle di Sistema - Dashboard 
+        Route::middleware(['throttle:100,1'])->group(function () {
+            Route::get('/system-tables', [App\Http\Controllers\SystemTablesController::class, 'index'])->name('system-tables.index');
+            Route::get('/system-tables/{table}', [App\Http\Controllers\SystemTablesController::class, 'show'])->name('system-tables.show');
+            Route::get('/system-tables/{table}/{id}', [App\Http\Controllers\SystemTablesController::class, 'edit'])->name('system-tables.edit');
+            Route::post('/system-tables/{table}', [App\Http\Controllers\SystemTablesController::class, 'store'])->name('system-tables.store');
+            Route::put('/system-tables/{table}/{id}', [App\Http\Controllers\SystemTablesController::class, 'update'])->name('system-tables.update');
+            Route::delete('/system-tables/{table}/{id}', [App\Http\Controllers\SystemTablesController::class, 'destroy'])->name('system-tables.destroy');
+            Route::get('/system-tables/{table}/export', [App\Http\Controllers\SystemTablesController::class, 'export'])->name('system-tables.export');
+            Route::get('/system-tables/{table}/api', [App\Http\Controllers\SystemTablesController::class, 'apiData'])->name('system-tables.api');
+            Route::get('/associazioni-nature-iva', [App\Http\Controllers\SystemTablesController::class, 'associazioniNatureIva'])->name('associazioni-nature-iva');
+            Route::get('/tax-rates-configurator', [App\Http\Controllers\SystemTablesController::class, 'taxRatesConfigurator'])->name('tax-rates-configurator');
+            
+            // Route per gestione preferiti (NEW!)
+            Route::post('/favorites/add', [App\Http\Controllers\SystemTablesController::class, 'addToFavorites'])->name('system-tables.favorites.add');
+            Route::delete('/favorites/remove', [App\Http\Controllers\SystemTablesController::class, 'removeFromFavorites'])->name('system-tables.favorites.remove');
+            Route::post('/track-usage', [App\Http\Controllers\SystemTablesController::class, 'trackTableUsage'])->name('system-tables.track-usage');
+        });
+        
+        // Route legacy per compatibilità
         Route::post('/tax-rates', [ConfigurationController::class, 'storeTaxRate'])->name('tax-rates.store');
         Route::post('/payment-methods', [ConfigurationController::class, 'storePaymentMethod'])->name('payment-methods.store');
         Route::post('/currencies', [ConfigurationController::class, 'storeCurrency'])->name('currencies.store');
@@ -109,6 +146,48 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Impostazioni
         Route::get('/settings', [ConfigurationController::class, 'settings'])->name('settings');
         Route::post('/settings', [ConfigurationController::class, 'updateSettings'])->name('settings.update');
+        
+        // Sistema Gestione Tabelle Enterprise (V2)
+        Route::prefix('gestione-tabelle')->name('gestione-tabelle.')->group(function () {
+            // Dashboard principale (throttle rimosso per sviluppo)
+            Route::get('/', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'index'])->name('index');
+                
+                // Gestione tabella specifica
+                Route::get('/{nomeTabella}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'mostraTabella'])->name('tabella');
+                Route::get('/{nomeTabella}/create', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'create'])->name('create');
+                Route::post('/{nomeTabella}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'store'])->name('store');
+                Route::get('/{nomeTabella}/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'show'])->name('show');
+                Route::get('/{nomeTabella}/{id}/edit', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'edit'])->name('edit');
+                Route::put('/{nomeTabella}/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'update'])->name('update');
+                Route::delete('/{nomeTabella}/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'destroy'])->name('destroy');
+                
+                // API per AJAX
+                Route::get('/{nomeTabella}/api/data', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'apiData'])->name('api.data');
+                
+                // Route specifiche per Aliquote IVA
+                Route::prefix('aliquote-iva')->name('aliquote-iva.')->group(function () {
+                    Route::post('/', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'storeAliquotaIva'])->name('store');
+                    Route::get('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'showAliquotaIva'])->name('show');
+                    Route::put('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'updateAliquotaIva'])->name('update');
+                    Route::delete('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'destroyAliquotaIva'])->name('destroy');
+                });
+                
+                // Route specifiche per Associazioni Nature IVA
+                Route::prefix('associazioni-nature-iva')->name('associazioni-nature-iva.')->group(function () {
+                    Route::post('/', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'storeAssociazioneNaturaIva'])->name('store');
+                    Route::get('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'showAssociazioneNaturaIva'])->name('show');
+                    Route::put('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'updateAssociazioneNaturaIva'])->name('update');
+                    Route::delete('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'destroyAssociazioneNaturaIva'])->name('destroy');
+                });
+                
+                // Route specifiche per Banche
+                Route::prefix('banche')->name('banche.')->group(function () {
+                    Route::post('/', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'storeBanca'])->name('store');
+                    Route::get('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'showBanca'])->name('show');
+                    Route::put('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'updateBanca'])->name('update');
+                    Route::delete('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'destroyBanca'])->name('destroy');
+                });
+        });
     });
 
     // Route Enterprise Features (Funzionalità Avanzate)

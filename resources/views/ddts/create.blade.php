@@ -22,7 +22,7 @@
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -45,7 +45,7 @@
     .section-title {
         font-size: 1.3rem;
         font-weight: 600;
-        color: #667eea;
+        color: #029D7E;
         margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
@@ -53,7 +53,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 15px 30px;
@@ -83,7 +83,7 @@
     
     .modern-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         color: white;
     }
     
@@ -106,7 +106,7 @@
     .sale-card {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
-        border: 2px solid rgba(102, 126, 234, 0.1);
+        border: 2px solid rgba(2, 157, 126, 0.1);
         border-radius: 20px;
         padding: 1.5rem;
         margin-bottom: 1rem;
@@ -115,7 +115,7 @@
     }
     
     .sale-card:hover {
-        border-color: rgba(102, 126, 234, 0.3);
+        border-color: rgba(2, 157, 126, 0.3);
         transform: translateY(-2px);
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
     }
@@ -127,7 +127,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .sale-header {
@@ -140,14 +140,14 @@
     .sale-id {
         font-size: 1.2rem;
         font-weight: 700;
-        color: #667eea;
+        color: #029D7E;
         margin: 0;
     }
     
     .sale-date {
         color: #6c757d;
         font-size: 0.9rem;
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
         padding: 4px 8px;
         border-radius: 8px;
     }
@@ -256,7 +256,7 @@
     }
     
     [data-bs-theme="dark"] .sale-date {
-        background: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.2);
         color: #e2e8f0;
     }
     

@@ -28,7 +28,7 @@
         left: 0;
         width: 100%;
         height: 4px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .customer-header {
@@ -42,7 +42,7 @@
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -51,7 +51,7 @@
         font-size: 2rem;
         flex-shrink: 0;
         border: 4px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 10px 25px rgba(2, 157, 126, 0.3);
     }
     
     .customer-info {
@@ -61,7 +61,7 @@
     .customer-title {
         font-size: 2.2rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -84,7 +84,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 12px 24px;
@@ -154,7 +154,7 @@
         left: 0;
         width: 100%;
         height: 3px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .info-card:hover {
@@ -173,7 +173,7 @@
     }
     
     .card-title i {
-        color: #667eea;
+        color: #029D7E;
         font-size: 1.5rem;
     }
     
@@ -182,7 +182,7 @@
         justify-content: space-between;
         align-items: flex-start;
         padding: 0.75rem 0;
-        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        border-bottom: 1px solid rgba(2, 157, 126, 0.1);
         transition: all 0.3s ease;
     }
     
@@ -191,7 +191,7 @@
     }
     
     .info-item:hover {
-        background: rgba(102, 126, 234, 0.03);
+        background: rgba(2, 157, 126, 0.03);
         padding-left: 0.5rem;
         border-radius: 8px;
     }
@@ -206,7 +206,7 @@
     }
     
     .info-label i {
-        color: #667eea;
+        color: #029D7E;
         width: 16px;
     }
     
@@ -219,11 +219,11 @@
     
     .contact-value {
         font-family: 'Courier New', monospace;
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
         padding: 4px 8px;
         border-radius: 6px;
         font-size: 0.9rem;
-        color: #667eea;
+        color: #029D7E;
     }
     
     .gender-badge {
@@ -245,13 +245,13 @@
     }
     
     .gender-other {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
     }
     
     .date-display {
         font-weight: 600;
-        color: #667eea;
+        color: #029D7E;
     }
     
     .address-display {
@@ -266,8 +266,8 @@
     }
     
     .age-badge {
-        background: rgba(102, 126, 234, 0.1);
-        color: #667eea;
+        background: rgba(2, 157, 126, 0.1);
+        color: #029D7E;
         padding: 4px 8px;
         border-radius: 8px;
         font-size: 0.8rem;
@@ -293,16 +293,16 @@
     }
     
     [data-bs-theme="dark"] .contact-value {
-        background: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.2);
         color: #e2e8f0;
     }
     
     [data-bs-theme="dark"] .info-item {
-        border-bottom-color: rgba(102, 126, 234, 0.2);
+        border-bottom-color: rgba(2, 157, 126, 0.2);
     }
     
     [data-bs-theme="dark"] .age-badge {
-        background: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.2);
         color: #e2e8f0;
     }
     

@@ -136,7 +136,7 @@
         
         .form-floating input:focus {
             border-color: #029D7E;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         }
         
         .form-floating input.is-invalid {
@@ -157,7 +157,7 @@
         
         .btn-register:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 20px rgba(2, 157, 126, 0.3);
         }
         
         .login-link {
@@ -205,7 +205,7 @@
             margin-top: 0.5rem;
             padding: 0.5rem;
             border-radius: 8px;
-            background: rgba(102, 126, 234, 0.1);
+            background: rgba(2, 157, 126, 0.1);
             color: #029D7E;
         }
         
@@ -272,17 +272,17 @@
         }
         
         .register-body::-webkit-scrollbar-track {
-            background: rgba(102, 126, 234, 0.1);
+            background: rgba(2, 157, 126, 0.1);
             border-radius: 3px;
         }
         
         .register-body::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.3);
+            background: rgba(2, 157, 126, 0.3);
             border-radius: 3px;
         }
         
         .register-body::-webkit-scrollbar-thumb:hover {
-            background: rgba(102, 126, 234, 0.5);
+            background: rgba(2, 157, 126, 0.5);
         }
     </style>
 </head>

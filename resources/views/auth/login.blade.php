@@ -77,7 +77,7 @@
         
         .form-floating input:focus {
             border-color: #029D7E;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         }
         
         .btn-login {
@@ -94,7 +94,7 @@
         
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 20px rgba(2, 157, 126, 0.3);
         }
         
         .form-check-input:checked {

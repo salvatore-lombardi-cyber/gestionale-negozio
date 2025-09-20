@@ -78,11 +78,11 @@
         align-items: center;
         gap: 0.5rem;
         padding-bottom: 0.5rem;
-        border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+        border-bottom: 2px solid rgba(2, 157, 126, 0.1);
     }
     
     .section-title i {
-        color: #667eea;
+        color: #029D7E;
         font-size: 1.4rem;
     }
     
@@ -101,7 +101,7 @@
     }
     
     .form-label i {
-        color: #667eea;
+        color: #029D7E;
         font-size: 1rem;
     }
     
@@ -113,7 +113,7 @@
     .modern-input {
         width: 100%;
         padding: 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -123,8 +123,8 @@
     
     .modern-input:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
         transform: translateY(-2px);
     }
@@ -137,7 +137,7 @@
     .modern-textarea {
         width: 100%;
         padding: 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -150,8 +150,8 @@
     
     .modern-textarea:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
     }
     
@@ -167,8 +167,8 @@
     }
     
     .checkbox-container {
-        background: rgba(102, 126, 234, 0.05);
-        border: 2px solid rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.05);
+        border: 2px solid rgba(2, 157, 126, 0.1);
         border-radius: 15px;
         padding: 1.5rem;
         margin-bottom: 2rem;
@@ -176,8 +176,8 @@
     }
     
     .checkbox-container:hover {
-        background: rgba(102, 126, 234, 0.08);
-        border-color: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.08);
+        border-color: rgba(2, 157, 126, 0.2);
     }
     
     .modern-checkbox {
@@ -190,7 +190,7 @@
     .checkbox-input {
         width: 20px;
         height: 20px;
-        border: 2px solid #667eea;
+        border: 2px solid #029D7E;
         border-radius: 6px;
         position: relative;
         cursor: pointer;
@@ -198,8 +198,8 @@
     }
     
     .checkbox-input:checked {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-color: #667eea;
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+        border-color: #029D7E;
     }
     
     .checkbox-input:checked::after {
@@ -227,7 +227,7 @@
         justify-content: flex-end;
         margin-top: 2.5rem;
         padding-top: 2rem;
-        border-top: 2px solid rgba(102, 126, 234, 0.1);
+        border-top: 2px solid rgba(2, 157, 126, 0.1);
     }
     
     .modern-btn {
@@ -268,7 +268,7 @@
     }
     
     .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
     }
     
@@ -319,7 +319,7 @@
     [data-bs-theme="dark"] .modern-input,
     [data-bs-theme="dark"] .modern-textarea {
         background: rgba(45, 55, 72, 0.8);
-        border-color: rgba(102, 126, 234, 0.3);
+        border-color: rgba(2, 157, 126, 0.3);
         color: #e2e8f0;
     }
     
@@ -329,14 +329,14 @@
     }
     
     [data-bs-theme="dark"] .checkbox-container {
-        background: rgba(102, 126, 234, 0.1);
-        border-color: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.1);
+        border-color: rgba(2, 157, 126, 0.2);
     }
     
     [data-bs-theme="dark"] .section-title,
     [data-bs-theme="dark"] .form-actions {
-        border-bottom-color: rgba(102, 126, 234, 0.2);
-        border-top-color: rgba(102, 126, 234, 0.2);
+        border-bottom-color: rgba(2, 157, 126, 0.2);
+        border-top-color: rgba(2, 157, 126, 0.2);
     }
     
     /* Responsive */

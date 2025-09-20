@@ -45,7 +45,7 @@
     .search-input {
         width: 100%;
         padding: 15px 50px 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -55,7 +55,7 @@
     .search-input:focus {
         outline: none;
         border-color: #029D7E;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
     }
     
@@ -88,7 +88,7 @@
     
     .filter-chip:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 5px 15px rgba(2, 157, 126, 0.4);
     }
     
     .filter-chip.active {
@@ -96,7 +96,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 12px 24px;
@@ -104,28 +104,12 @@
         color: white;
         text-decoration: none;
         transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
     }
     
-    .modern-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
-    }
-    
-    .modern-btn:hover::before {
-        left: 0;
-    }
     
     .modern-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         color: white;
     }
     
@@ -144,7 +128,7 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: thin;
-        scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
+        scrollbar-color: rgba(2, 157, 126, 0.3) transparent;
     }
     
     .table-responsive::-webkit-scrollbar {
@@ -152,17 +136,17 @@
     }
     
     .table-responsive::-webkit-scrollbar-track {
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
         border-radius: 10px;
     }
     
     .table-responsive::-webkit-scrollbar-thumb {
-        background: rgba(102, 126, 234, 0.3);
+        background: rgba(2, 157, 126, 0.3);
         border-radius: 10px;
     }
     
     .table-responsive::-webkit-scrollbar-thumb:hover {
-        background: rgba(102, 126, 234, 0.5);
+        background: rgba(2, 157, 126, 0.5);
     }
     
     .modern-card:hover {
@@ -201,14 +185,14 @@
     }
     
     .modern-table tbody tr:hover {
-        background: rgba(102, 126, 234, 0.05);
+        background: rgba(2, 157, 126, 0.05);
         transform: scale(1.01);
     }
     
     .modern-table tbody td {
         padding: 1rem;
         border: none;
-        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        border-bottom: 1px solid rgba(2, 157, 126, 0.1);
         vertical-align: middle;
         white-space: nowrap;
         overflow: hidden;
@@ -270,7 +254,7 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -299,7 +283,7 @@
     .contact-item i {
         width: 16px;
         margin-right: 5px;
-        color: #667eea;
+        color: #029D7E;
     }
     
     .no-results {
@@ -322,7 +306,7 @@
     
     [data-bs-theme="dark"] .search-input {
         background: rgba(45, 55, 72, 0.8);
-        border-color: rgba(102, 126, 234, 0.3);
+        border-color: rgba(2, 157, 126, 0.3);
         color: #e2e8f0;
     }
     
@@ -331,12 +315,12 @@
     }
     
     [data-bs-theme="dark"] .modern-table tbody tr:hover {
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
     }
     
     [data-bs-theme="dark"] .modern-table tbody td {
         color: #e2e8f0;
-        border-bottom-color: rgba(102, 126, 234, 0.2);
+        border-bottom-color: rgba(2, 157, 126, 0.2);
     }
     
     [data-bs-theme="dark"] .contact-item {
@@ -379,7 +363,7 @@
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -410,7 +394,7 @@
     
     .client-detail i {
         width: 20px;
-        color: #667eea;
+        color: #029D7E;
         margin-right: 10px;
     }
     
@@ -607,9 +591,14 @@
             <h1 class="page-title">
                 <i class="bi bi-people"></i> {{ __('app.clients') }}
             </h1>
-            <a href="{{ route('clienti.create') }}" class="modern-btn">
-                <i class="bi bi-person-plus"></i> {{ __('app.new') }} {{ __('app.client') }}
-            </a>
+            <div>
+                <a href="{{ route('anagrafiche.index') }}" class="btn btn-secondary modern-btn me-2">
+                    <i class="bi bi-arrow-left"></i> Torna Indietro
+                </a>
+                <a href="{{ route('clienti.create') }}" class="modern-btn">
+                    <i class="bi bi-person-plus"></i> {{ __('app.new') }} {{ __('app.client') }}
+                </a>
+            </div>
         </div>
     </div>
     
@@ -682,7 +671,7 @@
                     </td>
                     <td>
                         @if($cliente->citta)
-                        <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                        <span class="badge" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white;">
                             {{ $cliente->citta }}
                         </span>
                         @else
@@ -711,10 +700,7 @@
                         <div class="empty-state">
                             <i class="bi bi-people"></i>
                             <h5>{{ __('app.no_clients_found') }}</h5>
-                            <p>Inizia aggiungendo il primo cliente al tuo database</p>
-                            <a href="{{ route('clienti.create') }}" class="modern-btn">
-                                <i class="bi bi-person-plus"></i> Aggiungi Primo Cliente
-                            </a>
+                            <p>Inizia aggiungendo il primo cliente utilizzando il pulsante in alto</p>
                         </div>
                     </td>
                 </tr>
@@ -787,10 +773,7 @@
         <div class="empty-state">
             <i class="bi bi-people"></i>
             <h5>{{ __('app.no_clients_found') }}</h5>
-            <p>Inizia aggiungendo il primo cliente al tuo database</p>
-            <a href="{{ route('clienti.create') }}" class="modern-btn">
-                <i class="bi bi-person-plus"></i> Aggiungi Primo Cliente
-            </a>
+            <p>Inizia aggiungendo il primo cliente utilizzando il pulsante in alto</p>
         </div>
     </div>
     @endforelse

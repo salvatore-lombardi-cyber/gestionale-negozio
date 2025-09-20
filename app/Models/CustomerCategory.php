@@ -19,20 +19,12 @@ class CustomerCategory extends Model
         'code',
         'name',
         'description',
-        'discount_percentage',
-        'color_hex',
-        'priority_level',
-        'credit_limit',
-        'payment_terms_days',
         'active'
     ];
 
     protected $casts = [
-        'discount_percentage' => 'decimal:2',
-        'priority_level' => 'integer',
-        'credit_limit' => 'decimal:2',
-        'payment_terms_days' => 'integer',
         'active' => 'boolean',
+        'created_by' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
@@ -44,24 +36,57 @@ class CustomerCategory extends Model
         return $query->where('active', true);
     }
 
-    public function scopeByPriority(Builder $query): Builder
+    public function scopeOrdered(Builder $query): Builder
     {
-        return $query->orderBy('priority_level', 'desc');
+        return $query->orderBy('code')->orderBy('description');
     }
 
-    public function scopeWithDiscount(Builder $query): Builder
+    // Validazioni OWASP
+    public static function validationRules($id = null): array
     {
-        return $query->where('discount_percentage', '>', 0);
+        return [
+            'code' => [
+                'required',
+                'string',
+                'max:20',
+                'regex:/^[A-Z0-9_-]+$/',
+                'unique:customer_categories,code' . ($id ? ',' . $id : '')
+            ],
+            'description' => [
+                'required',
+                'string',
+                'min:3',
+                'max:255'
+            ],
+            'active' => [
+                'boolean'
+            ]
+        ];
     }
 
-    // Accessors
-    public function getFormattedDiscountAttribute(): string
+    // Metodi business logic
+    public function canBeDeleted(): bool
     {
-        return $this->discount_percentage ? "{$this->discount_percentage}%" : 'Nessuno';
+        // Controlla se ci sono clienti associati a questa categoria
+        // return !$this->customers()->exists();
+        return true; // Per ora non controlliamo relazioni
     }
 
-    public function getFormattedCreditLimitAttribute(): string
+    // Boot events
+    protected static function boot()
     {
-        return $this->credit_limit ? '€ ' . number_format($this->credit_limit, 2) : 'Illimitato';
+        parent::boot();
+
+        static::creating(function ($category) {
+            if (auth()->check()) {
+                $category->created_by = auth()->id();
+            }
+        });
     }
+
+    // Relazioni future (quando sarà implementata la gestione clienti)
+    // public function customers()
+    // {
+    //     return $this->hasMany(Customer::class, 'categoria_cliente');
+    // }
 }

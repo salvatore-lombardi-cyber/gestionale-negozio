@@ -22,7 +22,7 @@
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -45,7 +45,7 @@
     .section-title {
         font-size: 1.3rem;
         font-weight: 600;
-        color: #667eea;
+        color: #029D7E;
         margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
@@ -55,7 +55,7 @@
     .modern-input {
         width: 100%;
         padding: 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -65,8 +65,8 @@
     
     .modern-input:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
         transform: translateY(-2px);
     }
@@ -79,7 +79,7 @@
     .modern-textarea {
         width: 100%;
         padding: 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -91,8 +91,8 @@
     
     .modern-textarea:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
         transform: translateY(-2px);
     }
@@ -114,7 +114,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 15px 30px;
@@ -143,7 +143,7 @@
     
     .modern-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         color: white;
     }
     
@@ -173,7 +173,7 @@
     
     .modern-checkbox {
         background: rgba(255, 255, 255, 0.9);
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 8px;
         padding: 15px 20px;
         transition: all 0.3s ease;
@@ -181,7 +181,7 @@
     
     .modern-checkbox:hover {
         background: white;
-        border-color: #667eea;
+        border-color: #029D7E;
         transform: translateY(-2px);
     }
     
@@ -189,7 +189,7 @@
         width: 20px;
         height: 20px;
         margin-right: 10px;
-        accent-color: #667eea;
+        accent-color: #029D7E;
     }
     
     .variants-container {
@@ -203,7 +203,7 @@
     
     .variant-item {
         background: rgba(255, 255, 255, 0.9);
-        border: 2px solid rgba(102, 126, 234, 0.1);
+        border: 2px solid rgba(2, 157, 126, 0.1);
         border-radius: 15px;
         padding: 1.5rem;
         margin-bottom: 1rem;
@@ -211,34 +211,34 @@
     }
     
     .variant-item:hover {
-        border-color: rgba(102, 126, 234, 0.3);
+        border-color: rgba(2, 157, 126, 0.3);
         transform: translateY(-2px);
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
     
     .quick-select-card {
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
         backdrop-filter: blur(10px);
         border-radius: 15px;
         padding: 1rem;
-        border: 1px solid rgba(102, 126, 234, 0.2);
+        border: 1px solid rgba(2, 157, 126, 0.2);
         margin-bottom: 1rem;
     }
     
     .quick-btn {
-        background: rgba(102, 126, 234, 0.1);
-        border: 1px solid rgba(102, 126, 234, 0.3);
+        background: rgba(2, 157, 126, 0.1);
+        border: 1px solid rgba(2, 157, 126, 0.3);
         border-radius: 10px;
         padding: 8px 16px;
         font-size: 0.875rem;
         font-weight: 500;
-        color: #667eea;
+        color: #029D7E;
         margin: 0 5px 5px 0;
         transition: all 0.3s ease;
     }
     
     .quick-btn:hover {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
         border-color: transparent;
         transform: translateY(-2px);
@@ -270,7 +270,7 @@
     [data-bs-theme="dark"] .modern-input,
     [data-bs-theme="dark"] .modern-textarea {
         background: rgba(45, 55, 72, 0.8);
-        border-color: rgba(102, 126, 234, 0.3);
+        border-color: rgba(2, 157, 126, 0.3);
         color: #e2e8f0;
     }
     
@@ -287,11 +287,11 @@
     [data-bs-theme="dark"] .variant-item {
         background: rgba(45, 55, 72, 0.8);
         color: #e2e8f0;
-        border-color: rgba(102, 126, 234, 0.2);
+        border-color: rgba(2, 157, 126, 0.2);
     }
     
     [data-bs-theme="dark"] .quick-select-card {
-        background: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.2);
         color: #e2e8f0;
     }
     

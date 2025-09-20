@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Model per Colori Varianti (Card #10)
- * Palette colori per varianti
+ * Semplice gestione colori per varianti prodotti
  */
 class ColorVariant extends Model
 {
@@ -18,21 +18,14 @@ class ColorVariant extends Model
     protected $fillable = [
         'code',
         'name',
-        'hex_primary',
-        'hex_secondary',
-        'pantone_code',
-        'rgb_values',
-        'cmyk_values',
-        'season',
-        'trend_level',
-        'active'
+        'description',
+        'active',
+        'sort_order'
     ];
 
     protected $casts = [
-        'rgb_values' => 'array',
-        'cmyk_values' => 'array',
-        'trend_level' => 'integer',
         'active' => 'boolean',
+        'sort_order' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
@@ -43,17 +36,27 @@ class ColorVariant extends Model
         return $query->where('active', true);
     }
 
-    public function scopeBySeason(Builder $query, string $season): Builder
+    public function scopeOrdered(Builder $query): Builder
     {
-        return $query->where('season', $season);
+        return $query->orderBy('sort_order')->orderBy('name');
     }
 
-    public function getColorPreviewAttribute(): string
+    // Validazione semplice ma sicura
+    public static function validationRules(): array
     {
-        $gradient = $this->hex_secondary 
-            ? "background: linear-gradient(45deg, {$this->hex_primary}, {$this->hex_secondary});"
-            : "background: {$this->hex_primary};";
-            
-        return "<div style='width:30px;height:30px;{$gradient}border:1px solid #ccc;border-radius:4px;display:inline-block;'></div>";
+        return [
+            'code' => 'required|string|max:50|unique:color_variants,code|regex:/^[A-Z0-9_-]+$/',
+            'name' => 'required|string|max:255|min:2',
+            'description' => 'nullable|string|max:500',
+            'active' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0|max:9999'
+        ];
+    }
+
+    public static function validationRulesForUpdate(int $id): array
+    {
+        $rules = self::validationRules();
+        $rules['code'] = 'required|string|max:50|unique:color_variants,code,' . $id . '|regex:/^[A-Z0-9_-]+$/';
+        return $rules;
     }
 }

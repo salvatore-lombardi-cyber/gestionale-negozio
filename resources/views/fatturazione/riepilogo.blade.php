@@ -2,7 +2,7 @@
 
 @section('content')
 <style>
-    body {
+    .riepilogo-page {
         background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         min-height: 100vh;
     }
@@ -132,12 +132,18 @@
     }
 </style>
 
+<div class="riepilogo-page">
 <div class="container-fluid riepilogo-container">
     <!-- Header -->
-    <div class="riepilogo-header text-center">
-        <h1 class="riepilogo-title">
-            <i class="bi bi-bar-chart"></i> Riepilogo Fatturazione
-        </h1>
+    <div class="riepilogo-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="riepilogo-title">
+                <i class="bi bi-bar-chart"></i> Riepilogo Fatturazione
+            </h1>
+            <a href="{{ route('fatturazione.index') }}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Torna Indietro
+            </a>
+        </div>
         <p class="text-muted">Dashboard completa delle tue fatture</p>
     </div>
     
@@ -383,6 +389,7 @@
         </div>
     </div>
     @endif
+</div>
 </div>
 
 @if($fatturatoPeriodo->count() > 0)

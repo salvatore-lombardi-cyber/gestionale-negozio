@@ -45,7 +45,7 @@
     .search-input {
         width: 100%;
         padding: 15px 50px 15px 20px;
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         font-size: 1rem;
         transition: all 0.3s ease;
@@ -55,7 +55,7 @@
     .search-input:focus {
         outline: none;
         border-color: #029D7E;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
     }
     
@@ -88,7 +88,7 @@
     
     .filter-chip:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 5px 15px rgba(2, 157, 126, 0.4);
     }
     
     .filter-chip.active {
@@ -96,7 +96,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 12px 24px;
@@ -125,7 +125,7 @@
     
     .modern-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         color: white;
     }
     
@@ -167,14 +167,14 @@
     }
     
     .modern-table tbody tr:hover {
-        background: rgba(102, 126, 234, 0.05);
+        background: rgba(2, 157, 126, 0.05);
         transform: scale(1.01);
     }
     
     .modern-table tbody td {
         padding: 1rem;
         border: none;
-        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        border-bottom: 1px solid rgba(2, 157, 126, 0.1);
         vertical-align: middle;
         white-space: nowrap;
     }
@@ -236,7 +236,7 @@
     
     .product-code {
         font-family: 'Courier New', monospace;
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
         padding: 4px 8px;
         border-radius: 6px;
         font-size: 0.9rem;
@@ -288,7 +288,7 @@
     
     [data-bs-theme="dark"] .search-input {
         background: rgba(45, 55, 72, 0.8);
-        border-color: rgba(102, 126, 234, 0.3);
+        border-color: rgba(2, 157, 126, 0.3);
         color: #e2e8f0;
     }
     
@@ -297,16 +297,16 @@
     }
     
     [data-bs-theme="dark"] .modern-table tbody tr:hover {
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
     }
     
     [data-bs-theme="dark"] .modern-table tbody td {
         color: #e2e8f0;
-        border-bottom-color: rgba(102, 126, 234, 0.2);
+        border-bottom-color: rgba(2, 157, 126, 0.2);
     }
     
     [data-bs-theme="dark"] .product-code {
-        background: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.2);
         color: #e2e8f0;
     }
     
@@ -355,7 +355,7 @@
     
     .product-card-code {
         font-family: 'Courier New', monospace;
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(2, 157, 126, 0.1);
         padding: 4px 8px;
         border-radius: 6px;
         font-size: 0.8rem;
@@ -463,7 +463,7 @@
     }
     
     [data-bs-theme="dark"] .product-card-code {
-        background: rgba(102, 126, 234, 0.2);
+        background: rgba(2, 157, 126, 0.2);
         color: #e2e8f0;
     }
     
@@ -630,7 +630,7 @@
                         <strong>{{ $prodotto->nome }}</strong>
                     </td>
                     <td>
-                        <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                        <span class="badge" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white;">
                             {{ $prodotto->categoria }}
                         </span>
                     </td>
@@ -677,10 +677,7 @@
                         <div class="empty-state">
                             <i class="bi bi-box-seam"></i>
                             <h5>{{ __('app.no_products_found') }}</h5>
-                            <p>Inizia aggiungendo il primo prodotto al tuo catalogo</p>
-                            <a href="{{ route('prodotti.create') }}" class="modern-btn">
-                                <i class="bi bi-plus-circle"></i> Aggiungi Primo Prodotto
-                            </a>
+                            <p>Inizia aggiungendo il primo prodotto utilizzando il pulsante in alto</p>
                         </div>
                     </td>
                 </tr>
@@ -719,7 +716,7 @@
             <div class="product-detail">
                 <span class="product-detail-label">{{ __('app.category') }}</span>
                 <span class="product-detail-value">
-                    <span class="badge" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; font-size: 0.7rem;">
+                    <span class="badge" style="background: linear-gradient(135deg, #029D7E, #4DC9A5); color: white; font-size: 0.7rem;">
                         {{ $prodotto->categoria }}
                     </span>
                 </span>
@@ -766,10 +763,7 @@
         <div class="empty-state">
             <i class="bi bi-box-seam"></i>
             <h5>{{ __('app.no_products_found') }}</h5>
-            <p>Inizia aggiungendo il primo prodotto al tuo catalogo</p>
-            <a href="{{ route('prodotti.create') }}" class="modern-btn">
-                <i class="bi bi-plus-circle"></i> Aggiungi Primo Prodotto
-            </a>
+            <p>Inizia aggiungendo il primo prodotto utilizzando il pulsante in alto</p>
         </div>
     </div>
     @endforelse

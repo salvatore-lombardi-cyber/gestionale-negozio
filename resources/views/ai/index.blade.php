@@ -53,7 +53,7 @@
     }
     
     .modern-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         border: none;
         border-radius: 15px;
         padding: 12px 24px;
@@ -85,7 +85,7 @@
     
     .modern-btn:hover {
         transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 35px rgba(2, 157, 126, 0.4);
         color: white;
     }
     
@@ -135,7 +135,7 @@
     }
     
     .stat-card.products::before {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .stat-card.customers::before {
@@ -152,7 +152,7 @@
     
     .stat-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 25px 50px rgba(102, 126, 234, 0.2);
+        box-shadow: 0 25px 50px rgba(2, 157, 126, 0.2);
     }
     
     .stat-icon {
@@ -165,7 +165,7 @@
         margin: 0 auto 1.5rem;
         font-size: 2rem;
         color: white;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
     }
     
     .stat-icon.success { background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%); }
@@ -176,7 +176,7 @@
         font-size: 3rem;
         font-weight: 800;
         margin: 0;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         line-height: 1;
@@ -195,7 +195,7 @@
         height: 500px;
         overflow-y: auto;
         padding: 2rem;
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.03), rgba(118, 75, 162, 0.03));
+        background: linear-gradient(135deg, rgba(2, 157, 126, 0.03), rgba(118, 75, 162, 0.03));
         border-radius: 20px;
         margin-bottom: 1.5rem;
     }
@@ -224,7 +224,7 @@
     }
     
     .ai-message .message-avatar {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         margin-right: 1rem;
     }
     
@@ -287,7 +287,7 @@
     }
     
     .chat-input {
-        border: 2px solid rgba(102, 126, 234, 0.2);
+        border: 2px solid rgba(2, 157, 126, 0.2);
         border-radius: 15px;
         padding: 15px 20px;
         font-size: 1rem;
@@ -298,8 +298,8 @@
     
     .chat-input:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-color: #029D7E;
+        box-shadow: 0 0 0 0.2rem rgba(2, 157, 126, 0.25);
         background: white;
     }
     
@@ -316,7 +316,7 @@
     
     .send-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 10px 25px rgba(2, 157, 126, 0.4);
     }
     
     .quick-actions-grid {
@@ -329,7 +329,7 @@
     .quick-action-btn {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(102, 126, 234, 0.2);
+        border: 1px solid rgba(2, 157, 126, 0.2);
         border-radius: 20px;
         padding: 2rem 1rem;
         text-align: center;
@@ -358,7 +358,7 @@
     .quick-action-btn:hover {
         color: white;
         transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 20px 40px rgba(2, 157, 126, 0.3);
     }
     
     .quick-action-btn i {
@@ -400,7 +400,7 @@
     .suggestion-chip:hover {
         background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 8px 20px rgba(2, 157, 126, 0.4);
     }
     
     .loading-message {
@@ -420,7 +420,7 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         animation: loadingDots 1.4s infinite ease-in-out both;
     }
     
@@ -445,7 +445,7 @@
     }
     
     .section-title i {
-        color: #667eea;
+        color: #029D7E;
         font-size: 1.5rem;
     }
     
@@ -470,7 +470,7 @@
     
     [data-bs-theme="dark"] .chat-input {
         background: rgba(45, 55, 72, 0.8);
-        border-color: rgba(102, 126, 234, 0.3);
+        border-color: rgba(2, 157, 126, 0.3);
         color: #e2e8f0;
     }
     
@@ -678,7 +678,7 @@
                         </div>
                         <div class="message-content">
                             <p>Ciao! Sono il tuo assistente AI per il gestionale negozio. Posso aiutarti ad analizzare i dati, rispondere a domande sui prodotti, clienti, vendite e magazzino.</p>
-                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(102, 126, 234, 0.1); border-radius: 10px; font-size: 0.9rem;">
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(2, 157, 126, 0.1); border-radius: 10px; font-size: 0.9rem;">
                                 <strong>🆕 Novità: Comandi Calcolatrice Integrata!</strong><br>
                                 • <code>calcola 25 + 30 * 2</code> - Calcoli complessi<br>
                                 • <code>calcola 20% di 500</code> - Percentuali<br>
