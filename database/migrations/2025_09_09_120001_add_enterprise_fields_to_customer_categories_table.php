@@ -19,7 +19,7 @@ return new class extends Migration
             }
             
             if (!Schema::hasColumn('customer_categories', 'price_list')) {
-                $table->enum('price_list', ['LIST_1', 'LIST_2', 'LIST_3', 'WHOLESALE', 'RETAIL'])->default('LIST_1')->comment('Lista prezzi assegnata')->after('payment_terms_days');
+                $table->enum('price_list', ['LIST_1', 'LIST_2', 'LIST_3', 'WHOLESALE', 'RETAIL'])->default('LIST_1')->comment('Lista prezzi assegnata')->after('type');
             }
             
             if (!Schema::hasColumn('customer_categories', 'show_wholesale_prices')) {
@@ -27,7 +27,7 @@ return new class extends Migration
             }
             
             if (!Schema::hasColumn('customer_categories', 'icon')) {
-                $table->string('icon', 50)->default('bi-person')->comment('Icona Bootstrap categoria')->after('color_hex');
+                $table->string('icon', 50)->default('bi-person')->comment('Icona Bootstrap categoria')->after('show_wholesale_prices');
             }
             
             if (!Schema::hasColumn('customer_categories', 'receive_promotions')) {

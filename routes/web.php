@@ -146,6 +146,48 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Impostazioni
         Route::get('/settings', [ConfigurationController::class, 'settings'])->name('settings');
         Route::post('/settings', [ConfigurationController::class, 'updateSettings'])->name('settings.update');
+        
+        // Sistema Gestione Tabelle Enterprise (V2)
+        Route::prefix('gestione-tabelle')->name('gestione-tabelle.')->group(function () {
+            // Dashboard principale (throttle rimosso per sviluppo)
+            Route::get('/', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'index'])->name('index');
+                
+                // Gestione tabella specifica
+                Route::get('/{nomeTabella}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'mostraTabella'])->name('tabella');
+                Route::get('/{nomeTabella}/create', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'create'])->name('create');
+                Route::post('/{nomeTabella}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'store'])->name('store');
+                Route::get('/{nomeTabella}/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'show'])->name('show');
+                Route::get('/{nomeTabella}/{id}/edit', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'edit'])->name('edit');
+                Route::put('/{nomeTabella}/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'update'])->name('update');
+                Route::delete('/{nomeTabella}/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'destroy'])->name('destroy');
+                
+                // API per AJAX
+                Route::get('/{nomeTabella}/api/data', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'apiData'])->name('api.data');
+                
+                // Route specifiche per Aliquote IVA
+                Route::prefix('aliquote-iva')->name('aliquote-iva.')->group(function () {
+                    Route::post('/', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'storeAliquotaIva'])->name('store');
+                    Route::get('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'showAliquotaIva'])->name('show');
+                    Route::put('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'updateAliquotaIva'])->name('update');
+                    Route::delete('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'destroyAliquotaIva'])->name('destroy');
+                });
+                
+                // Route specifiche per Associazioni Nature IVA
+                Route::prefix('associazioni-nature-iva')->name('associazioni-nature-iva.')->group(function () {
+                    Route::post('/', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'storeAssociazioneNaturaIva'])->name('store');
+                    Route::get('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'showAssociazioneNaturaIva'])->name('show');
+                    Route::put('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'updateAssociazioneNaturaIva'])->name('update');
+                    Route::delete('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'destroyAssociazioneNaturaIva'])->name('destroy');
+                });
+                
+                // Route specifiche per Banche
+                Route::prefix('banche')->name('banche.')->group(function () {
+                    Route::post('/', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'storeBanca'])->name('store');
+                    Route::get('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'showBanca'])->name('show');
+                    Route::put('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'updateBanca'])->name('update');
+                    Route::delete('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'destroyBanca'])->name('destroy');
+                });
+        });
     });
 
     // Route Enterprise Features (Funzionalità Avanzate)

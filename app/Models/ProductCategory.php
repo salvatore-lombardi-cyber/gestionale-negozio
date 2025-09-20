@@ -19,24 +19,12 @@ class ProductCategory extends Model
         'code',
         'name',
         'description',
-        'parent_id',
-        'level',
-        'path',
-        'sort_order',
-        'color_hex',
-        'icon',
-        'active',
-        'created_by',
-        'updated_by'
+        'active'
     ];
 
     protected $casts = [
-        'parent_id' => 'integer',
-        'level' => 'integer',
-        'sort_order' => 'integer',
         'active' => 'boolean',
         'created_by' => 'integer',
-        'updated_by' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
@@ -209,11 +197,6 @@ class ProductCategory extends Model
             }
         });
 
-        static::updating(function ($category) {
-            if (auth()->check()) {
-                $category->updated_by = auth()->id();
-            }
-        });
 
         static::saved(function ($category) {
             if ($category->isDirty('name') || $category->isDirty('parent_id')) {

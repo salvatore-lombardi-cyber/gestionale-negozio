@@ -19,40 +19,12 @@ class CustomerCategory extends Model
         'code',
         'name',
         'description',
-        'type',
-        'discount_percentage',
-        'color_hex',
-        'icon',
-        'priority_level',
-        'credit_limit',
-        'payment_terms_days',
-        'price_list',
-        'show_wholesale_prices',
-        'receive_promotions',
-        'priority_support',
-        'require_approval',
-        'max_orders_per_day',
-        'activated_at',
-        'deactivated_at',
-        'metadata',
-        'notes',
         'active'
     ];
 
     protected $casts = [
-        'discount_percentage' => 'decimal:2',
-        'priority_level' => 'integer',
-        'credit_limit' => 'decimal:2',
-        'payment_terms_days' => 'integer',
-        'show_wholesale_prices' => 'boolean',
-        'receive_promotions' => 'boolean',
-        'priority_support' => 'boolean',
-        'require_approval' => 'boolean',
-        'max_orders_per_day' => 'integer',
-        'activated_at' => 'datetime',
-        'deactivated_at' => 'datetime',
-        'metadata' => 'array',
         'active' => 'boolean',
+        'created_by' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
@@ -64,77 +36,12 @@ class CustomerCategory extends Model
         return $query->where('active', true);
     }
 
-    public function scopeByPriority(Builder $query): Builder
+    public function scopeOrdered(Builder $query): Builder
     {
-        return $query->orderBy('priority_level', 'desc');
+        return $query->orderBy('code')->orderBy('description');
     }
 
-    public function scopeWithDiscount(Builder $query): Builder
-    {
-        return $query->where('discount_percentage', '>', 0);
-    }
-
-    // Accessors
-    public function getFormattedDiscountAttribute(): string
-    {
-        return $this->discount_percentage ? "{$this->discount_percentage}%" : 'Nessuno';
-    }
-
-    public function getFormattedCreditLimitAttribute(): string
-    {
-        return $this->credit_limit ? '€ ' . number_format($this->credit_limit, 2) : 'Illimitato';
-    }
-
-    public function getTypeTranslatedAttribute(): string
-    {
-        $translations = [
-            'B2B' => 'Business to Business',
-            'B2C' => 'Business to Consumer', 
-            'WHOLESALE' => 'All\'ingrosso',
-            'RETAIL' => 'Al dettaglio',
-            'VIP' => 'Cliente VIP',
-            'STANDARD' => 'Standard'
-        ];
-        
-        return $translations[$this->type] ?? $this->type;
-    }
-
-    public function getPriorityLevelBadgeAttribute(): string
-    {
-        $badges = [
-            'LOW' => '<span class="badge bg-secondary">Bassa</span>',
-            'MEDIUM' => '<span class="badge bg-primary">Media</span>',
-            'HIGH' => '<span class="badge bg-warning">Alta</span>',
-            'PREMIUM' => '<span class="badge bg-success">Premium</span>'
-        ];
-        
-        return $badges[$this->priority_level] ?? '<span class="badge bg-light">N/A</span>';
-    }
-
-    // Business Logic Methods
-    public function canPlaceOrder(int $dailyOrderCount = 0): bool
-    {
-        if (!$this->active) {
-            return false;
-        }
-
-        if ($this->max_orders_per_day && $dailyOrderCount >= $this->max_orders_per_day) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isWithinCreditLimit(float $orderAmount, float $currentDebt = 0): bool
-    {
-        if (!$this->credit_limit) {
-            return true; // Illimitato
-        }
-
-        return ($currentDebt + $orderAmount) <= $this->credit_limit;
-    }
-
-    // OWASP Security Validations
+    // Validazioni OWASP
     public static function validationRules($id = null): array
     {
         return [
@@ -143,87 +50,43 @@ class CustomerCategory extends Model
                 'string',
                 'max:20',
                 'regex:/^[A-Z0-9_-]+$/',
-                'unique:customer_categories,code' . ($id ? ",$id" : '')
-            ],
-            'name' => [
-                'required',
-                'string',
-                'max:100',
-                'regex:/^[a-zA-Z0-9\s\-_àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ]+$/'
+                'unique:customer_categories,code' . ($id ? ',' . $id : '')
             ],
             'description' => [
-                'nullable',
-                'string',
-                'max:1000'
-            ],
-            'type' => [
-                'required',
-                'in:B2B,B2C,WHOLESALE,RETAIL,VIP,STANDARD'
-            ],
-            'discount_percentage' => [
-                'required',
-                'numeric',
-                'min:0',
-                'max:100'
-            ],
-            'credit_limit' => [
-                'nullable',
-                'numeric',
-                'min:0',
-                'max:999999999.99'
-            ],
-            'payment_terms_days' => [
-                'required',
-                'integer',
-                'min:0',
-                'max:365'
-            ],
-            'price_list' => [
-                'required',
-                'in:LIST_1,LIST_2,LIST_3,WHOLESALE,RETAIL'
-            ],
-            'color_hex' => [
-                'required',
-                'regex:/^#[0-9A-Fa-f]{6}$/'
-            ],
-            'icon' => [
                 'required',
                 'string',
-                'max:50',
-                'regex:/^bi-[a-z0-9-]+$/'
+                'min:3',
+                'max:255'
             ],
-            'max_orders_per_day' => [
-                'nullable',
-                'integer',
-                'min:1',
-                'max:1000'
-            ],
-            'notes' => [
-                'nullable',
-                'string',
-                'max:500'
+            'active' => [
+                'boolean'
             ]
         ];
     }
 
-    // Scopes aggiuntivi
-    public function scopeByType(Builder $query, string $type): Builder
+    // Metodi business logic
+    public function canBeDeleted(): bool
     {
-        return $query->where('type', $type);
+        // Controlla se ci sono clienti associati a questa categoria
+        // return !$this->customers()->exists();
+        return true; // Per ora non controlliamo relazioni
     }
 
-    public function scopeVip(Builder $query): Builder
+    // Boot events
+    protected static function boot()
     {
-        return $query->where('type', 'VIP')->orWhere('priority_level', 'PREMIUM');
+        parent::boot();
+
+        static::creating(function ($category) {
+            if (auth()->check()) {
+                $category->created_by = auth()->id();
+            }
+        });
     }
 
-    public function scopeB2B(Builder $query): Builder
-    {
-        return $query->where('type', 'B2B');
-    }
-
-    public function scopeB2C(Builder $query): Builder
-    {
-        return $query->where('type', 'B2C');
-    }
+    // Relazioni future (quando sarà implementata la gestione clienti)
+    // public function customers()
+    // {
+    //     return $this->hasMany(Customer::class, 'categoria_cliente');
+    // }
 }

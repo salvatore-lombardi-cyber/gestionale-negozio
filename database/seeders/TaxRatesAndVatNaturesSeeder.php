@@ -14,26 +14,30 @@ class TaxRatesAndVatNaturesSeeder extends Seeder
         $taxRates = [
             [
                 'code' => '22%',
+                'name' => 'Aliquota ordinaria',
                 'description' => 'Aliquota IVA ordinaria',
-                'rate' => 22.00,
+                'percentuale' => 22.00,
                 'active' => true
             ],
             [
                 'code' => '10%',
+                'name' => 'Aliquota ridotta',
                 'description' => 'Aliquota IVA ridotta',
-                'rate' => 10.00,
+                'percentuale' => 10.00,
                 'active' => true
             ],
             [
                 'code' => '4%',
+                'name' => 'Aliquota super ridotta',
                 'description' => 'Aliquota IVA super ridotta',
-                'rate' => 4.00,
+                'percentuale' => 4.00,
                 'active' => true
             ],
             [
                 'code' => '0%',
+                'name' => 'Aliquota azzerata',
                 'description' => 'Aliquota IVA azzerata',
-                'rate' => 0.00,
+                'percentuale' => 0.00,
                 'active' => true
             ]
         ];

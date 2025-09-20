@@ -30,7 +30,12 @@ class SecurityAuditService
             'timestamp' => now()->toISOString(),
         ], $context);
 
-        Log::channel(self::AUDIT_CHANNEL)->info("Configuration access: {$action}", $auditData);
+        try {
+            Log::channel(self::AUDIT_CHANNEL)->info("Configuration access: {$action}", $auditData);
+        } catch (\Exception $e) {
+            // Fallback al log normale se security_audit non è configurato
+            Log::info("Configuration access: {$action}", $auditData);
+        }
         
         // Salva in database per audit trail permanente
         $this->storeSecurityEvent($auditData);

@@ -114,6 +114,10 @@
         background: linear-gradient(135deg, #ffd60a, #ff8500);
     }
     
+    .config-icon.enterprise {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    
     .config-icon::before {
         content: '';
         position: absolute;
@@ -304,6 +308,19 @@
                         <p class="config-description">{{ __('app.system_tables_desc') }}</p>
                         <a href="{{ route('configurations.system-tables.index') }}" class="config-btn info">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }}
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-lg-6 col-md-6">
+                    <div class="config-card enterprise">
+                        <div class="config-icon enterprise">
+                            <i class="bi bi-gear-wide-connected"></i>
+                        </div>
+                        <h3 class="config-title">Gestione Tabelle v2</h3>
+                        <p class="config-description">Sistema enterprise per configurazioni avanzate. Associazioni Nature IVA e Aliquote con architettura moderna.</p>
+                        <a href="{{ route('configurations.gestione-tabelle.index') }}" class="config-btn primary">
+                            <i class="bi bi-arrow-right"></i> Accedi v2
                         </a>
                     </div>
                 </div>
