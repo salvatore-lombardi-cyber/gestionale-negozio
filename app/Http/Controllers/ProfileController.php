@@ -14,16 +14,6 @@ use Illuminate\Support\Facades\Storage;
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile.
-     */
-    public function show(Request $request): View
-    {
-        return view('profile.show', [
-            'user' => $request->user(),
-        ]);
-    }
-
-    /**
      * Display the user's profile form.
      */
     public function edit(Request $request): View
@@ -39,20 +29,21 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
+        $validatedData = $request->validated();
         
         // Handle avatar upload
         if ($request->hasFile('avatar')) {
             // Delete old avatar if exists
-            if ($user->avatar && Storage::exists($user->avatar)) {
-                Storage::delete($user->avatar);
+            if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
+                Storage::delete('public/' . $user->avatar);
             }
             
             // Store new avatar
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $avatarPath;
+            $validatedData['avatar'] = $avatarPath;
         }
         
-        $user->fill($request->validated());
+        $user->fill($validatedData);
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
@@ -60,21 +51,32 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('success', 'Profilo aggiornato con successo!');
     }
-    public function updatePassword(Request $request)
-{
-    $request->validate([
-        'current_password' => 'required|current_password',
-        'password' => 'required|min:8|confirmed',
-    ]);
+    /**
+     * Update the user's password.
+     */
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'current_password' => 'required|current_password',
+            'password' => 'required|min:8|confirmed',
+        ]);
 
-    $request->user()->update([
-        'password' => Hash::make($request->password),
-    ]);
+        $request->user()->update([
+            'password' => Hash::make($request->password),
+        ]);
 
-    return redirect()->route('profile.edit')->with('success', 'Password aggiornata con successo!');
-}
+        return redirect()->route('profile.edit')->with('success', 'Password aggiornata con successo!');
+    }
+    
+    /**
+     * Show the user's profile.
+     */
+    public function show(): View
+    {
+        return view('profile.show');
+    }
 
     /**
      * Delete the user's account.
