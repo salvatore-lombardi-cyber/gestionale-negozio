@@ -4,57 +4,43 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Model per Nature IVA (Card #16)
- * Gestisce le nature fiscali (imponibile, non imponibile, esente, ecc.)
+ * Model semplificato per Natura IVA
+ * Versione base con Cod.IVA, %, Natura, Riferimento Normativo
  */
 class VatNature extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
-        'code',
-        'name',
-        'description',
-        'active',
-        'sort_order'
+        'vat_code',
+        'percentage',
+        'nature',
+        'legal_reference'
     ];
 
     protected $casts = [
-        'active' => 'boolean',
-        'sort_order' => 'integer',
+        'percentage' => 'decimal:2',
         'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime'
+        'updated_at' => 'datetime'
     ];
 
-    // Relazioni
-    public function associations()
+    // Validazione sicura OWASP
+    public static function validationRules(): array
     {
-        return $this->hasMany(VatNatureAssociation::class);
+        return [
+            'vat_code' => 'required|string|max:10|unique:vat_natures,vat_code|regex:/^[A-Z0-9._-]+$/',
+            'percentage' => 'required|numeric|min:0|max:100',
+            'nature' => 'required|string|max:255|min:2',
+            'legal_reference' => 'nullable|string|max:500'
+        ];
     }
 
-    public function taxRates()
+    public static function validationRulesForUpdate(int $id): array
     {
-        return $this->belongsToMany(TaxRate::class, 'vat_nature_associations');
-    }
-
-    // Scopes
-    public function scopeActive(Builder $query): Builder
-    {
-        return $query->where('active', true);
-    }
-
-    public function scopeTaxable(Builder $query): Builder
-    {
-        return $query->where('is_taxable', true);
-    }
-
-    public function scopeByCode(Builder $query, string $code): Builder
-    {
-        return $query->where('code', $code);
+        $rules = self::validationRules();
+        $rules['vat_code'] = 'required|string|max:10|unique:vat_natures,vat_code,' . $id . '|regex:/^[A-Z0-9._-]+$/';
+        return $rules;
     }
 }

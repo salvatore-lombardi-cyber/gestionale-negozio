@@ -731,6 +731,14 @@
                 <button type="button" class="btn btn-success modern-btn" onclick="openListiniModal()">
                     <i class="bi bi-plus-lg"></i> Nuovo Listino
                 </button>
+                @elseif($nomeTabella === 'modalita-pagamento')
+                <button type="button" class="btn btn-success modern-btn" onclick="openModalitaPagamentoModal()">
+                    <i class="bi bi-plus-lg"></i> Nuova Modalità di Pagamento
+                </button>
+                @elseif($nomeTabella === 'natura-iva')
+                <button type="button" class="btn btn-success modern-btn" onclick="openNaturaIvaModal()">
+                    <i class="bi bi-plus-lg"></i> Nuova Natura IVA
+                </button>
                 @else
                 <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#genericModal">
                     <i class="bi bi-plus-lg"></i> Nuova {{ $configurazione['nome_singolare'] ?? $configurazione['nome'] ?? 'Elemento' }}
@@ -1603,6 +1611,43 @@ function showViewModal(tabella, data) {
                 ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
             </div>
         `;
+    } else if (tabella === 'modalita-pagamento') {
+        content = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <strong>Codice:</strong> 
+                    <span class="badge badge-code">
+                        ${data.code || '-'}
+                    </span>
+                </div>
+                <div class="col-12">
+                    <strong>Descrizione:</strong> ${data.description || '-'}
+                </div>
+                ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
+            </div>
+        `;
+    } else if (tabella === 'natura-iva') {
+        content = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <strong>Cod.IVA:</strong> 
+                    <span class="badge badge-code">
+                        ${data.vat_code || '-'}
+                    </span>
+                </div>
+                <div class="col-md-6">
+                    <strong>Percentuale:</strong> 
+                    <span class="badge badge-percentage">
+                        ${data.percentage ? parseFloat(data.percentage).toFixed(2) + '%' : '0.00%'}
+                    </span>
+                </div>
+                <div class="col-12">
+                    <strong>Natura:</strong> ${data.nature || '-'}
+                </div>
+                ${data.legal_reference ? `<div class="col-12"><strong>Riferimento Normativo:</strong> ${data.legal_reference}</div>` : ''}
+                ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
+            </div>
+        `;
     }
     
     document.getElementById('viewModalContent').innerHTML = content;
@@ -1638,6 +1683,10 @@ function showEditModal(tabella, data) {
         showEditDepositiModal(data);
     } else if (tabella === 'listini') {
         showEditListiniModal(data);
+    } else if (tabella === 'modalita-pagamento') {
+        showEditModalitaPagamentoModal(data);
+    } else if (tabella === 'natura-iva') {
+        showEditNaturaIvaModal(data);
     } else {
         alert('Modifica non ancora implementata per questa tabella');
     }
@@ -1925,9 +1974,9 @@ function showEditCategoriaModal(data) {
                             <label for="modal_vat_nature_id" class="form-label">Natura IVA *</label>
                             <select class="form-select" id="modal_vat_nature_id" name="vat_nature_id" required>
                                 <option value="">Seleziona natura IVA...</option>
-                                @foreach(\App\Models\VatNature::where('active', true)->orderBy('code')->get() as $vatNature)
+                                @foreach(\App\Models\VatNature::orderBy('vat_code')->get() as $vatNature)
                                 <option value="{{ $vatNature->id }}">
-                                    {{ $vatNature->code }} - {{ $vatNature->name }}
+                                    {{ $vatNature->vat_code }} - {{ $vatNature->nature }}
                                 </option>
                                 @endforeach
                             </select>
@@ -2650,6 +2699,109 @@ function showEditCategoriaModal(data) {
                     </button>
                     <button type="submit" class="btn btn-success modern-btn">
                         <i class="bi bi-check-lg"></i> Crea Listino
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modalità di Pagamento Modal -->
+<div class="modal fade" id="modalitaPagamentoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%); color: white; border-radius: 20px 20px 0 0;">
+                <h5 class="modal-title text-white" id="modalitaPagamentoModalTitle">
+                    <i class="bi bi-wallet2 me-2"></i>
+                    Nuova Modalità di Pagamento
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="modalitaPagamentoForm" method="POST" action="{{ route('configurations.gestione-tabelle.store', 'modalita-pagamento') }}">
+                @csrf
+                <div class="modal-body">
+                    
+                    <div class="mb-3">
+                        <label for="modalita_pagamento_code" class="form-label">Codice *</label>
+                        <input type="text" class="form-control" id="modalita_pagamento_code" name="code" required maxlength="10">
+                        <div class="invalid-feedback" id="codeError"></div>
+                        <small class="form-text text-muted">Codice univoco per la modalità di pagamento (es. MP01, CONT, BANC)</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="modalita_pagamento_description" class="form-label">Descrizione *</label>
+                        <input type="text" class="form-control" id="modalita_pagamento_description" name="description" required maxlength="100">
+                        <div class="invalid-feedback" id="descriptionError"></div>
+                        <small class="form-text text-muted">Descrizione della modalità di pagamento</small>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Modalità di Pagamento
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Natura IVA Modal -->
+<div class="modal fade" id="naturaIvaModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%); color: white; border-radius: 20px 20px 0 0;">
+                <h5 class="modal-title text-white" id="naturaIvaModalTitle">
+                    <i class="bi bi-receipt me-2"></i>
+                    Nuova Natura IVA
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="naturaIvaForm" method="POST" action="{{ route('configurations.gestione-tabelle.store', 'natura-iva') }}">
+                @csrf
+                <div class="modal-body">
+                    
+                    <div class="mb-3">
+                        <label for="natura_iva_vat_code" class="form-label">Cod.IVA *</label>
+                        <input type="text" class="form-control" id="natura_iva_vat_code" name="vat_code" required maxlength="10">
+                        <div class="invalid-feedback" id="vatCodeError"></div>
+                        <small class="form-text text-muted">Codice identificativo IVA (es. N1, N2.1, N4)</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="natura_iva_percentage" class="form-label">Percentuale *</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="natura_iva_percentage" name="percentage" required step="0.01" min="0" max="100">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div class="invalid-feedback" id="percentageError"></div>
+                        <small class="form-text text-muted">Percentuale IVA (0.00 - 100.00)</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="natura_iva_nature" class="form-label">Natura *</label>
+                        <input type="text" class="form-control" id="natura_iva_nature" name="nature" required maxlength="255">
+                        <div class="invalid-feedback" id="natureError"></div>
+                        <small class="form-text text-muted">Descrizione della natura IVA</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="natura_iva_legal_reference" class="form-label">Riferimento Normativo</label>
+                        <textarea class="form-control" id="natura_iva_legal_reference" name="legal_reference" rows="3" maxlength="500"></textarea>
+                        <div class="invalid-feedback" id="legalReferenceError"></div>
+                        <small class="form-text text-muted">Riferimenti normativi e articoli di legge (opzionale)</small>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Natura IVA
                     </button>
                 </div>
             </form>
@@ -3403,6 +3555,164 @@ function showEditListiniModal(data) {
     
     // Apri la modale
     const modal = new bootstrap.Modal(document.getElementById('listiniModal'));
+    modal.show();
+}
+
+function openModalitaPagamentoModal() {
+    // Reset del form
+    const form = document.getElementById('modalitaPagamentoForm');
+    if (form) {
+        form.reset();
+        
+        // Reset action per creazione
+        form.action = '{{ route('configurations.gestione-tabelle.store', 'modalita-pagamento') }}';
+        
+        // Reset method a POST
+        let methodField = form.querySelector('input[name="_method"]');
+        if (methodField) {
+            methodField.remove();
+        }
+        
+        // Reset titolo e pulsante per creazione
+        const modalTitle = document.getElementById('modalitaPagamentoModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-wallet2 me-2"></i>Nuova Modalità di Pagamento';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Crea Modalità di Pagamento';
+        }
+        
+        // Focus sul campo codice
+        setTimeout(() => {
+            const codeField = document.getElementById('modalita_pagamento_code');
+            if (codeField) {
+                codeField.focus();
+            }
+        }, 500);
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('modalitaPagamentoModal'));
+    modal.show();
+}
+
+function showEditModalitaPagamentoModal(data) {
+    // Popola e mostra la modale di modifica per Modalità di Pagamento
+    const form = document.getElementById('modalitaPagamentoForm');
+    if (form) {
+        // Aggiorna action per modifica
+        form.action = '{{ route('configurations.gestione-tabelle.update', ['modalita-pagamento', '__ID__']) }}'.replace('__ID__', data.id);
+        
+        // Aggiungi method PUT
+        let methodField = form.querySelector('input[name="_method"]');
+        if (!methodField) {
+            methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            methodField.value = 'PUT';
+            form.appendChild(methodField);
+        }
+        
+        // Popola i campi
+        document.getElementById('modalita_pagamento_code').value = data.code || '';
+        document.getElementById('modalita_pagamento_description').value = data.description || '';
+        
+        // Aggiorna titolo e pulsante per modifica
+        const modalTitle = document.getElementById('modalitaPagamentoModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-wallet2 me-2"></i>Modifica Modalità di Pagamento';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Modalità di Pagamento';
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('modalitaPagamentoModal'));
+    modal.show();
+}
+
+function openNaturaIvaModal() {
+    // Reset del form
+    const form = document.getElementById('naturaIvaForm');
+    if (form) {
+        form.reset();
+        
+        // Reset action per creazione
+        form.action = '{{ route('configurations.gestione-tabelle.store', 'natura-iva') }}';
+        
+        // Reset method a POST
+        let methodField = form.querySelector('input[name="_method"]');
+        if (methodField) {
+            methodField.remove();
+        }
+        
+        // Reset titolo e pulsante per creazione
+        const modalTitle = document.getElementById('naturaIvaModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-receipt me-2"></i>Nuova Natura IVA';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Crea Natura IVA';
+        }
+        
+        // Focus sul campo codice IVA
+        setTimeout(() => {
+            const vatCodeField = document.getElementById('natura_iva_vat_code');
+            if (vatCodeField) {
+                vatCodeField.focus();
+            }
+        }, 500);
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('naturaIvaModal'));
+    modal.show();
+}
+
+function showEditNaturaIvaModal(data) {
+    // Popola e mostra la modale di modifica per Natura IVA
+    const form = document.getElementById('naturaIvaForm');
+    if (form) {
+        // Aggiorna action per modifica
+        form.action = '{{ route('configurations.gestione-tabelle.update', ['natura-iva', '__ID__']) }}'.replace('__ID__', data.id);
+        
+        // Aggiungi method PUT
+        let methodField = form.querySelector('input[name="_method"]');
+        if (!methodField) {
+            methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            methodField.value = 'PUT';
+            form.appendChild(methodField);
+        }
+        
+        // Popola i campi
+        document.getElementById('natura_iva_vat_code').value = data.vat_code || '';
+        document.getElementById('natura_iva_percentage').value = data.percentage || '';
+        document.getElementById('natura_iva_nature').value = data.nature || '';
+        document.getElementById('natura_iva_legal_reference').value = data.legal_reference || '';
+        
+        // Aggiorna titolo e pulsante per modifica
+        const modalTitle = document.getElementById('naturaIvaModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-receipt me-2"></i>Modifica Natura IVA';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Natura IVA';
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('naturaIvaModal'));
     modal.show();
 }
 </script>
