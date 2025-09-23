@@ -8,6 +8,11 @@ use App\Models\VatNatureAssociation;
 use App\Models\TaxRate;
 use App\Models\VatNature;
 use App\Models\SystemTable;
+use App\Models\SizeColor;
+use App\Models\WarehouseCause;
+use App\Models\FixedPriceDenomination;
+use App\Models\Deposit;
+use App\Models\PriceList;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -25,6 +30,7 @@ class GestioneTabelleController extends Controller
     public function __construct()
     {
         // Versione semplificata senza dependency injection complessa per evitare loop
+        // Disabilitato temporaneamente per test: $this->middleware('auth');
     }
 
     /**
@@ -88,6 +94,69 @@ class GestioneTabelleController extends Controller
                     'descrizione' => 'Classificazione e gestione categorie fornitori per procurement',
                     'color_from' => '#9c27b0',
                     'color_to' => '#7b1fa2'
+                ],
+                [
+                    'nome' => 'taglie-colori',
+                    'titolo' => 'Taglie e Colori',
+                    'icona' => 'bi-palette',
+                    'colore' => 'warning',
+                    'descrizione' => 'Gestione varianti prodotto: taglie e colori per catalogazione articoli',
+                    'color_from' => '#ffecd2',
+                    'color_to' => '#fcb69f'
+                ],
+                [
+                    'nome' => 'causali-magazzino',
+                    'titolo' => 'Causali di Magazzino',
+                    'icona' => 'bi-building',
+                    'colore' => 'danger',
+                    'descrizione' => 'Classificazione movimenti di magazzino: carico, scarico, trasferimenti',
+                    'color_from' => '#ee0979',
+                    'color_to' => '#ff6a00'
+                ],
+                [
+                    'nome' => 'colori-varianti',
+                    'titolo' => 'Colori Varianti',
+                    'icona' => 'bi-droplet-fill',
+                    'colore' => 'info',
+                    'descrizione' => 'Gestione semplice colori per varianti prodotti',
+                    'color_from' => '#a8edea',
+                    'color_to' => '#fed6e3'
+                ],
+                [
+                    'nome' => 'condizioni',
+                    'titolo' => 'Condizioni',
+                    'icona' => 'bi-list-ul',
+                    'colore' => 'info',
+                    'descrizione' => 'Gestione semplice condizioni di pagamento e vendita',
+                    'color_from' => '#00f2fe',
+                    'color_to' => '#4facfe'
+                ],
+                [
+                    'nome' => 'denominazioni-prezzi-fissi',
+                    'titolo' => 'Denominazione Prezzi Fissi',
+                    'icona' => 'bi-currency-euro',
+                    'colore' => 'brown',
+                    'descrizione' => 'Gestione denominazioni con descrizione e commento per prezzi fissi',
+                    'color_from' => '#8b4513',
+                    'color_to' => '#d2691e'
+                ],
+                [
+                    'nome' => 'depositi',
+                    'titolo' => 'Depositi',
+                    'icona' => 'bi-archive',
+                    'colore' => 'orange',
+                    'descrizione' => 'Gestione depositi e ubicazioni magazzino',
+                    'color_from' => '#ff8c00',
+                    'color_to' => '#ff4500'
+                ],
+                [
+                    'nome' => 'listini',
+                    'titolo' => 'Listini',
+                    'icona' => 'bi-list-columns',
+                    'colore' => 'teal',
+                    'descrizione' => 'Gestione listini con descrizione e percentuale',
+                    'color_from' => '#2d6a4f',
+                    'color_to' => '#1b4332'
                 ]
             ]);
             
@@ -118,7 +187,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle implementate
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -143,7 +212,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -190,6 +259,20 @@ class GestioneTabelleController extends Controller
                     'icona' => 'bi-person-badge',
                     'colore' => 'purple',
                     'descrizione' => 'Classificazione e gestione categorie fornitori per procurement'
+                ],
+                'taglie-colori' => [
+                    'nome' => 'Taglie e Colori',
+                    'nome_singolare' => 'Taglia/Colore',
+                    'icona' => 'bi-file-earmark-richtext',
+                    'colore' => 'pink',
+                    'descrizione' => 'Gestione varianti prodotto: taglie e colori per catalogazione articoli'
+                ],
+                'causali-magazzino' => [
+                    'nome' => 'Causali di Magazzino',
+                    'nome_singolare' => 'Causale Magazzino',
+                    'icona' => 'bi-boxes',
+                    'colore' => 'primary',
+                    'descrizione' => 'Classificazione movimenti di magazzino: carico, scarico, trasferimenti'
                 ]
             ];
 
@@ -224,7 +307,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -247,6 +330,29 @@ class GestioneTabelleController extends Controller
 
             if ($nomeTabella === 'categorie-fornitori') {
                 return $this->storeCategoriaFornitori($request);
+            }
+
+            if ($nomeTabella === 'taglie-colori') {
+                return $this->storeTaglieColori($request);
+            }
+
+            if ($nomeTabella === 'causali-magazzino') {
+                return $this->storeCausaliMagazzino($request);
+            }
+            if ($nomeTabella === 'colori-varianti') {
+                return $this->storeColoriVarianti($request);
+            }
+            if ($nomeTabella === 'condizioni') {
+                return $this->storeCondizioni($request);
+            }
+            if ($nomeTabella === 'denominazioni-prezzi-fissi') {
+                return $this->storeDenominazioniPrezzisFissi($request);
+            }
+            if ($nomeTabella === 'depositi') {
+                return $this->storeDepositi($request);
+            }
+            if ($nomeTabella === 'listini') {
+                return $this->storeListini($request);
             }
 
             // Default: Associazioni Nature IVA
@@ -384,6 +490,20 @@ class GestioneTabelleController extends Controller
                     $element = \App\Models\CustomerCategory::findOrFail($id);
                 } elseif ($nomeTabella === 'categorie-fornitori') {
                     $element = \App\Models\SupplierCategory::findOrFail($id);
+                } elseif ($nomeTabella === 'taglie-colori') {
+                    $element = \App\Models\SizeColor::findOrFail($id);
+                } elseif ($nomeTabella === 'causali-magazzino') {
+                    $element = \App\Models\WarehouseCause::findOrFail($id);
+                } elseif ($nomeTabella === 'colori-varianti') {
+                    $element = \App\Models\ColorVariant::findOrFail($id);
+                } elseif ($nomeTabella === 'condizioni') {
+                    $element = \App\Models\Condition::findOrFail($id);
+                } elseif ($nomeTabella === 'denominazioni-prezzi-fissi') {
+                    $element = \App\Models\FixedPriceDenomination::findOrFail($id);
+                } elseif ($nomeTabella === 'depositi') {
+                    $element = \App\Models\Deposit::findOrFail($id);
+                } elseif ($nomeTabella === 'listini') {
+                    $element = \App\Models\PriceList::findOrFail($id);
                 } else {
                     return response()->json(['error' => 'Tabella non supportata'], 404);
                 }
@@ -422,7 +542,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -445,6 +565,29 @@ class GestioneTabelleController extends Controller
 
             if ($nomeTabella === 'categorie-fornitori') {
                 return $this->updateCategoriaFornitori($request, $id);
+            }
+
+            if ($nomeTabella === 'taglie-colori') {
+                return $this->updateTaglieColori($request, $id);
+            }
+
+            if ($nomeTabella === 'causali-magazzino') {
+                return $this->updateCausaliMagazzino($request, $id);
+            }
+            if ($nomeTabella === 'colori-varianti') {
+                return $this->updateColoriVarianti($request, $id);
+            }
+            if ($nomeTabella === 'condizioni') {
+                return $this->updateCondizioni($request, $id);
+            }
+            if ($nomeTabella === 'denominazioni-prezzi-fissi') {
+                return $this->updateDenominazioniPrezzisFissi($request, $id);
+            }
+            if ($nomeTabella === 'depositi') {
+                return $this->updateDepositi($request, $id);
+            }
+            if ($nomeTabella === 'listini') {
+                return $this->updateListini($request, $id);
             }
 
             // Default: Associazioni Nature IVA
@@ -484,6 +627,20 @@ class GestioneTabelleController extends Controller
                 return $this->destroyCategoriaClienti($id);
             } elseif ($nomeTabella === 'categorie-fornitori') {
                 return $this->destroyCategoriaFornitori($id);
+            } elseif ($nomeTabella === 'taglie-colori') {
+                return $this->destroyTaglieColori($id);
+            } elseif ($nomeTabella === 'causali-magazzino') {
+                return $this->destroyCausaliMagazzino($id);
+            } elseif ($nomeTabella === 'colori-varianti') {
+                return $this->destroyColoriVarianti($id);
+            } elseif ($nomeTabella === 'condizioni') {
+                return $this->destroyCondizioni($id);
+            } elseif ($nomeTabella === 'denominazioni-prezzi-fissi') {
+                return $this->destroyDenominazioniPrezzisFissi($id);
+            } elseif ($nomeTabella === 'depositi') {
+                return $this->destroyDepositi($id);
+            } elseif ($nomeTabella === 'listini') {
+                return $this->destroyListini($id);
             } elseif ($nomeTabella === 'associazioni-nature-iva') {
                 $elemento = VatNatureAssociation::findOrFail($id);
                 $elemento->delete();
@@ -1001,6 +1158,111 @@ class GestioneTabelleController extends Controller
                     'description' => 'Descrizione',
                     'active' => 'Attivo'
                 ]
+            ],
+            'taglie-colori' => [
+                'modello' => \App\Models\SizeColor::class,
+                'nome' => 'Taglie e Colori',
+                'nome_singolare' => 'Taglia/Colore',
+                'icona' => 'bi-palette',
+                'colore' => 'warning',
+                'color_from' => '#ffecd2',
+                'color_to' => '#fcb69f',
+                'descrizione' => 'Gestione varianti prodotto: taglie e colori per catalogazione articoli',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'name' => 'Nome',
+                    'type' => 'Tipo',
+                    'active' => 'Attivo'
+                ]
+            ],
+            'causali-magazzino' => [
+                'modello' => \App\Models\WarehouseCause::class,
+                'nome' => 'Causali di Magazzino',
+                'nome_singolare' => 'Causale Magazzino',
+                'icona' => 'bi-building',
+                'colore' => 'danger',
+                'color_from' => '#ee0979',
+                'color_to' => '#ff6a00',
+                'descrizione' => 'Gestione semplificata causali di magazzino con codice e descrizione',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'colori-varianti' => [
+                'modello' => \App\Models\ColorVariant::class,
+                'nome' => 'Colori Varianti',
+                'nome_singolare' => 'Colore Variante',
+                'icona' => 'bi-droplet-fill',
+                'colore' => 'info',
+                'color_from' => '#a8edea',
+                'color_to' => '#fed6e3',
+                'descrizione' => 'Gestione semplice colori per varianti prodotti',
+                'campi_visibili' => [
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'condizioni' => [
+                'modello' => \App\Models\Condition::class,
+                'nome' => 'Condizioni',
+                'nome_singolare' => 'Condizione',
+                'icona' => 'bi-list-ul',
+                'colore' => 'info',
+                'color_from' => '#00f2fe',
+                'color_to' => '#4facfe',
+                'descrizione' => 'Gestione semplice condizioni di pagamento e vendita',
+                'campi_visibili' => [
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'denominazioni-prezzi-fissi' => [
+                'modello' => \App\Models\FixedPriceDenomination::class,
+                'nome' => 'Denominazione Prezzi Fissi',
+                'nome_singolare' => 'Denominazione',
+                'icona' => 'bi-currency-euro',
+                'colore' => 'brown',
+                'color_from' => '#8b4513',
+                'color_to' => '#d2691e',
+                'descrizione' => 'Gestione denominazioni con descrizione e commento per prezzi fissi',
+                'campi_visibili' => [
+                    'description' => 'Descrizione',
+                    'comment' => 'Commento'
+                ]
+            ],
+            'depositi' => [
+                'modello' => \App\Models\Deposit::class,
+                'nome' => 'Depositi',
+                'nome_singolare' => 'Deposito',
+                'icona' => 'bi-archive',
+                'colore' => 'orange',
+                'color_from' => '#ff8c00',
+                'color_to' => '#ff4500',
+                'descrizione' => 'Gestione depositi e ubicazioni magazzino',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione',
+                    'address' => 'Indirizzo',
+                    'city' => 'Località',
+                    'state' => 'Stato',
+                    'province' => 'Provincia',
+                    'postal_code' => 'CAP',
+                    'phone' => 'Telefono',
+                    'fax' => 'Fax'
+                ]
+            ],
+            'listini' => [
+                'modello' => \App\Models\PriceList::class,
+                'nome' => 'Listini',
+                'nome_singolare' => 'Listino',
+                'icona' => 'bi-list-columns',
+                'colore' => 'teal',
+                'color_from' => '#2d6a4f',
+                'color_to' => '#1b4332',
+                'descrizione' => 'Gestione listini con descrizione e percentuale',
+                'campi_visibili' => [
+                    'description' => 'Descrizione',
+                    'discount_percentage' => 'Percentuale'
+                ]
             ]
         ];
 
@@ -1015,6 +1277,10 @@ class GestioneTabelleController extends Controller
         } elseif ($nomeTabella === 'categorie-clienti') {
             $query = $modelClass::query();
         } elseif ($nomeTabella === 'categorie-fornitori') {
+            $query = $modelClass::query();
+        } elseif ($nomeTabella === 'taglie-colori') {
+            $query = $modelClass::query();
+        } elseif ($nomeTabella === 'causali-magazzino') {
             $query = $modelClass::query();
         } else {
             $query = $modelClass::query();
@@ -1053,6 +1319,25 @@ class GestioneTabelleController extends Controller
                     $q->where('code', 'LIKE', "%{$search}%")
                       ->orWhere('description', 'LIKE', "%{$search}%");
                 });
+            } elseif ($nomeTabella === 'taglie-colori') {
+                $query->where(function($q) use ($search) {
+                    $q->where('code', 'LIKE', "%{$search}%")
+                      ->orWhere('name', 'LIKE', "%{$search}%")
+                      ->orWhere('type', 'LIKE', "%{$search}%");
+                });
+            } elseif ($nomeTabella === 'causali-magazzino') {
+                $query->where(function($q) use ($search) {
+                    $q->where('code', 'LIKE', "%{$search}%")
+                      ->orWhere('description', 'LIKE', "%{$search}%");
+                });
+            } elseif ($nomeTabella === 'colori-varianti') {
+                $query->where(function($q) use ($search) {
+                    $q->where('description', 'LIKE', "%{$search}%");
+                });
+            } elseif ($nomeTabella === 'condizioni') {
+                $query->where(function($q) use ($search) {
+                    $q->where('description', 'LIKE', "%{$search}%");
+                });
             }
         }
 
@@ -1069,6 +1354,20 @@ class GestioneTabelleController extends Controller
             $query->orderBy('code', 'asc');
         } elseif ($nomeTabella === 'categorie-fornitori') {
             $query->orderBy('code', 'asc');
+        } elseif ($nomeTabella === 'taglie-colori') {
+            $query->orderBy('type', 'asc')->orderBy('code', 'asc');
+        } elseif ($nomeTabella === 'causali-magazzino') {
+            $query->orderBy('code', 'asc');
+        } elseif ($nomeTabella === 'colori-varianti') {
+            $query->orderBy('description', 'asc');
+        } elseif ($nomeTabella === 'condizioni') {
+            $query->orderBy('description', 'asc');
+        } elseif ($nomeTabella === 'denominazioni-prezzi-fissi') {
+            $query->orderBy('description', 'asc');
+        } elseif ($nomeTabella === 'depositi') {
+            $query->orderBy('code', 'asc');
+        } elseif ($nomeTabella === 'listini') {
+            $query->orderBy('description', 'asc');
         } else {
             $query->orderBy('name', 'asc');
         }
@@ -1529,19 +1828,32 @@ class GestioneTabelleController extends Controller
     public function storeCategoriaClienti(Request $request): JsonResponse|RedirectResponse
     {
         try {
-            // Validazione specifica per Categorie Clienti (pattern identico a categorie articoli)
+            \Log::info('=== DEBUG CATEGORIE CLIENTI ===');
+            \Log::info('Dati ricevuti:', $request->all());
+            
+            // Converti code in maiuscolo PRIMA della validazione
+            $code = strtoupper($request->input('code', ''));
+            $request->merge(['code' => $code]);
+            
+            \Log::info('Code convertito in maiuscolo:', ['code' => $code]);
+            
+            // Validazione semplificata
             $validated = $request->validate([
-                'code' => 'required|string|max:20|unique:customer_categories,code|regex:/^[A-Z0-9_-]+$/',
+                'code' => 'required|string|max:20|unique:customer_categories,code',
                 'description' => 'required|string|min:3|max:255',
                 'active' => 'nullable|boolean'
             ]);
+            
+            \Log::info('Validazione passata:', $validated);
 
             $elemento = \App\Models\CustomerCategory::create([
-                'code' => strtoupper($validated['code']),
-                'name' => $validated['description'], // Usiamo description come name
+                'code' => $validated['code'],
+                'name' => $validated['description'],
                 'description' => $validated['description'],
                 'active' => !empty($validated['active'])
             ]);
+            
+            \Log::info('Elemento creato:', $elemento->toArray());
 
             if ($request->expectsJson()) {
                 return response()->json([
@@ -1680,19 +1992,32 @@ class GestioneTabelleController extends Controller
     public function storeCategoriaFornitori(Request $request): JsonResponse|RedirectResponse
     {
         try {
-            // Validazione specifica per Categorie Fornitori (pattern identico a categorie clienti)
+            \Log::info('=== DEBUG CATEGORIE FORNITORI ===');
+            \Log::info('Dati ricevuti:', $request->all());
+            
+            // Converti code in maiuscolo PRIMA della validazione
+            $code = strtoupper($request->input('code', ''));
+            $request->merge(['code' => $code]);
+            
+            \Log::info('Code convertito in maiuscolo:', ['code' => $code]);
+            
+            // Validazione semplificata
             $validated = $request->validate([
-                'code' => 'required|string|max:20|unique:supplier_categories,code|regex:/^[A-Z0-9_-]+$/',
+                'code' => 'required|string|max:20|unique:supplier_categories,code',
                 'description' => 'required|string|min:3|max:255',
                 'active' => 'nullable|boolean'
             ]);
+            
+            \Log::info('Validazione passata:', $validated);
 
             $elemento = \App\Models\SupplierCategory::create([
-                'code' => strtoupper($validated['code']),
-                'name' => $validated['description'], // Usiamo description come name
+                'code' => $validated['code'],
+                'name' => $validated['description'],
                 'description' => $validated['description'],
                 'active' => !empty($validated['active'])
             ]);
+            
+            \Log::info('Elemento creato:', $elemento->toArray());
 
             if ($request->expectsJson()) {
                 return response()->json([
@@ -1821,6 +2146,1080 @@ class GestioneTabelleController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Errore durante l\'eliminazione'
+            ], 500);
+        }
+    }
+
+    /**
+     * Store per Taglie e Colori
+     */
+    public function storeTaglieColori(Request $request): JsonResponse|RedirectResponse
+    {
+        try {
+            \Log::info('=== DEBUG TAGLIE E COLORI ===');
+            \Log::info('Dati ricevuti:', $request->all());
+            
+            // Validazione specifica per Taglie e Colori
+            $validated = $request->validate([
+                'code' => 'required|string|max:20|unique:size_colors,code|regex:/^[A-Z0-9_-]+$/',
+                'name' => 'required|string|min:1|max:255',
+                'description' => 'nullable|string|max:500',
+                'type' => 'required|in:TAGLIA,COLORE',
+                'active' => 'nullable|boolean'
+            ]);
+            
+            \Log::info('Validazione passata:', $validated);
+
+            $elemento = SizeColor::create([
+                'code' => strtoupper($validated['code']),
+                'name' => $validated['name'],
+                'description' => $validated['description'] ?? null,
+                'type' => $validated['type'],
+                'active' => !empty($validated['active'])
+            ]);
+            
+            \Log::info('Elemento creato:', $elemento->toArray());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Taglia/Colore creato con successo',
+                    'data' => $elemento
+                ]);
+            }
+
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'taglie-colori')
+                ->with('success', 'Taglia/Colore creato con successo');
+
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+
+            return back()->withErrors($e->errors())->withInput();
+
+        } catch (\Exception $e) {
+            Log::error('Errore creazione taglia/colore', [
+                'dati' => $request->all(),
+                'errore' => $e->getMessage()
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante la creazione'
+                ], 500);
+            }
+
+            return back()->with('error', 'Errore durante la creazione')->withInput();
+        }
+    }
+
+    /**
+     * Update per Taglie e Colori
+     */
+    public function updateTaglieColori(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        try {
+            $tagliaColore = SizeColor::findOrFail($id);
+            
+            // Validazione specifica per Taglie e Colori (esclude ID corrente per unique)
+            $validated = $request->validate([
+                'code' => 'required|string|max:20|unique:size_colors,code,' . $id . '|regex:/^[A-Z0-9_-]+$/',
+                'name' => 'required|string|min:1|max:255',
+                'description' => 'nullable|string|max:500',
+                'type' => 'required|in:TAGLIA,COLORE',
+                'active' => 'nullable|boolean'
+            ]);
+
+            $tagliaColore->update([
+                'code' => strtoupper($validated['code']),
+                'name' => $validated['name'],
+                'description' => $validated['description'] ?? null,
+                'type' => $validated['type'],
+                'active' => !empty($validated['active'])
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Taglia/Colore aggiornato con successo',
+                    'data' => $tagliaColore
+                ]);
+            }
+
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'taglie-colori')
+                ->with('success', 'Taglia/Colore aggiornato con successo');
+
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            
+            return back()->withErrors($e->errors())->withInput();
+
+        } catch (\Exception $e) {
+            Log::error('Errore aggiornamento taglia/colore', [
+                'id' => $id,
+                'errore' => $e->getMessage(),
+                'dati' => $request->all()
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante l\'aggiornamento'
+                ], 500);
+            }
+
+            return back()->with('error', 'Errore durante l\'aggiornamento')->withInput();
+        }
+    }
+
+    /**
+     * Delete per Taglie e Colori
+     */
+    public function destroyTaglieColori(int $id): JsonResponse
+    {
+        try {
+            $tagliaColore = SizeColor::findOrFail($id);
+            
+            // Verifica se può essere eliminato (business logic)
+            if (!$tagliaColore->canBeDeleted()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossibile eliminare: la taglia/colore è utilizzata in altri elementi'
+                ], 422);
+            }
+
+            $tagliaColore->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Taglia/Colore eliminato con successo'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Errore eliminazione taglia/colore', [
+                'id' => $id,
+                'errore' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante l\'eliminazione'
+            ], 500);
+        }
+    }
+
+    /**
+     * Store per Causali di Magazzino
+     */
+    public function storeCausaliMagazzino(Request $request): JsonResponse|RedirectResponse
+    {
+        try {
+            \Log::info('=== DEBUG CAUSALI MAGAZZINO ===');
+            \Log::info('Dati ricevuti:', $request->all());
+            
+            // Validazione specifica per Causali di Magazzino
+            $validated = $request->validate(WarehouseCause::validationRules());
+            
+            \Log::info('Validazione passata:', $validated);
+
+            $elemento = WarehouseCause::create([
+                'code' => strtoupper($validated['code']),
+                'description' => $validated['description']
+            ]);
+            
+            \Log::info('Elemento creato:', $elemento->toArray());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Causale Magazzino creata con successo',
+                    'data' => $elemento
+                ]);
+            }
+
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'causali-magazzino')
+                ->with('success', 'Causale Magazzino creata con successo');
+
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+
+            return back()->withErrors($e->errors())->withInput();
+
+        } catch (\Exception $e) {
+            Log::error('Errore creazione causale magazzino', [
+                'dati' => $request->all(),
+                'errore' => $e->getMessage()
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante la creazione'
+                ], 500);
+            }
+
+            return back()->with('error', 'Errore durante la creazione')->withInput();
+        }
+    }
+
+    /**
+     * Update per Causali di Magazzino
+     */
+    public function updateCausaliMagazzino(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        try {
+            $causale = WarehouseCause::findOrFail($id);
+            
+            // Validazione specifica per Causali di Magazzino (esclude ID corrente per unique)
+            $validated = $request->validate(WarehouseCause::validationRules($id));
+
+            $causale->update([
+                'code' => strtoupper($validated['code']),
+                'description' => $validated['description']
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Causale Magazzino aggiornata con successo',
+                    'data' => $causale
+                ]);
+            }
+
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'causali-magazzino')
+                ->with('success', 'Causale Magazzino aggiornata con successo');
+
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            
+            return back()->withErrors($e->errors())->withInput();
+
+        } catch (\Exception $e) {
+            Log::error('Errore aggiornamento causale magazzino', [
+                'id' => $id,
+                'errore' => $e->getMessage(),
+                'dati' => $request->all()
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante l\'aggiornamento'
+                ], 500);
+            }
+
+            return back()->with('error', 'Errore durante l\'aggiornamento')->withInput();
+        }
+    }
+
+    /**
+     * Delete per Causali di Magazzino
+     */
+    public function destroyCausaliMagazzino(int $id): JsonResponse
+    {
+        try {
+            $causale = WarehouseCause::findOrFail($id);
+            
+            // Verifica se può essere eliminata (business logic)
+            if (!$causale->canBeDeleted()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossibile eliminare: la causale è utilizzata in movimenti di magazzino'
+                ], 422);
+            }
+
+            $causale->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Causale Magazzino eliminata con successo'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Errore eliminazione causale magazzino', [
+                'id' => $id,
+                'errore' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante l\'eliminazione'
+            ], 500);
+        }
+    }
+
+    // =====================================================
+    // METODI SPECIFICI PER COLORI VARIANTI
+    // =====================================================
+
+    public function storeColoriVarianti(Request $request): JsonResponse|RedirectResponse
+    {
+        try {
+            \Log::info('=== DEBUG COLORI VARIANTI ===');
+            \Log::info('Dati ricevuti:', $request->all());
+            
+            // Validazione specifica per Colori Varianti
+            $validated = $request->validate(\App\Models\ColorVariant::validationRules());
+            
+            \Log::info('Validazione passata:', $validated);
+
+            $elemento = \App\Models\ColorVariant::create([
+                'description' => $validated['description']
+            ]);
+            
+            \Log::info('Elemento creato:', $elemento->toArray());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Colore Variante creato con successo',
+                    'data' => $elemento
+                ]);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'colori-varianti')
+                ->with('success', 'Colore Variante creato con successo');
+        } catch (ValidationException $e) {
+            \Log::error('Errore validazione Colori Varianti:', $e->errors());
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore creazione Colore Variante:', [
+                'errore' => $e->getMessage(),
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante creazione: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'colori-varianti')
+                ->with('error', 'Errore durante creazione colore: ' . $e->getMessage());
+        }
+    }
+
+    public function updateColoriVarianti(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        try {
+            $colore = \App\Models\ColorVariant::findOrFail($id);
+            
+            // Validazione specifica per Colori Varianti (esclude ID corrente per unique)
+            $validated = $request->validate(\App\Models\ColorVariant::validationRules($id));
+
+            $colore->update([
+                'description' => $validated['description']
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Colore Variante aggiornato con successo',
+                    'data' => $colore
+                ]);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'colori-varianti')
+                ->with('success', 'Colore Variante aggiornato con successo');
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore aggiornamento Colore Variante:', [
+                'errore' => $e->getMessage(),
+                'id' => $id,
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante aggiornamento: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'colori-varianti')
+                ->with('error', 'Errore durante aggiornamento colore: ' . $e->getMessage());
+        }
+    }
+
+    public function destroyColoriVarianti(int $id): JsonResponse
+    {
+        try {
+            $colore = \App\Models\ColorVariant::findOrFail($id);
+            
+            // Verifica se può essere eliminato (business logic)
+            if (!$colore->canBeDeleted()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossibile eliminare: il colore è utilizzato in prodotti esistenti'
+                ], 422);
+            }
+            
+            $colore->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Colore Variante eliminato con successo'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Errore eliminazione Colore Variante:', [
+                'errore' => $e->getMessage(),
+                'id' => $id
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante eliminazione: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // =====================================================
+    // METODI SPECIFICI PER CONDIZIONI
+    // =====================================================
+
+    public function storeCondizioni(Request $request): JsonResponse|RedirectResponse
+    {
+        try {
+            \Log::info('=== DEBUG CONDIZIONI ===');
+            \Log::info('Dati ricevuti:', $request->all());
+            
+            // Validazione specifica per Condizioni
+            $validated = $request->validate(\App\Models\Condition::validationRules());
+            
+            \Log::info('Validazione passata:', $validated);
+
+            $elemento = \App\Models\Condition::create([
+                'description' => $validated['description']
+            ]);
+            
+            \Log::info('Elemento creato:', $elemento->toArray());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Condizione creata con successo',
+                    'data' => $elemento
+                ]);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'condizioni')
+                ->with('success', 'Condizione creata con successo');
+        } catch (ValidationException $e) {
+            \Log::error('Errore validazione Condizioni:', $e->errors());
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore creazione Condizione:', [
+                'errore' => $e->getMessage(),
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante creazione: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'condizioni')
+                ->with('error', 'Errore durante creazione condizione: ' . $e->getMessage());
+        }
+    }
+
+    public function updateCondizioni(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        try {
+            $condizione = \App\Models\Condition::findOrFail($id);
+            
+            // Validazione specifica per Condizioni (esclude ID corrente per unique)
+            $validated = $request->validate(\App\Models\Condition::validationRules($id));
+
+            $condizione->update([
+                'description' => $validated['description']
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Condizione aggiornata con successo',
+                    'data' => $condizione
+                ]);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'condizioni')
+                ->with('success', 'Condizione aggiornata con successo');
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore aggiornamento Condizione:', [
+                'errore' => $e->getMessage(),
+                'id' => $id,
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante aggiornamento: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'condizioni')
+                ->with('error', 'Errore durante aggiornamento condizione: ' . $e->getMessage());
+        }
+    }
+
+    public function destroyCondizioni(int $id): JsonResponse
+    {
+        try {
+            $condizione = \App\Models\Condition::findOrFail($id);
+            
+            // Verifica se può essere eliminata (business logic)
+            if (!$condizione->canBeDeleted()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossibile eliminare: la condizione è utilizzata in documenti esistenti'
+                ], 422);
+            }
+            
+            $condizione->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Condizione eliminata con successo'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Errore eliminazione Condizione:', [
+                'errore' => $e->getMessage(),
+                'id' => $id
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante eliminazione: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // =====================================================
+    // METODI SPECIFICI PER DENOMINAZIONI PREZZI FISSI
+    // =====================================================
+
+    public function storeDenominazioniPrezzisFissi(Request $request): JsonResponse|RedirectResponse
+    {
+        try {
+            \Log::info('=== DEBUG DENOMINAZIONI PREZZI FISSI ===');
+            \Log::info('Dati ricevuti:', $request->all());
+            
+            // Validazione specifica per Denominazioni Prezzi Fissi
+            $validated = $request->validate(\App\Models\FixedPriceDenomination::validationRules());
+            
+            \Log::info('Validazione passata:', $validated);
+
+            $elemento = \App\Models\FixedPriceDenomination::create([
+                'description' => $validated['description'],
+                'comment' => $validated['comment'] ?? null
+            ]);
+            
+            \Log::info('Elemento creato:', $elemento->toArray());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Denominazione creata con successo',
+                    'data' => $elemento
+                ]);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'denominazioni-prezzi-fissi')
+                ->with('success', 'Denominazione creata con successo');
+        } catch (ValidationException $e) {
+            \Log::error('Errore validazione Denominazioni Prezzi Fissi:', $e->errors());
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore creazione Denominazione Prezzo Fisso:', [
+                'errore' => $e->getMessage(),
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante creazione: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'denominazioni-prezzi-fissi')
+                ->with('error', 'Errore durante creazione denominazione: ' . $e->getMessage());
+        }
+    }
+
+    public function updateDenominazioniPrezzisFissi(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        try {
+            $denominazione = \App\Models\FixedPriceDenomination::findOrFail($id);
+            
+            // Validazione specifica per Denominazioni Prezzi Fissi (esclude ID corrente per unique)
+            $validated = $request->validate(\App\Models\FixedPriceDenomination::validationRules($id));
+
+            $denominazione->update([
+                'description' => $validated['description'],
+                'comment' => $validated['comment'] ?? null
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Denominazione aggiornata con successo',
+                    'data' => $denominazione->fresh()
+                ]);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'denominazioni-prezzi-fissi')
+                ->with('success', 'Denominazione aggiornata con successo');
+                
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore aggiornamento Denominazione Prezzo Fisso:', [
+                'errore' => $e->getMessage(),
+                'id' => $id,
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante aggiornamento: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'denominazioni-prezzi-fissi')
+                ->with('error', 'Errore durante aggiornamento denominazione: ' . $e->getMessage());
+        }
+    }
+
+    public function destroyDenominazioniPrezzisFissi(int $id): JsonResponse
+    {
+        try {
+            $denominazione = \App\Models\FixedPriceDenomination::findOrFail($id);
+            
+            // Verifica se può essere eliminata (business logic)
+            if (!$denominazione->canBeDeleted()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossibile eliminare: la denominazione è utilizzata nel sistema'
+                ], 422);
+            }
+            
+            $denominazione->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Denominazione eliminata con successo'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Errore eliminazione Denominazione Prezzo Fisso:', [
+                'errore' => $e->getMessage(),
+                'id' => $id
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante eliminazione: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // =====================================================
+    // METODI SPECIFICI PER DEPOSITI
+    // =====================================================
+
+    public function storeDepositi(Request $request): JsonResponse|RedirectResponse
+    {
+        try {
+            \Log::info('=== DEBUG DEPOSITI ===');
+            \Log::info('Dati ricevuti:', $request->all());
+            
+            // Validazione specifica per Depositi
+            $validated = $request->validate(\App\Models\Deposit::validationRules());
+            
+            \Log::info('Validazione passata:', $validated);
+
+            $elemento = \App\Models\Deposit::create([
+                'code' => $validated['code'],
+                'description' => $validated['description'],
+                'address' => $validated['address'] ?? null,
+                'city' => $validated['city'] ?? null,
+                'state' => $validated['state'] ?? null,
+                'province' => $validated['province'] ?? null,
+                'postal_code' => $validated['postal_code'] ?? null,
+                'phone' => $validated['phone'] ?? null,
+                'fax' => $validated['fax'] ?? null
+            ]);
+            
+            \Log::info('Elemento creato:', $elemento->toArray());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Deposito creato con successo',
+                    'data' => $elemento
+                ]);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'depositi')
+                ->with('success', 'Deposito creato con successo');
+        } catch (ValidationException $e) {
+            \Log::error('Errore validazione Depositi:', $e->errors());
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore creazione Deposito:', [
+                'errore' => $e->getMessage(),
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante creazione: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'depositi')
+                ->with('error', 'Errore durante creazione deposito: ' . $e->getMessage());
+        }
+    }
+
+    public function updateDepositi(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        try {
+            $deposito = \App\Models\Deposit::findOrFail($id);
+            
+            // Validazione specifica per Depositi (esclude ID corrente per unique)
+            $validated = $request->validate(\App\Models\Deposit::validationRules($id));
+
+            $deposito->update([
+                'code' => $validated['code'],
+                'description' => $validated['description'],
+                'address' => $validated['address'] ?? null,
+                'city' => $validated['city'] ?? null,
+                'state' => $validated['state'] ?? null,
+                'province' => $validated['province'] ?? null,
+                'postal_code' => $validated['postal_code'] ?? null,
+                'phone' => $validated['phone'] ?? null,
+                'fax' => $validated['fax'] ?? null
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Deposito aggiornato con successo',
+                    'data' => $deposito->fresh()
+                ]);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'depositi')
+                ->with('success', 'Deposito aggiornato con successo');
+                
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore aggiornamento Deposito:', [
+                'errore' => $e->getMessage(),
+                'id' => $id,
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante aggiornamento: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'depositi')
+                ->with('error', 'Errore durante aggiornamento deposito: ' . $e->getMessage());
+        }
+    }
+
+    public function destroyDepositi(int $id): JsonResponse
+    {
+        try {
+            $deposito = \App\Models\Deposit::findOrFail($id);
+            
+            // Verifica se può essere eliminato (business logic)
+            if (!$deposito->canBeDeleted()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossibile eliminare: il deposito è utilizzato nel sistema'
+                ], 422);
+            }
+            
+            $deposito->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Deposito eliminato con successo'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Errore eliminazione Deposito:', [
+                'errore' => $e->getMessage(),
+                'id' => $id
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante eliminazione: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // =====================================================
+    // METODI SPECIFICI PER LISTINI
+    // =====================================================
+
+    public function storeListini(Request $request): JsonResponse|RedirectResponse
+    {
+        try {
+            \Log::info('=== DEBUG LISTINI ===');
+            \Log::info('Dati ricevuti:', $request->all());
+            
+            // Validazione specifica per Listini
+            $validated = $request->validate(\App\Models\PriceList::validationRules());
+            
+            \Log::info('Validazione passata:', $validated);
+
+            $elemento = \App\Models\PriceList::create([
+                'description' => $validated['description'],
+                'discount_percentage' => $validated['discount_percentage']
+            ]);
+            
+            \Log::info('Elemento creato:', $elemento->toArray());
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Listino creato con successo',
+                    'data' => $elemento
+                ]);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'listini')
+                ->with('success', 'Listino creato con successo');
+        } catch (ValidationException $e) {
+            \Log::error('Errore validazione Listini:', $e->errors());
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore creazione Listino:', [
+                'errore' => $e->getMessage(),
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante creazione: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'listini')
+                ->with('error', 'Errore durante creazione listino: ' . $e->getMessage());
+        }
+    }
+
+    public function updateListini(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        try {
+            $listino = \App\Models\PriceList::findOrFail($id);
+            
+            // Validazione specifica per Listini (esclude ID corrente per unique)
+            $validated = $request->validate(\App\Models\PriceList::validationRules($id));
+
+            $listino->update([
+                'description' => $validated['description'],
+                'discount_percentage' => $validated['discount_percentage']
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Listino aggiornato con successo',
+                    'data' => $listino->fresh()
+                ]);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'listini')
+                ->with('success', 'Listino aggiornato con successo');
+                
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore aggiornamento Listino:', [
+                'errore' => $e->getMessage(),
+                'id' => $id,
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante aggiornamento: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'listini')
+                ->with('error', 'Errore durante aggiornamento listino: ' . $e->getMessage());
+        }
+    }
+
+    public function destroyListini(int $id): JsonResponse
+    {
+        try {
+            $listino = \App\Models\PriceList::findOrFail($id);
+            
+            // Verifica se può essere eliminato (business logic)
+            if (!$listino->canBeDeleted()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Impossibile eliminare: il listino è utilizzato nel sistema'
+                ], 422);
+            }
+            
+            $listino->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Listino eliminato con successo'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Errore eliminazione Listino:', [
+                'errore' => $e->getMessage(),
+                'id' => $id
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante eliminazione: ' . $e->getMessage()
             ], 500);
         }
     }
