@@ -10,6 +10,7 @@ use App\Http\Controllers\MagazzinoController;
 use App\Http\Controllers\DdtController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\ConfigurationController;
+use App\Http\Controllers\WeatherController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -235,3 +236,6 @@ Route::prefix('ai-assistant')->name('ai.')->group(function () {
 
 // Route API Calculator Chat
 Route::post('/api/calculator-chat', [App\Http\Controllers\CalculatorChatController::class, 'calculate'])->middleware(['auth']);
+
+// Route API Weather (no auth required for public weather data)
+Route::get('/api/weather', [WeatherController::class, 'getCurrentWeather'])->name('api.weather');

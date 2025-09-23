@@ -699,6 +699,38 @@
                 <button type="button" class="btn btn-success modern-btn" onclick="openCategoriaClientiModal()">
                     <i class="bi bi-plus-lg"></i> Nuova Categoria Clienti
                 </button>
+                @elseif($nomeTabella === 'categorie-fornitori')
+                <button type="button" class="btn btn-success modern-btn" onclick="openCategoriaFornitoriModal()">
+                    <i class="bi bi-plus-lg"></i> Nuova Categoria Fornitori
+                </button>
+                @elseif($nomeTabella === 'taglie-colori')
+                <button type="button" class="btn btn-success modern-btn" onclick="openTaglieColoriModal()">
+                    <i class="bi bi-plus-lg"></i> Nuova Taglia/Colore
+                </button>
+                @elseif($nomeTabella === 'causali-magazzino')
+                <button type="button" class="btn btn-success modern-btn" onclick="openCausaliMagazzinoModal()">
+                    <i class="bi bi-plus-lg"></i> Nuova Causale Magazzino
+                </button>
+                @elseif($nomeTabella === 'colori-varianti')
+                <button type="button" class="btn btn-success modern-btn" onclick="openColoriVariantiModal()">
+                    <i class="bi bi-plus-lg"></i> Nuovo Colore Variante
+                </button>
+                @elseif($nomeTabella === 'condizioni')
+                <button type="button" class="btn btn-success modern-btn" onclick="openCondizioniModal()">
+                    <i class="bi bi-plus-lg"></i> Nuova Condizione
+                </button>
+                @elseif($nomeTabella === 'denominazioni-prezzi-fissi')
+                <button type="button" class="btn btn-success modern-btn" onclick="openDenominazioniPrezzisFissiModal()">
+                    <i class="bi bi-plus-lg"></i> Nuova Denominazione
+                </button>
+                @elseif($nomeTabella === 'depositi')
+                <button type="button" class="btn btn-success modern-btn" onclick="openDepositiModal()">
+                    <i class="bi bi-plus-lg"></i> Nuovo Deposito
+                </button>
+                @elseif($nomeTabella === 'listini')
+                <button type="button" class="btn btn-success modern-btn" onclick="openListiniModal()">
+                    <i class="bi bi-plus-lg"></i> Nuovo Listino
+                </button>
                 @else
                 <button type="button" class="btn btn-success modern-btn" data-bs-toggle="modal" data-bs-target="#genericModal">
                     <i class="bi bi-plus-lg"></i> Nuova {{ $configurazione['nome_singolare'] ?? $configurazione['nome'] ?? 'Elemento' }}
@@ -911,7 +943,13 @@
         @forelse($dati as $item)
             <div class="item-card mobile-item-row" data-status="{{ $item->active ?? 1 }}">
                 <div class="item-card-header">
-                    <h3 class="item-card-title">{{ $item->name ?? $item->nome ?? 'Elemento #' . $item->id }}</h3>
+                    <h3 class="item-card-title">
+                        @if($item->name ?? $item->nome ?? false)
+                            {{ $item->name ?? $item->nome }}
+                        @else
+                            {{ $item->description ?? $item->descrizione ?? 'Elemento #' . $item->id }}
+                        @endif
+                    </h3>
                     <div>
                         <span class="status-badge status-badge-small {{ ($item->active ?? true) ? 'status-active' : 'status-inactive' }}">
                             {{ ($item->active ?? true) ? 'Attivo' : 'Inattivo' }}
@@ -919,7 +957,7 @@
                     </div>
                 </div>
                 
-                @if($item->description ?? $item->descrizione ?? false)
+                @if(($item->description ?? $item->descrizione ?? false) && ($item->name ?? $item->nome ?? false))
                     <div class="mb-3">
                         <span class="card-description">{{ $item->description ?? $item->descrizione }}</span>
                     </div>
@@ -1441,6 +1479,130 @@ function showViewModal(tabella, data) {
                 ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
             </div>
         `;
+    } else if (tabella === 'categorie-fornitori') {
+        content = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <strong>Codice:</strong> 
+                    <span class="badge badge-code">
+                        ${data.code}
+                    </span>
+                </div>
+                <div class="col-md-6">
+                    <strong>Stato:</strong> ${data.active ? 'Attiva' : 'Inattiva'}
+                </div>
+                <div class="col-12">
+                    <strong>Descrizione:</strong> ${data.description || '-'}
+                </div>
+                ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
+            </div>
+        `;
+    } else if (tabella === 'taglie-colori') {
+        content = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <strong>Codice:</strong> 
+                    <span class="badge badge-code">
+                        ${data.code}
+                    </span>
+                </div>
+                <div class="col-md-6">
+                    <strong>Tipo:</strong> 
+                    <span class="badge ${data.type === 'TAGLIA' ? 'bg-info' : 'bg-warning'}">
+                        ${data.type === 'TAGLIA' ? 'Taglia' : 'Colore'}
+                    </span>
+                </div>
+                <div class="col-12">
+                    <strong>Nome:</strong> ${data.name}
+                </div>
+                <div class="col-12">
+                    <strong>Descrizione:</strong> ${data.description || '-'}
+                </div>
+                <div class="col-12">
+                    <strong>Stato:</strong> ${data.active ? 'Attivo' : 'Inattivo'}
+                </div>
+                ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
+            </div>
+        `;
+    } else if (tabella === 'causali-magazzino') {
+        content = `
+            <div class="row g-3">
+                <div class="col-12">
+                    <strong>Codice:</strong> ${data.code}
+                </div>
+                <div class="col-12">
+                    <strong>Descrizione:</strong> ${data.description || '-'}
+                </div>
+                ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
+            </div>
+        `;
+    } else if (tabella === 'colori-varianti') {
+        content = `
+            <div class="row g-3">
+                <div class="col-12">
+                    <strong>Descrizione:</strong> ${data.description || '-'}
+                </div>
+                ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
+            </div>
+        `;
+    } else if (tabella === 'condizioni') {
+        content = `
+            <div class="row g-3">
+                <div class="col-12">
+                    <strong>Descrizione:</strong> ${data.description || '-'}
+                </div>
+                ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
+            </div>
+        `;
+    } else if (tabella === 'denominazioni-prezzi-fissi') {
+        content = `
+            <div class="row g-3">
+                <div class="col-12">
+                    <strong>Descrizione:</strong> ${data.description || '-'}
+                </div>
+                ${data.comment ? `<div class="col-12"><strong>Commento:</strong> ${data.comment}</div>` : ''}
+                ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
+            </div>
+        `;
+    } else if (tabella === 'depositi') {
+        content = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <strong>Codice:</strong> ${data.code || '-'}
+                </div>
+                <div class="col-md-6">
+                    <strong>Descrizione:</strong> ${data.description || '-'}
+                </div>
+                ${data.address ? `<div class="col-12"><strong>Indirizzo:</strong> ${data.address}</div>` : ''}
+                <div class="col-md-4">
+                    <strong>Località:</strong> ${data.city || '-'}
+                </div>
+                <div class="col-md-4">
+                    <strong>Stato:</strong> ${data.state || '-'}
+                </div>
+                <div class="col-md-2">
+                    <strong>Provincia:</strong> ${data.province || '-'}
+                </div>
+                <div class="col-md-2">
+                    <strong>CAP:</strong> ${data.postal_code || '-'}
+                </div>
+                ${data.phone ? `<div class="col-md-6"><strong>Telefono:</strong> ${data.phone}</div>` : ''}
+                ${data.fax ? `<div class="col-md-6"><strong>Fax:</strong> ${data.fax}</div>` : ''}
+                ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
+            </div>
+        `;
+    } else if (tabella === 'listini') {
+        content = `
+            <div class="row g-3">
+                <div class="col-12">
+                    <strong>Descrizione:</strong> ${data.description || '-'}
+                </div>
+                <div class="col-md-6">
+                    <strong>Percentuale:</strong> ${data.discount_percentage ? (data.discount_percentage > 0 ? '+' : '') + parseFloat(data.discount_percentage).toFixed(2) + '%' : '0.00%'}
+                </div>
+                ${data.created_at ? `<div class="col-12"><strong>Data Creazione:</strong> ${new Date(data.created_at).toLocaleDateString('it-IT')} ${new Date(data.created_at).toLocaleTimeString('it-IT')}</div>` : ''}
+            </div>
+        `;
     }
     
     document.getElementById('viewModalContent').innerHTML = content;
@@ -1460,6 +1622,22 @@ function showEditModal(tabella, data) {
         showEditCategoriaModal(data);
     } else if (tabella === 'categorie-clienti') {
         showEditCategoriaClientiModal(data);
+    } else if (tabella === 'categorie-fornitori') {
+        showEditCategoriaFornitoriModal(data);
+    } else if (tabella === 'taglie-colori') {
+        showEditTaglieColoriModal(data);
+    } else if (tabella === 'causali-magazzino') {
+        showEditCausaliMagazzinoModal(data);
+    } else if (tabella === 'colori-varianti') {
+        showEditColoriVariantiModal(data);
+    } else if (tabella === 'condizioni') {
+        showEditCondizioniModal(data);
+    } else if (tabella === 'denominazioni-prezzi-fissi') {
+        showEditDenominazioniPrezzisFissiModal(data);
+    } else if (tabella === 'depositi') {
+        showEditDepositiModal(data);
+    } else if (tabella === 'listini') {
+        showEditListiniModal(data);
     } else {
         alert('Modifica non ancora implementata per questa tabella');
     }
@@ -1602,7 +1780,8 @@ function getTableDisplayName(tabella) {
         'aliquote-iva': 'Aliquota IVA',
         'associazioni-nature-iva': 'Associazione Nature IVA',
         'categorie-articoli': 'Categoria Articoli',
-        'categorie-clienti': 'Categoria Clienti'
+        'categorie-clienti': 'Categoria Clienti',
+        'categorie-fornitori': 'Categoria Fornitori'
     };
     return names[tabella] || 'Elemento';
 }
@@ -2064,6 +2243,420 @@ function showEditCategoriaModal(data) {
     </div>
 </div>
 
+<!-- Modal Categoria Fornitori -->
+<div class="modal fade" id="categoriaFornitoriModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title" id="categoriaFornitoriModalTitle">
+                    <i class="bi bi-person-badge me-2"></i>
+                    Nuova Categoria Fornitori
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="categoriaFornitoriForm" method="POST" action="{{ route('configurations.gestione-tabelle.store', 'categorie-fornitori') }}">
+                @csrf
+                <div class="modal-body modal-body-custom">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="modal_code_categoria_fornitori" class="form-label">Codice <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal_code_categoria_fornitori" name="code" 
+                                   placeholder="Codice categoria (es: STRAT)" maxlength="20" required>
+                            <div class="form-text">Codice identificativo univoco</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="modal_description_categoria_fornitori" class="form-label">Descrizione <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal_description_categoria_fornitori" name="description" 
+                                   placeholder="Descrizione categoria (es: Strategico)" maxlength="255" required>
+                            <div class="form-text">Descrizione dettagliata della categoria</div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="modal_active_categoria_fornitori" name="active" value="1" checked>
+                                <label class="form-check-label" for="modal_active_categoria_fornitori">
+                                    Categoria attiva
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-custom">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Categoria Fornitori
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Taglie e Colori -->
+<div class="modal fade" id="taglieColoriModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title" id="taglieColoriModalTitle">
+                    <i class="bi bi-palette me-2"></i>
+                    Nuova Taglia/Colore
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="taglieColoriForm" method="POST" action="{{ route('configurations.gestione-tabelle.store', 'taglie-colori') }}">
+                @csrf
+                <div class="modal-body modal-body-custom">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="modal_code_taglie_colori" class="form-label">Codice <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal_code_taglie_colori" name="code" 
+                                   placeholder="Codice (es: S, M, ROSSO)" maxlength="20" required>
+                            <div class="form-text">Codice identificativo univoco</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="modal_type_taglie_colori" class="form-label">Tipo <span class="text-danger">*</span></label>
+                            <select class="form-select" id="modal_type_taglie_colori" name="type" required>
+                                <option value="">-- Seleziona tipo --</option>
+                                <option value="TAGLIA">Taglia</option>
+                                <option value="COLORE">Colore</option>
+                            </select>
+                            <div class="form-text">Tipologia: Taglia o Colore</div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label for="modal_name_taglie_colori" class="form-label">Nome <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal_name_taglie_colori" name="name" 
+                                   placeholder="Nome descrittivo (es: Small, Rosso)" maxlength="255" required>
+                            <div class="form-text">Nome descrittivo della taglia/colore</div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label for="modal_description_taglie_colori" class="form-label">Descrizione</label>
+                            <textarea class="form-control" id="modal_description_taglie_colori" name="description" 
+                                      placeholder="Descrizione opzionale..." maxlength="500" rows="3"></textarea>
+                            <div class="form-text">Descrizione dettagliata (opzionale)</div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="modal_active_taglie_colori" name="active" value="1" checked>
+                                <label class="form-check-label" for="modal_active_taglie_colori">
+                                    Taglia/Colore attivo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-custom">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Taglia/Colore
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Causali Magazzino -->
+<div class="modal fade" id="causaliMagazzinoModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title" id="causaliMagazzinoModalTitle">
+                    <i class="bi bi-building me-2"></i>
+                    Nuova Causale Magazzino
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="causaliMagazzinoForm" method="POST" action="{{ route('configurations.gestione-tabelle.store', 'causali-magazzino') }}">
+                @csrf
+                <div class="modal-body modal-body-custom">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="modal_code_causali_magazzino" class="form-label">Codice <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal_code_causali_magazzino" name="code" 
+                                   placeholder="Codice (es: CAR001, SCA001)" maxlength="20" required>
+                            <div class="form-text">Codice identificativo univoco</div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="modal_description_causali_magazzino" class="form-label">Descrizione <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal_description_causali_magazzino" name="description" 
+                                   placeholder="Descrizione causale (es: Vendita a Cliente)" maxlength="255" required>
+                            <div class="form-text">Descrizione dettagliata della causale</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-custom">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Causale Magazzino
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Colori Varianti -->
+<div class="modal fade" id="coloriVariantiModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title" id="coloriVariantiModalTitle">
+                    <i class="bi bi-droplet-fill me-2"></i>
+                    Nuovo Colore Variante
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="coloriVariantiForm" method="POST" action="{{ route('configurations.gestione-tabelle.store', 'colori-varianti') }}">
+                @csrf
+                <div class="modal-body modal-body-custom">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="modal_description_colori_varianti" class="form-label">Descrizione <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal_description_colori_varianti" name="description" 
+                                   placeholder="Descrizione colore (es: Rosso Bordeaux, Blu Navy)" maxlength="255" required>
+                            <div class="form-text">Descrizione del colore per la variante prodotto</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-custom">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Colore Variante
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Condizioni -->
+<div class="modal fade" id="condizioniModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title" id="condizioniModalTitle">
+                    <i class="bi bi-list-ul me-2"></i>
+                    Nuova Condizione
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="condizioniForm" method="POST" action="{{ route('configurations.gestione-tabelle.store', 'condizioni') }}">
+                @csrf
+                <div class="modal-body modal-body-custom">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="modal_description_condizioni" class="form-label">Descrizione <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal_description_condizioni" name="description" 
+                                   placeholder="Descrizione condizione (es: 30 gg dalla fattura, Pagamento immediato)" maxlength="255" required>
+                            <div class="form-text">Descrizione della condizione di pagamento o vendita</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer modal-footer-custom">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Condizione
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuova Denominazione Prezzo Fisso -->
+<div class="modal fade" id="denominazioniPrezzisFissiModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%); color: white; border-radius: 20px 20px 0 0;">
+                <h5 class="modal-title text-white" id="denominazioniPrezzisFissiModalTitle">
+                    <i class="bi bi-currency-euro me-2"></i>
+                    Nuova Denominazione
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="denominazioniPrezzisFissiForm" method="POST" action="{{ route('configurations.gestione-tabelle.store', 'denominazioni-prezzi-fissi') }}">
+                @csrf
+                <div class="modal-body">
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Descrizione *</label>
+                        <input type="text" class="form-control" id="description" name="description" required maxlength="255">
+                        <div class="invalid-feedback" id="descriptionError"></div>
+                        <small class="form-text text-muted">Descrizione della denominazione prezzo fisso</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Commento</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="3" maxlength="500"></textarea>
+                        <div class="invalid-feedback" id="commentError"></div>
+                        <small class="form-text text-muted">Commento opzionale - max 500 caratteri</small>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Denominazione
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuovo Deposito -->
+<div class="modal fade" id="depositiModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%); color: white; border-radius: 20px 20px 0 0;">
+                <h5 class="modal-title text-white" id="depositiModalTitle">
+                    <i class="bi bi-archive me-2"></i>
+                    Nuovo Deposito
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="depositiForm" method="POST" action="{{ route('configurations.gestione-tabelle.store', 'depositi') }}">
+                @csrf
+                <div class="modal-body">
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="deposit_code" class="form-label">Codice *</label>
+                            <input type="text" class="form-control" id="deposit_code" name="code" required maxlength="50" pattern="[A-Z0-9_-]+">
+                            <div class="invalid-feedback" id="codeError"></div>
+                            <small class="form-text text-muted">Solo lettere maiuscole, numeri, _ e -</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="deposit_description" class="form-label">Descrizione *</label>
+                            <input type="text" class="form-control" id="deposit_description" name="description" required maxlength="255">
+                            <div class="invalid-feedback" id="descriptionError"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="deposit_address" class="form-label">Indirizzo</label>
+                        <input type="text" class="form-control" id="deposit_address" name="address" maxlength="255">
+                        <div class="invalid-feedback" id="addressError"></div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="deposit_city" class="form-label">Località</label>
+                            <input type="text" class="form-control" id="deposit_city" name="city" maxlength="100">
+                            <div class="invalid-feedback" id="cityError"></div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="deposit_state" class="form-label">Stato</label>
+                            <input type="text" class="form-control" id="deposit_state" name="state" maxlength="100">
+                            <div class="invalid-feedback" id="stateError"></div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="deposit_province" class="form-label">Provincia</label>
+                            <input type="text" class="form-control" id="deposit_province" name="province" maxlength="5" pattern="[A-Z]{2}">
+                            <div class="invalid-feedback" id="provinceError"></div>
+                            <small class="form-text text-muted">Es: MI, RM</small>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="deposit_postal_code" class="form-label">CAP</label>
+                            <input type="text" class="form-control" id="deposit_postal_code" name="postal_code" maxlength="10" pattern="[0-9]{5}">
+                            <div class="invalid-feedback" id="postalCodeError"></div>
+                            <small class="form-text text-muted">5 cifre</small>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="deposit_phone" class="form-label">Telefono</label>
+                            <input type="text" class="form-control" id="deposit_phone" name="phone" maxlength="20" pattern="[0-9\s\+\-\(\)]+">
+                            <div class="invalid-feedback" id="phoneError"></div>
+                            <small class="form-text text-muted">Solo numeri, spazi e caratteri + - ( )</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="deposit_fax" class="form-label">Fax</label>
+                            <input type="text" class="form-control" id="deposit_fax" name="fax" maxlength="20" pattern="[0-9\s\+\-\(\)]+">
+                            <div class="invalid-feedback" id="faxError"></div>
+                            <small class="form-text text-muted">Solo numeri, spazi e caratteri + - ( )</small>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Deposito
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuovo Listino -->
+<div class="modal fade" id="listiniModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header" style="background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%); color: white; border-radius: 20px 20px 0 0;">
+                <h5 class="modal-title text-white" id="listiniModalTitle">
+                    <i class="bi bi-list-columns me-2"></i>
+                    Nuovo Listino
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="listiniForm" method="POST" action="{{ route('configurations.gestione-tabelle.store', 'listini') }}">
+                @csrf
+                <div class="modal-body">
+                    
+                    <div class="mb-3">
+                        <label for="listino_description" class="form-label">Descrizione *</label>
+                        <input type="text" class="form-control" id="listino_description" name="description" required maxlength="255">
+                        <div class="invalid-feedback" id="descriptionError"></div>
+                        <small class="form-text text-muted">Descrizione del listino prezzi</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="listino_discount_percentage" class="form-label">Percentuale *</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="listino_discount_percentage" name="discount_percentage" required step="0.01" min="-100" max="1000">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div class="invalid-feedback" id="discountPercentageError"></div>
+                        <small class="form-text text-muted">Percentuale di sconto/maggiorazione (da -100% a +1000%)</small>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modern-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Annulla
+                    </button>
+                    <button type="submit" class="btn btn-success modern-btn">
+                        <i class="bi bi-check-lg"></i> Crea Listino
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
 // Funzione per aprire modale nuova categoria clienti
 function openCategoriaClientiModal() {
@@ -2148,6 +2741,668 @@ function showEditCategoriaClientiModal(data) {
     
     // Apri la modale
     const modal = new bootstrap.Modal(document.getElementById('categoriaClientiModal'));
+    modal.show();
+}
+
+// Funzione per aprire modale nuova categoria fornitori
+function openCategoriaFornitoriModal() {
+    // Reset del form
+    const form = document.getElementById('categoriaFornitoriForm');
+    if (form) {
+        form.reset();
+        
+        // Reset action per creazione
+        form.action = '{{ route('configurations.gestione-tabelle.store', 'categorie-fornitori') }}';
+        
+        // Reset method a POST
+        let methodField = form.querySelector('input[name="_method"]');
+        if (methodField) {
+            methodField.remove();
+        }
+        
+        // Reset titolo e pulsante per creazione
+        const modalTitle = document.getElementById('categoriaFornitoriModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-plus-lg me-2"></i>Nuova Categoria Fornitori';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Salva Categoria Fornitori';
+        }
+        
+        // Imposta active a true di default
+        const activeCheckbox = document.getElementById('modal_active_categoria_fornitori');
+        if (activeCheckbox) {
+            activeCheckbox.checked = true;
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('categoriaFornitoriModal'));
+    modal.show();
+    
+    // Focus sul campo codice dopo apertura
+    setTimeout(() => {
+        const codeField = document.getElementById('modal_code_categoria_fornitori');
+        if (codeField) {
+            codeField.focus();
+        }
+    }, 500);
+}
+
+function showEditCategoriaFornitoriModal(data) {
+    // Popola e mostra la modale di modifica per Categoria Fornitori
+    const form = document.getElementById('categoriaFornitoriForm');
+    if (form) {
+        // Aggiorna action per update
+        form.action = `/configurations/gestione-tabelle/categorie-fornitori/${data.id}`;
+        
+        // Aggiungi method PUT se non esiste
+        let methodField = form.querySelector('input[name="_method"]');
+        if (!methodField) {
+            methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            form.appendChild(methodField);
+        }
+        methodField.value = 'PUT';
+        
+        // Popola i campi
+        document.getElementById('modal_code_categoria_fornitori').value = data.code || '';
+        document.getElementById('modal_description_categoria_fornitori').value = data.description || '';
+        document.getElementById('modal_active_categoria_fornitori').checked = data.active || false;
+        
+        // Aggiorna titolo e pulsante per modifica
+        const modalTitle = document.getElementById('categoriaFornitoriModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-pencil me-2"></i>Modifica Categoria Fornitori';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Categoria Fornitori';
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('categoriaFornitoriModal'));
+    modal.show();
+}
+
+// Funzione per aprire modale nuova taglia/colore
+function openTaglieColoriModal() {
+    // Reset del form
+    const form = document.getElementById('taglieColoriForm');
+    if (form) {
+        form.reset();
+        
+        // Reset action per creazione
+        form.action = '{{ route('configurations.gestione-tabelle.store', 'taglie-colori') }}';
+        
+        // Reset method a POST
+        let methodField = form.querySelector('input[name="_method"]');
+        if (methodField) {
+            methodField.remove();
+        }
+        
+        // Reset titolo e pulsante per creazione
+        const modalTitle = document.getElementById('taglieColoriModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-palette me-2"></i>Nuova Taglia/Colore';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Salva Taglia/Colore';
+        }
+        
+        // Imposta active a true di default
+        const activeCheckbox = document.getElementById('modal_active_taglie_colori');
+        if (activeCheckbox) {
+            activeCheckbox.checked = true;
+        }
+        
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('taglieColoriModal'));
+    modal.show();
+    
+    // Focus sul campo codice dopo apertura
+    setTimeout(() => {
+        const codeField = document.getElementById('modal_code_taglie_colori');
+        if (codeField) {
+            codeField.focus();
+        }
+    }, 500);
+}
+
+function showEditTaglieColoriModal(data) {
+    // Popola e mostra la modale di modifica per Taglie/Colori
+    const form = document.getElementById('taglieColoriForm');
+    if (form) {
+        // Aggiorna action per modifica
+        form.action = '{{ route('configurations.gestione-tabelle.update', ['taglie-colori', '__ID__']) }}'.replace('__ID__', data.id);
+        
+        // Aggiungi method PUT
+        let methodField = form.querySelector('input[name="_method"]');
+        if (!methodField) {
+            methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            form.appendChild(methodField);
+        }
+        methodField.value = 'PUT';
+        
+        // Popola i campi
+        document.getElementById('modal_code_taglie_colori').value = data.code || '';
+        document.getElementById('modal_name_taglie_colori').value = data.name || '';
+        document.getElementById('modal_description_taglie_colori').value = data.description || '';
+        document.getElementById('modal_type_taglie_colori').value = data.type || '';
+        document.getElementById('modal_active_taglie_colori').checked = data.active || false;
+        
+        // Aggiorna titolo e pulsante per modifica
+        const modalTitle = document.getElementById('taglieColoriModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-palette me-2"></i>Modifica Taglia/Colore';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Taglia/Colore';
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('taglieColoriModal'));
+    modal.show();
+}
+
+// Funzione per aprire modale nuova causale magazzino
+function openCausaliMagazzinoModal() {
+    // Reset del form
+    const form = document.getElementById('causaliMagazzinoForm');
+    if (form) {
+        form.reset();
+        
+        // Reset action per creazione
+        form.action = '{{ route('configurations.gestione-tabelle.store', 'causali-magazzino') }}';
+        
+        // Reset method a POST
+        let methodField = form.querySelector('input[name="_method"]');
+        if (methodField) {
+            methodField.remove();
+        }
+        
+        // Reset titolo e pulsante per creazione
+        const modalTitle = document.getElementById('causaliMagazzinoModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-building me-2"></i>Nuova Causale Magazzino';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Salva Causale Magazzino';
+        }
+        
+        // Focus sul campo codice
+        setTimeout(() => {
+            const codeField = document.getElementById('modal_code_causali_magazzino');
+            if (codeField) {
+                codeField.focus();
+            }
+        }, 500);
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('causaliMagazzinoModal'));
+    modal.show();
+    
+    // Focus sul campo codice dopo apertura
+    setTimeout(() => {
+        const codeField = document.getElementById('modal_code_causali_magazzino');
+        if (codeField) {
+            codeField.focus();
+        }
+    }, 500);
+}
+
+function showEditCausaliMagazzinoModal(data) {
+    // Popola e mostra la modale di modifica per Causali Magazzino
+    const form = document.getElementById('causaliMagazzinoForm');
+    if (form) {
+        // Aggiorna action per modifica
+        form.action = '{{ route('configurations.gestione-tabelle.update', ['causali-magazzino', '__ID__']) }}'.replace('__ID__', data.id);
+        
+        // Aggiungi method PUT
+        let methodField = form.querySelector('input[name="_method"]');
+        if (!methodField) {
+            methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            form.appendChild(methodField);
+        }
+        methodField.value = 'PUT';
+        
+        // Popola i campi
+        document.getElementById('modal_code_causali_magazzino').value = data.code || '';
+        document.getElementById('modal_description_causali_magazzino').value = data.description || '';
+        
+        // Aggiorna titolo e pulsante per modifica
+        const modalTitle = document.getElementById('causaliMagazzinoModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-building me-2"></i>Modifica Causale Magazzino';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Causale Magazzino';
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('causaliMagazzinoModal'));
+    modal.show();
+}
+
+// Funzione per aprire modale nuovo colore variante
+function openColoriVariantiModal() {
+    // Reset del form
+    const form = document.getElementById('coloriVariantiForm');
+    if (form) {
+        form.reset();
+        
+        // Reset action per creazione
+        form.action = '{{ route('configurations.gestione-tabelle.store', 'colori-varianti') }}';
+        
+        // Reset method a POST
+        let methodField = form.querySelector('input[name="_method"]');
+        if (methodField) {
+            methodField.remove();
+        }
+        
+        // Reset titolo e pulsante per creazione
+        const modalTitle = document.getElementById('coloriVariantiModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-droplet-fill me-2"></i>Nuovo Colore Variante';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Crea Colore Variante';
+        }
+        
+        // Focus sul campo descrizione
+        setTimeout(() => {
+            const descField = document.getElementById('modal_description_colori_varianti');
+            if (descField) {
+                descField.focus();
+            }
+        }, 500);
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('coloriVariantiModal'));
+    modal.show();
+}
+
+function showEditColoriVariantiModal(data) {
+    // Popola e mostra la modale di modifica per Colori Varianti
+    const form = document.getElementById('coloriVariantiForm');
+    if (form) {
+        // Aggiorna action per modifica
+        form.action = '{{ route('configurations.gestione-tabelle.update', ['colori-varianti', '__ID__']) }}'.replace('__ID__', data.id);
+        
+        // Aggiungi method PUT
+        let methodField = form.querySelector('input[name="_method"]');
+        if (!methodField) {
+            methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            form.appendChild(methodField);
+        }
+        methodField.value = 'PUT';
+        
+        // Popola i campi
+        document.getElementById('modal_description_colori_varianti').value = data.description || '';
+        
+        // Aggiorna titolo e pulsante per modifica
+        const modalTitle = document.getElementById('coloriVariantiModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-droplet-fill me-2"></i>Modifica Colore Variante';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Colore Variante';
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('coloriVariantiModal'));
+    modal.show();
+}
+
+// Funzione per aprire modale nuova condizione
+function openCondizioniModal() {
+    // Reset del form
+    const form = document.getElementById('condizioniForm');
+    if (form) {
+        form.reset();
+        
+        // Reset action per creazione
+        form.action = '{{ route('configurations.gestione-tabelle.store', 'condizioni') }}';
+        
+        // Reset method a POST
+        let methodField = form.querySelector('input[name="_method"]');
+        if (methodField) {
+            methodField.remove();
+        }
+        
+        // Reset titolo e pulsante per creazione
+        const modalTitle = document.getElementById('condizioniModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-list-ul me-2"></i>Nuova Condizione';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Crea Condizione';
+        }
+        
+        // Focus sul campo descrizione
+        setTimeout(() => {
+            const descField = document.getElementById('modal_description_condizioni');
+            if (descField) {
+                descField.focus();
+            }
+        }, 500);
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('condizioniModal'));
+    modal.show();
+}
+
+function showEditCondizioniModal(data) {
+    // Popola e mostra la modale di modifica per Condizioni
+    const form = document.getElementById('condizioniForm');
+    if (form) {
+        // Aggiorna action per modifica
+        form.action = '{{ route('configurations.gestione-tabelle.update', ['condizioni', '__ID__']) }}'.replace('__ID__', data.id);
+        
+        // Aggiungi method PUT
+        let methodField = form.querySelector('input[name="_method"]');
+        if (!methodField) {
+            methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            form.appendChild(methodField);
+        }
+        methodField.value = 'PUT';
+        
+        // Popola i campi
+        document.getElementById('modal_description_condizioni').value = data.description || '';
+        
+        // Aggiorna titolo e pulsante per modifica
+        const modalTitle = document.getElementById('condizioniModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-list-ul me-2"></i>Modifica Condizione';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Condizione';
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('condizioniModal'));
+    modal.show();
+}
+
+// Funzione per aprire modale nuova denominazione prezzo fisso
+function openDenominazioniPrezzisFissiModal() {
+    // Reset del form
+    const form = document.getElementById('denominazioniPrezzisFissiForm');
+    if (form) {
+        form.reset();
+        
+        // Reset action per creazione
+        form.action = '{{ route('configurations.gestione-tabelle.store', 'denominazioni-prezzi-fissi') }}';
+        
+        // Reset method a POST
+        let methodField = form.querySelector('input[name="_method"]');
+        if (methodField) {
+            methodField.remove();
+        }
+        
+        // Reset titolo e pulsante per creazione
+        const modalTitle = document.getElementById('denominazioniPrezzisFissiModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-currency-euro me-2"></i>Nuova Denominazione';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Crea Denominazione';
+        }
+        
+        // Focus sul campo descrizione
+        setTimeout(() => {
+            const descField = document.getElementById('description');
+            if (descField) {
+                descField.focus();
+            }
+        }, 500);
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('denominazioniPrezzisFissiModal'));
+    modal.show();
+}
+
+function showEditDenominazioniPrezzisFissiModal(data) {
+    // Popola e mostra la modale di modifica per Denominazioni Prezzi Fissi
+    const form = document.getElementById('denominazioniPrezzisFissiForm');
+    if (form) {
+        // Aggiorna action per modifica
+        form.action = '{{ route('configurations.gestione-tabelle.update', ['denominazioni-prezzi-fissi', '__ID__']) }}'.replace('__ID__', data.id);
+        
+        // Aggiungi method PUT
+        let methodField = form.querySelector('input[name="_method"]');
+        if (!methodField) {
+            methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            methodField.value = 'PUT';
+            form.appendChild(methodField);
+        }
+        
+        // Popola i campi
+        document.getElementById('description').value = data.description || '';
+        document.getElementById('comment').value = data.comment || '';
+        
+        // Aggiorna titolo e pulsante per modifica
+        const modalTitle = document.getElementById('denominazioniPrezzisFissiModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-currency-euro me-2"></i>Modifica Denominazione';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Denominazione';
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('denominazioniPrezzisFissiModal'));
+    modal.show();
+}
+
+// Funzione per aprire modale nuovo deposito
+function openDepositiModal() {
+    // Reset del form
+    const form = document.getElementById('depositiForm');
+    if (form) {
+        form.reset();
+        
+        // Reset action per creazione
+        form.action = '{{ route('configurations.gestione-tabelle.store', 'depositi') }}';
+        
+        // Reset method a POST
+        let methodField = form.querySelector('input[name="_method"]');
+        if (methodField) {
+            methodField.remove();
+        }
+        
+        // Reset titolo e pulsante per creazione
+        const modalTitle = document.getElementById('depositiModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-archive me-2"></i>Nuovo Deposito';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Crea Deposito';
+        }
+        
+        // Focus sul campo codice
+        setTimeout(() => {
+            const codeField = document.getElementById('deposit_code');
+            if (codeField) {
+                codeField.focus();
+            }
+        }, 500);
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('depositiModal'));
+    modal.show();
+}
+
+function showEditDepositiModal(data) {
+    // Popola e mostra la modale di modifica per Depositi
+    const form = document.getElementById('depositiForm');
+    if (form) {
+        // Aggiorna action per modifica
+        form.action = '{{ route('configurations.gestione-tabelle.update', ['depositi', '__ID__']) }}'.replace('__ID__', data.id);
+        
+        // Aggiungi method PUT
+        let methodField = form.querySelector('input[name="_method"]');
+        if (!methodField) {
+            methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            methodField.value = 'PUT';
+            form.appendChild(methodField);
+        }
+        
+        // Popola i campi
+        document.getElementById('deposit_code').value = data.code || '';
+        document.getElementById('deposit_description').value = data.description || '';
+        document.getElementById('deposit_address').value = data.address || '';
+        document.getElementById('deposit_city').value = data.city || '';
+        document.getElementById('deposit_state').value = data.state || '';
+        document.getElementById('deposit_province').value = data.province || '';
+        document.getElementById('deposit_postal_code').value = data.postal_code || '';
+        document.getElementById('deposit_phone').value = data.phone || '';
+        document.getElementById('deposit_fax').value = data.fax || '';
+        
+        // Aggiorna titolo e pulsante per modifica
+        const modalTitle = document.getElementById('depositiModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-archive me-2"></i>Modifica Deposito';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Deposito';
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('depositiModal'));
+    modal.show();
+}
+
+// Funzione per aprire modale nuovo listino
+function openListiniModal() {
+    // Reset del form
+    const form = document.getElementById('listiniForm');
+    if (form) {
+        form.reset();
+        
+        // Reset action per creazione
+        form.action = '{{ route('configurations.gestione-tabelle.store', 'listini') }}';
+        
+        // Reset method a POST
+        let methodField = form.querySelector('input[name="_method"]');
+        if (methodField) {
+            methodField.remove();
+        }
+        
+        // Reset titolo e pulsante per creazione
+        const modalTitle = document.getElementById('listiniModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-list-columns me-2"></i>Nuovo Listino';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Crea Listino';
+        }
+        
+        // Focus sul campo descrizione
+        setTimeout(() => {
+            const descField = document.getElementById('listino_description');
+            if (descField) {
+                descField.focus();
+            }
+        }, 500);
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('listiniModal'));
+    modal.show();
+}
+
+function showEditListiniModal(data) {
+    // Popola e mostra la modale di modifica per Listini
+    const form = document.getElementById('listiniForm');
+    if (form) {
+        // Aggiorna action per modifica
+        form.action = '{{ route('configurations.gestione-tabelle.update', ['listini', '__ID__']) }}'.replace('__ID__', data.id);
+        
+        // Aggiungi method PUT
+        let methodField = form.querySelector('input[name="_method"]');
+        if (!methodField) {
+            methodField = document.createElement('input');
+            methodField.type = 'hidden';
+            methodField.name = '_method';
+            methodField.value = 'PUT';
+            form.appendChild(methodField);
+        }
+        
+        // Popola i campi
+        document.getElementById('listino_description').value = data.description || '';
+        document.getElementById('listino_discount_percentage').value = data.discount_percentage || '';
+        
+        // Aggiorna titolo e pulsante per modifica
+        const modalTitle = document.getElementById('listiniModalTitle');
+        if (modalTitle) {
+            modalTitle.innerHTML = '<i class="bi bi-list-columns me-2"></i>Modifica Listino';
+        }
+        
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Aggiorna Listino';
+        }
+    }
+    
+    // Apri la modale
+    const modal = new bootstrap.Modal(document.getElementById('listiniModal'));
     modal.show();
 }
 </script>

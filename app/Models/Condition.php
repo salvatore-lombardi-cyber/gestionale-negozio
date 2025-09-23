@@ -4,59 +4,61 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Model per Condizioni (Card #11)
- * Semplice gestione condizioni di pagamento e vendita
+ * Semplice tabella con solo descrizione
  */
 class Condition extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
-        'code',
-        'name',
-        'description',
-        'active',
-        'sort_order'
+        'description'
     ];
 
     protected $casts = [
-        'active' => 'boolean',
-        'sort_order' => 'integer',
         'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime'
+        'updated_at' => 'datetime'
     ];
 
-    public function scopeActive(Builder $query): Builder
-    {
-        return $query->where('active', true);
-    }
-
+    // Scopes
     public function scopeOrdered(Builder $query): Builder
     {
-        return $query->orderBy('sort_order')->orderBy('name');
+        return $query->orderBy('description');
     }
 
-    // Validazione semplice ma sicura
-    public static function validationRules(): array
+    public function scopeByDescription(Builder $query, string $description): Builder
+    {
+        return $query->where('description', 'LIKE', "%{$description}%");
+    }
+
+    // Validation rules per OWASP compliance
+    public static function validationRules($id = null): array
     {
         return [
-            'code' => 'required|string|max:50|unique:conditions,code|regex:/^[A-Z0-9_-]+$/',
-            'name' => 'required|string|max:255|min:2',
-            'description' => 'nullable|string|max:500',
-            'active' => 'boolean',
-            'sort_order' => 'nullable|integer|min:0|max:9999'
+            'description' => [
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+                'unique:conditions,description' . ($id ? ',' . $id : '')
+            ]
         ];
     }
 
-    public static function validationRulesForUpdate(int $id): array
+    // Metodi business logic
+    public function canBeDeleted(): bool
     {
-        $rules = self::validationRules();
-        $rules['code'] = 'required|string|max:50|unique:conditions,code,' . $id . '|regex:/^[A-Z0-9_-]+$/';
-        return $rules;
+        // Controlla se ci sono documenti associati a questa condizione
+        // return !$this->documents()->exists();
+        return true; // Per ora non controlliamo relazioni
     }
+
+    // Relazioni future (quando sarà implementata la gestione documenti)
+    // public function documents()
+    // {
+    //     return $this->hasMany(Document::class, 'condition_id');
+    // }
 }

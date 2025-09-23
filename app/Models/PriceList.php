@@ -4,104 +4,84 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Model per Listini Prezzi (Card #14)
- * Gestione listini con date validità e percentuali sconto/maggiorazione
+ * Model per Listini
+ * Gestione semplificata con solo descrizione e percentuale
  */
 class PriceList extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
-        'code',
-        'description', 
-        'discount_percentage',
-        'valid_from',
-        'valid_to',
-        'is_default',
-        'active',
-        'sort_order'
+        'description',
+        'discount_percentage'
     ];
 
     protected $casts = [
         'discount_percentage' => 'decimal:2',
-        'valid_from' => 'date',
-        'valid_to' => 'date', 
-        'is_default' => 'boolean',
-        'active' => 'boolean',
-        'sort_order' => 'integer',
         'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime'
+        'updated_at' => 'datetime'
     ];
 
-    public function scopeActive(Builder $query): Builder
-    {
-        return $query->where('active', true);
-    }
-
-    public function scopeValid(Builder $query): Builder
-    {
-        $today = now()->toDateString();
-        return $query->where('valid_from', '<=', $today)
-            ->where(function($q) use ($today) {
-                $q->whereNull('valid_to')
-                  ->orWhere('valid_to', '>=', $today);
-            });
-    }
-
-    public function scopeDefault(Builder $query): Builder
-    {
-        return $query->where('is_default', true);
-    }
-
+    // Scopes
     public function scopeOrdered(Builder $query): Builder
     {
-        return $query->orderBy('sort_order')->orderBy('description');
+        return $query->orderBy('description');
     }
 
-    // Validazione sicura OWASP
-    public static function validationRules(): array
+    public function scopeByDescription(Builder $query, string $description): Builder
+    {
+        return $query->where('description', 'LIKE', "%{$description}%");
+    }
+
+    public function scopeByPercentage(Builder $query, float $percentage): Builder
+    {
+        return $query->where('discount_percentage', $percentage);
+    }
+
+    // Validation rules per OWASP compliance
+    public static function validationRules($id = null): array
     {
         return [
-            'code' => 'required|string|max:50|unique:price_lists,code|regex:/^[A-Z0-9_-]+$/',
-            'description' => 'required|string|max:255|min:2',
-            'discount_percentage' => 'required|numeric|between:-100,1000', // da -100% a +1000%
-            'valid_from' => 'required|date|after_or_equal:today',
-            'valid_to' => 'nullable|date|after:valid_from',
-            'is_default' => 'boolean',
-            'active' => 'boolean',
-            'sort_order' => 'nullable|integer|min:0|max:9999'
+            'description' => [
+                'required',
+                'string',
+                'min:2',
+                'max:255',
+                'unique:price_lists,description' . ($id ? ',' . $id : '')
+            ],
+            'discount_percentage' => [
+                'required',
+                'numeric',
+                'between:-100,1000' // da -100% a +1000%
+            ]
         ];
     }
 
-    public static function validationRulesForUpdate(int $id): array
-    {
-        $rules = self::validationRules();
-        $rules['code'] = 'required|string|max:50|unique:price_lists,code,' . $id . '|regex:/^[A-Z0-9_-]+$/';
-        $rules['valid_from'] = 'required|date'; // Per modifica, permettiamo date passate
-        return $rules;
-    }
-
     // Helper per formattazione percentuale
-    public function getFormattedDiscountAttribute(): string
+    public function getFormattedPercentageAttribute(): string
     {
         if ($this->discount_percentage > 0) {
             return '+' . number_format($this->discount_percentage, 2) . '%';
+        } elseif ($this->discount_percentage < 0) {
+            return number_format($this->discount_percentage, 2) . '%';
         }
-        return number_format($this->discount_percentage, 2) . '%';
+        return '0.00%';
     }
 
-    // Helper per verifica validità
-    public function getIsCurrentlyValidAttribute(): bool
+    // Metodi business logic
+    public function canBeDeleted(): bool
     {
-        $today = now()->toDate();
-        $validFrom = $this->valid_from;
-        $validTo = $this->valid_to;
-
-        return $validFrom <= $today && (is_null($validTo) || $validTo >= $today);
+        // Controlla se ci sono prodotti associati a questo listino
+        // return !$this->products()->exists();
+        return true; // Per ora non controlliamo relazioni
     }
+
+    // Relazioni future (quando sarà implementata la gestione prodotti)
+    // public function products()
+    // {
+    //     return $this->hasMany(Product::class, 'price_list_id');
+    // }
 }

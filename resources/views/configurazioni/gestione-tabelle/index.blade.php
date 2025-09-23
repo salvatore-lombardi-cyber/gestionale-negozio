@@ -122,6 +122,7 @@
         margin-top: 0.5rem;
     }
     
+    
     /* Grid Tabelle - Stile Gestionale */
     .tables-grid {
         display: grid;
@@ -415,24 +416,11 @@
             Gestisci tutte le tabelle di configurazione del sistema
         </p>
         
-        <!-- Metriche Performance -->
+        <!-- Card Orologio, Meteo e Mappa -->
         <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-value">27</div>
-                <div class="metric-label">Tabelle Totali</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value text-success">27</div>
-                <div class="metric-label">Tabelle Attive</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value text-info">0</div>
-                <div class="metric-label">Record Totali</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value text-warning">100%</div>
-                <div class="metric-label">Cache Hit Rate</div>
-            </div>
+            <x-orologio id="gestione-tabelle" />
+            <x-meteo id="gestione-tabelle" city="Roma" />
+            <x-mappa id="gestione-tabelle" location="Italia" />
         </div>
     </div>
 

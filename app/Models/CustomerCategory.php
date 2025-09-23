@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -13,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class CustomerCategory extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'code',
@@ -24,10 +23,8 @@ class CustomerCategory extends Model
 
     protected $casts = [
         'active' => 'boolean',
-        'created_by' => 'integer',
         'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime'
+        'updated_at' => 'datetime'
     ];
 
     // Scopes
@@ -77,11 +74,7 @@ class CustomerCategory extends Model
     {
         parent::boot();
 
-        static::creating(function ($category) {
-            if (auth()->check()) {
-                $category->created_by = auth()->id();
-            }
-        });
+        // Rimosso created_by perché il campo non esiste più nella tabella semplificata
     }
 
     // Relazioni future (quando sarà implementata la gestione clienti)
