@@ -1,16 +1,13 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProdottoController;
-use App\Http\Controllers\ClienteController;
-use App\Http\Controllers\FornitoriController;
-use App\Http\Controllers\VettoriController;
 use App\Http\Controllers\VenditaController;
 use App\Http\Controllers\MagazzinoController;
 use App\Http\Controllers\DdtController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\WeatherController;
+use App\Http\Controllers\AnagraficaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,8 +23,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
     
-    // Anagrafiche
-    Route::get('/anagrafiche', [App\Http\Controllers\AnagraficheController::class, 'index'])->name('anagrafiche.index');
     
     // Magazzino Overview
     Route::get('/magazzino-overview', [App\Http\Controllers\MagazzinoOverviewController::class, 'index'])->name('magazzino-overview.index');
@@ -57,10 +52,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     // Route del gestionale
-    Route::resource('prodotti', ProdottoController::class)->parameter('prodotti', 'prodotto');
-    Route::resource('clienti', ClienteController::class)->parameter('clienti', 'cliente');
-    Route::resource('fornitori', FornitoriController::class)->parameter('fornitori', 'fornitore');
-    Route::resource('vettori', VettoriController::class)->parameter('vettori', 'vettore');
     Route::resource('vendite', VenditaController::class)->parameter('vendite', 'vendita');
     
     Route::get('/magazzino/caricamento-multiplo', [MagazzinoController::class, 'caricamentoMultiplo'])->name('magazzino.caricamento-multiplo');
@@ -72,12 +63,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/ddts/{ddt}/pdf', [DdtController::class, 'downloadPdf'])->name('ddts.pdf');
     Route::post('/ddts/{ddt}/email', [DdtController::class, 'sendEmail'])->name('ddts.email');
     
-    // Route QR Code e Etichette
-    Route::prefix('prodotti/{id}')->group(function () {
-        Route::post('/generate-qr', [ProdottoController::class, 'generateQR'])->name('prodotti.generate-qr');
-        Route::post('/generate-all-qr', [ProdottoController::class, 'generateAllQR'])->name('prodotti.generate-all-qr');
-        Route::get('/labels', [ProdottoController::class, 'printLabels'])->name('prodotti.labels');
-    });
     
     // Route Gestione Etichette
     Route::prefix('labels')->name('labels.')->group(function () {
@@ -91,20 +76,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/decode', [LabelController::class, 'decode'])->name('decode');
     });
     
-    // Route speciali per Fornitori Enterprise
-    Route::prefix('fornitori')->name('fornitori.')->group(function () {
-        Route::get('/search', [FornitoriController::class, 'search'])->name('search'); // AJAX
-        Route::get('/export-csv', [FornitoriController::class, 'exportCsv'])->name('export-csv');
-        Route::post('/{fornitore}/verifica-dati', [FornitoriController::class, 'verificaDati'])->name('verifica-dati');
-    });
-
-    // Route speciali per Vettori Enterprise
-    Route::prefix('vettori')->name('vettori.')->group(function () {
-        Route::get('/search', [VettoriController::class, 'search'])->name('search'); // AJAX
-        Route::get('/export-csv', [VettoriController::class, 'exportCsv'])->name('export-csv');
-        Route::post('/{vettore}/verifica-dati', [VettoriController::class, 'verificaDati'])->name('verifica-dati');
-        Route::post('/calcola-costo', [VettoriController::class, 'calcolaCosto'])->name('calcola-costo'); // AJAX
-    });
 
     // Route Configurazioni
     Route::prefix('configurations')->name('configurations.')->group(function () {
@@ -189,6 +160,37 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     Route::delete('/{id}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'destroyBanca'])->name('destroy');
                 });
         });
+    });
+    
+    // Route Anagrafiche - Sistema Unificato
+    Route::prefix('anagrafiche')->name('anagrafiche.')->group(function () {
+        // Dashboard principale con 6 card
+        Route::get('/', [AnagraficaController::class, 'index'])->name('index');
+        
+        // Liste per tipologia
+        Route::get('/{tipo}/lista', [AnagraficaController::class, 'lista'])->name('lista');
+        
+        // Creazione
+        Route::get('/{tipo}/create', [AnagraficaController::class, 'create'])->name('create');
+        Route::post('/', [AnagraficaController::class, 'store'])->name('store');
+        
+        // Export (PRIMA delle route parametriche!)
+        Route::get('/{tipo}/export/{format}', [AnagraficaController::class, 'export'])->name('export');
+        Route::get('/{tipo}/excel-export', [AnagraficaController::class, 'exportExcel'])->name('excelExport');
+        
+        // API per ricerche e filtri
+        Route::get('/{tipo}/api/search', [AnagraficaController::class, 'apiSearch'])->name('api.search');
+        Route::get('/fornitori-list', [AnagraficaController::class, 'fornitorsList'])->name('fornitori.list');
+        
+        // Visualizzazione, modifica, eliminazione
+        Route::get('/{tipo}/{anagrafica}', [AnagraficaController::class, 'show'])->name('show');
+        Route::get('/{tipo}/{anagrafica}/edit', [AnagraficaController::class, 'edit'])->name('edit');
+        Route::put('/{tipo}/{anagrafica}', [AnagraficaController::class, 'update'])->name('update');
+        Route::delete('/{tipo}/{anagrafica}', [AnagraficaController::class, 'destroy'])->name('destroy');
+        
+        // Duplicazione
+        Route::get('/{tipo}/{anagrafica}/duplicate', [AnagraficaController::class, 'duplicate'])->name('duplicate');
+        Route::post('/{tipo}/{anagrafica}/duplicate', [AnagraficaController::class, 'storeDuplicate'])->name('store.duplicate');
     });
 
     // Route Enterprise Features (Funzionalità Avanzate)

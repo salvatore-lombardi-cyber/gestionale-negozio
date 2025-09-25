@@ -312,9 +312,9 @@
                         <div class="stats-icon primary">
                             <i class="bi bi-box-seam"></i>
                         </div>
-                        <h3 class="stats-number">{{ \App\Models\Prodotto::count() }}</h3>
+                        <h3 class="stats-number">{{ \App\Models\Anagrafica::where('tipo', 'articolo')->count() }}</h3>
                         <p class="stats-label">{{ __('app.articoli_magazzino') }}</p>
-                        <a href="{{ route('prodotti.index') }}" class="stats-btn primary">
+                        <a href="{{ route('anagrafiche.lista', 'articolo') }}" class="stats-btn primary">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.articoli_magazzino') }}
                         </a>
                     </div>

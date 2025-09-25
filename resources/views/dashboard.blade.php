@@ -372,9 +372,9 @@
                         <div class="stats-icon primary">
                             <i class="bi bi-box-seam"></i>
                         </div>
-                        <h3 class="stats-number">{{ \App\Models\Prodotto::count() }}</h3>
+                        <h3 class="stats-number">{{ \App\Models\Anagrafica::where('tipo', 'articolo')->count() }}</h3>
                         <p class="stats-label">{{ __('app.products') }}</p>
-                        <a href="{{ route('prodotti.index') }}" class="stats-btn primary">
+                        <a href="{{ route('anagrafiche.lista', 'articolo') }}" class="stats-btn primary">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.products') }}
                         </a>
                     </div>
@@ -385,9 +385,9 @@
                         <div class="stats-icon success">
                             <i class="bi bi-people"></i>
                         </div>
-                        <h3 class="stats-number">{{ \App\Models\Cliente::count() }}</h3>
+                        <h3 class="stats-number">{{ \App\Models\Anagrafica::where('tipo', 'cliente')->count() }}</h3>
                         <p class="stats-label">{{ __('app.clients') }}</p>
-                        <a href="{{ route('clienti.index') }}" class="stats-btn success">
+                        <a href="{{ route('anagrafiche.lista', 'cliente') }}" class="stats-btn success">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.clients') }}
                         </a>
                     </div>
