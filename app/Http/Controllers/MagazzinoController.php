@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Magazzino;
-use App\Models\Prodotto;
+use App\Models\Anagrafica;
 use Illuminate\Http\Request;
 
 class MagazzinoController extends Controller
 {
    public function index()
 {
-    // Raggruppiamo per prodotto e calcoliamo totali
-    $prodotti = Prodotto::with(['magazzino' => function($query) {
-        $query->orderBy('taglia')->orderBy('colore');
-    }])
-    ->whereHas('magazzino')
-    ->orderBy('nome')
-    ->get();
+    // Raggruppiamo per articolo e calcoliamo totali
+    $prodotti = Anagrafica::where('tipo', 'articolo')
+        ->with(['magazzino' => function($query) {
+            $query->orderBy('taglia')->orderBy('colore');
+        }])
+        ->whereHas('magazzino')
+        ->orderBy('nome')
+        ->get();
 
     // Calcoliamo le statistiche per ogni prodotto
     $prodottiConStatistiche = $prodotti->map(function($prodotto) {
@@ -147,7 +148,7 @@ class MagazzinoController extends Controller
     }
     public function dettaglioProdotto($prodotto)
 {
-    $prodotto = Prodotto::with('magazzino')->findOrFail($prodotto);
+    $prodotto = Anagrafica::where('tipo', 'articolo')->with('magazzino')->findOrFail($prodotto);
     
     return view('magazzino.dettaglio-prodotto', compact('prodotto'));
 }

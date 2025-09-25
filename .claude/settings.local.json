@@ -20,7 +20,12 @@
       "WebFetch(domain:cheatsheetseries.owasp.org)",
       "WebFetch(domain:mallow-tech.com)",
       "Bash(rm:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(php /Users/salvatorelombardi/Desktop/gestionale-negozio-verde/artisan make:migration create_anagrafiche_table --create=anagrafiche)",
+      "Bash(php /Users/salvatorelombardi/Desktop/gestionale-negozio-verde/artisan make:migration create_province_table --create=province)",
+      "Bash(php /Users/salvatorelombardi/Desktop/gestionale-negozio-verde/artisan make:model Anagrafica)",
+      "Bash(composer:*)",
+      "Bash(php:*)"
     ],
     "deny": [],
     "ask": []

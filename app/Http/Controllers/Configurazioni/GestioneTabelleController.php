@@ -13,6 +13,7 @@ use App\Models\WarehouseCause;
 use App\Models\FixedPriceDenomination;
 use App\Models\Deposit;
 use App\Models\PriceList;
+use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -157,6 +158,24 @@ class GestioneTabelleController extends Controller
                     'descrizione' => 'Gestione listini con descrizione e percentuale',
                     'color_from' => '#2d6a4f',
                     'color_to' => '#1b4332'
+                ],
+                [
+                    'nome' => 'modalita-pagamento',
+                    'titolo' => 'Modalità di Pagamento',
+                    'icona' => 'bi-wallet2',
+                    'colore' => 'dark',
+                    'descrizione' => 'Gestione modalità di pagamento con codice e descrizione',
+                    'color_from' => '#2c2c2c',
+                    'color_to' => '#1a1a1a'
+                ],
+                [
+                    'nome' => 'natura-iva',
+                    'titolo' => 'Natura IVA',
+                    'icona' => 'bi-receipt',
+                    'colore' => 'pink',
+                    'descrizione' => 'Gestione nature IVA con codice, percentuale e riferimenti normativi',
+                    'color_from' => '#fadadd',
+                    'color_to' => '#f8bbd9'
                 ]
             ]);
             
@@ -187,7 +206,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle implementate
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -212,7 +231,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -307,7 +326,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -353,6 +372,12 @@ class GestioneTabelleController extends Controller
             }
             if ($nomeTabella === 'listini') {
                 return $this->storeListini($request);
+            }
+            if ($nomeTabella === 'modalita-pagamento') {
+                return $this->storeModalitaPagamento($request);
+            }
+            if ($nomeTabella === 'natura-iva') {
+                return $this->storeNaturaIva($request);
             }
 
             // Default: Associazioni Nature IVA
@@ -504,6 +529,10 @@ class GestioneTabelleController extends Controller
                     $element = \App\Models\Deposit::findOrFail($id);
                 } elseif ($nomeTabella === 'listini') {
                     $element = \App\Models\PriceList::findOrFail($id);
+                } elseif ($nomeTabella === 'modalita-pagamento') {
+                    $element = \App\Models\PaymentMethod::findOrFail($id);
+                } elseif ($nomeTabella === 'natura-iva') {
+                    $element = \App\Models\VatNature::findOrFail($id);
                 } else {
                     return response()->json(['error' => 'Tabella non supportata'], 404);
                 }
@@ -542,7 +571,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -588,6 +617,12 @@ class GestioneTabelleController extends Controller
             }
             if ($nomeTabella === 'listini') {
                 return $this->updateListini($request, $id);
+            }
+            if ($nomeTabella === 'modalita-pagamento') {
+                return $this->updateModalitaPagamento($request, $id);
+            }
+            if ($nomeTabella === 'natura-iva') {
+                return $this->updateNaturaIva($request, $id);
             }
 
             // Default: Associazioni Nature IVA
@@ -641,6 +676,10 @@ class GestioneTabelleController extends Controller
                 return $this->destroyDepositi($id);
             } elseif ($nomeTabella === 'listini') {
                 return $this->destroyListini($id);
+            } elseif ($nomeTabella === 'modalita-pagamento') {
+                return $this->destroyModalitaPagamento($id);
+            } elseif ($nomeTabella === 'natura-iva') {
+                return $this->destroyNaturaIva($id);
             } elseif ($nomeTabella === 'associazioni-nature-iva') {
                 $elemento = VatNatureAssociation::findOrFail($id);
                 $elemento->delete();
@@ -1263,6 +1302,36 @@ class GestioneTabelleController extends Controller
                     'description' => 'Descrizione',
                     'discount_percentage' => 'Percentuale'
                 ]
+            ],
+            'modalita-pagamento' => [
+                'modello' => \App\Models\PaymentMethod::class,
+                'nome' => 'Modalità di Pagamento',
+                'nome_singolare' => 'Modalità di Pagamento',
+                'icona' => 'bi-wallet2',
+                'colore' => 'dark',
+                'color_from' => '#2c2c2c',
+                'color_to' => '#1a1a1a',
+                'descrizione' => 'Gestione modalità di pagamento con codice e descrizione',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'natura-iva' => [
+                'modello' => \App\Models\VatNature::class,
+                'nome' => 'Natura IVA',
+                'nome_singolare' => 'Natura IVA',
+                'icona' => 'bi-receipt',
+                'colore' => 'pink',
+                'color_from' => '#fadadd',
+                'color_to' => '#f8bbd9',
+                'descrizione' => 'Gestione nature IVA con codice, percentuale e riferimenti normativi',
+                'campi_visibili' => [
+                    'vat_code' => 'Cod.IVA',
+                    'percentage' => '%',
+                    'nature' => 'Natura',
+                    'legal_reference' => 'Riferimento Normativo'
+                ]
             ]
         ];
 
@@ -1368,6 +1437,10 @@ class GestioneTabelleController extends Controller
             $query->orderBy('code', 'asc');
         } elseif ($nomeTabella === 'listini') {
             $query->orderBy('description', 'asc');
+        } elseif ($nomeTabella === 'modalita-pagamento') {
+            $query->orderBy('code', 'asc');
+        } elseif ($nomeTabella === 'natura-iva') {
+            $query->orderBy('vat_code', 'asc');
         } else {
             $query->orderBy('name', 'asc');
         }
@@ -1379,7 +1452,7 @@ class GestioneTabelleController extends Controller
         if ($nomeTabella === 'associazioni-nature-iva') {
             $extraData['associations'] = $dati;
             $extraData['taxRates'] = \App\Models\TaxRate::where('active', true)->orderBy('percentuale')->get();
-            $extraData['vatNatures'] = \App\Models\VatNature::where('active', true)->orderBy('code')->get();
+            $extraData['vatNatures'] = \App\Models\VatNature::orderBy('vat_code')->get();
         }
 
         return view('configurazioni.gestione-tabelle.tabella', array_merge([
@@ -3214,6 +3287,282 @@ class GestioneTabelleController extends Controller
             
         } catch (\Exception $e) {
             \Log::error('Errore eliminazione Listino:', [
+                'errore' => $e->getMessage(),
+                'id' => $id
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante eliminazione: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // =====================================================
+    // METODI SPECIFICI PER MODALITÀ DI PAGAMENTO
+    // =====================================================
+
+    public function storeModalitaPagamento(Request $request): JsonResponse|RedirectResponse
+    {
+        try {
+            // Validazione specifica per Modalità di Pagamento
+            $validated = $request->validate(\App\Models\PaymentMethod::validationRules());
+
+            $modalitaPagamento = \App\Models\PaymentMethod::create([
+                'code' => $validated['code'],
+                'description' => $validated['description']
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Modalità di pagamento creata con successo',
+                    'data' => $modalitaPagamento
+                ], 201);
+            }
+
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'modalita-pagamento')
+                ->with('success', 'Modalità di pagamento creata con successo');
+                
+        } catch (ValidationException $e) {
+            \Log::error('Errore validazione Modalità di Pagamento:', $e->errors());
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore creazione Modalità di Pagamento:', [
+                'errore' => $e->getMessage(),
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante creazione: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'modalita-pagamento')
+                ->with('error', 'Errore durante creazione modalità di pagamento: ' . $e->getMessage());
+        }
+    }
+
+    public function updateModalitaPagamento(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        try {
+            $modalitaPagamento = \App\Models\PaymentMethod::findOrFail($id);
+            
+            // Validazione specifica per Modalità di Pagamento (esclude ID corrente per unique)
+            $validated = $request->validate(\App\Models\PaymentMethod::validationRulesForUpdate($id));
+
+            $modalitaPagamento->update([
+                'code' => $validated['code'],
+                'description' => $validated['description']
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Modalità di pagamento aggiornata con successo',
+                    'data' => $modalitaPagamento
+                ]);
+            }
+
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'modalita-pagamento')
+                ->with('success', 'Modalità di pagamento aggiornata con successo');
+                
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore aggiornamento Modalità di Pagamento:', [
+                'errore' => $e->getMessage(),
+                'id' => $id,
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante aggiornamento: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'modalita-pagamento')
+                ->with('error', 'Errore durante aggiornamento modalità di pagamento: ' . $e->getMessage());
+        }
+    }
+
+    public function destroyModalitaPagamento(int $id): JsonResponse
+    {
+        try {
+            $modalitaPagamento = \App\Models\PaymentMethod::findOrFail($id);
+            
+            $modalitaPagamento->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Modalità di pagamento eliminata con successo'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Errore eliminazione Modalità di Pagamento:', [
+                'errore' => $e->getMessage(),
+                'id' => $id
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante eliminazione: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // =====================================================
+    // METODI SPECIFICI PER NATURA IVA
+    // =====================================================
+
+    public function storeNaturaIva(Request $request): JsonResponse|RedirectResponse
+    {
+        try {
+            // Validazione specifica per Natura IVA
+            $validated = $request->validate(\App\Models\VatNature::validationRules());
+
+            $naturaIva = \App\Models\VatNature::create([
+                'vat_code' => $validated['vat_code'],
+                'percentage' => $validated['percentage'],
+                'nature' => $validated['nature'],
+                'legal_reference' => $validated['legal_reference']
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Natura IVA creata con successo',
+                    'data' => $naturaIva
+                ], 201);
+            }
+
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'natura-iva')
+                ->with('success', 'Natura IVA creata con successo');
+                
+        } catch (ValidationException $e) {
+            \Log::error('Errore validazione Natura IVA:', $e->errors());
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore creazione Natura IVA:', [
+                'errore' => $e->getMessage(),
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante creazione: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'natura-iva')
+                ->with('error', 'Errore durante creazione natura IVA: ' . $e->getMessage());
+        }
+    }
+
+    public function updateNaturaIva(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        try {
+            $naturaIva = \App\Models\VatNature::findOrFail($id);
+            
+            // Validazione specifica per Natura IVA (esclude ID corrente per unique)
+            $validated = $request->validate(\App\Models\VatNature::validationRulesForUpdate($id));
+
+            $naturaIva->update([
+                'vat_code' => $validated['vat_code'],
+                'percentage' => $validated['percentage'],
+                'nature' => $validated['nature'],
+                'legal_reference' => $validated['legal_reference']
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Natura IVA aggiornata con successo',
+                    'data' => $naturaIva
+                ]);
+            }
+
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'natura-iva')
+                ->with('success', 'Natura IVA aggiornata con successo');
+                
+        } catch (ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errori di validazione',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Errore aggiornamento Natura IVA:', [
+                'errore' => $e->getMessage(),
+                'id' => $id,
+                'dati' => $request->all()
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Errore durante aggiornamento: ' . $e->getMessage()
+                ], 500);
+            }
+            return redirect()
+                ->route('configurations.gestione-tabelle.tabella', 'natura-iva')
+                ->with('error', 'Errore durante aggiornamento natura IVA: ' . $e->getMessage());
+        }
+    }
+
+    public function destroyNaturaIva(int $id): JsonResponse
+    {
+        try {
+            $naturaIva = \App\Models\VatNature::findOrFail($id);
+            
+            $naturaIva->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Natura IVA eliminata con successo'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Errore eliminazione Natura IVA:', [
                 'errore' => $e->getMessage(),
                 'id' => $id
             ]);

@@ -57,16 +57,14 @@
     
     .map-container {
         width: 100%;
-        height: 90px;
-        border-radius: 15px;
+        border-radius: 10px;
         overflow: hidden;
         position: relative;
-        border: 3px solid #ffd60a;
+        border: 1px solid rgba(255, 214, 10, 0.2);
         box-shadow: 0 0 20px rgba(255, 214, 10, 0.3);
         margin: 0.5rem 0;
         order: 2;
         flex: 1;
-        max-height: 90px;
     }
     
     .map-preview {

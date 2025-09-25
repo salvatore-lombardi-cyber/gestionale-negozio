@@ -285,6 +285,48 @@
             font-size: 1.5rem;
         }
     }
+    
+    /* ===== FIX CARD DIMENSIONI DASHBOARD ===== */
+    .dashboard-header .clock-card,
+    .dashboard-header .weather-card,
+    .dashboard-header .calendar-card,
+    .dashboard-header .map-card {
+        min-height: 320px !important;
+        height: 320px !important;
+        max-height: 320px !important;
+    }
+    
+    .dashboard-header .calendar-grid {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    .dashboard-header .map-container {
+        height: 100px !important;
+    }
+    
+    /* ===== RIMPICCIOLISCI CALENDARIO DASHBOARD ===== */
+    .dashboard-header .calendar-day {
+        font-size: 0.65rem !important;
+        padding: 0.15rem !important;
+        min-height: 18px !important;
+        height: 18px !important;
+    }
+    
+    .dashboard-header .calendar-weekday {
+        font-size: 0.6rem !important;
+        padding: 0.2rem 0 !important;
+    }
+    
+    .dashboard-header .calendar-grid {
+        gap: 1px !important;
+        padding: 0.3rem !important;
+    }
+    
+    .dashboard-header .calendar-date-display {
+        margin-top: 0.8rem !important;
+    }
 </style>
 
 <!-- Elementi fluttuanti di sfondo -->
@@ -305,6 +347,22 @@
                     <i class="bi bi-speedometer2"></i> {{ __('app.dashboard') }}
                 </h1>
                 <p class="welcome-text">{{ __('app.welcome_message') }}</p>
+                
+                <!-- Card Orologio, Meteo, Calendario e Mappa -->
+                <div class="row g-3 mt-3">
+                    <div class="col-xl-3 col-lg-6 col-md-6">
+                        <x-orologio id="dashboard" />
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6">
+                        <x-meteo id="dashboard" city="Roma" />
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6">
+                        <x-calendario id="dashboard" />
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6">
+                        <x-mappa id="dashboard" location="Italia" />
+                    </div>
+                </div>
             </div>
             
             <!-- Cards delle Statistiche -->
@@ -314,9 +372,9 @@
                         <div class="stats-icon primary">
                             <i class="bi bi-box-seam"></i>
                         </div>
-                        <h3 class="stats-number">{{ \App\Models\Prodotto::count() }}</h3>
+                        <h3 class="stats-number">{{ \App\Models\Anagrafica::where('tipo', 'articolo')->count() }}</h3>
                         <p class="stats-label">{{ __('app.products') }}</p>
-                        <a href="{{ route('prodotti.index') }}" class="stats-btn primary">
+                        <a href="{{ route('anagrafiche.lista', 'articolo') }}" class="stats-btn primary">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.products') }}
                         </a>
                     </div>
@@ -327,9 +385,9 @@
                         <div class="stats-icon success">
                             <i class="bi bi-people"></i>
                         </div>
-                        <h3 class="stats-number">{{ \App\Models\Cliente::count() }}</h3>
+                        <h3 class="stats-number">{{ \App\Models\Anagrafica::where('tipo', 'cliente')->count() }}</h3>
                         <p class="stats-label">{{ __('app.clients') }}</p>
-                        <a href="{{ route('clienti.index') }}" class="stats-btn success">
+                        <a href="{{ route('anagrafiche.lista', 'cliente') }}" class="stats-btn success">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.clients') }}
                         </a>
                     </div>
