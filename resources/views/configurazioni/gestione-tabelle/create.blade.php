@@ -252,203 +252,73 @@
             @csrf
             
             <div class="row g-3">
-                <!-- Campo Nome (comune a tutte le tabelle) -->
-                <div class="col-md-6">
-                    <label for="name" class="form-label">Nome *</label>
-                    <input type="text" 
-                           class="form-control @error('name') is-invalid @enderror" 
-                           id="name" 
-                           name="name" 
-                           value="{{ old('name') }}" 
-                           required 
-                           maxlength="255">
-                    @error('name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                    <div class="form-text">Nome dell'elemento (obbligatorio)</div>
-                </div>
+                @php
+                    // Ottieni i campi dalla configurazione della tabella
+                    $campiConfig = $configurazione['campi_visibili'] ?? [];
+                @endphp
                 
-                <!-- Campo Codice (se presente) -->
-                <div class="col-md-6">
-                    <label for="code" class="form-label">Codice</label>
-                    <input type="text" 
-                           class="form-control input-uppercase @error('code') is-invalid @enderror" 
-                           id="code" 
-                           name="code" 
-                           value="{{ old('code') }}" 
-                           maxlength="50">
-                    @error('code')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                    <div class="form-text">Codice identificativo univoco</div>
-                </div>
-                
-                <!-- Campo Descrizione (comune) -->
-                <div class="col-12">
-                    <label for="description" class="form-label">Descrizione</label>
-                    <textarea class="form-control @error('description') is-invalid @enderror" 
-                              id="description" 
-                              name="description" 
-                              rows="3" 
-                              maxlength="500">{{ old('description') }}</textarea>
-                    @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                    <div class="form-text">Descrizione dettagliata (opzionale)</div>
-                </div>
-                
-                <!-- Campi specifici per Banche -->
-                @if($nomeTabella === 'banche')
-                    <div class="col-md-6">
-                        <label for="abi_code" class="form-label">
-                            Codice ABI
-                            <i class="bi bi-info-circle ms-1" 
-                               data-bs-toggle="tooltip" 
-                               data-bs-placement="top" 
-                               title="Associazione Bancaria Italiana - solo per banche italiane"></i>
+                @foreach($campiConfig as $campo => $label)
+                    <div class="col-md-{{ in_array($campo, ['description', 'comment', 'address', 'nome_associazione']) ? '12' : '6' }}">
+                        <label for="{{ $campo }}" class="form-label">
+                            {{ $label }}{{ in_array($campo, ['nome_associazione', 'description', 'aliquota_iva', 'natura_iva']) ? ' *' : '' }}
                         </label>
-                        <input type="text" 
-                               class="form-control @error('abi_code') is-invalid @enderror" 
-                               id="abi_code" 
-                               name="abi_code" 
-                               value="{{ old('abi_code') }}" 
-                               maxlength="5" 
-                               pattern="\d{5}">
-                        @error('abi_code')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text">5 cifre per banche italiane (es: 03069)</div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label for="bic_swift" class="form-label">
-                            Codice BIC/SWIFT
-                            <i class="bi bi-info-circle ms-1" 
-                               data-bs-toggle="tooltip" 
-                               data-bs-placement="top" 
-                               title="Bank Identifier Code per transazioni internazionali"></i>
-                        </label>
-                        <input type="text" 
-                               class="form-control input-uppercase @error('bic_swift') is-invalid @enderror" 
-                               id="bic_swift" 
-                               name="bic_swift" 
-                               value="{{ old('bic_swift') }}" 
-                               maxlength="11">
-                        @error('bic_swift')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text">8-11 caratteri per transazioni internazionali</div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label for="city" class="form-label">Città</label>
-                        <input type="text" 
-                               class="form-control @error('city') is-invalid @enderror" 
-                               id="city" 
-                               name="city" 
-                               value="{{ old('city') }}" 
-                               maxlength="100">
-                        @error('city')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label for="country" class="form-label">Paese</label>
-                        <input type="text" 
-                               class="form-control @error('country') is-invalid @enderror" 
-                               id="country" 
-                               name="country" 
-                               value="{{ old('country', 'Italia') }}" 
-                               maxlength="100">
-                        @error('country')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
-                    <div class="col-12">
-                        <label for="address" class="form-label">Indirizzo</label>
-                        <textarea class="form-control @error('address') is-invalid @enderror" 
-                                  id="address" 
-                                  name="address" 
-                                  rows="2" 
-                                  maxlength="500">{{ old('address') }}</textarea>
-                        @error('address')
+                        
+                        @if($campo === 'aliquota_iva')
+                            {{-- Dropdown Aliquote IVA --}}
+                            <select class="form-select @error($campo) is-invalid @enderror" 
+                                    id="{{ $campo }}" 
+                                    name="{{ $campo }}" 
+                                    required>
+                                <option value="">Seleziona aliquota...</option>
+                                @if(isset($extraData['aliquote_iva']))
+                                    @foreach($extraData['aliquote_iva'] as $aliquota)
+                                        <option value="{{ $aliquota->id }}" {{ old($campo) == $aliquota->id ? 'selected' : '' }}>
+                                            {{ $aliquota->percentuale }}% - {{ $aliquota->name }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            
+                        @elseif($campo === 'natura_iva')
+                            {{-- Dropdown Nature IVA --}}
+                            <select class="form-select @error($campo) is-invalid @enderror" 
+                                    id="{{ $campo }}" 
+                                    name="{{ $campo }}" 
+                                    required>
+                                <option value="">Seleziona natura...</option>
+                                @if(isset($extraData['nature_iva']))
+                                    @foreach($extraData['nature_iva'] as $natura)
+                                        <option value="{{ $natura->id }}" {{ old($campo) == $natura->id ? 'selected' : '' }}>
+                                            {{ $natura->vat_code }} - {{ $natura->nature }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            
+                        @elseif(in_array($campo, ['description', 'comment', 'address']))
+                            {{-- Campi textarea --}}
+                            <textarea class="form-control @error($campo) is-invalid @enderror" 
+                                      id="{{ $campo }}" 
+                                      name="{{ $campo }}" 
+                                      rows="3"
+                                      @if($campo === 'description') required @endif
+                                      maxlength="255">{{ old($campo) }}</textarea>
+                        @else
+                            {{-- Campi input text --}}
+                            <input type="text" 
+                                   class="form-control @error($campo) is-invalid @enderror" 
+                                   id="{{ $campo }}" 
+                                   name="{{ $campo }}" 
+                                   value="{{ old($campo) }}" 
+                                   @if(in_array($campo, ['nome_associazione', 'description'])) required @endif
+                                   maxlength="100">
+                        @endif
+                        
+                        @error($campo)
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    
-                    <div class="col-md-4">
-                        <label for="phone" class="form-label">Telefono</label>
-                        <input type="text" 
-                               class="form-control @error('phone') is-invalid @enderror" 
-                               id="phone" 
-                               name="phone" 
-                               value="{{ old('phone') }}" 
-                               maxlength="50">
-                        @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" 
-                               class="form-control @error('email') is-invalid @enderror" 
-                               id="email" 
-                               name="email" 
-                               value="{{ old('email') }}" 
-                               maxlength="100">
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <label for="website" class="form-label">Sito Web</label>
-                        <input type="url" 
-                               class="form-control @error('website') is-invalid @enderror" 
-                               id="website" 
-                               name="website" 
-                               value="{{ old('website') }}" 
-                               maxlength="255">
-                        @error('website')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                @endif
-                
-                <!-- Campo Stato Attivo (comune) -->
-                <div class="col-md-6">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" 
-                               type="checkbox" 
-                               id="active" 
-                               name="active" 
-                               value="1"
-                               {{ old('active', true) ? 'checked' : '' }}>
-                        <label class="form-check-label fw-bold" for="active">
-                            Attivo
-                        </label>
-                    </div>
-                    <div class="form-text">Indica se l'elemento è attivo nel sistema</div>
-                </div>
-                
-                <!-- Campo Sort Order (se applicabile) -->
-                <div class="col-md-6">
-                    <label for="sort_order" class="form-label">Ordine di Visualizzazione</label>
-                    <input type="number" 
-                           class="form-control @error('sort_order') is-invalid @enderror" 
-                           id="sort_order" 
-                           name="sort_order" 
-                           value="{{ old('sort_order', 0) }}" 
-                           min="0" 
-                           max="9999">
-                    @error('sort_order')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                    <div class="form-text">Numero per ordinare gli elementi (0-9999)</div>
-                </div>
+                @endforeach
             </div>
             
             <div class="d-flex justify-content-end gap-2 mt-4">

@@ -10,7 +10,7 @@ class MerchandiseSector extends Model
     use SoftDeletes;
     
     // OWASP: Specifica tabella corretta
-    protected $table = 'merchandising_sectors';
+    protected $table = 'merchandise_sectors';
 
     // OWASP: Mass Assignment Protection - Solo campi specifici
     protected $fillable = [

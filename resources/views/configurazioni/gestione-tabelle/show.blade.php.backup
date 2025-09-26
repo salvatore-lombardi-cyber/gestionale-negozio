@@ -78,14 +78,14 @@
     
     .modern-btn.btn-warning,
     .btn-warning.modern-btn {
-        background: linear-gradient(135deg, #ffd60a, #ff8500);
-        color: white;
+        background: linear-gradient(135deg, #ffc107, #e0a800);
+        color: #212529;
         border: none;
     }
     
     .modern-btn.btn-danger,
     .btn-danger.modern-btn {
-        background: linear-gradient(135deg, #f72585, #c5025a);
+        background: linear-gradient(135deg, #dc3545, #c82333);
         color: white;
         border: none;
     }
@@ -345,15 +345,6 @@
                             $valore = isset($elemento->percentage) ? number_format($elemento->percentage, 2) . '%' : '0.00%';
                         } elseif ($campo === 'type') {
                             $valore = $elemento->type === 'TAGLIA' ? 'Taglia' : ($elemento->type === 'COLORE' ? 'Colore' : $elemento->type ?? '-');
-                        } elseif ($campo === 'aliquota_iva' && $nomeTabella === 'associazioni-nature-iva') {
-                            // Gestione relazione TaxRate
-                            $valore = $elemento->taxRate ? ($elemento->taxRate->code . ' - ' . $elemento->taxRate->name . ' (' . $elemento->taxRate->percentuale . '%)') : '-';
-                        } elseif ($campo === 'natura_iva' && $nomeTabella === 'associazioni-nature-iva') {
-                            // Gestione relazione VatNature
-                            $valore = $elemento->vatNature ? ($elemento->vatNature->vat_code . ' - ' . $elemento->vatNature->nature) : '-';
-                        } elseif ($campo === 'predefinita' && $nomeTabella === 'associazioni-nature-iva') {
-                            // Gestione campo booleano predefinita
-                            $valore = isset($elemento->is_default) ? ($elemento->is_default ? 'Sì' : 'No') : '-';
                         } else {
                             // Valore generico del campo
                             $valore = $elemento->{$campo} ?? '-';
@@ -392,6 +383,92 @@
                 </div>
             @endif
         </div>
+                @if($elemento->abi_code || $elemento->bic_swift)
+                <div class="col-md-6">
+                    <div class="detail-field">
+                        <div class="detail-label">Codici Bancari</div>
+                        <div class="detail-value">
+                            @if($elemento->abi_code)
+                                <span class="abi-badge">ABI: {{ $elemento->abi_code }}</span><br>
+                            @endif
+                            @if($elemento->bic_swift)
+                                <span class="swift-badge">{{ $elemento->bic_swift }}</span>
+                            @endif
+                            @if(!$elemento->abi_code && !$elemento->bic_swift)
+                                <span class="empty">Non specificati</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endif
+                
+                @if($elemento->city || $elemento->country)
+                <div class="col-md-6">
+                    <div class="detail-field">
+                        <div class="detail-label">Localizzazione</div>
+                        <div class="detail-value">
+                            @if($elemento->city)
+                                <strong>{{ $elemento->city }}</strong><br>
+                            @endif
+                            {{ $elemento->country ?? 'Non specificato' }}
+                        </div>
+                    </div>
+                </div>
+                @endif
+                
+                @if($elemento->address)
+                <div class="col-12">
+                    <div class="detail-field">
+                        <div class="detail-label">Indirizzo</div>
+                        <div class="detail-value">{{ $elemento->address }}</div>
+                    </div>
+                </div>
+                @endif
+                
+                @if($elemento->phone || $elemento->email || $elemento->website)
+                <div class="col-12">
+                    <div class="detail-field">
+                        <div class="detail-label">Contatti</div>
+                        <div class="detail-value">
+                            @if($elemento->phone)
+                                <strong>Telefono:</strong> {{ $elemento->phone }}<br>
+                            @endif
+                            @if($elemento->email)
+                                <strong>Email:</strong> <a href="mailto:{{ $elemento->email }}">{{ $elemento->email }}</a><br>
+                            @endif
+                            @if($elemento->website)
+                                <strong>Sito Web:</strong> <a href="{{ $elemento->website }}" target="_blank">{{ $elemento->website }}</a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endif
+            @endif
+            
+            <!-- Stato -->
+            <div class="col-md-6">
+                <div class="detail-field">
+                    <div class="detail-label">Stato</div>
+                    <div class="detail-value">
+                        <span class="status-badge {{ ($elemento->active ?? true) ? 'status-active' : 'status-inactive' }}">
+                            {{ ($elemento->active ?? true) ? 'Attivo' : 'Inattivo' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ordine di visualizzazione -->
+            @if(isset($elemento->sort_order))
+            <div class="col-md-6">
+                <div class="detail-field">
+                    <div class="detail-label">Ordine di Visualizzazione</div>
+                    <div class="detail-value">{{ $elemento->sort_order ?? 0 }}</div>
+                </div>
+            </div>
+            @endif
+        </div>
+        
+        <!-- Metadata section -->
         <div class="metadata-section">
             <h6 class="text-muted mb-3">Informazioni di Sistema</h6>
             <div class="metadata-grid">

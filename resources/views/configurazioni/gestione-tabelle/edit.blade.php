@@ -256,214 +256,189 @@
             @method('PUT')
             
             <div class="row g-3">
-                <!-- Campo Nome (comune a tutte le tabelle) -->
-                <div class="col-md-6">
-                    <label for="name" class="form-label">Nome *</label>
-                    <input type="text" 
-                           class="form-control @error('name') is-invalid @enderror" 
-                           id="name" 
-                           name="name" 
-                           value="{{ old('name', $elemento->name ?? $elemento->nome) }}" 
-                           required 
-                           maxlength="255">
-                    @error('name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                    <div class="form-text">Nome dell'elemento (obbligatorio)</div>
-                </div>
-                
-                <!-- Campo Codice (se presente) -->
-                @if(isset($elemento->code))
-                <div class="col-md-6">
-                    <label for="code" class="form-label">Codice</label>
-                    <input type="text" 
-                           class="form-control label-uppercase @error('code') is-invalid @enderror" 
-                           id="code" 
-                           name="code" 
-                           value="{{ old('code', $elemento->code) }}" 
-                           maxlength="50">
-                    @error('code')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                    <div class="form-text">Codice identificativo univoco</div>
-                </div>
-                @endif
-                
-                <!-- Campo Descrizione (comune) -->
-                <div class="col-12">
-                    <label for="description" class="form-label">Descrizione</label>
-                    <textarea class="form-control @error('description') is-invalid @enderror" 
-                              id="description" 
-                              name="description" 
-                              rows="3" 
-                              maxlength="500">{{ old('description', $elemento->description ?? $elemento->descrizione) }}</textarea>
-                    @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                    <div class="form-text">Descrizione dettagliata (opzionale)</div>
-                </div>
-                
-                <!-- Campi specifici per Banche -->
-                @if($nomeTabella === 'banche')
-                    <div class="col-md-6">
-                        <label for="abi_code" class="form-label">
-                            Codice ABI
-                            <i class="bi bi-info-circle ms-1" 
-                               data-bs-toggle="tooltip" 
-                               data-bs-placement="top" 
-                               title="Associazione Bancaria Italiana - solo per banche italiane"></i>
-                        </label>
-                        <input type="text" 
-                               class="form-control @error('abi_code') is-invalid @enderror" 
-                               id="abi_code" 
-                               name="abi_code" 
-                               value="{{ old('abi_code', $elemento->abi_code) }}" 
-                               maxlength="5" 
-                               pattern="\d{5}">
-                        @error('abi_code')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text">5 cifre per banche italiane (es: 03069)</div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label for="bic_swift" class="form-label">
-                            Codice BIC/SWIFT
-                            <i class="bi bi-info-circle ms-1" 
-                               data-bs-toggle="tooltip" 
-                               data-bs-placement="top" 
-                               title="Bank Identifier Code per transazioni internazionali"></i>
-                        </label>
-                        <input type="text" 
-                               class="form-control label-uppercase @error('bic_swift') is-invalid @enderror" 
-                               id="bic_swift" 
-                               name="bic_swift" 
-                               value="{{ old('bic_swift', $elemento->bic_swift) }}" 
-                               maxlength="11">
-                        @error('bic_swift')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <div class="form-text">8-11 caratteri per transazioni internazionali</div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label for="city" class="form-label">Città</label>
-                        <input type="text" 
-                               class="form-control @error('city') is-invalid @enderror" 
-                               id="city" 
-                               name="city" 
-                               value="{{ old('city', $elemento->city) }}" 
-                               maxlength="100">
-                        @error('city')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label for="country" class="form-label">Paese</label>
-                        <input type="text" 
-                               class="form-control @error('country') is-invalid @enderror" 
-                               id="country" 
-                               name="country" 
-                               value="{{ old('country', $elemento->country) }}" 
-                               maxlength="100">
-                        @error('country')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
+                <!-- Campi dinamici basati su configurazione -->
+                @if(isset($configurazione['campi_visibili']) && !empty($configurazione['campi_visibili']))
+                    @foreach($configurazione['campi_visibili'] as $campo => $label)
+                        @php
+                            // Gestione valore iniziale per campo
+                            if ($campo === 'aliquota_iva' && $nomeTabella === 'associazioni-nature-iva') {
+                                $valore = old('tax_rate_id', $elemento->tax_rate_id ?? '');
+                                $inputType = 'select';
+                                $campo_reale = 'tax_rate_id';
+                            } elseif ($campo === 'natura_iva' && $nomeTabella === 'associazioni-nature-iva') {
+                                $valore = old('vat_nature_id', $elemento->vat_nature_id ?? '');
+                                $inputType = 'select';
+                                $campo_reale = 'vat_nature_id';
+                            } elseif ($campo === 'predefinita' && $nomeTabella === 'associazioni-nature-iva') {
+                                $valore = old('is_default', $elemento->is_default ?? false);
+                                $inputType = 'checkbox';
+                                $campo_reale = 'is_default';
+                            } else {
+                                $valore = old($campo, $elemento->{$campo} ?? '');
+                                $campo_reale = $campo;
+                            }
+                            
+                            $required = in_array($campo, ['name', 'nome', 'code', 'description']) ? 'required' : '';
+                            $step = null;
+                            
+                            // Determinazione tipo input (se non già impostato)
+                            if (!isset($inputType)) {
+                                $inputType = 'text';
+                                if (in_array($campo, ['percentuale', 'percentage', 'discount_percentage'])) {
+                                    $inputType = 'number';
+                                    $step = '0.01';
+                                } elseif ($campo === 'email') {
+                                    $inputType = 'email';
+                                } elseif (in_array($campo, ['description', 'descrizione', 'comment'])) {
+                                    $inputType = 'textarea';
+                                } elseif ($campo === 'active') {
+                                    $inputType = 'checkbox';
+                                } elseif ($campo === 'type' && $nomeTabella === 'taglie-colori') {
+                                    $inputType = 'select';
+                                }
+                            }
+                        @endphp
+                        
+                        @if($inputType === 'checkbox')
+                            <!-- Campo Checkbox -->
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           id="{{ $campo_reale }}" 
+                                           name="{{ $campo_reale }}" 
+                                           value="1"
+                                           {{ $valore ? 'checked' : '' }}>
+                                    <label class="form-check-label fw-bold" for="{{ $campo_reale }}">
+                                        {{ $label }}
+                                    </label>
+                                </div>
+                                <div class="form-text">
+                                    @if($campo === 'predefinita')
+                                        Imposta come associazione predefinita
+                                    @else
+                                        Indica se l'elemento è attivo nel sistema
+                                    @endif
+                                </div>
+                            </div>
+                            
+                        @elseif($inputType === 'select' && $campo === 'aliquota_iva')
+                            <!-- Campo Select per Aliquota IVA -->
+                            <div class="col-md-6">
+                                <label for="{{ $campo_reale }}" class="form-label">{{ $label }} *</label>
+                                <select class="form-select @error($campo_reale) is-invalid @enderror" 
+                                        id="{{ $campo_reale }}" 
+                                        name="{{ $campo_reale }}" 
+                                        required>
+                                    <option value="">Seleziona aliquota IVA...</option>
+                                    @foreach(\App\Models\TaxRate::orderBy('percentuale')->get() as $taxRate)
+                                    <option value="{{ $taxRate->id }}" {{ $valore == $taxRate->id ? 'selected' : '' }}>
+                                        {{ $taxRate->code }} - {{ $taxRate->name }} ({{ $taxRate->percentuale }}%)
+                                    </option>
+                                    @endforeach
+                                </select>
+                                @error($campo_reale)
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text">Aliquota IVA associata</div>
+                            </div>
+                            
+                        @elseif($inputType === 'select' && $campo === 'natura_iva')
+                            <!-- Campo Select per Natura IVA -->
+                            <div class="col-md-6">
+                                <label for="{{ $campo_reale }}" class="form-label">{{ $label }} *</label>
+                                <select class="form-select @error($campo_reale) is-invalid @enderror" 
+                                        id="{{ $campo_reale }}" 
+                                        name="{{ $campo_reale }}" 
+                                        required>
+                                    <option value="">Seleziona natura IVA...</option>
+                                    @foreach(\App\Models\VatNature::orderBy('vat_code')->get() as $vatNature)
+                                    <option value="{{ $vatNature->id }}" {{ $valore == $vatNature->id ? 'selected' : '' }}>
+                                        {{ $vatNature->vat_code }} - {{ $vatNature->nature }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                @error($campo_reale)
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text">Natura IVA associata</div>
+                            </div>
+                            
+                        @elseif($inputType === 'select' && $campo === 'type')
+                            <!-- Campo Select per Tipo -->
+                            <div class="col-md-6">
+                                <label for="{{ $campo_reale }}" class="form-label">{{ $label }} *</label>
+                                <select class="form-select @error($campo_reale) is-invalid @enderror" 
+                                        id="{{ $campo_reale }}" 
+                                        name="{{ $campo_reale }}" 
+                                        required>
+                                    <option value="">Seleziona tipo...</option>
+                                    <option value="TAGLIA" {{ $valore === 'TAGLIA' ? 'selected' : '' }}>Taglia</option>
+                                    <option value="COLORE" {{ $valore === 'COLORE' ? 'selected' : '' }}>Colore</option>
+                                </select>
+                                @error($campo_reale)
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text">Tipo di variante prodotto</div>
+                            </div>
+                            
+                        @elseif($inputType === 'textarea')
+                            <!-- Campo Textarea -->
+                            <div class="col-12">
+                                <label for="{{ $campo_reale }}" class="form-label">{{ $label }}</label>
+                                <textarea class="form-control @error($campo_reale) is-invalid @enderror" 
+                                          id="{{ $campo_reale }}" 
+                                          name="{{ $campo_reale }}" 
+                                          rows="3" 
+                                          maxlength="500">{{ $valore }}</textarea>
+                                @error($campo_reale)
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text">{{ $label }} (opzionale)</div>
+                            </div>
+                            
+                        @else
+                            <!-- Campo Input Text/Number -->
+                            <div class="col-md-6">
+                                <label for="{{ $campo_reale }}" class="form-label">{{ $label }} @if($required)*@endif</label>
+                                <input type="{{ $inputType }}" 
+                                       class="form-control @if($campo === 'code') label-uppercase @endif @error($campo_reale) is-invalid @enderror" 
+                                       id="{{ $campo_reale }}" 
+                                       name="{{ $campo_reale }}" 
+                                       value="{{ $valore }}"
+                                       @if($step) step="{{ $step }}" @endif
+                                       @if($required) required @endif
+                                       maxlength="255">
+                                @error($campo_reale)
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text">
+                                    @if($campo === 'percentuale' || $campo === 'percentage')
+                                        Percentuale (es. 22.00 per 22%)
+                                    @elseif($campo === 'code')
+                                        Codice identificativo univoco
+                                    @else
+                                        {{ $label }} @if($required)(obbligatorio)@else(opzionale)@endif
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @else
+                    <!-- Fallback per tabelle senza configurazione -->
                     <div class="col-12">
-                        <label for="address" class="form-label">Indirizzo</label>
-                        <textarea class="form-control @error('address') is-invalid @enderror" 
-                                  id="address" 
-                                  name="address" 
-                                  rows="2" 
-                                  maxlength="500">{{ old('address', $elemento->address) }}</textarea>
-                        @error('address')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Configurazione campi mancante per questa tabella. Contattare l'amministratore.
+                        </div>
                     </div>
-                    
-                    <div class="col-md-4">
-                        <label for="phone" class="form-label">Telefono</label>
-                        <input type="text" 
-                               class="form-control @error('phone') is-invalid @enderror" 
-                               id="phone" 
-                               name="phone" 
-                               value="{{ old('phone', $elemento->phone) }}" 
-                               maxlength="50">
-                        @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" 
-                               class="form-control @error('email') is-invalid @enderror" 
-                               id="email" 
-                               name="email" 
-                               value="{{ old('email', $elemento->email) }}" 
-                               maxlength="100">
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <label for="website" class="form-label">Sito Web</label>
-                        <input type="url" 
-                               class="form-control @error('website') is-invalid @enderror" 
-                               id="website" 
-                               name="website" 
-                               value="{{ old('website', $elemento->website) }}" 
-                               maxlength="255">
-                        @error('website')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                @endif
-                
-                <!-- Campo Stato Attivo (comune) -->
-                <div class="col-md-6">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" 
-                               type="checkbox" 
-                               id="active" 
-                               name="active" 
-                               value="1"
-                               {{ old('active', $elemento->active ?? true) ? 'checked' : '' }}>
-                        <label class="form-check-label fw-bold" for="active">
-                            Attivo
-                        </label>
-                    </div>
-                    <div class="form-text">Indica se l'elemento è attivo nel sistema</div>
-                </div>
-                
-                <!-- Campo Sort Order (se applicabile) -->
-                @if(isset($elemento->sort_order) || property_exists($elemento, 'sort_order'))
-                <div class="col-md-6">
-                    <label for="sort_order" class="form-label">Ordine di Visualizzazione</label>
-                    <input type="number" 
-                           class="form-control @error('sort_order') is-invalid @enderror" 
-                           id="sort_order" 
-                           name="sort_order" 
-                           value="{{ old('sort_order', $elemento->sort_order ?? 0) }}" 
-                           min="0" 
-                           max="9999">
-                    @error('sort_order')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                    <div class="form-text">Numero per ordinare gli elementi (0-9999)</div>
-                </div>
                 @endif
             </div>
-            
             <div class="d-flex justify-content-end gap-2 mt-4">
-                <a href="{{ route('configurations.gestione-tabelle.show', [$nomeTabella, $elemento->id]) }}" class="btn btn-secondary modern-btn">
+                <a href="{{ route('configurations.gestione-tabelle.tabella', $nomeTabella) }}" class="btn btn-secondary modern-btn">
                     <i class="bi bi-x-lg"></i> Annulla
                 </a>
-                <button type="submit" class="btn btn-warning modern-btn">
+                <button type="submit" class="btn btn-primary modern-btn">
                     <i class="bi bi-check-lg"></i> Salva Modifiche
                 </button>
             </div>

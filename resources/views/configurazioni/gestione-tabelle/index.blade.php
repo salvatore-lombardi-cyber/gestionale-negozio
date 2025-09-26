@@ -416,13 +416,6 @@
             Gestisci tutte le tabelle di configurazione del sistema
         </p>
         
-        <!-- Card Orologio, Meteo, Calendario e Mappa -->
-        <div class="metrics-grid">
-            <x-orologio id="gestione-tabelle" />
-            <x-meteo id="gestione-tabelle" city="Roma" />
-            <x-calendario id="gestione-tabelle" />
-            <x-mappa id="gestione-tabelle" location="Italia" />
-        </div>
     </div>
 
     <!-- ========================================== -->

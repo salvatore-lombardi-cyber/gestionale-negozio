@@ -283,19 +283,6 @@ class GestioneTabelleController extends Controller
                     'code' => 'Codice',
                     'description' => 'Descrizione'
                 ]
-            ],
-            'taglie-varianti' => [
-                'modello' => \App\Models\SizeVariant::class,
-                'nome' => 'Taglie Varianti',
-                'nome_singolare' => 'Taglia Variante',
-                'icona' => 'bi-rulers',
-                'colore' => 'info',
-                'color_from' => '#17a2b8',
-                'color_to' => '#138496',
-                'descrizione' => 'Gestione taglie e sistemi di misurazione per varianti prodotto',
-                'campi_visibili' => [
-                    'description' => 'Descrizione'
-                ]
             ]
         ];
     }
@@ -465,15 +452,6 @@ class GestioneTabelleController extends Controller
                     'descrizione' => 'Classificazione settori merceologici per categorizzazione prodotti e clienti',
                     'color_from' => '#9c27b0',
                     'color_to' => '#673ab7'
-                ],
-                [
-                    'nome' => 'taglie-varianti',
-                    'titolo' => 'Taglie Varianti',
-                    'icona' => 'bi-rulers',
-                    'colore' => 'info',
-                    'descrizione' => 'Gestione taglie e sistemi di misurazione per varianti prodotto',
-                    'color_from' => '#17a2b8',
-                    'color_to' => '#138496'
                 ]
             ]);
             
@@ -504,7 +482,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle implementate
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -529,7 +507,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -581,7 +559,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -928,7 +906,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -1472,6 +1450,255 @@ class GestioneTabelleController extends Controller
     {
         // Usa configurazione centralizzata
         $configurazioni = $this->getConfigurazioni();
+            'associazioni-nature-iva' => [
+                'modello' => \App\Models\VatNatureAssociation::class,
+                'nome' => 'Associazioni Nature IVA',
+                'icona' => 'bi-link-45deg',
+                'colore' => 'primary',
+                'color_from' => '#4ecdc4',
+                'color_to' => '#44a08d',
+                'descrizione' => 'Configuratore avanzato per associazioni tra aliquote IVA e nature fiscali',
+                'campi_visibili' => [
+                    'nome_associazione' => 'Nome Associazione',
+                    'aliquota_iva' => 'Aliquota IVA',
+                    'natura_iva' => 'Natura IVA'
+                ]
+            ],
+            'aliquote-iva' => [
+                'modello' => \App\Models\TaxRate::class,
+                'nome' => 'Aliquote IVA',
+                'nome_singolare' => 'Aliquota IVA',
+                'icona' => 'bi-percent',
+                'colore' => 'danger',
+                'color_from' => '#dc3545',
+                'color_to' => '#c82333',
+                'descrizione' => 'Gestione completa delle aliquote IVA del sistema',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'name' => 'Nome',
+                    'percentuale' => 'Percentuale'
+                ]
+            ],
+            'banche' => [
+                'modello' => \App\Models\Bank::class,
+                'nome' => 'Banche',
+                'nome_singolare' => 'Banca',
+                'icona' => 'bi-bank',
+                'colore' => 'info',
+                'color_from' => '#48cae4',
+                'color_to' => '#023e8a',
+                'descrizione' => 'Configurazione profili bancari aziendali per documenti e pagamenti',
+                'campi_visibili' => [
+                    'name' => 'Nome Banca',
+                    'abi_code' => 'ABI',
+                    'bic_swift' => 'BIC/SWIFT'
+                ]
+            ],
+            'categorie-articoli' => [
+                'modello' => \App\Models\ProductCategory::class,
+                'nome' => 'Categorie Articoli',
+                'nome_singolare' => 'Categoria Articoli',
+                'icona' => 'bi-grid-3x3-gap',
+                'colore' => 'success',
+                'color_from' => '#38b000',
+                'color_to' => '#70e000',
+                'descrizione' => 'Sistema gerarchico per classificazione e organizzazione prodotti',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'categorie-clienti' => [
+                'modello' => \App\Models\CustomerCategory::class,
+                'nome' => 'Categorie Clienti',
+                'nome_singolare' => 'Categoria Clienti',
+                'icona' => 'bi-people',
+                'colore' => 'warning',
+                'color_from' => '#f093fb',
+                'color_to' => '#f5576c',
+                'descrizione' => 'Segmentazione e classificazione clienti per gestione commerciale',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'categorie-fornitori' => [
+                'modello' => \App\Models\SupplierCategory::class,
+                'nome' => 'Categorie Fornitori',
+                'nome_singolare' => 'Categoria Fornitori',
+                'icona' => 'bi-person-badge',
+                'colore' => 'purple',
+                'color_from' => '#9c27b0',
+                'color_to' => '#7b1fa2',
+                'descrizione' => 'Classificazione e gestione categorie fornitori per procurement',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'taglie-colori' => [
+                'modello' => \App\Models\SizeColor::class,
+                'nome' => 'Taglie e Colori',
+                'nome_singolare' => 'Taglia/Colore',
+                'icona' => 'bi-palette',
+                'colore' => 'warning',
+                'color_from' => '#ffecd2',
+                'color_to' => '#fcb69f',
+                'descrizione' => 'Gestione varianti prodotto: taglie e colori per catalogazione articoli',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'name' => 'Nome',
+                    'type' => 'Tipo'
+                ]
+            ],
+            'causali-magazzino' => [
+                'modello' => \App\Models\WarehouseCause::class,
+                'nome' => 'Causali di Magazzino',
+                'nome_singolare' => 'Causale Magazzino',
+                'icona' => 'bi-building',
+                'colore' => 'danger',
+                'color_from' => '#ee0979',
+                'color_to' => '#ff6a00',
+                'descrizione' => 'Gestione semplificata causali di magazzino con codice e descrizione',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'colori-varianti' => [
+                'modello' => \App\Models\ColorVariant::class,
+                'nome' => 'Colori Varianti',
+                'nome_singolare' => 'Colore Variante',
+                'icona' => 'bi-droplet-fill',
+                'colore' => 'info',
+                'color_from' => '#a8edea',
+                'color_to' => '#fed6e3',
+                'descrizione' => 'Gestione semplice colori per varianti prodotti',
+                'campi_visibili' => [
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'condizioni' => [
+                'modello' => \App\Models\Condition::class,
+                'nome' => 'Condizioni',
+                'nome_singolare' => 'Condizione',
+                'icona' => 'bi-list-ul',
+                'colore' => 'info',
+                'color_from' => '#00f2fe',
+                'color_to' => '#4facfe',
+                'descrizione' => 'Gestione semplice condizioni di pagamento e vendita',
+                'campi_visibili' => [
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'denominazioni-prezzi-fissi' => [
+                'modello' => \App\Models\FixedPriceDenomination::class,
+                'nome' => 'Denominazione Prezzi Fissi',
+                'nome_singolare' => 'Denominazione',
+                'icona' => 'bi-currency-euro',
+                'colore' => 'brown',
+                'color_from' => '#8b4513',
+                'color_to' => '#d2691e',
+                'descrizione' => 'Gestione denominazioni con descrizione e commento per prezzi fissi',
+                'campi_visibili' => [
+                    'description' => 'Descrizione',
+                    'comment' => 'Commento'
+                ]
+            ],
+            'depositi' => [
+                'modello' => \App\Models\Deposit::class,
+                'nome' => 'Depositi',
+                'nome_singolare' => 'Deposito',
+                'icona' => 'bi-archive',
+                'colore' => 'orange',
+                'color_from' => '#ff8c00',
+                'color_to' => '#ff4500',
+                'descrizione' => 'Gestione depositi e ubicazioni magazzino',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione',
+                    'address' => 'Indirizzo',
+                    'city' => 'Località',
+                    'state' => 'Stato',
+                    'province' => 'Provincia',
+                    'postal_code' => 'CAP',
+                    'phone' => 'Telefono',
+                    'fax' => 'Fax'
+                ]
+            ],
+            'listini' => [
+                'modello' => \App\Models\PriceList::class,
+                'nome' => 'Listini',
+                'nome_singolare' => 'Listino',
+                'icona' => 'bi-list-columns',
+                'colore' => 'teal',
+                'color_from' => '#2d6a4f',
+                'color_to' => '#1b4332',
+                'descrizione' => 'Gestione listini con descrizione e percentuale',
+                'campi_visibili' => [
+                    'description' => 'Descrizione',
+                    'discount_percentage' => 'Percentuale'
+                ]
+            ],
+            'modalita-pagamento' => [
+                'modello' => \App\Models\PaymentMethod::class,
+                'nome' => 'Modalità di Pagamento',
+                'nome_singolare' => 'Modalità di Pagamento',
+                'icona' => 'bi-wallet2',
+                'colore' => 'dark',
+                'color_from' => '#2c2c2c',
+                'color_to' => '#1a1a1a',
+                'descrizione' => 'Gestione modalità di pagamento con codice e descrizione',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione'
+                ]
+            ],
+            'natura-iva' => [
+                'modello' => \App\Models\VatNature::class,
+                'nome' => 'Natura IVA',
+                'nome_singolare' => 'Natura IVA',
+                'icona' => 'bi-receipt',
+                'colore' => 'pink',
+                'color_from' => '#fadadd',
+                'color_to' => '#f8bbd9',
+                'descrizione' => 'Gestione nature IVA con codice, percentuale e riferimenti normativi',
+                'campi_visibili' => [
+                    'vat_code' => 'Cod.IVA',
+                    'percentage' => '%',
+                    'nature' => 'Natura',
+                    'legal_reference' => 'Riferimento Normativo'
+                ]
+            ],
+            'porto' => [
+                'modello' => \App\Models\Porto::class,
+                'nome' => 'Porto',
+                'nome_singolare' => 'Porto',
+                'icona' => 'bi-truck',
+                'colore' => 'steel',
+                'color_from' => '#6b7280',
+                'color_to' => '#4b5563',
+                'descrizione' => 'Gestione condizioni di trasporto e consegna merci: franco fabbrica, franco destino, porto assegnato',
+                'campi_visibili' => [
+                    'description' => 'Descrizione',
+                    'comment' => 'Commento'
+                ]
+            ],
+            'settori-merceologici' => [
+                'modello' => \App\Models\MerchandiseSector::class,
+                'nome' => 'Settori Merceologici',
+                'nome_singolare' => 'Settore Merceologico',
+                'icona' => 'bi-diagram-3',
+                'colore' => 'purple',
+                'color_from' => '#9c27b0',
+                'color_to' => '#673ab7',
+                'descrizione' => 'Classificazione settori merceologici per categorizzazione prodotti e clienti',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione'
+                ]
+            ]
+        ];
 
         $config = $configurazioni[$nomeTabella];
         $modelClass = $config['modello'];
