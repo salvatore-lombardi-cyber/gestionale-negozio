@@ -248,6 +248,7 @@
             Nuovo Elemento - {{ $configurazione['nome'] ?? ucfirst($nomeTabella) }}
         </div>
         
+        
         <form method="POST" action="{{ route('configurations.gestione-tabelle.store', $nomeTabella) }}">
             @csrf
             
@@ -303,6 +304,19 @@
                                       rows="3"
                                       @if($campo === 'description') required @endif
                                       maxlength="255">{{ old($campo) }}</textarea>
+                        @elseif(isset($configurazione['campi_con_tipo'][$campo]) && $configurazione['campi_con_tipo'][$campo] === 'checkbox')
+                            {{-- Campi checkbox --}}
+                            <div class="form-check">
+                                <input type="checkbox" 
+                                       class="form-check-input @error($campo) is-invalid @enderror" 
+                                       id="{{ $campo }}" 
+                                       name="{{ $campo }}" 
+                                       value="1"
+                                       {{ old($campo) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="{{ $campo }}">
+                                    {{ $label }}
+                                </label>
+                            </div>
                         @else
                             {{-- Campi input text --}}
                             <input type="text" 

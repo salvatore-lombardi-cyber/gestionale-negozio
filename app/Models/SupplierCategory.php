@@ -4,82 +4,42 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Model per Categorie Fornitori (Card #7)
- * Classificazione fornitori
+ * Model per Categorie Fornitori - Versione Semplificata
+ * Gestione categorie fornitori con solo codice e descrizione
  */
 class SupplierCategory extends Model
 {
     use HasFactory;
 
+    protected $table = 'supplier_categories';
+
+    // Campi fillable semplificati
     protected $fillable = [
         'code',
-        'name',
-        'description',
-        'active'
+        'description'
     ];
 
     protected $casts = [
-        'active' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
 
-    // Scopes
-    public function scopeActive(Builder $query): Builder
-    {
-        return $query->where('active', true);
-    }
-
-    public function scopeOrdered(Builder $query): Builder
-    {
-        return $query->orderBy('code')->orderBy('description');
-    }
-
-    // Validazioni OWASP
-    public static function validationRules($id = null): array
+    // Validazione semplificata
+    public static function validationRules(): array
     {
         return [
-            'code' => [
-                'required',
-                'string',
-                'max:20',
-                'regex:/^[A-Z0-9_-]+$/',
-                'unique:supplier_categories,code' . ($id ? ',' . $id : '')
-            ],
-            'description' => [
-                'required',
-                'string',
-                'min:3',
-                'max:255'
-            ],
-            'active' => [
-                'boolean'
-            ]
+            'code' => 'required|string|max:20|min:1|unique:supplier_categories,code',
+            'description' => 'required|string|max:500|min:1'
         ];
     }
 
-    // Metodi business logic
-    public function canBeDeleted(): bool
+    public static function validationRulesForUpdate(int $id): array
     {
-        // Controlla se ci sono fornitori associati a questa categoria
-        // return !$this->suppliers()->exists();
-        return true; // Per ora non controlliamo relazioni
+        return [
+            'code' => 'required|string|max:20|min:1|unique:supplier_categories,code,' . $id,
+            'description' => 'required|string|max:500|min:1'
+        ];
     }
-
-    // Boot events
-    protected static function boot()
-    {
-        parent::boot();
-
-        // Rimosso created_by perché il campo non esiste più nella tabella semplificata
-    }
-
-    // Relazioni future (quando sarà implementata la gestione fornitori)
-    // public function suppliers()
-    // {
-    //     return $this->hasMany(Supplier::class, 'categoria_fornitore');
-    // }
 }

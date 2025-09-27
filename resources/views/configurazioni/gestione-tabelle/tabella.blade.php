@@ -819,6 +819,14 @@
                                             <span class="status-badge {{ ($item->$campo ?? true) ? 'status-active' : 'status-inactive' }}">
                                                 {{ ($item->$campo ?? true) ? 'Attivo' : 'Inattivo' }}
                                             </span>
+                                        @elseif(isset($configurazione['campi_con_tipo'][$campo]) && $configurazione['campi_con_tipo'][$campo] === 'checkbox')
+                                            <span class="checkbox-icon">
+                                                @if($item->$campo)
+                                                    <i class="bi bi-check-square-fill" style="color: #029D7E; font-size: 1.2rem;"></i>
+                                                @else
+                                                    <i class="bi bi-square" style="color: #6c757d; font-size: 1.2rem;"></i>
+                                                @endif
+                                            </span>
                                         @else
                                             {{ $item->$campo ?? '-' }}
                                         @endif
@@ -1104,13 +1112,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Funzioni per visualizzare e modificare elementi
 async function viewItem(tabella, id) {
-    // Approccio moderno: redirect alla pagina di visualizzazione
-    window.location.href = `{{ url('configurations/gestione-tabelle') }}/${tabella}/${id}`;
+    // Usa i named routes di Laravel - passa direttamente la tabella corrente
+    const url = `{{ route('configurations.gestione-tabelle.show', ['nomeTabella' => $nomeTabella, 'id' => ':id']) }}`
+        .replace(':id', id);
+    window.location.href = url;
 }
 
 async function editItem(tabella, id) {
-    // Approccio moderno: redirect alla pagina di modifica
-    window.location.href = `{{ url('configurations/gestione-tabelle') }}/${tabella}/${id}/edit`;
+    // Usa i named routes di Laravel - passa direttamente la tabella corrente
+    const url = `{{ route('configurations.gestione-tabelle.edit', ['nomeTabella' => $nomeTabella, 'id' => ':id']) }}`
+        .replace(':id', id);
+    window.location.href = url;
 }
 
 

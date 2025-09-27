@@ -4,16 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Model per Denominazioni Prezzi Fissi
- * Gestione semplificata con solo descrizione e commento
+ * Model per Denominazioni Prezzi Fissi - Versione Semplificata
+ * Gestione denominazioni prezzi fissi con descrizione e commento
  */
 class FixedPriceDenomination extends Model
 {
     use HasFactory;
 
+    protected $table = 'fixed_price_denominations';
+
+    // Campi fillable semplificati
     protected $fillable = [
         'description',
         'comment'
@@ -24,52 +26,17 @@ class FixedPriceDenomination extends Model
         'updated_at' => 'datetime'
     ];
 
-    // Scopes
-    public function scopeOrdered(Builder $query): Builder
-    {
-        return $query->orderBy('description');
-    }
-
-    public function scopeByDescription(Builder $query, string $description): Builder
-    {
-        return $query->where('description', 'LIKE', "%{$description}%");
-    }
-
-    public function scopeByComment(Builder $query, string $comment): Builder
-    {
-        return $query->where('comment', 'LIKE', "%{$comment}%");
-    }
-
-    // Validation rules per OWASP compliance
-    public static function validationRules($id = null): array
+    // Validazione semplificata
+    public static function validationRules(): array
     {
         return [
-            'description' => [
-                'required',
-                'string',
-                'min:3',
-                'max:255',
-                'unique:fixed_price_denominations,description' . ($id ? ',' . $id : '')
-            ],
-            'comment' => [
-                'nullable',
-                'string',
-                'max:500'
-            ]
+            'description' => 'required|string|max:500|min:1',
+            'comment' => 'nullable|string|max:1000'
         ];
     }
 
-    // Metodi business logic
-    public function canBeDeleted(): bool
+    public static function validationRulesForUpdate(int $id): array
     {
-        // Controlla se ci sono elementi associati a questa denominazione
-        // return !$this->relatedElements()->exists();
-        return true; // Per ora non controlliamo relazioni
+        return self::validationRules();
     }
-
-    // Relazioni future (quando sarà implementata la gestione documenti/prezzi)
-    // public function priceElements()
-    // {
-    //     return $this->hasMany(PriceElement::class, 'denomination_id');
-    // }
 }

@@ -4,66 +4,39 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Model per Aliquote IVA - Versione Semplificata
+ * Gestione aliquote con solo percentuale e descrizione
+ */
 class TaxRate extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
+    // Campi fillable semplificati
     protected $fillable = [
-        'uuid',
-        'code',
-        'name',
-        'description',
-        'riferimento_normativo',
         'percentuale',
-        'active',
-        'sort_order',
-        'created_by',
-        'updated_by'
+        'description'
     ];
 
     protected $casts = [
-        'active' => 'boolean',
         'percentuale' => 'decimal:2',
-        'sort_order' => 'integer',
-        'created_by' => 'integer',
-        'updated_by' => 'integer'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 
-    protected $hidden = [
-        'created_by',
-        'updated_by'
-    ];
-
-    /**
-     * Verifica se il codice è unico
-     */
-    public static function isCodeUnique(string $code, ?int $excludeId = null): bool
+    // Validazione semplificata
+    public static function validationRules(): array
     {
-        $query = static::where('code', $code);
-        
-        if ($excludeId) {
-            $query->where('id', '!=', $excludeId);
-        }
-        
-        return $query->doesntExist();
+        return [
+            'percentuale' => 'required|numeric|min:0|max:100',
+            'description' => 'required|string|max:500|min:1'
+        ];
     }
 
-    /**
-     * Scope per aliquote attive
-     */
-    public function scopeActive($query)
+    public static function validationRulesForUpdate(int $id): array
     {
-        return $query->where('active', true);
-    }
-
-    /**
-     * Scope per ordinamento standard
-     */
-    public function scopeOrderByDefault($query)
-    {
-        return $query->orderBy('sort_order')->orderBy('percentuale')->orderBy('name');
+        return self::validationRules();
     }
 
     /**
@@ -83,55 +56,10 @@ class TaxRate extends Model
     }
 
     /**
-     * Mutator per retrocompatibilità con 'rate'
+     * Scope per ordinamento standard
      */
-    public function setRateAttribute($value)
+    public function scopeOrderByDefault($query)
     {
-        $this->attributes['percentuale'] = $value;
-    }
-
-    /**
-     * Relazione con utente creatore (audit trail)
-     */
-    public function creator()
-    {
-        return $this->belongsTo(\App\Models\User::class, 'created_by');
-    }
-
-    /**
-     * Relazione con utente che ha fatto l'ultimo aggiornamento (audit trail)
-     */
-    public function updater()
-    {
-        return $this->belongsTo(\App\Models\User::class, 'updated_by');
-    }
-
-    /**
-     * Cache key per performance
-     */
-    public function getCacheKey(): string
-    {
-        return "tax_rate_{$this->uuid}";
-    }
-
-    /**
-     * Boot model per gestire UUID automaticamente
-     */
-    protected static function booted()
-    {
-        static::creating(function ($model) {
-            if (empty($model->uuid)) {
-                $model->uuid = \Illuminate\Support\Str::uuid()->toString();
-            }
-            if (auth()->check() && empty($model->created_by)) {
-                $model->created_by = auth()->id();
-            }
-        });
-
-        static::updating(function ($model) {
-            if (auth()->check()) {
-                $model->updated_by = auth()->id();
-            }
-        });
+        return $query->orderBy('percentuale');
     }
 }

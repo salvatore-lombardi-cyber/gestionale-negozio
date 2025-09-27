@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Model per Porto - Condizioni di trasporto e consegna merci
- * Gestisce chi si fa carico dei costi e responsabilità del trasporto
- * Es: Franco fabbrica, Franco destino, Porto assegnato, etc.
+ * Model per Porto - Versione Semplificata
+ * Gestione condizioni di trasporto con descrizione e commento
  */
 class Porto extends Model
 {
@@ -16,6 +15,7 @@ class Porto extends Model
 
     protected $table = 'porti';
 
+    // Campi fillable semplificati
     protected $fillable = [
         'description',
         'comment'
@@ -26,12 +26,12 @@ class Porto extends Model
         'updated_at' => 'datetime'
     ];
 
-    // Validazione sicura OWASP
+    // Validazione semplificata
     public static function validationRules(): array
     {
         return [
-            'description' => 'required|string|max:100|min:2',
-            'comment' => 'nullable|string|max:255'
+            'description' => 'required|string|max:255|min:1',
+            'comment' => 'nullable|string|max:500'
         ];
     }
 

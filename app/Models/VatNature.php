@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Model semplificato per Natura IVA
- * Versione base con Cod.IVA, %, Natura, Riferimento Normativo
+ * Model per Natura IVA - Versione Semplificata
+ * Gestione natura IVA con cod.iva, %, natura e riferimento normativo
  */
 class VatNature extends Model
 {
     use HasFactory;
 
+    protected $table = 'vat_natures';
+
+    // Campi fillable semplificati
     protected $fillable = [
         'vat_code',
         'percentage',
@@ -26,21 +29,24 @@ class VatNature extends Model
         'updated_at' => 'datetime'
     ];
 
-    // Validazione sicura OWASP
+    // Validazione semplificata
     public static function validationRules(): array
     {
         return [
-            'vat_code' => 'required|string|max:10|unique:vat_natures,vat_code|regex:/^[A-Z0-9._-]+$/',
-            'percentage' => 'required|numeric|min:0|max:100',
-            'nature' => 'required|string|max:255|min:2',
+            'vat_code' => 'required|string|max:10|min:1|unique:vat_natures,vat_code',
+            'percentage' => 'required|numeric|between:0,100',
+            'nature' => 'required|string|max:255|min:1',
             'legal_reference' => 'nullable|string|max:500'
         ];
     }
 
     public static function validationRulesForUpdate(int $id): array
     {
-        $rules = self::validationRules();
-        $rules['vat_code'] = 'required|string|max:10|unique:vat_natures,vat_code,' . $id . '|regex:/^[A-Z0-9._-]+$/';
-        return $rules;
+        return [
+            'vat_code' => 'required|string|max:10|min:1|unique:vat_natures,vat_code,' . $id,
+            'percentage' => 'required|numeric|between:0,100',
+            'nature' => 'required|string|max:255|min:1',
+            'legal_reference' => 'nullable|string|max:500'
+        ];
     }
 }

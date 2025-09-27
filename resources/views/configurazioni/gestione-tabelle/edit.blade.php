@@ -251,6 +251,7 @@
             Modifica Elemento - {{ $configurazione['nome'] ?? ucfirst($nomeTabella) }}
         </div>
         
+        
         <form method="POST" action="{{ route('configurations.gestione-tabelle.update', [$nomeTabella, $elemento->id]) }}">
             @csrf
             @method('PUT')
@@ -260,6 +261,9 @@
                 @if(isset($configurazione['campi_visibili']) && !empty($configurazione['campi_visibili']))
                     @foreach($configurazione['campi_visibili'] as $campo => $label)
                         @php
+                            // Reset variabili per ogni campo
+                            $inputType = null;
+                            
                             // Gestione valore iniziale per campo
                             if ($campo === 'aliquota_iva' && $nomeTabella === 'associazioni-nature-iva') {
                                 $valore = old('tax_rate_id', $elemento->tax_rate_id ?? '');
@@ -284,7 +288,9 @@
                             // Determinazione tipo input (se non già impostato)
                             if (!isset($inputType)) {
                                 $inputType = 'text';
-                                if (in_array($campo, ['percentuale', 'percentage', 'discount_percentage'])) {
+                                if (isset($configurazione['campi_con_tipo'][$campo])) {
+                                    $inputType = $configurazione['campi_con_tipo'][$campo];
+                                } elseif (in_array($campo, ['percentuale', 'percentage', 'discount_percentage'])) {
                                     $inputType = 'number';
                                     $step = '0.01';
                                 } elseif ($campo === 'email') {
@@ -297,6 +303,7 @@
                                     $inputType = 'select';
                                 }
                             }
+                            
                         @endphp
                         
                         @if($inputType === 'checkbox')
@@ -385,16 +392,17 @@
                         @elseif($inputType === 'textarea')
                             <!-- Campo Textarea -->
                             <div class="col-12">
-                                <label for="{{ $campo_reale }}" class="form-label">{{ $label }}</label>
+                                <label for="{{ $campo_reale }}" class="form-label">{{ $label }} @if($required)*@endif</label>
                                 <textarea class="form-control @error($campo_reale) is-invalid @enderror" 
                                           id="{{ $campo_reale }}" 
                                           name="{{ $campo_reale }}" 
                                           rows="3" 
-                                          maxlength="500">{{ $valore }}</textarea>
+                                          maxlength="500"
+                                          @if($required) required @endif>{{ $valore }}</textarea>
                                 @error($campo_reale)
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <div class="form-text">{{ $label }} (opzionale)</div>
+                                <div class="form-text">{{ $label }} @if($required)(obbligatorio)@else(opzionale)@endif</div>
                             </div>
                             
                         @else
