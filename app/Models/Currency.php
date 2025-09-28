@@ -15,11 +15,9 @@ class Currency extends Model
 
     // OWASP: Mass Assignment Protection - SOLO campi valute
     protected $fillable = [
-        'code',
-        'name',
-        'symbol',
-        'exchange_rate',
-        'active'
+        'valuta',
+        'conversione',
+        'descrizione'
     ];
 
     // OWASP: Campi protetti da mass assignment
@@ -30,112 +28,86 @@ class Currency extends Model
     ];
 
     protected $casts = [
-        'active' => 'boolean',
-        'exchange_rate' => 'decimal:6',
+        'conversione' => 'decimal:6',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
 
-    public function scopeActive($query)
-    {
-        return $query->where('active', true);
-    }
-
-    public function scopeOrdered($query) 
-    {
-        return $query->orderBy('name');
-    }
-
     // OWASP: Input Sanitization Methods per valute
 
     /**
-     * Sanitizza il codice valuta per prevenire injection attacks
+     * Sanitizza la valuta per prevenire XSS
      */
-    public function setCodeAttribute($value)
+    public function setValutaAttribute($value)
     {
-        // OWASP: Sanitizzazione rigorosa del codice valuta (ISO 4217)
-        $sanitized = strtoupper(trim($value));
+        if ($value === null) {
+            $this->attributes['valuta'] = null;
+            return;
+        }
+
+        // OWASP: Sanitizzazione della valuta
+        $sanitized = strtoupper(trim(strip_tags($value)));
         $sanitized = preg_replace('/[^A-Z0-9]/', '', $sanitized);
-        $this->attributes['code'] = substr($sanitized, 0, 3); // ISO 4217 = 3 chars
+        $this->attributes['valuta'] = substr($sanitized, 0, 10);
     }
 
     /**
-     * Sanitizza il nome valuta per prevenire XSS
+     * Sanitizza il tasso di conversione per prevenire injection
      */
-    public function setNameAttribute($value)
-    {
-        // OWASP: Sanitizzazione del nome valuta
-        $sanitized = trim(strip_tags($value));
-        $sanitized = preg_replace('/[<>"\'&]/', '', $sanitized);
-        $this->attributes['name'] = substr($sanitized, 0, 150);
-    }
-
-    /**
-     * Sanitizza il simbolo valuta per prevenire XSS
-     */
-    public function setSymbolAttribute($value)
+    public function setConversioneAttribute($value)
     {
         if ($value === null) {
-            $this->attributes['symbol'] = null;
+            $this->attributes['conversione'] = null;
             return;
         }
 
-        // OWASP: Sanitizzazione del simbolo valuta
-        $sanitized = trim(strip_tags($value));
-        $sanitized = preg_replace('/[<>"\'&]/', '', $sanitized);
-        $this->attributes['symbol'] = substr($sanitized, 0, 10);
-    }
-
-    /**
-     * Validazione tasso di cambio
-     */
-    public function setExchangeRateAttribute($value)
-    {
-        if ($value === null) {
-            $this->attributes['exchange_rate'] = 1.000000;
-            return;
-        }
-
-        // OWASP: Validazione numerica rigorosa per tassi
-        $rate = floatval($value);
+        // OWASP: Validazione numerica rigorosa per tasso di cambio
+        $conversion = floatval($value);
         
-        if ($rate <= 0) {
-            $rate = 1.000000;
-        } elseif ($rate > 999999.999999) {
-            $rate = 999999.999999;
+        if ($conversion < 0) {
+            $conversion = 0;
+        } elseif ($conversion > 999999.999999) {
+            $conversion = 999999.999999;
         }
 
-        $this->attributes['exchange_rate'] = $rate;
+        $this->attributes['conversione'] = $conversion;
     }
 
-    // OWASP: Validazione regole complete per valute
+    /**
+     * Sanitizza la descrizione per prevenire XSS
+     */
+    public function setDescrizioneAttribute($value)
+    {
+        if ($value === null) {
+            $this->attributes['descrizione'] = null;
+            return;
+        }
+
+        // OWASP: Sanitizzazione della descrizione valuta
+        $sanitized = trim(strip_tags($value));
+        $sanitized = preg_replace('/[<>"\'&]/', '', $sanitized);
+        $this->attributes['descrizione'] = substr($sanitized, 0, 255);
+    }
+
+    // OWASP: Validazione regole semplificata per valute
     public static function validationRules(): array
     {
         return [
-            'code' => 'required|string|max:3|min:3|unique:currencies,code|regex:/^[A-Z]{3}$/',
-            'name' => 'required|string|max:150|min:2',
-            'symbol' => 'nullable|string|max:10',
-            'exchange_rate' => 'required|numeric|min:0.000001|max:999999.999999',
-            'active' => 'boolean'
+            'valuta' => 'required|string|max:10|min:1|regex:/^[A-Z0-9]+$/',
+            'conversione' => 'required|numeric|min:0|max:999999.999999',
+            'descrizione' => 'required|string|max:255|min:1'
         ];
     }
 
     public static function validationRulesForUpdate(int $id): array
     {
-        $rules = self::validationRules();
-        $rules['code'] = 'required|string|max:3|min:3|unique:currencies,code,' . $id . '|regex:/^[A-Z]{3}$/';
-        return $rules;
+        return self::validationRules();
     }
 
     // Accessors per visualizzazione formattata
-    public function getFormattedActiveAttribute(): string
+    public function getFormattedConversioneAttribute(): string
     {
-        return $this->active ? 'Attiva' : 'Inattiva';
-    }
-
-    public function getFormattedExchangeRateAttribute(): string
-    {
-        return number_format($this->exchange_rate, 6);
+        return number_format($this->conversione, 6);
     }
 
     /**
@@ -147,9 +119,9 @@ class Currency extends Model
         // OWASP: Audit Trail per valute (dati finanziari sensibili)
         static::creating(function ($model) {
             \Log::info('Creating Currency', [
-                'code' => $model->code,
-                'name' => $model->name,
-                'exchange_rate' => $model->exchange_rate,
+                'valuta' => $model->valuta,
+                'conversione' => $model->conversione,
+                'descrizione' => $model->descrizione,
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent()
@@ -159,7 +131,9 @@ class Currency extends Model
         static::updating(function ($model) {
             \Log::info('Updating Currency', [
                 'id' => $model->id,
-                'code' => $model->code,
+                'valuta' => $model->valuta,
+                'conversione' => $model->conversione,
+                'descrizione' => $model->descrizione,
                 'changes' => $model->getDirty(),
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
@@ -170,8 +144,9 @@ class Currency extends Model
         static::deleting(function ($model) {
             \Log::warning('Deleting Currency', [
                 'id' => $model->id,
-                'code' => $model->code,
-                'name' => $model->name,
+                'valuta' => $model->valuta,
+                'conversione' => $model->conversione,
+                'descrizione' => $model->descrizione,
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent()

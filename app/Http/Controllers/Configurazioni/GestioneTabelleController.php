@@ -317,13 +317,129 @@ class GestioneTabelleController extends Controller
                 'modello' => \App\Models\SizeType::class,
                 'nome' => 'Tipo di Taglie',
                 'nome_singolare' => 'Tipo di Taglia',
-                'icona' => 'bi-diagram-2',
-                'colore' => 'cyan',
-                'color_from' => '#0dcaf0',
-                'color_to' => '#0fb4d1',
+                'icona' => 'bi-tags',
+                'colore' => 'purple',
+                'color_from' => '#8B5CF6',
+                'color_to' => '#A855F7',
                 'descrizione' => 'Gestione tipologie di classificazione taglie',
                 'campi_visibili' => [
                     'description' => 'Descrizione'
+                ]
+            ],
+            'tipi-pagamento' => [
+                'modello' => \App\Models\PaymentType::class,
+                'nome' => 'Tipi di Pagamento',
+                'nome_singolare' => 'Tipo di Pagamento',
+                'icona' => 'bi-credit-card-2-front',
+                'colore' => 'emerald',
+                'color_from' => '#10b981',
+                'color_to' => '#059669',
+                'descrizione' => 'Gestione piani di pagamento rateizzati con percentuali personalizzate',
+                'campi_visibili' => [
+                    'code' => 'Codice',
+                    'description' => 'Descrizione',
+                    'total_installments' => 'Rate',
+                    'end_payment' => 'Fine Lavori'
+                ],
+                'campi_con_tipo' => [
+                    'end_payment' => 'checkbox'
+                ]
+            ],
+            'trasporto' => [
+                'modello' => \App\Models\Transport::class,
+                'nome' => 'Trasporto',
+                'nome_singolare' => 'Modalità di Trasporto',
+                'icona' => 'bi-truck',
+                'colore' => 'indigo',
+                'color_from' => '#6366f1',
+                'color_to' => '#4f46e5',
+                'descrizione' => 'Gestione modalità di trasporto e spedizione',
+                'campi_visibili' => [
+                    'description' => 'Descrizione',
+                    'comment' => 'Commento'
+                ],
+                'campi_con_tipo' => [
+                    'comment' => 'textarea'
+                ]
+            ],
+            'trasporto-a-mezzo' => [
+                'modello' => \App\Models\TransportMeans::class,
+                'nome' => 'Trasporto a Mezzo',
+                'nome_singolare' => 'Trasporto a Mezzo',
+                'icona' => 'bi-globe',
+                'colore' => 'cyan',
+                'color_from' => '#06b6d4',
+                'color_to' => '#0891b2',
+                'descrizione' => 'Gestione modalità di trasporto a mezzo (mare, aria, terra, ferro)',
+                'campi_visibili' => [
+                    'description' => 'Descrizione',
+                    'comment' => 'Commento'
+                ],
+                'campi_con_tipo' => [
+                    'comment' => 'textarea'
+                ]
+            ],
+            'ubicazioni' => [
+                'modello' => \App\Models\Location::class,
+                'nome' => 'Ubicazioni',
+                'nome_singolare' => 'Ubicazione',
+                'icona' => 'bi-geo-alt',
+                'colore' => 'amber',
+                'color_from' => '#f59e0b',
+                'color_to' => '#d97706',
+                'descrizione' => 'Gestione ubicazioni magazzino con deposito e posizione specifica',
+                'campi_visibili' => [
+                    'dep' => 'Deposito',
+                    'ubicazione' => 'Ubicazione'
+                ]
+            ],
+            'unita-di-misura' => [
+                'modello' => \App\Models\UnitOfMeasure::class,
+                'nome' => 'Unità di Misura',
+                'nome_singolare' => 'Unità di Misura',
+                'icona' => 'bi-calculator',
+                'colore' => 'purple',
+                'color_from' => '#8b5cf6',
+                'color_to' => '#7c3aed',
+                'descrizione' => 'Gestione unità di misura per prodotti (kg, litri, metri, pezzi)',
+                'campi_visibili' => [
+                    'description' => 'Descrizione',
+                    'comment' => 'Commento'
+                ],
+                'campi_con_tipo' => [
+                    'comment' => 'textarea'
+                ]
+            ],
+            'valute' => [
+                'modello' => \App\Models\Currency::class,
+                'nome' => 'Valute',
+                'nome_singolare' => 'Valuta',
+                'icona' => 'bi-currency-exchange',
+                'colore' => 'emerald',
+                'color_from' => '#10b981',
+                'color_to' => '#059669',
+                'descrizione' => 'Gestione valute e tassi di cambio per commercio internazionale',
+                'campi_visibili' => [
+                    'valuta' => 'Valuta',
+                    'conversione' => 'Tasso di Conversione',
+                    'descrizione' => 'Descrizione'
+                ],
+                'campi_con_tipo' => [
+                    'conversione' => 'number'
+                ]
+            ],
+            'zone' => [
+                'modello' => \App\Models\Zone::class,
+                'nome' => 'Zone',
+                'nome_singolare' => 'Zona',
+                'icona' => 'bi-map',
+                'colore' => 'orange',
+                'color_from' => '#f97316',
+                'color_to' => '#ea580c',
+                'descrizione' => 'Gestione zone geografiche e commerciali per organizzazione territoriale',
+                'campi_visibili' => [
+                    'codice' => 'Codice',
+                    'descrizione' => 'Descrizione'
                 ]
             ]
         ];
@@ -516,11 +632,74 @@ class GestioneTabelleController extends Controller
                 [
                     'nome' => 'tipo-di-taglie',
                     'titolo' => 'Tipo di Taglie',
-                    'icona' => 'bi-diagram-2',
-                    'colore' => 'cyan',
+                    'icona' => 'bi-tags',
+                    'colore' => 'purple',
                     'descrizione' => 'Gestione tipologie di classificazione taglie',
-                    'color_from' => '#0dcaf0',
-                    'color_to' => '#0fb4d1'
+                    'color_from' => '#8B5CF6',
+                    'color_to' => '#A855F7'
+                ],
+                [
+                    'nome' => 'tipi-pagamento',
+                    'titolo' => 'Tipi di Pagamento',
+                    'icona' => 'bi-credit-card-2-front',
+                    'colore' => 'emerald',
+                    'descrizione' => 'Gestione piani di pagamento rateizzati con percentuali personalizzate',
+                    'color_from' => '#10b981',
+                    'color_to' => '#059669'
+                ],
+                [
+                    'nome' => 'trasporto',
+                    'titolo' => 'Trasporto',
+                    'icona' => 'bi-truck',
+                    'colore' => 'indigo',
+                    'descrizione' => 'Gestione modalità di trasporto e spedizione',
+                    'color_from' => '#6366f1',
+                    'color_to' => '#4f46e5'
+                ],
+                [
+                    'nome' => 'trasporto-a-mezzo',
+                    'titolo' => 'Trasporto a Mezzo',
+                    'icona' => 'bi-globe',
+                    'colore' => 'cyan',
+                    'descrizione' => 'Gestione modalità di trasporto a mezzo (mare, aria, terra, ferro)',
+                    'color_from' => '#06b6d4',
+                    'color_to' => '#0891b2'
+                ],
+                [
+                    'nome' => 'ubicazioni',
+                    'titolo' => 'Ubicazioni',
+                    'icona' => 'bi-geo-alt',
+                    'colore' => 'amber',
+                    'descrizione' => 'Gestione ubicazioni magazzino con deposito e posizione specifica',
+                    'color_from' => '#f59e0b',
+                    'color_to' => '#d97706'
+                ],
+                [
+                    'nome' => 'unita-di-misura',
+                    'titolo' => 'Unità di Misura',
+                    'icona' => 'bi-calculator',
+                    'colore' => 'purple',
+                    'descrizione' => 'Gestione unità di misura per prodotti (kg, litri, metri, pezzi)',
+                    'color_from' => '#8b5cf6',
+                    'color_to' => '#7c3aed'
+                ],
+                [
+                    'nome' => 'valute',
+                    'titolo' => 'Valute',
+                    'icona' => 'bi-currency-exchange',
+                    'colore' => 'emerald',
+                    'descrizione' => 'Gestione valute e tassi di cambio per commercio internazionale',
+                    'color_from' => '#10b981',
+                    'color_to' => '#059669'
+                ],
+                [
+                    'nome' => 'zone',
+                    'titolo' => 'Zone',
+                    'icona' => 'bi-map',
+                    'colore' => 'orange',
+                    'descrizione' => 'Gestione zone geografiche e commerciali per organizzazione territoriale',
+                    'color_from' => '#f97316',
+                    'color_to' => '#ea580c'
                 ]
             ]);
             
@@ -551,7 +730,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle implementate
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'aspetto-beni', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti', 'tipo-di-taglie'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'aspetto-beni', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti', 'tipo-di-taglie', 'tipi-pagamento', 'trasporto', 'trasporto-a-mezzo', 'ubicazioni', 'unita-di-misura', 'valute', 'zone'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -576,7 +755,7 @@ class GestioneTabelleController extends Controller
     {
         try {
             // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'aspetto-beni', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti', 'tipo-di-taglie'])) {
+            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'aspetto-beni', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti', 'tipo-di-taglie', 'tipi-pagamento', 'trasporto', 'trasporto-a-mezzo', 'ubicazioni', 'unita-di-misura', 'valute', 'zone'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
 
@@ -627,147 +806,136 @@ class GestioneTabelleController extends Controller
     public function store(string $nomeTabella, Request $request): RedirectResponse|JsonResponse
     {
         try {
-            // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'aspetto-beni', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti', 'tipo-di-taglie'])) {
+            // ========================================
+            // SISTEMA V2 UNIFICATO - GESTIONE DINAMICA
+            // ========================================
+            
+            // Verifica che la tabella sia supportata
+            $configurazioni = $this->getConfigurazioni();
+            if (!isset($configurazioni[$nomeTabella])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
-
-            // Gestione specifica per ogni tabella
+            
+            $configurazione = $configurazioni[$nomeTabella];
+            $modelClass = $configurazione['modello'];
+            
+            // Gestione caso speciale: Associazioni Nature IVA (logica complessa)
             if ($nomeTabella === 'associazioni-nature-iva') {
                 return $this->storeAssociazioniNatureIva($request);
             }
             
-            if ($nomeTabella === 'aliquote-iva') {
-                return $this->storeAliquotaIva($request);
-            }
-
-            if ($nomeTabella === 'aspetto-beni') {
-                return $this->storeAspettoBeni($request);
-            }
-
-            if ($nomeTabella === 'banche') {
-                return $this->storeBanca($request);
-            }
-
-            if ($nomeTabella === 'categorie-articoli') {
-                return $this->storeCategoriaArticoli($request);
-            }
-
-            if ($nomeTabella === 'categorie-clienti') {
-                return $this->storeCategoriaClienti($request);
-            }
-
-            if ($nomeTabella === 'categorie-fornitori') {
-                return $this->storeCategoriaFornitori($request);
-            }
-
-            if ($nomeTabella === 'taglie-colori') {
-                return $this->storeTaglieColori($request);
-            }
-
-            if ($nomeTabella === 'causali-magazzino') {
-                return $this->storeCausaliMagazzino($request);
-            }
-            if ($nomeTabella === 'colori-varianti') {
-                return $this->storeColoriVarianti($request);
-            }
-            if ($nomeTabella === 'condizioni') {
-                return $this->storeCondizioni($request);
-            }
-            if ($nomeTabella === 'denominazioni-prezzi-fissi') {
-                return $this->storeDenominazioniPrezzisFissi($request);
-            }
-            if ($nomeTabella === 'depositi') {
-                return $this->storeDepositi($request);
-            }
-            if ($nomeTabella === 'listini') {
-                return $this->storeListini($request);
-            }
-            if ($nomeTabella === 'modalita-pagamento') {
-                return $this->storeModalitaPagamento($request);
-            }
-            if ($nomeTabella === 'natura-iva') {
-                return $this->storeNaturaIva($request);
-            }
-            if ($nomeTabella === 'porto') {
-                return $this->storePorto($request);
-            }
-            if ($nomeTabella === 'settori-merceologici') {
-                return $this->storeSettoriMerceologici($request);
-            }
-            if ($nomeTabella === 'taglie-varianti') {
-                return $this->storeTaglieVarianti($request);
-            }
-            if ($nomeTabella === 'tipo-di-taglie') {
-                return $this->storeTipoDiTaglie($request);
-            }
-
-            // Default: Associazioni Nature IVA
-
-            // Validazione specifica per Associazioni Nature IVA
-            $validated = $request->validate([
-                'nome_associazione' => 'required|string|min:3|max:255',
-                'descrizione' => 'nullable|string|max:500',
-                'tax_rate_id' => 'required|integer|exists:tax_rates,id',
-                'vat_nature_id' => 'required|integer|exists:vat_natures,id',
-                'is_default' => 'nullable|boolean'
-            ]);
-
-            // Verifica duplicati
-            $exists = VatNatureAssociation::where('tax_rate_id', $validated['tax_rate_id'])
-                                         ->where('vat_nature_id', $validated['vat_nature_id'])
-                                         ->where('active', true)
-                                         ->exists();
-
-            if ($exists) {
+            // ========================================
+            // LOGICA UNIFICATA PER TUTTE LE ALTRE TABELLE
+            // ========================================
+            
+            try {
+                // Validazione dinamica tramite modello
+                $validated = $request->validate($modelClass::validationRules());
+                
+                // Gestione dati extra per dropdown specifici
+                $extraData = [];
+                if ($nomeTabella === 'associazioni-nature-iva') {
+                    $extraData['aliquote_iva'] = \App\Models\TaxRate::where('active', true)->get();
+                    $extraData['nature_iva'] = \App\Models\VatNature::all();
+                }
+                
+                // Creazione elemento tramite modello dinamico
+                $elemento = $modelClass::create($validated);
+                
+                // Risposta JSON per richieste AJAX
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => "{$configurazione['nome_singolare']} creato con successo",
+                        'data' => $elemento
+                    ]);
+                }
+                
+                // Redirect con messaggio di successo
+                return redirect()
+                    ->route('configurations.gestione-tabelle.tabella', $nomeTabella)
+                    ->with('success', "{$configurazione['nome_singolare']} creato con successo");
+                    
+            } catch (\Exception $e) {
+                Log::error("Errore creazione {$nomeTabella}", [
+                    'errore' => $e->getMessage(),
+                    'dati' => $validated ?? []
+                ]);
+                
+                // Risposta JSON per richieste AJAX
                 if ($request->expectsJson()) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Esiste già un\'associazione tra questa aliquota IVA e natura IVA.',
-                        'errors' => ['duplicate' => 'Associazione già esistente']
-                    ], 422);
+                        'message' => 'Errore durante la creazione',
+                        'errors' => ['general' => $e->getMessage()]
+                    ], 500);
                 }
                 
-                return back()->withErrors([
-                    'duplicate' => 'Esiste già un\'associazione tra questa aliquota IVA e natura IVA.'
-                ])->withInput();
+                // Redirect con errore
+                return back()
+                    ->withErrors(['general' => 'Errore durante la creazione: ' . $e->getMessage()])
+                    ->withInput();
             }
+        } catch (\Exception $e) {
+            Log::error('Errore store gestione tabelle', [
+                'errore' => $e->getMessage(),
+                'tabella' => $nomeTabella
+            ]);
+            
+            throw $e;
+        }
+    }
+    
+    /**
+     * Gestione specifica per Associazioni Nature IVA (logica complessa)
+     */
+    private function storeAssociazioniNatureIva(Request $request)
+    {
+        // Validazione specifica per Associazioni Nature IVA
+        $validated = $request->validate([
+            'nome_associazione' => 'required|string|min:3|max:255',
+            'descrizione' => 'nullable|string|max:500',
+            'tax_rate_id' => 'required|integer|exists:tax_rates,id',
+            'vat_nature_id' => 'required|integer|exists:vat_natures,id',
+            'is_default' => 'nullable|boolean'
+        ]);
 
-            // Se viene impostata come predefinita, rimuovi il flag dalle altre della stessa aliquota
-            if (!empty($validated['is_default'])) {
-                VatNatureAssociation::where('tax_rate_id', $validated['tax_rate_id'])
-                                     ->update(['is_default' => false]);
+        // Verifica duplicati
+        $exists = VatNatureAssociation::where('tax_rate_id', $validated['tax_rate_id'])
+                                     ->where('vat_nature_id', $validated['vat_nature_id'])
+                                     ->where('active', true)
+                                     ->exists();
+
+        if ($exists) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Esiste già un\'associazione tra questa aliquota IVA e natura IVA.',
+                    'errors' => ['duplicate' => 'Associazione già esistente']
+                ], 422);
             }
+            
+            return back()->withErrors([
+                'duplicate' => 'Esiste già un\'associazione tra questa aliquota IVA e natura IVA.'
+            ])->withInput();
+        }
 
-            try {
-                $elemento = VatNatureAssociation::create([
-                    'nome_associazione' => $validated['nome_associazione'],
-                    'name' => $validated['nome_associazione'],
-                    'descrizione' => $validated['descrizione'] ?? null,
-                    'tax_rate_id' => $validated['tax_rate_id'],
-                    'vat_nature_id' => $validated['vat_nature_id'],
-                    'is_default' => !empty($validated['is_default']),
+        // Se viene impostata come predefinita, rimuovi il flag dalle altre della stessa aliquota
+        if (!empty($validated['is_default'])) {
+            VatNatureAssociation::where('tax_rate_id', $validated['tax_rate_id'])
+                                 ->update(['is_default' => false]);
+        }
+
+        try {
+            $elemento = VatNatureAssociation::create([
+                'nome_associazione' => $validated['nome_associazione'],
+                'name' => $validated['nome_associazione'],
+                'descrizione' => $validated['descrizione'] ?? null,
+                'tax_rate_id' => $validated['tax_rate_id'],
+                'vat_nature_id' => $validated['vat_nature_id'],
+                'is_default' => !empty($validated['is_default']),
                     'active' => true
-                ]);
-            } catch (\Illuminate\Database\QueryException $e) {
-                // Gestisci errore di constraint duplicato
-                if ($e->errorInfo[1] == 1062) { // Duplicate entry error
-                    if ($request->expectsJson()) {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Esiste già un\'associazione tra questa aliquota IVA e natura IVA.',
-                            'errors' => ['duplicate' => 'Associazione già esistente']
-                        ], 422);
-                    }
-                    
-                    return back()->withErrors([
-                        'duplicate' => 'Esiste già un\'associazione tra questa aliquota IVA e natura IVA.'
-                    ])->withInput();
-                }
-                
-                // Re-throw altri errori
-                throw $e;
-            }
+            ]);
             
             $messaggio = 'Associazione creata con successo';
             
@@ -775,45 +943,31 @@ class GestioneTabelleController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => $messaggio,
-                    'data' => $elemento,
-                    'redirect' => route('configurations.gestione-tabelle.tabella', $nomeTabella)
+                    'data' => $elemento
                 ]);
             }
             
             return redirect()
-                ->route('configurations.gestione-tabelle.tabella', $nomeTabella)
+                ->route('configurations.gestione-tabelle.tabella', 'associazioni-nature-iva')
                 ->with('success', $messaggio);
                 
-        } catch (ValidationException $e) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Errori di validazione',
-                    'errors' => $e->errors()
-                ], 422);
-            }
-            
-            return back()
-                ->withErrors($e->errors())
-                ->withInput();
-                
         } catch (\Exception $e) {
-            Log::error("Errore creazione elemento {$nomeTabella}", [
+            Log::error("Errore creazione associazione natura IVA", [
                 'errore' => $e->getMessage(),
-                'dati' => $request->all(),
-                // 'utente_id' => auth()->id() // Commentato per test senza auth
+                'dati' => $validated
             ]);
             
-            $messaggio = $e->getMessage() ?: 'Errore durante la creazione';
-            
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => $messaggio
+                    'message' => 'Errore durante la creazione',
+                    'errors' => ['general' => $e->getMessage()]
                 ], 500);
             }
             
-            return back()->with('error', $messaggio)->withInput();
+            return back()
+                ->withErrors(['general' => 'Errore durante la creazione: ' . $e->getMessage()])
+                ->withInput();
         }
     }
 
@@ -823,54 +977,33 @@ class GestioneTabelleController extends Controller
     public function show(string $nomeTabella, int $id, Request $request): JsonResponse|RedirectResponse|View
     {
         try {
-            // Carica l'elemento in base alla tabella (per entrambi JSON e VIEW)
-            if ($nomeTabella === 'banche') {
-                $element = \App\Models\Bank::findOrFail($id);
-            } elseif ($nomeTabella === 'aliquote-iva') {
-                $element = \App\Models\TaxRate::findOrFail($id);
-            } elseif ($nomeTabella === 'aspetto-beni') {
-                $element = \App\Models\AspettoBeni::findOrFail($id);
-            } elseif ($nomeTabella === 'associazioni-nature-iva') {
-                $element = VatNatureAssociation::with(['taxRate', 'vatNature'])->findOrFail($id);
-            } elseif ($nomeTabella === 'categorie-articoli') {
-                $element = \App\Models\ProductCategory::findOrFail($id);
-            } elseif ($nomeTabella === 'categorie-clienti') {
-                $element = \App\Models\CustomerCategory::findOrFail($id);
-            } elseif ($nomeTabella === 'categorie-fornitori') {
-                $element = \App\Models\SupplierCategory::findOrFail($id);
-            } elseif ($nomeTabella === 'taglie-varianti') {
-                $element = \App\Models\SizeVariant::findOrFail($id);
-            } elseif ($nomeTabella === 'tipo-di-taglie') {
-                $element = \App\Models\SizeType::findOrFail($id);
-            } elseif ($nomeTabella === 'taglie-colori') {
-                $element = \App\Models\SizeColor::findOrFail($id);
-            } elseif ($nomeTabella === 'causali-magazzino') {
-                $element = \App\Models\WarehouseCause::findOrFail($id);
-            } elseif ($nomeTabella === 'colori-varianti') {
-                $element = \App\Models\ColorVariant::findOrFail($id);
-            } elseif ($nomeTabella === 'condizioni') {
-                $element = \App\Models\Condition::findOrFail($id);
-            } elseif ($nomeTabella === 'denominazioni-prezzi-fissi') {
-                $element = \App\Models\FixedPriceDenomination::findOrFail($id);
-            } elseif ($nomeTabella === 'depositi') {
-                $element = \App\Models\Deposit::findOrFail($id);
-            } elseif ($nomeTabella === 'listini') {
-                $element = \App\Models\PriceList::findOrFail($id);
-            } elseif ($nomeTabella === 'modalita-pagamento') {
-                $element = \App\Models\PaymentMethod::findOrFail($id);
-            } elseif ($nomeTabella === 'natura-iva') {
-                $element = \App\Models\VatNature::findOrFail($id);
-            } elseif ($nomeTabella === 'porto') {
-                $element = \App\Models\Porto::findOrFail($id);
-            } elseif ($nomeTabella === 'settori-merceologici') {
-                $element = \App\Models\MerchandiseSector::findOrFail($id);
-            } else {
+            // ========================================
+            // SISTEMA V2 UNIFICATO - SHOW DINAMICO
+            // ========================================
+            
+            // Verifica che la tabella sia supportata
+            $configurazioni = $this->getConfigurazioni();
+            if (!isset($configurazioni[$nomeTabella])) {
                 if ($request->expectsJson()) {
-                    return response()->json(['error' => 'Tabella non supportata'], 404);
-                } else {
-                    return redirect()->route('configurations.gestione-tabelle.index')
-                        ->with('error', 'Tabella non supportata');
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Tabella {$nomeTabella} non supportata"
+                    ], 404);
                 }
+                
+                return redirect()
+                    ->route('configurations.gestione-tabelle.index')
+                    ->with('error', "Tabella {$nomeTabella} non supportata");
+            }
+            
+            $configurazione = $configurazioni[$nomeTabella];
+            $modelClass = $configurazione['modello'];
+            
+            // Carica elemento con relazioni se necessario
+            if ($nomeTabella === 'associazioni-nature-iva') {
+                $element = $modelClass::with(['taxRate', 'vatNature'])->findOrFail($id);
+            } else {
+                $element = $modelClass::findOrFail($id);
             }
 
             // Se richiede JSON, restituisci JSON
@@ -879,14 +1012,6 @@ class GestioneTabelleController extends Controller
             }
             
             // Per richieste normali, mostra la pagina di visualizzazione
-            $configurazioni = $this->getConfigurazioni();
-            if (!isset($configurazioni[$nomeTabella])) {
-                return redirect()->route('configurations.gestione-tabelle.index')
-                    ->with('error', 'Tabella non trovata');
-            }
-            
-            $configurazione = $configurazioni[$nomeTabella];
-            
             return view('configurazioni.gestione-tabelle.show', [
                 'nomeTabella' => $nomeTabella,
                 'configurazione' => $configurazione,
@@ -916,62 +1041,36 @@ class GestioneTabelleController extends Controller
     public function edit(string $nomeTabella, int $id): View|RedirectResponse
     {
         try {
-            // Ottieni l'elemento in base alla tabella
-            if ($nomeTabella === 'banche') {
-                $element = \App\Models\Bank::findOrFail($id);
-            } elseif ($nomeTabella === 'aliquote-iva') {
-                $element = \App\Models\TaxRate::findOrFail($id);
-            } elseif ($nomeTabella === 'aspetto-beni') {
-                $element = \App\Models\AspettoBeni::findOrFail($id);
-            } elseif ($nomeTabella === 'associazioni-nature-iva') {
-                $element = VatNatureAssociation::with(['taxRate', 'vatNature'])->findOrFail($id);
-            } elseif ($nomeTabella === 'categorie-articoli') {
-                $element = \App\Models\ProductCategory::findOrFail($id);
-            } elseif ($nomeTabella === 'categorie-clienti') {
-                $element = \App\Models\CustomerCategory::findOrFail($id);
-            } elseif ($nomeTabella === 'categorie-fornitori') {
-                $element = \App\Models\SupplierCategory::findOrFail($id);
-            } elseif ($nomeTabella === 'taglie-varianti') {
-                $element = \App\Models\SizeVariant::findOrFail($id);
-            } elseif ($nomeTabella === 'tipo-di-taglie') {
-                $element = \App\Models\SizeType::findOrFail($id);
-            } elseif ($nomeTabella === 'taglie-colori') {
-                $element = \App\Models\SizeColor::findOrFail($id);
-            } elseif ($nomeTabella === 'causali-magazzino') {
-                $element = \App\Models\WarehouseCause::findOrFail($id);
-            } elseif ($nomeTabella === 'colori-varianti') {
-                $element = \App\Models\ColorVariant::findOrFail($id);
-            } elseif ($nomeTabella === 'condizioni') {
-                $element = \App\Models\Condition::findOrFail($id);
-            } elseif ($nomeTabella === 'denominazioni-prezzi-fissi') {
-                $element = \App\Models\FixedPriceDenomination::findOrFail($id);
-            } elseif ($nomeTabella === 'depositi') {
-                $element = \App\Models\Deposit::findOrFail($id);
-            } elseif ($nomeTabella === 'listini') {
-                $element = \App\Models\PriceList::findOrFail($id);
-            } elseif ($nomeTabella === 'modalita-pagamento') {
-                $element = \App\Models\PaymentMethod::findOrFail($id);
-            } elseif ($nomeTabella === 'natura-iva') {
-                $element = \App\Models\VatNature::findOrFail($id);
-            } elseif ($nomeTabella === 'porto') {
-                $element = \App\Models\Porto::findOrFail($id);
-            } elseif ($nomeTabella === 'settori-merceologici') {
-                $element = \App\Models\MerchandiseSector::findOrFail($id);
-            } else {
-                return redirect()->route('configurations.gestione-tabelle.index')
-                    ->with('error', 'Tabella non supportata');
-            }
+            // ========================================
+            // SISTEMA V2 UNIFICATO - EDIT DINAMICO
+            // ========================================
             
-            // Ottieni la configurazione per la tabella
+            // Verifica che la tabella sia supportata
             $configurazioni = $this->getConfigurazioni();
             if (!isset($configurazioni[$nomeTabella])) {
-                return redirect()->route('configurations.gestione-tabelle.index')
-                    ->with('error', 'Tabella non trovata');
+                return redirect()
+                    ->route('configurations.gestione-tabelle.index')
+                    ->with('error', "Tabella {$nomeTabella} non supportata");
             }
             
             $configurazione = $configurazioni[$nomeTabella];
+            $modelClass = $configurazione['modello'];
             
-            return view('configurazioni.gestione-tabelle.edit', [
+            // Carica elemento per modifica
+            if ($nomeTabella === 'associazioni-nature-iva') {
+                $element = $modelClass::with(['taxRate', 'vatNature'])->findOrFail($id);
+            } else {
+                $element = $modelClass::findOrFail($id);
+            }
+            
+            // Dati extra per dropdown specifici  
+            $extraData = [];
+            if ($nomeTabella === 'associazioni-nature-iva') {
+                $extraData['aliquote_iva'] = \App\Models\TaxRate::where('active', true)->get();
+                $extraData['nature_iva'] = \App\Models\VatNature::all();
+            }
+            
+            return view('configurazioni.gestione-tabelle.edit', array_merge([
                 'nomeTabella' => $nomeTabella,
                 'configurazione' => $configurazione,
                 'elemento' => $element,
@@ -982,7 +1081,7 @@ class GestioneTabelleController extends Controller
                     ['title' => $configurazione['nome'], 'url' => route('configurations.gestione-tabelle.tabella', $nomeTabella)],
                     ['title' => 'Modifica ' . $configurazione['nome_singolare'], 'active' => true]
                 ]
-            ]);
+            ], $extraData));
                 
         } catch (\Exception $e) {
             return redirect()->route('configurations.gestione-tabelle.tabella', $nomeTabella)
@@ -996,75 +1095,84 @@ class GestioneTabelleController extends Controller
     public function update(string $nomeTabella, int $id, Request $request): RedirectResponse|JsonResponse
     {
         try {
-            // Supporto per le tabelle v2
-            if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'aspetto-beni', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti', 'tipo-di-taglie'])) {
+            // ========================================
+            // SISTEMA V2 UNIFICATO - UPDATE DINAMICO
+            // ========================================
+            
+            // Verifica che la tabella sia supportata
+            $configurazioni = $this->getConfigurazioni();
+            if (!isset($configurazioni[$nomeTabella])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
             }
-
-            // Gestione specifica per ogni tabella
-            if ($nomeTabella === 'aliquote-iva') {
-                return $this->updateAliquotaIva($request, $id);
+            
+            $configurazione = $configurazioni[$nomeTabella];
+            $modelClass = $configurazione['modello'];
+            
+            // Gestione caso speciale: Associazioni Nature IVA (logica complessa)
+            if ($nomeTabella === 'associazioni-nature-iva') {
+                return $this->updateAssociazioneNatureIva($request, $id);
             }
-
-            if ($nomeTabella === 'banche') {
-                return $this->updateBanca($request, $id);
+            
+            // ========================================
+            // LOGICA UNIFICATA PER TUTTE LE ALTRE TABELLE
+            // ========================================
+            
+            try {
+                // Trova l'elemento esistente
+                $elemento = $modelClass::findOrFail($id);
+                
+                // Validazione dinamica tramite modello
+                $validated = $request->validate($modelClass::validationRulesForUpdate($id));
+                
+                // Aggiornamento elemento
+                $elemento->update($validated);
+                
+                // Risposta JSON per richieste AJAX
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => "{$configurazione['nome_singolare']} aggiornato con successo",
+                        'data' => $elemento->fresh()
+                    ]);
+                }
+                
+                // Redirect con messaggio di successo
+                return redirect()
+                    ->route('configurations.gestione-tabelle.tabella', $nomeTabella)
+                    ->with('success', "{$configurazione['nome_singolare']} aggiornato con successo");
+                    
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Elemento non trovato'
+                    ], 404);
+                }
+                
+                return redirect()
+                    ->route('configurations.gestione-tabelle.tabella', $nomeTabella)
+                    ->with('error', 'Elemento non trovato');
+                    
+            } catch (\Exception $e) {
+                Log::error("Errore aggiornamento {$nomeTabella}:{$id}", [
+                    'errore' => $e->getMessage(),
+                    'dati' => $validated ?? []
+                ]);
+                
+                // Risposta JSON per richieste AJAX
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Errore durante l\'aggiornamento',
+                        'errors' => ['general' => $e->getMessage()]
+                    ], 500);
+                }
+                
+                // Redirect con errore
+                return back()
+                    ->withErrors(['general' => 'Errore durante l\'aggiornamento: ' . $e->getMessage()])
+                    ->withInput();
             }
-
-            if ($nomeTabella === 'categorie-articoli') {
-                return $this->updateCategoriaArticoli($request, $id);
-            }
-
-            if ($nomeTabella === 'categorie-clienti') {
-                return $this->updateCategoriaClienti($request, $id);
-            }
-
-            if ($nomeTabella === 'categorie-fornitori') {
-                return $this->updateCategoriaFornitori($request, $id);
-            }
-
-            if ($nomeTabella === 'taglie-colori') {
-                return $this->updateTaglieColori($request, $id);
-            }
-
-            if ($nomeTabella === 'causali-magazzino') {
-                return $this->updateCausaliMagazzino($request, $id);
-            }
-            if ($nomeTabella === 'colori-varianti') {
-                return $this->updateColoriVarianti($request, $id);
-            }
-            if ($nomeTabella === 'condizioni') {
-                return $this->updateCondizioni($request, $id);
-            }
-            if ($nomeTabella === 'denominazioni-prezzi-fissi') {
-                return $this->updateDenominazioniPrezzisFissi($request, $id);
-            }
-            if ($nomeTabella === 'depositi') {
-                return $this->updateDepositi($request, $id);
-            }
-            if ($nomeTabella === 'listini') {
-                return $this->updateListini($request, $id);
-            }
-            if ($nomeTabella === 'modalita-pagamento') {
-                return $this->updateModalitaPagamento($request, $id);
-            }
-            if ($nomeTabella === 'natura-iva') {
-                return $this->updateNaturaIva($request, $id);
-            }
-            if ($nomeTabella === 'porto') {
-                return $this->updatePorto($request, $id);
-            }
-            if ($nomeTabella === 'settori-merceologici') {
-                return $this->updateSettoriMerceologici($request, $id);
-            }
-            if ($nomeTabella === 'taglie-varianti') {
-                return $this->updateTaglieVarianti($request, $id);
-            }
-            if ($nomeTabella === 'tipo-di-taglie') {
-                return $this->updateTipoDiTaglie($request, $id);
-            }
-
-            // Default: Associazioni Nature IVA
-            return $this->updateAssociazioneNatureIva($request, $id);
             
         } catch (\Exception $e) {
             Log::error("Errore aggiornamento elemento {$nomeTabella}:{$id}", [
@@ -1089,67 +1197,77 @@ class GestioneTabelleController extends Controller
     public function destroy(string $nomeTabella, int $id, Request $request): RedirectResponse|JsonResponse
     {
         try {
-            // Gestione per tabelle v2
-            if ($nomeTabella === 'aliquote-iva') {
-                return $this->destroyAliquotaIva($id);
-            } elseif ($nomeTabella === 'banche') {
-                return $this->destroyBanca($id);
-            } elseif ($nomeTabella === 'categorie-articoli') {
-                return $this->destroyCategoriaArticoli($id);
-            } elseif ($nomeTabella === 'categorie-clienti') {
-                return $this->destroyCategoriaClienti($id);
-            } elseif ($nomeTabella === 'categorie-fornitori') {
-                return $this->destroyCategoriaFornitori($id);
-            } elseif ($nomeTabella === 'taglie-colori') {
-                return $this->destroyTaglieColori($id);
-            } elseif ($nomeTabella === 'taglie-varianti') {
-                return $this->destroyTaglieVarianti($id);
-            } elseif ($nomeTabella === 'tipo-di-taglie') {
-                return $this->destroyTipoDiTaglie($id);
-            } elseif ($nomeTabella === 'causali-magazzino') {
-                return $this->destroyCausaliMagazzino($id);
-            } elseif ($nomeTabella === 'colori-varianti') {
-                return $this->destroyColoriVarianti($id);
-            } elseif ($nomeTabella === 'condizioni') {
-                return $this->destroyCondizioni($id);
-            } elseif ($nomeTabella === 'denominazioni-prezzi-fissi') {
-                return $this->destroyDenominazioniPrezzisFissi($id);
-            } elseif ($nomeTabella === 'depositi') {
-                return $this->destroyDepositi($id);
-            } elseif ($nomeTabella === 'listini') {
-                return $this->destroyListini($id);
-            } elseif ($nomeTabella === 'modalita-pagamento') {
-                return $this->destroyModalitaPagamento($id);
-            } elseif ($nomeTabella === 'natura-iva') {
-                return $this->destroyNaturaIva($id);
-            } elseif ($nomeTabella === 'porto') {
-                return $this->destroyPorto($id);
-            } elseif ($nomeTabella === 'settori-merceologici') {
-                return $this->destroySettoriMerceologici($id);
-            } elseif ($nomeTabella === 'associazioni-nature-iva') {
-                $elemento = VatNatureAssociation::findOrFail($id);
+            // ========================================
+            // SISTEMA V2 UNIFICATO - DELETE DINAMICO
+            // ========================================
+            
+            // Verifica che la tabella sia supportata
+            $configurazioni = $this->getConfigurazioni();
+            if (!isset($configurazioni[$nomeTabella])) {
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Tabella {$nomeTabella} non supportata"
+                    ], 404);
+                }
+                
+                return back()->with('error', "Tabella {$nomeTabella} non supportata");
+            }
+            
+            $configurazione = $configurazioni[$nomeTabella];
+            $modelClass = $configurazione['modello'];
+            
+            // ========================================
+            // LOGICA UNIFICATA PER TUTTE LE TABELLE
+            // ========================================
+            
+            try {
+                // Trova e elimina l'elemento
+                $elemento = $modelClass::findOrFail($id);
                 $elemento->delete();
                 
+                // Risposta JSON per richieste AJAX
                 if ($request->expectsJson()) {
                     return response()->json([
                         'success' => true,
-                        'message' => 'Associazione eliminata con successo'
+                        'message' => "{$configurazione['nome_singolare']} eliminato con successo"
                     ]);
+                }
+                
+                // Redirect con messaggio di successo
+                return redirect()
+                    ->route('configurations.gestione-tabelle.tabella', $nomeTabella)
+                    ->with('success', "{$configurazione['nome_singolare']} eliminato con successo");
+                    
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Elemento non trovato'
+                    ], 404);
                 }
                 
                 return redirect()
                     ->route('configurations.gestione-tabelle.tabella', $nomeTabella)
-                    ->with('success', 'Associazione eliminata con successo');
+                    ->with('error', 'Elemento non trovato');
+                    
+            } catch (\Exception $e) {
+                Log::error("Errore eliminazione {$nomeTabella}:{$id}", [
+                    'errore' => $e->getMessage()
+                ]);
+                
+                // Risposta JSON per richieste AJAX
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Errore durante l\'eliminazione',
+                        'errors' => ['general' => $e->getMessage()]
+                    ], 500);
+                }
+                
+                // Redirect con errore
+                return back()->with('error', 'Errore durante l\'eliminazione: ' . $e->getMessage());
             }
-            
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Eliminazione non ancora implementata per {$nomeTabella}"
-                ], 501);
-            }
-            
-            return back()->with('error', "Eliminazione non ancora implementata per {$nomeTabella}");
             
         } catch (\Exception $e) {
             Log::error("Errore eliminazione elemento {$nomeTabella}:{$id}", [
@@ -3691,65 +3809,6 @@ class GestioneTabelleController extends Controller
         }
     }
 
-    /**
-     * Store Associazioni Nature IVA
-     */
-    private function storeAssociazioniNatureIva(Request $request): RedirectResponse
-    {
-        try {
-            // Validazione dati
-            $validatedData = $request->validate([
-                'nome_associazione' => 'required|string|max:100|min:2',
-                'description' => 'nullable|string|max:255',
-                'aliquota_iva' => 'required|exists:tax_rates,id',
-                'natura_iva' => 'required|exists:vat_natures,id',
-            ]);
-
-            // Verifica unicità associazione
-            $exists = VatNatureAssociation::where('tax_rate_id', $validatedData['aliquota_iva'])
-                ->where('vat_nature_id', $validatedData['natura_iva'])
-                ->where('active', true)
-                ->exists();
-                
-            if ($exists) {
-                return redirect()
-                    ->back()
-                    ->withErrors(['aliquota_iva' => 'Questa associazione esiste già'])
-                    ->withInput();
-            }
-
-            // Mapping campi da form a database
-            $dataToSave = [
-                'nome_associazione' => $validatedData['nome_associazione'],
-                'name' => $validatedData['nome_associazione'], // Campo name necessario
-                'description' => $validatedData['description'],
-                'tax_rate_id' => $validatedData['aliquota_iva'],
-                'vat_nature_id' => $validatedData['natura_iva'],
-                'active' => true,
-                'is_default' => false
-            ];
-
-            VatNatureAssociation::create($dataToSave);
-
-            return redirect()
-                ->route('configurations.gestione-tabelle.tabella', 'associazioni-nature-iva')
-                ->with('success', 'Associazione Nature IVA creata con successo');
-
-        } catch (ValidationException $e) {
-            return redirect()
-                ->back()
-                ->withErrors($e->errors())
-                ->withInput();
-        } catch (\Exception $e) {
-            \Log::error('Errore creazione Associazione Nature IVA:', [
-                'errore' => $e->getMessage(),
-                'dati' => $request->all()
-            ]);
-            return redirect()
-                ->route('configurations.gestione-tabelle.tabella', 'associazioni-nature-iva')
-                ->with('error', 'Errore durante creazione associazione: ' . $e->getMessage());
-        }
-    }
 
     /**
      * Store Settori Merceologici

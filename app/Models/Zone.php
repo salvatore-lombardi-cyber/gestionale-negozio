@@ -15,11 +15,8 @@ class Zone extends Model
 
     // OWASP: Mass Assignment Protection - SOLO campi zone
     protected $fillable = [
-        'code',
-        'name', 
-        'description',
-        'active',
-        'sort_order'
+        'codice',
+        'descrizione'
     ];
 
     // OWASP: Campi protetti da mass assignment
@@ -31,109 +28,59 @@ class Zone extends Model
     ];
 
     protected $casts = [
-        'active' => 'boolean',
-        'sort_order' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
     ];
 
-    public function scopeActive($query)
-    {
-        return $query->where('active', true);
-    }
-
-    public function scopeOrdered($query) 
-    {
-        return $query->orderBy('sort_order')->orderBy('name');
-    }
-
     // OWASP: Input Sanitization Methods per zone
 
     /**
-     * Sanitizza il codice zona per prevenire injection attacks
+     * Sanitizza il codice per prevenire XSS
      */
-    public function setCodeAttribute($value)
+    public function setCodiceAttribute($value)
     {
-        // OWASP: Sanitizzazione rigorosa del codice zona
-        $sanitized = strtoupper(trim($value));
-        $sanitized = preg_replace('/[^A-Z0-9_-]/', '', $sanitized);
-        $this->attributes['code'] = substr($sanitized, 0, 20);
-    }
+        if ($value === null) {
+            $this->attributes['codice'] = null;
+            return;
+        }
 
-    /**
-     * Sanitizza il nome zona per prevenire XSS
-     */
-    public function setNameAttribute($value)
-    {
-        // OWASP: Sanitizzazione del nome zona
-        $sanitized = trim(strip_tags($value));
-        $sanitized = preg_replace('/[<>"\'&]/', '', $sanitized);
-        $this->attributes['name'] = substr($sanitized, 0, 150);
+        // OWASP: Sanitizzazione del codice zona
+        $sanitized = strtoupper(trim(strip_tags($value)));
+        $sanitized = preg_replace('/[^A-Z0-9_-]/', '', $sanitized);
+        $this->attributes['codice'] = substr($sanitized, 0, 20);
     }
 
     /**
      * Sanitizza la descrizione per prevenire XSS
      */
-    public function setDescriptionAttribute($value)
+    public function setDescrizioneAttribute($value)
     {
         if ($value === null) {
-            $this->attributes['description'] = null;
+            $this->attributes['descrizione'] = null;
             return;
         }
 
         // OWASP: Sanitizzazione della descrizione zona
         $sanitized = trim(strip_tags($value));
         $sanitized = preg_replace('/[<>"\'&]/', '', $sanitized);
-        $this->attributes['description'] = substr($sanitized, 0, 500);
+        $this->attributes['descrizione'] = substr($sanitized, 0, 255);
     }
 
-    /**
-     * Validazione ordine
-     */
-    public function setSortOrderAttribute($value)
-    {
-        if ($value === null) {
-            $this->attributes['sort_order'] = 0;
-            return;
-        }
-
-        // OWASP: Validazione numerica rigorosa
-        $order = intval($value);
-        
-        if ($order < 0) {
-            $order = 0;
-        } elseif ($order > 9999) {
-            $order = 9999;
-        }
-
-        $this->attributes['sort_order'] = $order;
-    }
-
-    // OWASP: Validazione regole complete per zone
+    // OWASP: Validazione regole semplificata per zone
     public static function validationRules(): array
     {
         return [
-            'code' => 'required|string|max:20|unique:zones,code|regex:/^[A-Z0-9_-]+$/',
-            'name' => 'required|string|max:150|min:2',
-            'description' => 'nullable|string|max:500',
-            'active' => 'boolean',
-            'sort_order' => 'nullable|integer|min:0|max:9999'
+            'codice' => 'required|string|max:20|min:1|regex:/^[A-Z0-9_-]+$/',
+            'descrizione' => 'required|string|max:255|min:1'
         ];
     }
 
     public static function validationRulesForUpdate(int $id): array
     {
-        $rules = self::validationRules();
-        $rules['code'] = 'required|string|max:20|unique:zones,code,' . $id . '|regex:/^[A-Z0-9_-]+$/';
-        return $rules;
+        return self::validationRules();
     }
 
-    // Accessors per visualizzazione formattata
-    public function getFormattedActiveAttribute(): string
-    {
-        return $this->active ? 'Attiva' : 'Inattiva';
-    }
 
     /**
      * OWASP: Log delle modifiche per audit trail zone
@@ -144,8 +91,8 @@ class Zone extends Model
         // OWASP: Audit Trail per zone (dati geografici/commerciali sensibili)
         static::creating(function ($model) {
             \Log::info('Creating Zone', [
-                'code' => $model->code,
-                'name' => $model->name,
+                'codice' => $model->codice,
+                'descrizione' => $model->descrizione,
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent()
@@ -155,7 +102,8 @@ class Zone extends Model
         static::updating(function ($model) {
             \Log::info('Updating Zone', [
                 'id' => $model->id,
-                'code' => $model->code,
+                'codice' => $model->codice,
+                'descrizione' => $model->descrizione,
                 'changes' => $model->getDirty(),
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
@@ -166,8 +114,8 @@ class Zone extends Model
         static::deleting(function ($model) {
             \Log::warning('Deleting Zone', [
                 'id' => $model->id,
-                'code' => $model->code,
-                'name' => $model->name,
+                'codice' => $model->codice,
+                'descrizione' => $model->descrizione,
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent()

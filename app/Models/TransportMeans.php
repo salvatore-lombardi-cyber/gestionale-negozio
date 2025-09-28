@@ -6,25 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Model per Trasporto con OWASP Security Best Practices 2025
- * Gestione trasporti e logistica (corriere, trasporto proprio, spedizionieri, etc.)
+ * Model per Trasporto a Mezzo - Sistema V2 Semplificato
+ * Gestione modalità di trasporto a mezzo (nave, aereo, treno, etc.)
  */
-class Transport extends Model
+class TransportMeans extends Model
 {
     use SoftDeletes;
 
-    // OWASP: Mass Assignment Protection - Solo campi specifici
+    protected $table = 'transport_means';
+
     protected $fillable = [
         'description',
         'comment'
-    ];
-
-    // OWASP: Campi protetti da mass assignment
-    protected $guarded = [
-        'id',
-        'created_at',
-        'updated_at',
-        'deleted_at'
     ];
 
     protected $casts = [
@@ -45,7 +38,7 @@ class Transport extends Model
             return;
         }
 
-        // OWASP: Sanitizzazione della descrizione trasporto
+        // OWASP: Sanitizzazione della descrizione trasporto a mezzo
         $sanitized = trim(strip_tags($value));
         $sanitized = preg_replace('/[<>"\'&]/', '', $sanitized);
         $this->attributes['description'] = substr($sanitized, 0, 255);
@@ -61,13 +54,13 @@ class Transport extends Model
             return;
         }
 
-        // OWASP: Sanitizzazione del commento trasporto
+        // OWASP: Sanitizzazione del commento trasporto a mezzo
         $sanitized = trim(strip_tags($value));
         $sanitized = preg_replace('/[<>"\'&]/', '', $sanitized);
         $this->attributes['comment'] = substr($sanitized, 0, 500);
     }
 
-    // OWASP: Validazione regole semplificata per trasporti
+    // OWASP: Validazione regole semplificata per trasporto a mezzo
     public static function validationRules(): array
     {
         return [
@@ -81,18 +74,16 @@ class Transport extends Model
         return self::validationRules();
     }
 
-
     /**
-     * OWASP: Log delle modifiche per audit trail trasporti
+     * OWASP: Log delle modifiche per audit trail trasporti a mezzo
      * Importante per tracciare modifiche a informazioni logistiche sensibili
      */
     protected static function booted()
     {
-        // OWASP: Audit Trail per trasporti (dati sensibili)
+        // OWASP: Audit Trail per trasporti a mezzo (dati sensibili)
         static::creating(function ($model) {
-            \Log::info('Creating Transport', [
-                'code' => $model->code,
-                'name' => $model->name,
+            \Log::info('Creating TransportMeans', [
+                'description' => $model->description,
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent()
@@ -100,9 +91,9 @@ class Transport extends Model
         });
 
         static::updating(function ($model) {
-            \Log::info('Updating Transport', [
+            \Log::info('Updating TransportMeans', [
                 'id' => $model->id,
-                'code' => $model->code,
+                'description' => $model->description,
                 'changes' => $model->getDirty(),
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
@@ -111,10 +102,9 @@ class Transport extends Model
         });
 
         static::deleting(function ($model) {
-            \Log::warning('Deleting Transport', [
+            \Log::warning('Deleting TransportMeans', [
                 'id' => $model->id,
-                'code' => $model->code,
-                'name' => $model->name,
+                'description' => $model->description,
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent()

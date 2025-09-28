@@ -15,11 +15,8 @@ class Location extends Model
 
     // OWASP: Mass Assignment Protection - SOLO campi ubicazioni
     protected $fillable = [
-        'code',
-        'name', 
-        'description',
-        'active',
-        'sort_order'
+        'dep',
+        'ubicazione'
     ];
 
     // OWASP: Campi protetti da mass assignment
@@ -31,109 +28,59 @@ class Location extends Model
     ];
 
     protected $casts = [
-        'active' => 'boolean',
-        'sort_order' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime'
     ];
 
-    public function scopeActive($query)
-    {
-        return $query->where('active', true);
-    }
-
-    public function scopeOrdered($query) 
-    {
-        return $query->orderBy('sort_order')->orderBy('name');
-    }
-
     // OWASP: Input Sanitization Methods per ubicazioni
 
     /**
-     * Sanitizza il codice ubicazione per prevenire injection attacks
+     * Sanitizza il deposito per prevenire XSS
      */
-    public function setCodeAttribute($value)
-    {
-        // OWASP: Sanitizzazione rigorosa del codice ubicazione
-        $sanitized = strtoupper(trim($value));
-        $sanitized = preg_replace('/[^A-Z0-9_-]/', '', $sanitized);
-        $this->attributes['code'] = substr($sanitized, 0, 20);
-    }
-
-    /**
-     * Sanitizza il nome ubicazione per prevenire XSS
-     */
-    public function setNameAttribute($value)
-    {
-        // OWASP: Sanitizzazione del nome ubicazione
-        $sanitized = trim(strip_tags($value));
-        $sanitized = preg_replace('/[<>"\'&]/', '', $sanitized);
-        $this->attributes['name'] = substr($sanitized, 0, 150);
-    }
-
-    /**
-     * Sanitizza la descrizione per prevenire XSS
-     */
-    public function setDescriptionAttribute($value)
+    public function setDepAttribute($value)
     {
         if ($value === null) {
-            $this->attributes['description'] = null;
+            $this->attributes['dep'] = null;
             return;
         }
 
-        // OWASP: Sanitizzazione della descrizione ubicazione
+        // OWASP: Sanitizzazione del deposito
         $sanitized = trim(strip_tags($value));
         $sanitized = preg_replace('/[<>"\'&]/', '', $sanitized);
-        $this->attributes['description'] = substr($sanitized, 0, 500);
+        $this->attributes['dep'] = substr($sanitized, 0, 255);
     }
 
     /**
-     * Validazione ordine
+     * Sanitizza l'ubicazione per prevenire XSS
      */
-    public function setSortOrderAttribute($value)
+    public function setUbicazioneAttribute($value)
     {
         if ($value === null) {
-            $this->attributes['sort_order'] = 0;
+            $this->attributes['ubicazione'] = null;
             return;
         }
 
-        // OWASP: Validazione numerica rigorosa
-        $order = intval($value);
-        
-        if ($order < 0) {
-            $order = 0;
-        } elseif ($order > 9999) {
-            $order = 9999;
-        }
-
-        $this->attributes['sort_order'] = $order;
+        // OWASP: Sanitizzazione dell'ubicazione
+        $sanitized = trim(strip_tags($value));
+        $sanitized = preg_replace('/[<>"\'&]/', '', $sanitized);
+        $this->attributes['ubicazione'] = substr($sanitized, 0, 255);
     }
 
-    // OWASP: Validazione regole complete per ubicazioni
+    // OWASP: Validazione regole semplificata per ubicazioni
     public static function validationRules(): array
     {
         return [
-            'code' => 'required|string|max:20|unique:locations,code|regex:/^[A-Z0-9_-]+$/',
-            'name' => 'required|string|max:150|min:2',
-            'description' => 'nullable|string|max:500',
-            'active' => 'boolean',
-            'sort_order' => 'nullable|integer|min:0|max:9999'
+            'dep' => 'required|string|max:255|min:1',
+            'ubicazione' => 'required|string|max:255|min:1'
         ];
     }
 
     public static function validationRulesForUpdate(int $id): array
     {
-        $rules = self::validationRules();
-        $rules['code'] = 'required|string|max:20|unique:locations,code,' . $id . '|regex:/^[A-Z0-9_-]+$/';
-        return $rules;
+        return self::validationRules();
     }
 
-    // Accessors per visualizzazione formattata
-    public function getFormattedActiveAttribute(): string
-    {
-        return $this->active ? 'Attiva' : 'Inattiva';
-    }
 
     /**
      * OWASP: Log delle modifiche per audit trail ubicazioni
@@ -144,8 +91,8 @@ class Location extends Model
         // OWASP: Audit Trail per ubicazioni (dati magazzino sensibili)
         static::creating(function ($model) {
             \Log::info('Creating Location', [
-                'code' => $model->code,
-                'name' => $model->name,
+                'dep' => $model->dep,
+                'ubicazione' => $model->ubicazione,
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent()
@@ -155,7 +102,8 @@ class Location extends Model
         static::updating(function ($model) {
             \Log::info('Updating Location', [
                 'id' => $model->id,
-                'code' => $model->code,
+                'dep' => $model->dep,
+                'ubicazione' => $model->ubicazione,
                 'changes' => $model->getDirty(),
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
@@ -166,8 +114,8 @@ class Location extends Model
         static::deleting(function ($model) {
             \Log::warning('Deleting Location', [
                 'id' => $model->id,
-                'code' => $model->code,
-                'name' => $model->name,
+                'dep' => $model->dep,
+                'ubicazione' => $model->ubicazione,
                 'user_id' => auth()->id(),
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent()
