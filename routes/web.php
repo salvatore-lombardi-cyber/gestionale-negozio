@@ -123,6 +123,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('gestione-tabelle')->name('gestione-tabelle.')->group(function () {
             // Dashboard principale (throttle rimosso per sviluppo)
             Route::get('/', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'index'])->name('index');
+            
+            // ========================================
+            // SISTEMA TABELLE FREQUENTI V2 - SENZA LIMITI
+            // IMPORTANTE: Prima delle route generiche per evitare conflitti
+            // ========================================
+            Route::prefix('favorites-v2')->name('favorites-v2.')->group(function () {
+                // Gestione preferiti
+                Route::get('/', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'getFavoriteTablesV2'])->name('list');
+                Route::post('/add', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'addToFavoritesV2'])->name('add');
+                Route::delete('/remove', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'removeFromFavoritesV2'])->name('remove');
+                
+                // Tracking e analytics
+                Route::post('/track', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'trackTableUsageV2'])->name('track');
+                Route::get('/stats', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'getTableStatsV2'])->name('stats');
+            });
                 
                 // Gestione tabella specifica
                 Route::get('/{nomeTabella}', [App\Http\Controllers\Configurazioni\GestioneTabelleController::class, 'mostraTabella'])->name('tabella');

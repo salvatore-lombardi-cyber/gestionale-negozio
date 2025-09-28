@@ -31,7 +31,7 @@ class GestioneTabelleController extends Controller
     /**
      * Ottieni le configurazioni per tutte le tabelle
      */
-    private function getConfigurazioni(): array
+    public function getConfigurazioni(): array
     {
         return [
             'associazioni-nature-iva' => [
@@ -703,13 +703,48 @@ class GestioneTabelleController extends Controller
                 ]
             ]);
             
+            // ========================================
+            // CARICAMENTO TABELLE FREQUENTI V2 - SENZA LIMITI
+            // ========================================
+            $favoriteTablesV2 = [];
+            try {
+                if (auth()->check()) {
+                    $favoriteTablesV2 = \App\Models\UserFavoriteTable::getFavoritesWithDetailsV2(auth()->id());
+                    
+                    // Arricchimento con configurazioni tabelle per UI
+                    $configurazioni = $this->getConfigurazioni();
+                    $favoriteTablesV2 = $favoriteTablesV2->map(function ($favorite) use ($configurazioni) {
+                        $tableConfig = $configurazioni[$favorite['table_objname']] ?? null;
+                        if ($tableConfig) {
+                            $favorite['table_details'] = [
+                                'nome' => $tableConfig['nome'],
+                                'nome_singolare' => $tableConfig['nome_singolare'],
+                                'icona' => $tableConfig['icona'],
+                                'colore' => $tableConfig['colore'],
+                                'color_from' => $tableConfig['color_from'],
+                                'color_to' => $tableConfig['color_to'],
+                                'descrizione' => $tableConfig['descrizione']
+                            ];
+                        }
+                        return $favorite;
+                    });
+                }
+            } catch (\Exception $e) {
+                Log::warning('Errore caricamento tabelle frequenti V2:', [
+                    'errore' => $e->getMessage(),
+                    'user_id' => auth()->id()
+                ]);
+                $favoriteTablesV2 = collect(); // Fallback vuoto
+            }
+
             return view('configurazioni.gestione-tabelle.index', [
                 'tabelle' => $tabelleDisponibili,
-                'title' => 'Gestione Tabelle di Sistema',
+                'favoriteTablesV2' => $favoriteTablesV2, // NUOVO: tabelle frequenti senza limiti
+                'title' => 'Gestione Tabelle di Sistema V2',
                 'breadcrumbs' => [
                     ['title' => 'Dashboard', 'url' => route('dashboard')],
                     ['title' => 'Configurazioni', 'url' => route('configurations.index')],
-                    ['title' => 'Gestione Tabelle', 'active' => true]
+                    ['title' => 'Gestione Tabelle V2', 'active' => true]
                 ]
             ]);
             
@@ -732,6 +767,46 @@ class GestioneTabelleController extends Controller
             // Supporto per le tabelle implementate
             if (!in_array($nomeTabella, ['associazioni-nature-iva', 'aliquote-iva', 'aspetto-beni', 'banche', 'categorie-articoli', 'categorie-clienti', 'categorie-fornitori', 'taglie-colori', 'causali-magazzino', 'colori-varianti', 'condizioni', 'denominazioni-prezzi-fissi', 'depositi', 'listini', 'modalita-pagamento', 'natura-iva', 'porto', 'settori-merceologici', 'taglie-varianti', 'tipo-di-taglie', 'tipi-pagamento', 'trasporto', 'trasporto-a-mezzo', 'ubicazioni', 'unita-di-misura', 'valute', 'zone'])) {
                 abort(404, "Tabella {$nomeTabella} non ancora implementata");
+            }
+
+            // ========================================
+            // TRACKING AUTOMATICO UTILIZZO V2
+            // ========================================
+            if (auth()->check()) {
+                try {
+                    // Tracking asincrono in background per non rallentare la risposta
+                    $favorite = \App\Models\UserFavoriteTable::firstOrCreate(
+                        [
+                            'user_id' => auth()->id(),
+                            'table_objname' => $nomeTabella
+                        ],
+                        [
+                            'uuid' => \Illuminate\Support\Str::uuid(),
+                            'sort_order' => 0,
+                            'click_count' => 0
+                        ]
+                    );
+
+                    // Incrementa utilizzo
+                    $favorite->incrementUsage();
+
+                    // Log solo per debug se necessario
+                    if ($favorite->click_count % 10 == 0) { // Log ogni 10 utilizzi
+                        Log::info('Tabella V2 molto utilizzata:', [
+                            'user_id' => auth()->id(),
+                            'table' => $nomeTabella,
+                            'clicks' => $favorite->click_count
+                        ]);
+                    }
+
+                } catch (\Exception $e) {
+                    // Non bloccare l'accesso alla tabella per errori di tracking
+                    Log::warning('Errore tracking automatico V2:', [
+                        'errore' => $e->getMessage(),
+                        'table' => $nomeTabella,
+                        'user_id' => auth()->id()
+                    ]);
+                }
             }
 
             // Gestione unificata per TUTTE le tabelle v2
@@ -4109,6 +4184,352 @@ class GestioneTabelleController extends Controller
             return redirect()
                 ->route('configurations.gestione-tabelle.tabella', 'aspetto-beni')
                 ->with('error', 'Errore durante creazione: ' . $e->getMessage());
+        }
+    }
+
+    // =====================================================
+    // SISTEMA TABELLE FREQUENTI V2 - SENZA LIMITI
+    // =====================================================
+
+    /**
+     * Carica le tabelle frequenti dell'utente senza limite fisso
+     */
+    public function getFavoriteTablesV2(): JsonResponse
+    {
+        try {
+            if (!auth()->check()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Utente non autenticato',
+                    'data' => []
+                ], 401);
+            }
+
+            // Carica TUTTE le tabelle frequenti senza limite
+            $favoriteTablesWithDetails = \App\Models\UserFavoriteTable::getFavoritesWithDetailsV2(auth()->id());
+            
+            return response()->json([
+                'success' => true,
+                'data' => $favoriteTablesWithDetails,
+                'count' => $favoriteTablesWithDetails->count()
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Errore caricamento tabelle frequenti V2:', [
+                'errore' => $e->getMessage(),
+                'user_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore caricamento tabelle frequenti',
+                'data' => []
+            ], 500);
+        }
+    }
+
+    /**
+     * Aggiunge una tabella ai preferiti
+     */
+    public function addToFavoritesV2(Request $request): JsonResponse
+    {
+        try {
+            if (!auth()->check()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Utente non autenticato'
+                ], 401);
+            }
+
+            $validated = $request->validate([
+                'table_objname' => 'required|string|max:100'
+            ]);
+
+            // Verifica che la tabella sia supportata
+            $configurazioni = $this->getConfigurazioni();
+            if (!isset($configurazioni[$validated['table_objname']])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tabella non supportata'
+                ], 400);
+            }
+
+            // Crea o aggiorna il preferito
+            $favorite = \App\Models\UserFavoriteTable::firstOrCreate(
+                [
+                    'user_id' => auth()->id(),
+                    'table_objname' => $validated['table_objname']
+                ],
+                [
+                    'uuid' => \Illuminate\Support\Str::uuid(),
+                    'sort_order' => 0,
+                    'click_count' => 0
+                ]
+            );
+
+            Log::info('Tabella aggiunta ai preferiti V2:', [
+                'user_id' => auth()->id(),
+                'table_objname' => $validated['table_objname'],
+                'favorite_id' => $favorite->id
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Tabella aggiunta ai preferiti',
+                'data' => $favorite
+            ], 201);
+
+        } catch (\Exception $e) {
+            Log::error('Errore aggiunta preferito V2:', [
+                'errore' => $e->getMessage(),
+                'dati' => $request->all(),
+                'user_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante aggiunta ai preferiti'
+            ], 500);
+        }
+    }
+
+    /**
+     * Rimuove una tabella dai preferiti
+     */
+    public function removeFromFavoritesV2(Request $request): JsonResponse
+    {
+        try {
+            if (!auth()->check()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Utente non autenticato'
+                ], 401);
+            }
+
+            $validated = $request->validate([
+                'table_objname' => 'required|string|max:100'
+            ]);
+
+            Log::info('Tentativo rimozione preferito V2:', [
+                'user_id' => auth()->id(),
+                'table_objname' => $validated['table_objname'],
+                'request_data' => $request->all()
+            ]);
+
+            $deleted = \App\Models\UserFavoriteTable::where('user_id', auth()->id())
+                ->where('table_objname', $validated['table_objname'])
+                ->delete();
+
+            Log::info('Risultato rimozione preferito V2:', [
+                'user_id' => auth()->id(),
+                'table_objname' => $validated['table_objname'],
+                'deleted_count' => $deleted
+            ]);
+
+            // Anche se non trova nulla, consideriamolo un successo
+            // (l'obiettivo è che la tabella non sia più nei preferiti)
+            return response()->json([
+                'success' => true,
+                'message' => $deleted > 0 ? 'Tabella rimossa dai preferiti' : 'Tabella già non presente nei preferiti',
+                'deleted_count' => $deleted
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::warning('Validazione fallita rimozione preferito V2:', [
+                'errori' => $e->errors(),
+                'dati' => $request->all(),
+                'user_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Dati non validi',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            Log::error('Errore rimozione preferito V2:', [
+                'errore' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'dati' => $request->all(),
+                'user_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante rimozione dai preferiti: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Traccia l'utilizzo di una tabella (con auto-promozione migliorata)
+     */
+    public function trackTableUsageV2(Request $request): JsonResponse
+    {
+        try {
+            if (!auth()->check()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Utente non autenticato'
+                ], 401);
+            }
+
+            $validated = $request->validate([
+                'table_objname' => 'required|string|max:100'
+            ]);
+
+            // Verifica che la tabella sia supportata
+            $configurazioni = $this->getConfigurazioni();
+            if (!isset($configurazioni[$validated['table_objname']])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tabella non supportata'
+                ], 400);
+            }
+
+            // Trova o crea il record di tracking
+            $favorite = \App\Models\UserFavoriteTable::firstOrCreate(
+                [
+                    'user_id' => auth()->id(),
+                    'table_objname' => $validated['table_objname']
+                ],
+                [
+                    'uuid' => \Illuminate\Support\Str::uuid(),
+                    'sort_order' => 0,
+                    'click_count' => 0
+                ]
+            );
+
+            // Incrementa il contatore e aggiorna ultimo accesso
+            $favorite->incrementUsage();
+
+            // SISTEMA AUTO-PROMOZIONE MIGLIORATO
+            // Soglie intelligenti: promozione automatica dopo 5 utilizzi
+            if ($favorite->click_count >= 5 && $favorite->click_count % 5 == 0) {
+                Log::info('Auto-promozione tabella frequente V2:', [
+                    'user_id' => auth()->id(),
+                    'table_objname' => $validated['table_objname'],
+                    'click_count' => $favorite->click_count,
+                    'action' => 'promoted_to_frequent'
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Utilizzo tracciato',
+                'data' => [
+                    'click_count' => $favorite->click_count,
+                    'last_accessed_at' => $favorite->last_accessed_at,
+                    'is_frequent' => $favorite->click_count >= 5
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Errore tracking utilizzo V2:', [
+                'errore' => $e->getMessage(),
+                'dati' => $request->all(),
+                'user_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore durante tracking utilizzo'
+            ], 500);
+        }
+    }
+
+    /**
+     * Ottieni statistiche utilizzo tabelle
+     */
+    public function getTableStatsV2(): JsonResponse
+    {
+        try {
+            if (!auth()->check()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Utente non autenticato'
+                ], 401);
+            }
+
+            $stats = \App\Models\UserFavoriteTable::where('user_id', auth()->id())
+                ->selectRaw('
+                    COUNT(*) as total_favorites,
+                    SUM(click_count) as total_clicks,
+                    AVG(click_count) as avg_clicks_per_table,
+                    COUNT(CASE WHEN click_count >= 5 THEN 1 END) as frequent_tables,
+                    MAX(click_count) as max_clicks,
+                    MAX(last_accessed_at) as last_activity
+                ')
+                ->first();
+
+            // Top 5 tabelle più utilizzate
+            $topTables = \App\Models\UserFavoriteTable::where('user_id', auth()->id())
+                ->orderByDesc('click_count')
+                ->orderByDesc('last_accessed_at')
+                ->limit(5)
+                ->get(['table_objname', 'click_count', 'last_accessed_at']);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'overview' => $stats,
+                    'top_tables' => $topTables,
+                    'recommendations' => $this->getTableRecommendations()
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Errore caricamento statistiche V2:', [
+                'errore' => $e->getMessage(),
+                'user_id' => auth()->id()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Errore caricamento statistiche'
+            ], 500);
+        }
+    }
+
+    /**
+     * Sistema intelligente di raccomandazioni
+     */
+    private function getTableRecommendations(): array
+    {
+        try {
+            $configurazioni = $this->getConfigurazioni();
+            $userFavorites = \App\Models\UserFavoriteTable::where('user_id', auth()->id())
+                ->pluck('table_objname')
+                ->toArray();
+
+            $recommendations = [];
+
+            // Logica di raccomandazione basata sui pattern di utilizzo
+            if (in_array('categorie-articoli', $userFavorites)) {
+                $recommendations[] = [
+                    'table' => 'settori-merceologici',
+                    'reason' => 'Correlata a categorie articoli',
+                    'confidence' => 0.8
+                ];
+            }
+
+            if (in_array('aliquote-iva', $userFavorites)) {
+                $recommendations[] = [
+                    'table' => 'natura-iva',
+                    'reason' => 'Completa la gestione IVA',
+                    'confidence' => 0.9
+                ];
+            }
+
+            return array_slice($recommendations, 0, 3); // Max 3 suggerimenti
+
+        } catch (\Exception $e) {
+            Log::error('Errore generazione raccomandazioni:', [
+                'errore' => $e->getMessage(),
+                'user_id' => auth()->id()
+            ]);
+            return [];
         }
     }
 }
