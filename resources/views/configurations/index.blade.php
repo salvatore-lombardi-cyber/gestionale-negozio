@@ -276,11 +276,11 @@
                 <div class="col-xl-3 col-lg-6 col-md-6">
                     <div class="config-card company">
                         <div class="config-icon company">
-                            <i class="bi bi-building"></i>
+                            <i class="bi bi-person-badge"></i>
                         </div>
-                        <h3 class="config-title">{{ __('app.company_profile') }}</h3>
-                        <p class="config-description">{{ __('app.company_profile_desc') }}</p>
-                        <a href="{{ route('configurations.company-profile') }}" class="config-btn primary">
+                        <h3 class="config-title">Profilo Utente</h3>
+                        <p class="config-description">Gestisci i dati anagrafici, fiscali e di contatto dell'azienda</p>
+                        <a href="{{ route('configurations.utente') }}" class="config-btn primary">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }}
                         </a>
                     </div>

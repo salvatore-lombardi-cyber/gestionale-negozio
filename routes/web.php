@@ -81,9 +81,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('configurations')->name('configurations.')->group(function () {
         Route::get('/', [ConfigurationController::class, 'index'])->name('index');
         
-        // Profilo Azienda
-        Route::get('/company-profile', [ConfigurationController::class, 'companyProfile'])->name('company-profile');
-        Route::post('/company-profile', [ConfigurationController::class, 'updateCompanyProfile'])->name('company-profile.update');
+        // Utente
+        Route::get('/utente', [ConfigurationController::class, 'utente'])->name('utente');
+        Route::post('/utente', [ConfigurationController::class, 'updateUtente'])->name('utente.update');
         
         // Coordinate Bancarie
         Route::get('/bank-accounts', [ConfigurationController::class, 'bankAccounts'])->name('bank-accounts');

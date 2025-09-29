@@ -140,7 +140,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <h1 class="config-title">
-                    <i class="bi bi-building"></i> {{ __('app.company_profile') }}
+                    <i class="bi bi-person-badge"></i> Profilo Utente
                 </h1>
             </div>
             <a href="{{ route('configurations.index') }}" class="btn btn-outline-secondary">
@@ -155,7 +155,7 @@
         </div>
     @endif
 
-    <form action="{{ route('configurations.company-profile.update') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('configurations.utente.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         
         <!-- Dati Anagrafici -->
