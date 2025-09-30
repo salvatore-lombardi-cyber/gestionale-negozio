@@ -47,56 +47,41 @@
         padding: 0;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        overflow: hidden;
     }
     
-    .nav-tabs {
-        background: rgba(248, 249, 250, 0.8);
-        border-bottom: 2px solid #e9ecef;
-        padding: 0 2rem;
-        margin: 0;
-    }
-    
-    .nav-tabs .nav-link {
-        border: none;
-        border-radius: 0;
-        padding: 1rem 1.5rem;
-        color: #6c757d;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        margin-bottom: -2px;
-        position: relative;
-    }
-    
-    .nav-tabs .nav-link:hover {
-        background: rgba(255, 255, 255, 0.5);
-        color: #029D7E;
-    }
-    
-    .nav-tabs .nav-link.active {
-        background: transparent;
-        color: #029D7E;
-        border-bottom: 2px solid #029D7E;
-    }
-    
-    .tab-content {
+    .form-content {
         padding: 2rem;
     }
     
     .form-section {
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 15px;
+        padding: 1.5rem;
         margin-bottom: 2rem;
+        border: 1px solid rgba(226, 232, 240, 0.5);
+        transition: all 0.3s ease;
+    }
+    
+    .form-section:hover {
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
     
     .section-title {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         font-weight: 700;
-        color: #2d3748;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid #e2e8f0;
+        color: #029D7E;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid rgba(2, 157, 126, 0.2);
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
+    }
+    
+    .section-title i {
+        font-size: 1.4rem;
+        color: #029D7E;
     }
     
     .form-group {
@@ -152,23 +137,6 @@
         box-shadow: 0 10px 25px rgba(108, 117, 125, 0.3);
     }
     
-    .form-actions {
-        background: rgba(248, 249, 250, 0.8);
-        padding: 1.5rem 2rem;
-        margin: -2rem -2rem 0 -2rem;
-        border-top: 1px solid #e9ecef;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .form-actions .d-flex {
-        margin-right: 2rem;
-    }
-    
-    .form-actions .form-check {
-        margin-left: 2rem;
-    }
     
     .required {
         color: #dc3545;
@@ -179,6 +147,14 @@
         border-style: dashed !important;
         cursor: not-allowed;
     }
+    
+    
+    /* Indicatore sezione attiva durante lo scroll */
+    .form-section.in-view {
+        border-left: 4px solid #029D7E;
+        background: rgba(2, 157, 126, 0.05);
+    }
+    
     
     @media (max-width: 768px) {
         .anagrafiche-container {
@@ -193,29 +169,47 @@
             font-size: 1.5rem;
         }
         
-        .nav-tabs {
-            padding: 0 1rem;
-        }
-        
-        .nav-tabs .nav-link {
-            padding: 0.75rem 1rem;
-            font-size: 0.9rem;
-        }
-        
-        .tab-content {
+        .form-content {
             padding: 1.5rem;
         }
         
-        .form-actions {
-            padding: 1rem 1.5rem;
-            margin: -1.5rem -1.5rem 0 -1.5rem;
-            flex-direction: column;
-            gap: 1rem;
+        .form-section {
+            padding: 1rem;
         }
     }
 </style>
 
 <div class="container-fluid anagrafiche-container">
+    <!-- Alert Messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Attenzione!</strong> Sono stati rilevati dei problemi:
+            <ul class="mb-0 mt-2">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-12">
             <!-- Header -->
@@ -240,33 +234,15 @@
                     @csrf
                     <input type="hidden" name="tipo" value="{{ $tipo }}">
                     
-                    <!-- Tab Navigation -->
-                    <ul class="nav nav-tabs" id="anagraficaTabs" role="tablist">
-                        @foreach($config['tabs'] as $tabKey => $tab)
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link {{ $loop->first ? 'active' : '' }}" 
-                                    id="{{ $tabKey }}-tab" 
-                                    data-bs-toggle="tab" 
-                                    data-bs-target="#{{ $tabKey }}" 
-                                    type="button" 
-                                    role="tab">
-                                <i class="{{ $tab['icon'] }}"></i> {{ $tab['titolo'] }}
-                            </button>
-                        </li>
-                        @endforeach
-                    </ul>
-                    
-                    <!-- Tab Content -->
-                    <div class="tab-content" id="anagraficaTabContent">
+                    <!-- Form Content Unificato -->
+                    <div class="form-content">
                         
-                        <!-- TAB DATI BASE -->
+                        <!-- SEZIONE DATI BASE -->
                         @if(isset($config['tabs']['dati-base']))
-                        <div class="tab-pane fade {{ array_key_first($config['tabs']) === 'dati-base' ? 'show active' : '' }}" 
-                             id="dati-base" role="tabpanel">
-                            <div class="form-section">
-                                <h4 class="section-title">
-                                    <i class="bi bi-person-fill"></i> Informazioni Base
-                                </h4>
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="bi bi-person-fill"></i> Informazioni Base
+                            </h4>
                                 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -354,18 +330,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                         @endif
                         
-                        <!-- TAB INDIRIZZO -->
+                        <!-- SEZIONE INDIRIZZO -->
                         @if(isset($config['tabs']['indirizzo']))
-                        <div class="tab-pane fade {{ array_key_first($config['tabs']) === 'indirizzo' ? 'show active' : '' }}" 
-                             id="indirizzo" role="tabpanel">
-                            <div class="form-section">
-                                <h4 class="section-title">
-                                    <i class="bi bi-geo-alt-fill"></i> Indirizzo
-                                </h4>
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="bi bi-geo-alt-fill"></i> Indirizzo
+                            </h4>
                                 
                                 <div class="row">
                                     <div class="col-md-8">
@@ -421,18 +394,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                         @endif
                         
-                        <!-- TAB CONTATTI -->
+                        <!-- SEZIONE CONTATTI -->
                         @if(isset($config['tabs']['contatti']))
-                        <div class="tab-pane fade {{ array_key_first($config['tabs']) === 'contatti' ? 'show active' : '' }}" 
-                             id="contatti" role="tabpanel">
-                            <div class="form-section">
-                                <h4 class="section-title">
-                                    <i class="bi bi-telephone-fill"></i> Contatti
-                                </h4>
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="bi bi-telephone-fill"></i> Contatti
+                            </h4>
                                 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -496,18 +466,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                         @endif
                         
-                        <!-- TAB FISCALI -->
+                        <!-- SEZIONE FISCALI -->
                         @if(isset($config['tabs']['fiscali']))
-                        <div class="tab-pane fade {{ array_key_first($config['tabs']) === 'fiscali' ? 'show active' : '' }}" 
-                             id="fiscali" role="tabpanel">
-                            <div class="form-section">
-                                <h4 class="section-title">
-                                    <i class="bi bi-receipt"></i> Dati Fiscali
-                                </h4>
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="bi bi-receipt"></i> Dati Fiscali
+                            </h4>
                                 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -575,18 +542,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                         @endif
                         
-                        <!-- TAB COMMERCIALI -->
+                        <!-- SEZIONE COMMERCIALI -->
                         @if(isset($config['tabs']['commerciali']))
-                        <div class="tab-pane fade {{ array_key_first($config['tabs']) === 'commerciali' ? 'show active' : '' }}" 
-                             id="commerciali" role="tabpanel">
-                            <div class="form-section">
-                                <h4 class="section-title">
-                                    <i class="bi bi-cash-coin"></i> Dati Commerciali
-                                </h4>
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="bi bi-cash-coin"></i> Dati Commerciali
+                            </h4>
                                 
                                 <div class="row">
                                     <div class="col-md-4">
@@ -649,18 +613,15 @@
                                     </div>
                                 </div>
                                 @endif
-                            </div>
                         </div>
                         @endif
                         
-                        <!-- TAB BANCARI -->
+                        <!-- SEZIONE BANCARI -->
                         @if(isset($config['tabs']['bancari']))
-                        <div class="tab-pane fade {{ array_key_first($config['tabs']) === 'bancari' ? 'show active' : '' }}" 
-                             id="bancari" role="tabpanel">
-                            <div class="form-section">
-                                <h4 class="section-title">
-                                    <i class="bi bi-bank"></i> Coordinate Bancarie
-                                </h4>
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="bi bi-bank"></i> Coordinate Bancarie
+                            </h4>
                                 
                                 <div class="row">
                                     <div class="col-md-12">
@@ -694,18 +655,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                         @endif
                         
-                        <!-- TAB SPECIFICI per ARTICOLI -->
+                        <!-- SEZIONE SPECIFICI per ARTICOLI -->
                         @if(isset($config['tabs']['specifici']) && $tipo === 'articolo')
-                        <div class="tab-pane fade {{ array_key_first($config['tabs']) === 'specifici' ? 'show active' : '' }}" 
-                             id="specifici" role="tabpanel">
-                            <div class="form-section">
-                                <h4 class="section-title">
-                                    <i class="bi bi-box-seam"></i> Dati Specifici Articolo
-                                </h4>
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="bi bi-box-seam"></i> Dati Specifici Articolo
+                            </h4>
                                 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -800,18 +758,15 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                         @endif
                         
-                        <!-- TAB SPECIFICI per SERVIZI -->
+                        <!-- SEZIONE SPECIFICI per SERVIZI -->
                         @if(isset($config['tabs']['specifici']) && $tipo === 'servizio')
-                        <div class="tab-pane fade {{ array_key_first($config['tabs']) === 'specifici' ? 'show active' : '' }}" 
-                             id="specifici" role="tabpanel">
-                            <div class="form-section">
-                                <h4 class="section-title">
-                                    <i class="bi bi-tools"></i> Dati Specifici Servizio
-                                </h4>
+                        <div class="form-section">
+                            <h4 class="section-title">
+                                <i class="bi bi-tools"></i> Dati Specifici Servizio
+                            </h4>
                                 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -872,33 +827,21 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                         @endif
                         
-                    </div>
-                    
-                    <!-- Actions -->
-                    <div class="form-actions">
-                        <div class="form-check">
-                            <input type="checkbox" 
-                                   name="attivo" 
-                                   class="form-check-input" 
-                                   id="attivo"
-                                   checked>
-                            <label class="form-check-label" for="attivo">
-                                <strong>{{ ucfirst($tipo) }} attivo</strong>
-                            </label>
+                        <!-- Actions Section -->
+                        <div class="form-section" style="text-align: center; background: rgba(248, 249, 250, 0.8);">
+                            <div class="d-flex gap-3 justify-content-center">
+                                <a href="{{ route('anagrafiche.lista', $tipo) }}" class="btn btn-secondary">
+                                    <i class="bi bi-x-circle"></i> Annulla
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle"></i> Salva {{ ucfirst($tipo) }}
+                                </button>
+                            </div>
                         </div>
                         
-                        <div class="d-flex gap-2">
-                            <a href="{{ route('anagrafiche.lista', $tipo) }}" class="btn btn-secondary">
-                                <i class="bi bi-x-circle"></i> Annulla
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-circle"></i> Salva {{ ucfirst($tipo) }}
-                            </button>
-                        </div>
                     </div>
                 </form>
             </div>
@@ -922,10 +865,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Evidenziazione sezione attiva durante scroll della pagina
+    const sections = document.querySelectorAll('.form-section');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Rimuovi evidenziazione da tutte le sezioni
+                sections.forEach(section => section.classList.remove('in-view'));
+                // Aggiungi evidenziazione alla sezione corrente
+                entry.target.classList.add('in-view');
+            }
+        });
+    }, {
+        threshold: 0.4
+    });
+    
+    // Osserva tutte le sezioni
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+    
     // Carica fornitori per articoli
     @if($tipo === 'articolo')
     loadFornitori();
     @endif
+    
+    // Auto-dismiss alerts dopo 5 secondi
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+        setTimeout(function() {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
+    });
 });
 
 @if($tipo === 'articolo')

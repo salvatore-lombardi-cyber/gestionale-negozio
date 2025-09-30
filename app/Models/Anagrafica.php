@@ -275,9 +275,20 @@ class Anagrafica extends Model
         ];
 
         $prefisso = $prefissi[$tipo] ?? 'GEN';
-        $numero = static::where('tipo', $tipo)->count() + 1;
         
-        return $prefisso . str_pad($numero, 6, '0', STR_PAD_LEFT);
+        // Trova il prossimo numero disponibile controllando duplicati
+        $numero = 1;
+        do {
+            $codice = $prefisso . str_pad($numero, 6, '0', STR_PAD_LEFT);
+            $exists = static::where('codice_interno', $codice)->exists();
+            if (!$exists) {
+                return $codice;
+            }
+            $numero++;
+        } while ($numero <= 999999); // Limite massimo di sicurezza
+        
+        // Fallback se arriviamo al limite (molto improbabile)
+        throw new \Exception("Impossibile generare codice interno unico per tipo: {$tipo}");
     }
 
     public static function tipiDisponibili()
