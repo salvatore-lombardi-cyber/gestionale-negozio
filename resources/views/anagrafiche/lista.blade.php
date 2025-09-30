@@ -177,7 +177,9 @@
         padding: 0;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        overflow: visible;
+        overflow: visible !important;
+        position: relative;
+        z-index: 10;
     }
     
     .results-header {
@@ -189,6 +191,8 @@
         flex-wrap: wrap;
         gap: 1.5rem;
         overflow: visible !important;
+        position: relative;
+        z-index: 100;
     }
     
     .banner-title h3 {
@@ -219,6 +223,74 @@
         display: flex;
         gap: 0.5rem;
         align-items: center;
+    }
+    
+    /* Dropdown Export Styles */
+    .export-dropdown-menu {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(2, 157, 126, 0.2);
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        padding: 0.5rem;
+        min-width: 280px;
+        margin-top: 0.5rem;
+        z-index: 1050 !important;
+        position: relative;
+    }
+    
+    .dropdown {
+        position: relative;
+        z-index: 1050;
+    }
+    
+    .banner-controls {
+        overflow: visible !important;
+        z-index: 1050;
+        position: relative;
+    }
+    
+    .export-item {
+        display: flex !important;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        border: none !important;
+        transition: all 0.3s ease;
+        text-decoration: none !important;
+        color: #2d3748 !important;
+    }
+    
+    .export-item:hover {
+        background: linear-gradient(135deg, rgba(2, 157, 126, 0.1), rgba(77, 201, 165, 0.1));
+        transform: translateX(5px);
+        color: #029D7E !important;
+    }
+    
+    .export-item i {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+    
+    .export-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+    
+    .export-text strong {
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+    
+    .export-text small {
+        color: #6c757d;
+        font-size: 0.8rem;
+    }
+    
+    .dropdown-toggle::after {
+        margin-left: 0.5rem;
     }
     
     .table-responsive {
@@ -853,12 +925,40 @@
                     <span>per pagina</span>
                 </div>
                 <div class="export-actions">
-                    <a href="{{ route('anagrafiche.excel-export', $tipo) }}?formato=excel" class="modern-btn primary">
-                        <i class="bi bi-file-earmark-excel"></i> Excel
-                    </a>
-                    <a href="{{ route('anagrafiche.excel-export', $tipo) }}?formato=csv" class="modern-btn warning">
-                        <i class="bi bi-file-earmark-text"></i> CSV
-                    </a>
+                    <div class="dropdown">
+                        <button class="modern-btn primary dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-download"></i> Esporta
+                        </button>
+                        <ul class="dropdown-menu export-dropdown-menu" aria-labelledby="exportDropdown">
+                            <li>
+                                <a class="dropdown-item export-item" href="{{ route('anagrafiche.excel-export', $tipo) }}?formato=excel">
+                                    <i class="bi bi-file-earmark-excel text-success"></i>
+                                    <div class="export-text">
+                                        <strong>Excel</strong>
+                                        <small>Foglio di calcolo (.xlsx)</small>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item export-item" href="{{ route('anagrafiche.excel-export', $tipo) }}?formato=csv">
+                                    <i class="bi bi-file-earmark-text text-warning"></i>
+                                    <div class="export-text">
+                                        <strong>CSV</strong>
+                                        <small>Valori separati da virgola (.csv)</small>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item export-item" href="{{ route('anagrafiche.export', ['tipo' => $tipo, 'format' => 'pdf-all']) }}">
+                                    <i class="bi bi-file-earmark-pdf text-danger"></i>
+                                    <div class="export-text">
+                                        <strong>PDF Completo</strong>
+                                        <small>Archivio completo (.pdf)</small>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
