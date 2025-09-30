@@ -249,6 +249,10 @@ class AnagraficaController extends Controller
             return $this->exportPdf($tipo, $id);
         }
 
+        if ($format === 'pdf-all') {
+            return $this->exportPdfAll($tipo, $request);
+        }
+
         return redirect()
             ->route('anagrafiche.lista', ['tipo' => $tipo])
             ->with('error', 'Formato export non supportato');
@@ -266,6 +270,50 @@ class AnagraficaController extends Controller
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('anagrafiche.pdf', compact('anagrafica'));
         
         $filename = "{$tipo}_{$anagrafica->codice_interno}_" . now()->format('Y-m-d') . ".pdf";
+        
+        return $pdf->download($filename);
+    }
+
+    /**
+     * Export PDF archivio completo
+     */
+    public function exportPdfAll($tipo, Request $request)
+    {
+        $this->validateTipo($tipo);
+        
+        // Ottieni tutte le anagrafiche del tipo con eventuali filtri di ricerca
+        $query = Anagrafica::where('tipo', $tipo)->attivi();
+        
+        // Applica ricerca se presente
+        if ($search = $request->get('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('nome', 'LIKE', "%{$search}%")
+                  ->orWhere('cognome', 'LIKE', "%{$search}%")
+                  ->orWhere('codice_interno', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%")
+                  ->orWhere('codice_fiscale', 'LIKE', "%{$search}%")
+                  ->orWhere('partita_iva', 'LIKE', "%{$search}%");
+            });
+        }
+        
+        // Applica filtri specifici per tipo
+        $this->applicaFiltriPerTipo($query, $tipo, $request);
+        
+        // Ordina per nome
+        $anagrafiche = $query->orderBy('nome', 'asc')->get();
+        
+        $tipoLabel = $this->getTipoLabel($tipo);
+        $tipoPlural = $tipo === 'cliente' ? 'Clienti' : ($tipo === 'fornitore' ? 'Fornitori' : ($tipo === 'vettore' ? 'Vettori' : ($tipo === 'agente' ? 'Agenti' : ($tipo === 'articolo' ? 'Articoli' : 'Servizi'))));
+        
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('anagrafiche.pdf-all', [
+            'anagrafiche' => $anagrafiche,
+            'tipo' => $tipo,
+            'tipoLabel' => $tipoLabel,
+            'tipoPlural' => $tipoPlural,
+            'dataExport' => now()->format('d/m/Y H:i')
+        ]);
+        
+        $filename = "Archivio_{$tipoPlural}_" . now()->format('Y-m-d_H-i-s') . ".pdf";
         
         return $pdf->download($filename);
     }
