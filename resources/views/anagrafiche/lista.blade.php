@@ -177,7 +177,7 @@
         padding: 0;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        overflow: hidden;
+        overflow: visible;
     }
     
     .results-header {
@@ -188,6 +188,7 @@
         align-items: center;
         flex-wrap: wrap;
         gap: 1.5rem;
+        overflow: visible !important;
     }
     
     .banner-title h3 {
@@ -211,6 +212,7 @@
         align-items: center;
         gap: 1.5rem;
         flex-wrap: wrap;
+        overflow: visible !important;
     }
     
     .export-actions {
@@ -851,10 +853,10 @@
                     <span>per pagina</span>
                 </div>
                 <div class="export-actions">
-                    <a href="{{ route('anagrafiche.excelExport', $tipo) }}?formato=excel" class="modern-btn primary">
+                    <a href="{{ route('anagrafiche.excel-export', $tipo) }}?formato=excel" class="modern-btn primary">
                         <i class="bi bi-file-earmark-excel"></i> Excel
                     </a>
-                    <a href="{{ route('anagrafiche.excelExport', $tipo) }}?formato=csv" class="modern-btn warning">
+                    <a href="{{ route('anagrafiche.excel-export', $tipo) }}?formato=csv" class="modern-btn warning">
                         <i class="bi bi-file-earmark-text"></i> CSV
                     </a>
                 </div>
@@ -1074,5 +1076,6 @@ document.querySelector('.search-input').addEventListener('input', function() {
         this.closest('form').submit();
     }, 500);
 });
+
 </script>
 @endsection

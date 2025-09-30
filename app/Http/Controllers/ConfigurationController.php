@@ -32,17 +32,17 @@ class ConfigurationController extends Controller
         return view('configurations.index');
     }
 
-    // === PROFILO AZIENDA ===
-    public function companyProfile()
+    // === UTENTE ===
+    public function utente()
     {
         $company = CompanyProfile::first() ?? new CompanyProfile();
-        return view('configurations.company-profile', compact('company'));
+        return view('configurations.utente', compact('company'));
     }
 
-    public function updateCompanyProfile(Request $request)
+    public function updateUtente(Request $request)
     {
         // Rate limiting per operazioni critiche
-        $rateLimiterKey = 'update-company-profile:' . Auth::id();
+        $rateLimiterKey = 'update-utente:' . Auth::id();
         if (RateLimiter::tooManyAttempts($rateLimiterKey, 5)) {
             $seconds = RateLimiter::availableIn($rateLimiterKey);
             return back()->withErrors(['error' => "Troppe modifiche. Riprova tra {$seconds} secondi."]);
