@@ -73,7 +73,7 @@
     }
     
     .config-card.banks::before {
-        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+        background: linear-gradient(135deg, #48cae4, #0077b6);
     }
     
     .config-card.tables::before {
@@ -82,6 +82,14 @@
     
     .config-card.settings::before {
         background: linear-gradient(135deg, #ffd60a, #ff8500);
+    }
+    
+    .config-card.enterprise::before {
+        background: linear-gradient(135deg, #ffd60a, #ff8500);
+    }
+    
+    .config-card.users::before {
+        background: linear-gradient(135deg, #f72585, #c5025a);
     }
     
     .config-icon {
@@ -103,7 +111,7 @@
     }
     
     .config-icon.banks {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        background: linear-gradient(135deg, #48cae4, #0077b6);
     }
     
     .config-icon.tables {
@@ -115,7 +123,11 @@
     }
     
     .config-icon.enterprise {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #ffd60a, #ff8500);
+    }
+    
+    .config-icon.users {
+        background: linear-gradient(135deg, #f72585, #c5025a);
     }
     
     .config-icon::before {
@@ -185,6 +197,11 @@
     
     .config-btn.warning {
         background: linear-gradient(135deg, #ffd60a, #ff8500);
+        color: white;
+    }
+    
+    .config-btn.danger {
+        background: linear-gradient(135deg, #f72585, #c5025a);
         color: white;
     }
     
@@ -293,20 +310,7 @@
                         </div>
                         <h3 class="config-title">{{ __('app.bank_accounts') }}</h3>
                         <p class="config-description">{{ __('app.bank_accounts_desc') }} Configura metodi di pagamento e coordinate per fatturazione.</p>
-                        <a href="{{ route('configurations.bank-accounts') }}" class="config-btn success">
-                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }}
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="col-xl-3 col-lg-6 col-md-6">
-                    <div class="config-card tables">
-                        <div class="config-icon tables">
-                            <i class="bi bi-table"></i>
-                        </div>
-                        <h3 class="config-title">{{ __('app.system_tables') }}</h3>
-                        <p class="config-description">{{ __('app.system_tables_desc') }}</p>
-                        <a href="{{ route('configurations.system-tables.index') }}" class="config-btn info">
+                        <a href="{{ route('configurations.bank-accounts') }}" class="config-btn info">
                             <i class="bi bi-arrow-right"></i> {{ __('app.manage') }}
                         </a>
                     </div>
@@ -317,10 +321,23 @@
                         <div class="config-icon enterprise">
                             <i class="bi bi-gear-wide-connected"></i>
                         </div>
-                        <h3 class="config-title">Gestione Tabelle v2</h3>
+                        <h3 class="config-title">Gestisci Tabelle</h3>
                         <p class="config-description">Sistema enterprise per configurazioni avanzate. Associazioni Nature IVA e Aliquote con architettura moderna.</p>
-                        <a href="{{ route('configurations.gestione-tabelle.index') }}" class="config-btn primary">
-                            <i class="bi bi-arrow-right"></i> Accedi v2
+                        <a href="{{ route('configurations.gestione-tabelle.index') }}" class="config-btn warning">
+                            <i class="bi bi-arrow-right"></i> Gestisci
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-lg-6 col-md-6">
+                    <div class="config-card users">
+                        <div class="config-icon users">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h3 class="config-title">Gestione Utenti</h3>
+                        <p class="config-description">Sistema multi-utente enterprise con permessi granulari e controllo accessi avanzato</p>
+                        <a href="{{ route('configurations.users.index') }}" class="config-btn danger">
+                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }}
                         </a>
                     </div>
                 </div>

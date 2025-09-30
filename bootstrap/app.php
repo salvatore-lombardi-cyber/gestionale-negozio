@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Registra middleware personalizzati per sicurezza
         $middleware->alias([
             'config.access' => \App\Http\Middleware\ConfigurationAccess::class,
+            'permissions' => \App\Http\Middleware\CheckUserPermissions::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

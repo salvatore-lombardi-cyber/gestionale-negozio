@@ -23,6 +23,12 @@ class User extends Authenticatable
         'avatar',
         'password',
         'role',
+        'company_id',
+        'department',
+        'bio',
+        'preferences',
+        'phone',
+        'is_active',
     ];
 
     /**
@@ -45,6 +51,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'preferences' => 'array',
+            'last_login_at' => 'datetime',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -69,7 +78,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->hasAnyRole(['admin', 'super_admin']);
+        return $this->role === 'amministratore';
     }
 
     /**
@@ -77,6 +86,144 @@ class User extends Authenticatable
      */
     public function canConfigure(): bool
     {
-        return $this->hasAnyRole(['admin', 'configuratore', 'super_admin']);
+        return $this->role === 'amministratore';
+    }
+
+    // ================================
+    // RELAZIONI MULTI-UTENTE
+    // ================================
+
+    /**
+     * Relazione con Company
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Relazione con UserPermission
+     */
+    public function permissions()
+    {
+        return $this->hasMany(UserPermission::class);
+    }
+
+    /**
+     * Ottiene i permessi attivi
+     */
+    public function activePermissions()
+    {
+        return $this->permissions()
+            ->where('is_active', true)
+            ->where(function($query) {
+                $query->whereNull('valid_from')
+                      ->orWhere('valid_from', '<=', now());
+            })
+            ->where(function($query) {
+                $query->whereNull('valid_until')
+                      ->orWhere('valid_until', '>=', now());
+            });
+    }
+
+    // ================================
+    // METODI SISTEMA PERMESSI
+    // ================================
+
+    /**
+     * Verifica se l'utente può accedere a un modulo
+     */
+    public function canAccessModule(string $module, string $action = 'read'): bool
+    {
+        // Super admin ha accesso a tutto
+        if ($this->role === 'super_admin') {
+            return true;
+        }
+
+        // Verifica permessi specifici
+        $permissions = $this->activePermissions()->get();
+        
+        foreach ($permissions as $permission) {
+            $modules = $permission->modules ?? [];
+            if (isset($modules[$module][$action]) && $modules[$module][$action] === true) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Verifica permesso speciale
+     */
+    public function hasSpecialPermission(string $permission): bool
+    {
+        if ($this->role === 'super_admin') {
+            return true;
+        }
+
+        $permissions = $this->activePermissions()->get();
+        
+        foreach ($permissions as $perm) {
+            $special = $perm->special_permissions ?? [];
+            if (isset($special[$permission]) && $special[$permission] === true) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Ottiene restrizioni attive
+     */
+    public function getRestrictions(): array
+    {
+        $restrictions = [];
+        
+        $permissions = $this->activePermissions()->get();
+        foreach ($permissions as $permission) {
+            if ($permission->restrictions) {
+                $restrictions = array_merge($restrictions, $permission->restrictions);
+            }
+        }
+        
+        return $restrictions;
+    }
+
+    /**
+     * Aggiorna ultimo accesso
+     */
+    public function updateLastLogin(): void
+    {
+        $this->update(['last_login_at' => now()]);
+    }
+
+    // ================================
+    // SCOPES E QUERY HELPERS
+    // ================================
+
+    /**
+     * Scope per utenti attivi
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope per utenti di una specifica company
+     */
+    public function scopeOfCompany($query, $companyId)
+    {
+        return $query->where('company_id', $companyId);
+    }
+
+    /**
+     * Scope per ruoli specifici
+     */
+    public function scopeWithRole($query, $role)
+    {
+        return $query->where('role', $role);
     }
 }

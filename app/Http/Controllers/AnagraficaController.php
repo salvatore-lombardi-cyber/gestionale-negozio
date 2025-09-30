@@ -301,7 +301,7 @@ class AnagraficaController extends Controller
     /**
      * API AJAX per ricerca dinamica
      */
-    public function search($tipo, Request $request)
+    public function apiSearch($tipo, Request $request)
     {
         $this->validateTipo($tipo);
 
@@ -621,4 +621,5 @@ class AnagraficaController extends Controller
             ]
         };
     }
+
 }
