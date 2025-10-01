@@ -11,6 +11,8 @@ use App\Models\PaymentMethod;
 use App\Models\Currency;
 use App\Models\SystemSetting;
 use App\Models\DocumentNumbering;
+use App\Models\RegimeFiscale;
+use App\Models\VatNature;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -36,7 +38,10 @@ class ConfigurationController extends Controller
     public function utente()
     {
         $company = CompanyProfile::first() ?? new CompanyProfile();
-        return view('configurations.utente', compact('company'));
+        $regimiFiscali = RegimeFiscale::attivo()->ordinato()->get();
+        $natureIva = VatNature::orderBy('vat_code')->get();
+        
+        return view('configurations.utente', compact('company', 'regimiFiscali', 'natureIva'));
     }
 
     public function updateUtente(Request $request)
@@ -67,16 +72,18 @@ class ConfigurationController extends Controller
             'email' => 'nullable|email:rfc,dns|max:255',
             'sito_web' => 'nullable|url|max:255|regex:/^https?:\/\/.+$/',
             'partita_iva' => 'nullable|string|max:20|regex:/^[A-Z]{2}[0-9]{11}$/',
-            'codice_attivita_iva' => 'nullable|string|max:20|regex:/^[0-9]{6}\.[0-9]{2}$/',
+            'codice_attivita_iva' => 'nullable|string|exists:vat_natures,vat_code',
             'regime_fiscale' => 'nullable|string|max:255',
             'attivita' => 'nullable|string|max:500',
             'numero_tribunale' => 'nullable|string|max:255',
+            'tribunale' => 'nullable|string|max:255',
             'cciaa' => 'nullable|string|max:255',
             'capitale_sociale' => 'nullable|numeric|min:0|max:999999999.99',
             'provincia_nascita' => 'nullable|string|max:100|regex:/^[\p{L}\s\-]+$/u',
             'luogo_nascita' => 'nullable|string|max:100|regex:/^[\p{L}\s\-\']+$/u',
             'data_nascita' => 'nullable|date|before:today',
             'iva_esente' => 'boolean',
+            'conai' => 'boolean',
             'sdi_username' => 'nullable|string|max:255',
             'sdi_password' => 'nullable|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048|dimensions:max_width=1000,max_height=1000'
@@ -133,7 +140,7 @@ class ConfigurationController extends Controller
     // === COORDINATE BANCARIE ===
     public function bankAccounts()
     {
-        $accounts = BankAccount::where('active', true)->get();
+        $accounts = BankAccount::orderBy('nome_banca')->get();
         return view('configurations.bank-accounts', compact('accounts'));
     }
 
@@ -146,6 +153,11 @@ class ConfigurationController extends Controller
         }
         RateLimiter::hit($rateLimiterKey, 3600); // 10 tentativi per ora
 
+        // Pre-processo IBAN rimuovendo spazi per validazione
+        $request->merge([
+            'iban' => str_replace(' ', '', $request->input('iban', ''))
+        ]);
+
         $validated = $request->validate([
             'nome_banca' => 'required|string|max:255|regex:/^[\p{L}\p{N}\s\-\.\&]+$/u',
             'abi' => 'nullable|string|size:5|regex:/^[0-9]{5}$/',
@@ -156,10 +168,9 @@ class ConfigurationController extends Controller
             'sia' => 'nullable|string|size:5|regex:/^[A-Z0-9]{5}$/'
         ]);
 
-        // Verifica univocità IBAN
-        $existingIban = BankAccount::where('iban', $validated['iban'])
-            ->where('active', true)
-            ->first();
+        // Verifica univocità IBAN (cripta per confronto)
+        $encryptedIban = Crypt::encryptString($validated['iban']);
+        $existingIban = BankAccount::where('iban', $encryptedIban)->first();
         
         if ($existingIban) {
             return back()->withErrors(['iban' => 'IBAN già esistente nel sistema.']);
@@ -192,7 +203,7 @@ class ConfigurationController extends Controller
             abort(404, 'Conto bancario non trovato.');
         }
 
-        $account = BankAccount::where('uuid', $uuid)->where('active', true)->firstOrFail();
+        $account = BankAccount::where('uuid', $uuid)->firstOrFail();
         
         // Rate limiting per aggiornamenti
         $rateLimiterKey = 'update-bank-account:' . Auth::id() . ':' . $uuid;
@@ -200,6 +211,11 @@ class ConfigurationController extends Controller
             return back()->withErrors(['error' => 'Troppi aggiornamenti. Attendi prima di modificare nuovamente.']);
         }
         RateLimiter::hit($rateLimiterKey, 900); // 5 tentativi per 15 minuti
+
+        // Pre-processo IBAN rimuovendo spazi per validazione
+        $request->merge([
+            'iban' => str_replace(' ', '', $request->input('iban', ''))
+        ]);
 
         $validated = $request->validate([
             'nome_banca' => 'required|string|max:255|regex:/^[\p{L}\p{N}\s\-\.\&]+$/u',
@@ -209,9 +225,7 @@ class ConfigurationController extends Controller
             'iban' => [
                 'required', 'string', 'size:27', 
                 'regex:/^IT[0-9]{2}[A-Z][0-9]{5}[0-9]{5}[A-Z0-9]{12}$/',
-                Rule::unique('bank_accounts')->where(function ($query) {
-                    return $query->where('active', true);
-                })->ignore($account->id)
+                Rule::unique('bank_accounts', 'iban')->ignore($account->id)
             ],
             'swift' => 'nullable|string|size:11|regex:/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/',
             'sia' => 'nullable|string|size:5|regex:/^[A-Z0-9]{5}$/'
@@ -243,7 +257,7 @@ class ConfigurationController extends Controller
             abort(404, 'Conto bancario non trovato.');
         }
 
-        $account = BankAccount::where('uuid', $uuid)->where('active', true)->firstOrFail();
+        $account = BankAccount::where('uuid', $uuid)->firstOrFail();
         
         // Rate limiting per eliminazioni
         $rateLimiterKey = 'delete-bank-account:' . Auth::id();
@@ -252,22 +266,20 @@ class ConfigurationController extends Controller
         }
         RateLimiter::hit($rateLimiterKey, 3600); // 3 tentativi per ora
 
-        // Soft delete per audit trail
-        $account->update([
-            'active' => false,
-            'deleted_at' => now(),
-            'deleted_by' => Auth::id()
-        ]);
-        
-        Log::warning('Conto bancario eliminato', [
+        // Log prima dell'eliminazione per audit
+        Log::warning('Conto bancario eliminato definitivamente', [
             'user_id' => Auth::id(),
             'bank_account_uuid' => $uuid,
             'bank_name' => $account->nome_banca,
+            'iban_last_4' => substr($account->iban ?? '', -4), // Ultimi 4 caratteri per identificazione
             'ip' => request()->ip()
         ]);
 
+        // Hard delete - eliminazione definitiva come nel vecchio gestionale
+        $account->delete();
+
         return redirect()->route('configurations.bank-accounts')
-            ->with('success', 'Conto bancario rimosso con successo!');
+            ->with('success', 'Conto bancario eliminato definitivamente!');
     }
 
     // === TABELLE DI SISTEMA ===

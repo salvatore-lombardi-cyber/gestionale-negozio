@@ -31,12 +31,14 @@ class CompanyProfile extends Model
         'regime_fiscale',
         'attivita',
         'numero_tribunale',
+        'tribunale',
         'cciaa',
         'capitale_sociale',
         'provincia_nascita',
         'luogo_nascita',
         'data_nascita',
         'iva_esente',
+        'conai',
         'sdi_username',
         'sdi_password',
         'logo_path',
@@ -44,6 +46,7 @@ class CompanyProfile extends Model
 
     protected $casts = [
         'iva_esente' => 'boolean',
+        'conai' => 'boolean',
         'data_nascita' => 'date',
         'capitale_sociale' => 'decimal:2',
     ];

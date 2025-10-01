@@ -8,6 +8,7 @@ use App\Http\Controllers\LabelController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\AnagraficaController;
+use App\Http\Controllers\SdiTestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -179,6 +180,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/{user}/reset-password', [App\Http\Controllers\UserManagementController::class, 'resetPassword'])->name('reset-password');
         });
         
+        // Sistema Templates per Moduli di Stampa
+        Route::prefix('templates')->name('templates.')->group(function () {
+            // Route READ - Visualizzazione templates
+            Route::middleware(['permissions:configurazioni,read'])->group(function () {
+                Route::get('/', [App\Http\Controllers\Configurazioni\TemplatesController::class, 'index'])->name('index');
+                Route::get('/{id}', [App\Http\Controllers\Configurazioni\TemplatesController::class, 'show'])->name('show')->where('id', '[0-9]+');
+                Route::get('/create', [App\Http\Controllers\Configurazioni\TemplatesController::class, 'create'])->name('create');
+                Route::get('/{id}/edit', [App\Http\Controllers\Configurazioni\TemplatesController::class, 'edit'])->name('edit')->where('id', '[0-9]+');
+            });
+            
+            // Route WRITE - Modifica templates
+            Route::middleware(['permissions:configurazioni,write'])->group(function () {
+                Route::post('/', [App\Http\Controllers\Configurazioni\TemplatesController::class, 'store'])->name('store');
+                Route::put('/{id}', [App\Http\Controllers\Configurazioni\TemplatesController::class, 'update'])->name('update')->where('id', '[0-9]+');
+            });
+            
+            // Route DELETE - Eliminazione templates
+            Route::middleware(['permissions:configurazioni,delete'])->group(function () {
+                Route::delete('/{id}', [App\Http\Controllers\Configurazioni\TemplatesController::class, 'destroy'])->name('destroy')->where('id', '[0-9]+');
+            });
+        });
+        
         // Sistema Gestione Tabelle Enterprise (V2) con controllo permessi
         Route::prefix('gestione-tabelle')->name('gestione-tabelle.')->group(function () {
             
@@ -255,6 +278,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{tipo}/{anagrafica}/duplicate', [AnagraficaController::class, 'duplicate'])->name('duplicate');
         Route::post('/{tipo}/{anagrafica}/duplicate', [AnagraficaController::class, 'storeDuplicate'])->name('store.duplicate');
         Route::get('/fornitori-list', [AnagraficaController::class, 'fornitorsList'])->name('fornitori.list');
+    });
+    
+    // Route SDI Test (Sistema di Interscambio)
+    Route::prefix('sdi')->name('sdi.')->group(function () {
+        Route::get('/test', [SdiTestController::class, 'index'])->name('test');
+        Route::post('/generate-test-invoice', [SdiTestController::class, 'generateTestInvoice'])->name('generate-test');
+        Route::get('/xml/{filename}', [SdiTestController::class, 'viewXml'])->name('view-xml');
+        Route::get('/api/xml-files', [SdiTestController::class, 'listXmlFiles'])->name('list-xml');
     });
 });
 

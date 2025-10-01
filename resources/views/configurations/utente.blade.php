@@ -43,10 +43,18 @@
     .section-title {
         font-size: 1.3rem;
         font-weight: 600;
-        color: #2d3748;
+        color: #029D7E;
         margin-bottom: 1.5rem;
         padding-bottom: 0.5rem;
-        border-bottom: 2px solid #e9ecef;
+        border-bottom: 2px solid #029D7E;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .section-title i {
+        color: #029D7E;
+        font-size: 1.2rem;
     }
     
     .form-control, .form-select {
@@ -77,11 +85,27 @@
         box-shadow: 0 10px 25px rgba(2, 157, 126, 0.3);
     }
     
-    .btn-outline-secondary {
+    .modern-btn {
+        border: none;
         border-radius: 15px;
         padding: 12px 30px;
         font-weight: 600;
         transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.9rem;
+    }
+    
+    .modern-btn.secondary {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        color: white;
+    }
+    
+    .modern-btn.secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(108, 117, 125, 0.3);
+        color: white;
+        text-decoration: none;
     }
     
     .logo-preview {
@@ -89,7 +113,45 @@
         max-height: 200px;
         border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        object-fit: contain;
+    }
+    
+    .logo-preview:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+    
+    .logo-preview-container {
+        text-align: center;
+    }
+    
+    .no-logo-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        border: 2px dashed #dee2e6;
+        border-radius: 15px;
+        background: rgba(248, 249, 250, 0.5);
+        min-height: 200px;
+    }
+    
+    .logo-preview-new {
+        position: relative;
+        animation: fadeInScale 0.5s ease-out;
+    }
+    
+    @keyframes fadeInScale {
+        from {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
     
     .alert {
@@ -115,8 +177,12 @@
     }
     
     [data-bs-theme="dark"] .section-title {
-        color: #e2e8f0 !important;
-        border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+        color: #4DC9A5 !important;
+        border-bottom-color: #4DC9A5 !important;
+    }
+    
+    [data-bs-theme="dark"] .section-title i {
+        color: #4DC9A5 !important;
     }
     
     [data-bs-theme="dark"] .form-control,
@@ -132,6 +198,22 @@
         border-color: #029D7E !important;
         color: #e2e8f0 !important;
     }
+    
+    /* Toggle Switch personalizzati con verde gestionale */
+    .form-check-input:checked {
+        background-color: #029D7E !important;
+        border-color: #029D7E !important;
+    }
+    
+    .form-check-input:focus {
+        border-color: #029D7E !important;
+        box-shadow: 0 0 0 0.25rem rgba(2, 157, 126, 0.25) !important;
+    }
+    
+    .form-check-input:checked:focus {
+        border-color: #029D7E !important;
+        box-shadow: 0 0 0 0.25rem rgba(2, 157, 126, 0.25) !important;
+    }
 </style>
 
 <div class="container-fluid config-container">
@@ -143,8 +225,8 @@
                     <i class="bi bi-person-badge"></i> Profilo Utente
                 </h1>
             </div>
-            <a href="{{ route('configurations.index') }}" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> {{ __('app.back') }}
+            <a href="{{ route('configurations.index') }}" class="modern-btn secondary">
+                <i class="bi bi-arrow-left"></i> {{ __('app.torna_indietro') }}
             </a>
         </div>
     </div>
@@ -230,7 +312,7 @@
                 
                 <div class="col-md-3">
                     <div class="mb-3">
-                        <label for="provincia" class="form-label">{{ __('app.province') }}</label>
+                        <label for="provincia" class="form-label">Provincia</label>
                         <input type="text" class="form-control @error('provincia') is-invalid @enderror" 
                                id="provincia" name="provincia" 
                                value="{{ old('provincia', $company->provincia) }}">
@@ -385,9 +467,16 @@
                 <div class="col-md-4">
                     <div class="mb-3">
                         <label for="codice_attivita_iva" class="form-label">{{ __('app.vat_activity_code') }}</label>
-                        <input type="text" class="form-control @error('codice_attivita_iva') is-invalid @enderror" 
-                               id="codice_attivita_iva" name="codice_attivita_iva" 
-                               value="{{ old('codice_attivita_iva', $company->codice_attivita_iva) }}">
+                        <select class="form-select @error('codice_attivita_iva') is-invalid @enderror" 
+                                id="codice_attivita_iva" name="codice_attivita_iva">
+                            <option value="">Seleziona natura IVA</option>
+                            @foreach($natureIva as $natura)
+                                <option value="{{ $natura->vat_code }}" 
+                                        {{ old('codice_attivita_iva', $company->codice_attivita_iva) == $natura->vat_code ? 'selected' : '' }}>
+                                    {{ $natura->vat_code }} - {{ $natura->nature }}
+                                </option>
+                            @endforeach
+                        </select>
                         @error('codice_attivita_iva')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -397,24 +486,45 @@
                 <div class="col-md-4">
                     <div class="mb-3">
                         <label for="regime_fiscale" class="form-label">{{ __('app.tax_regime') }}</label>
-                        <input type="text" class="form-control @error('regime_fiscale') is-invalid @enderror" 
-                               id="regime_fiscale" name="regime_fiscale" 
-                               value="{{ old('regime_fiscale', $company->regime_fiscale) }}">
+                        <select class="form-select @error('regime_fiscale') is-invalid @enderror" 
+                                id="regime_fiscale" name="regime_fiscale">
+                            <option value="">Seleziona regime fiscale</option>
+                            @foreach($regimiFiscali as $regime)
+                                <option value="{{ $regime->codice }}" 
+                                        {{ old('regime_fiscale', $company->regime_fiscale) == $regime->codice ? 'selected' : '' }}>
+                                    {{ $regime->display_name }}
+                                </option>
+                            @endforeach
+                        </select>
                         @error('regime_fiscale')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <div class="form-text">
+                            <i class="bi bi-info-circle"></i> Regime fiscale per fatturazione elettronica
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-12">
-                    <div class="mb-3 form-check">
+                <div class="col-md-6">
+                    <div class="mb-3 form-check form-switch">
                         <input type="checkbox" class="form-check-input" id="iva_esente" name="iva_esente" value="1"
                                {{ old('iva_esente', $company->iva_esente) ? 'checked' : '' }}>
                         <label class="form-check-label" for="iva_esente">
-                            {{ __('app.vat_exempt') }}
+                            <i class="bi bi-shield-check"></i> {{ __('app.vat_exempt') }}
                         </label>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-3 form-check form-switch">
+                        <input type="checkbox" class="form-check-input" id="conai" name="conai" value="1"
+                               {{ old('conai', $company->conai) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="conai">
+                            <i class="bi bi-recycle"></i> Contributo CONAI
+                        </label>
+                        <div class="form-text">Consorzio Nazionale Imballaggi</div>
                     </div>
                 </div>
             </div>
@@ -426,20 +536,47 @@
                 <i class="bi bi-image"></i> {{ __('app.company_logo') }}
             </h3>
             
-            @if($company->logo_url)
-                <div class="mb-3">
-                    <img src="{{ $company->logo_url }}" alt="Logo attuale" class="logo-preview">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="logo-preview-container">
+                        <div class="logo-current mb-3">
+                            @if($company->logo_url)
+                                <img src="{{ $company->logo_url }}" alt="Logo attuale" class="logo-preview" id="currentLogo">
+                                <div class="form-text text-center">Logo attuale</div>
+                            @else
+                                <div class="no-logo-placeholder" id="currentLogo">
+                                    <i class="bi bi-image" style="font-size: 3rem; color: #dee2e6;"></i>
+                                    <div class="form-text text-center">Nessun logo caricato</div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                 </div>
-            @endif
-            
-            <div class="mb-3">
-                <label for="logo" class="form-label">{{ __('app.upload_logo') }}</label>
-                <input type="file" class="form-control @error('logo') is-invalid @enderror" 
-                       id="logo" name="logo" accept="image/*">
-                @error('logo')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-                <div class="form-text">Formati supportati: JPG, PNG, GIF. Dimensione massima: 2MB</div>
+                
+                <div class="col-md-4">
+                    <div class="logo-preview-container">
+                        <div class="logo-preview-new mb-3" id="logoPreviewContainer" style="display: none;">
+                            <img src="" alt="Anteprima nuovo logo" class="logo-preview" id="logoPreview">
+                            <div class="form-text text-center">Anteprima nuovo logo</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="logo" class="form-label">{{ __('app.upload_logo') }}</label>
+                        <input type="file" class="form-control @error('logo') is-invalid @enderror" 
+                               id="logo" name="logo" accept="image/*" onchange="previewLogo(this)">
+                        @error('logo')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text">
+                            <i class="bi bi-info-circle"></i> Formati: JPG, PNG, GIF<br>
+                            <i class="bi bi-info-circle"></i> Dimensione max: 2MB<br>
+                            <i class="bi bi-info-circle"></i> Anteprima istantanea
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -536,7 +673,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="mb-3">
                         <label for="numero_tribunale" class="form-label">Numero REA Tribunale</label>
                         <input type="text" class="form-control @error('numero_tribunale') is-invalid @enderror" 
@@ -548,7 +685,20 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="tribunale" class="form-label">Tribunale di</label>
+                        <input type="text" class="form-control @error('tribunale') is-invalid @enderror" 
+                               id="tribunale" name="tribunale" 
+                               value="{{ old('tribunale', $company->tribunale) }}"
+                               placeholder="es. Roma, Milano, Napoli">
+                        @error('tribunale')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
                     <div class="mb-3">
                         <label for="cciaa" class="form-label">Numero CCIAA</label>
                         <input type="text" class="form-control @error('cciaa') is-invalid @enderror" 
@@ -608,4 +758,83 @@
         </div>
     </form>
 </div>
+
+<script>
+/**
+ * Funzione per preview live del logo
+ * Replica comportamento del vecchio gestionale con miglioramenti moderni
+ */
+function previewLogo(input) {
+    const previewContainer = document.getElementById('logoPreviewContainer');
+    const previewImage = document.getElementById('logoPreview');
+    
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        
+        // Validazione formato file
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('⚠️ Formato file non supportato. Utilizzare: JPG, PNG, GIF');
+            input.value = '';
+            previewContainer.style.display = 'none';
+            return;
+        }
+        
+        // Validazione dimensione (2MB)
+        if (file.size > 2048 * 1024) {
+            alert('⚠️ File troppo grande. Dimensione massima: 2MB');
+            input.value = '';
+            previewContainer.style.display = 'none';
+            return;
+        }
+        
+        // Reader per preview
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            previewContainer.style.display = 'block';
+            
+            // Effetto di entrata smooth
+            previewContainer.style.opacity = '0';
+            setTimeout(() => {
+                previewContainer.style.transition = 'opacity 0.5s ease';
+                previewContainer.style.opacity = '1';
+            }, 50);
+        };
+        
+        reader.readAsDataURL(file);
+    } else {
+        // Nasconde preview se nessun file selezionato
+        previewContainer.style.display = 'none';
+    }
+}
+
+/**
+ * Auto-resize per textarea 
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-resize textarea
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    });
+    
+    // Animazione di caricamento form
+    const cards = document.querySelectorAll('.config-card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+});
+</script>
 @endsection
