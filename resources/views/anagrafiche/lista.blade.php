@@ -301,13 +301,8 @@
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        margin: 0;
+        background: white;
+        border: none;
     }
     
     .modern-table thead th {

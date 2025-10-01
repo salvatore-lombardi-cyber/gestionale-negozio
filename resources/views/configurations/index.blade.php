@@ -130,6 +130,10 @@
         background: linear-gradient(135deg, #f72585, #c5025a);
     }
     
+    .config-icon.templates {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+    
     .config-icon::before {
         content: '';
         position: absolute;
@@ -202,6 +206,11 @@
     
     .config-btn.danger {
         background: linear-gradient(135deg, #f72585, #c5025a);
+        color: white;
+    }
+    
+    .config-btn.purple {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
         color: white;
     }
     
@@ -290,7 +299,7 @@
             
             <!-- Configuration Cards -->
             <div class="row g-4">
-                <div class="col-xl-3 col-lg-6 col-md-6">
+                <div class="col-xl-4 col-lg-6 col-md-6">
                     <div class="config-card company">
                         <div class="config-icon company">
                             <i class="bi bi-person-badge"></i>
@@ -303,7 +312,7 @@
                     </div>
                 </div>
                 
-                <div class="col-xl-3 col-lg-6 col-md-6">
+                <div class="col-xl-4 col-lg-6 col-md-6">
                     <div class="config-card banks">
                         <div class="config-icon banks">
                             <i class="bi bi-bank"></i>
@@ -316,7 +325,7 @@
                     </div>
                 </div>
                 
-                <div class="col-xl-3 col-lg-6 col-md-6">
+                <div class="col-xl-4 col-lg-6 col-md-6">
                     <div class="config-card enterprise">
                         <div class="config-icon enterprise">
                             <i class="bi bi-gear-wide-connected"></i>
@@ -329,7 +338,20 @@
                     </div>
                 </div>
                 
-                <div class="col-xl-3 col-lg-6 col-md-6">
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <div class="config-card templates">
+                        <div class="config-icon templates">
+                            <i class="bi bi-printer"></i>
+                        </div>
+                        <h3 class="config-title">Moduli di Stampa</h3>
+                        <p class="config-description">Gestione template per documenti e report. Crea e personalizza layout per fatture, DDT e preventivi.</p>
+                        <a href="{{ route('configurations.templates.index') }}" class="config-btn purple">
+                            <i class="bi bi-arrow-right"></i> Gestisci
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-xl-4 col-lg-6 col-md-6">
                     <div class="config-card users">
                         <div class="config-icon users">
                             <i class="bi bi-people"></i>
@@ -342,7 +364,7 @@
                     </div>
                 </div>
                 
-                <div class="col-xl-3 col-lg-6 col-md-6">
+                <div class="col-xl-4 col-lg-6 col-md-6">
                     <div class="config-card settings">
                         <div class="config-icon settings">
                             <i class="bi bi-sliders"></i>
