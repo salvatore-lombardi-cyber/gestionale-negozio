@@ -16,6 +16,10 @@
         padding-bottom: 0;
     }
     
+    .management-container:nth-child(3) {
+        padding-top: 0;
+    }
+    
     /* Header con form creazione */
     .management-header {
         background: rgba(255, 255, 255, 0.95);
@@ -110,6 +114,7 @@
         padding: 2rem;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
+        margin-bottom: 1rem;
     }
     
     .section-title {
@@ -161,8 +166,14 @@
         border-bottom: none;
     }
     
-    .modern-table tbody tr:hover td {
-        background-color: rgba(2, 157, 126, 0.05);
+    .modern-table tbody tr {
+        transition: all 0.3s ease;
+        border: none;
+    }
+    
+    .modern-table tbody tr:hover {
+        background: rgba(72, 202, 228, 0.05);
+        transform: scale(1.01);
     }
     
     /* Empty state */

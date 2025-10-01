@@ -123,17 +123,23 @@
         box-shadow: 0 0 0 3px rgba(2, 157, 126, 0.1);
     }
     
+    /* Table responsive wrapper */
+    .table-responsive {
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
     /* Tabella moderna */
     .modern-table {
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: white;
+        border: none;
     }
     
     .modern-table thead th {
