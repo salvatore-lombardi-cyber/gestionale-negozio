@@ -24,7 +24,7 @@
     .dashboard-title {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #029D7E 0%, #4DC9A5 100%);
+        background: linear-gradient(135deg, #ffd60a 0%, #ff8500 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
@@ -65,27 +65,16 @@
         box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
     }
 
-
-
+    .config-card.print-config::before {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
     
-    .config-card.company::before {
+    .config-card.numbering::before {
+        background: linear-gradient(135deg, #48cae4, #0077b6);
+    }
+    
+    .config-card.import::before {
         background: linear-gradient(135deg, #029D7E, #4DC9A5);
-    }
-    
-    .config-card.banks::before {
-        background: linear-gradient(135deg, #48cae4, #0077b6);
-    }
-    
-    .config-card.tables::before {
-        background: linear-gradient(135deg, #48cae4, #0077b6);
-    }
-    
-    .config-card.settings::before {
-        background: linear-gradient(135deg, #ffd60a, #ff8500);
-    }
-    
-    .config-card.enterprise::before {
-        background: linear-gradient(135deg, #ffd60a, #ff8500);
     }
     
     .config-card.users::before {
@@ -106,32 +95,20 @@
         overflow: hidden;
     }
     
-    .config-icon.company {
+    .config-icon.print-config {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+    
+    .config-icon.numbering {
+        background: linear-gradient(135deg, #48cae4, #0077b6);
+    }
+    
+    .config-icon.import {
         background: linear-gradient(135deg, #029D7E, #4DC9A5);
-    }
-    
-    .config-icon.banks {
-        background: linear-gradient(135deg, #48cae4, #0077b6);
-    }
-    
-    .config-icon.tables {
-        background: linear-gradient(135deg, #48cae4, #0077b6);
-    }
-    
-    .config-icon.settings {
-        background: linear-gradient(135deg, #ffd60a, #ff8500);
-    }
-    
-    .config-icon.enterprise {
-        background: linear-gradient(135deg, #ffd60a, #ff8500);
     }
     
     .config-icon.users {
         background: linear-gradient(135deg, #f72585, #c5025a);
-    }
-    
-    .config-icon.templates {
-        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
     }
     
     .config-icon::before {
@@ -184,13 +161,8 @@
         overflow: hidden;
     }
     
-    .config-btn.primary {
-        background: linear-gradient(135deg, #029D7E, #4DC9A5);
-        color: white;
-    }
-    
-    .config-btn.success {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    .config-btn.purple {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
         color: white;
     }
     
@@ -199,8 +171,8 @@
         color: white;
     }
     
-    .config-btn.warning {
-        background: linear-gradient(135deg, #ffd60a, #ff8500);
+    .config-btn.success {
+        background: linear-gradient(135deg, #029D7E, #4DC9A5);
         color: white;
     }
     
@@ -209,14 +181,32 @@
         color: white;
     }
     
-    .config-btn.purple {
-        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-        color: white;
-    }
-    
     .config-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        color: white;
+        text-decoration: none;
+    }
+
+    .modern-btn {
+        border: none;
+        border-radius: 15px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.9rem;
+    }
+    
+    .modern-btn.secondary {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        color: white;
+    }
+    
+    .modern-btn.secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(108, 117, 125, 0.3);
         color: white;
         text-decoration: none;
     }
@@ -228,7 +218,7 @@
     }
     
     [data-bs-theme="dark"] .dashboard-title {
-        background: linear-gradient(135deg, #029D7E, #4DC9A5);
+        background: linear-gradient(135deg, #ffd60a, #ff8500);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
@@ -291,75 +281,69 @@
         <div class="col-12">
             <!-- Header -->
             <div class="dashboard-header text-center">
-                <h1 class="dashboard-title">
-                    <i class="bi bi-gear"></i> {{ __('app.configurations') }}
-                </h1>
-                <p class="welcome-text">{{ __('app.configurations_subtitle') }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1">
+                        <h1 class="dashboard-title">
+                            <i class="bi bi-sliders"></i> Impostazioni
+                        </h1>
+                        <p class="welcome-text">Configura numeratori, stampe, importazioni e utenze del sistema</p>
+                    </div>
+                    <a href="{{ route('configurations.index') }}" class="modern-btn secondary">
+                        <i class="bi bi-arrow-left"></i> Torna alle Configurazioni
+                    </a>
+                </div>
             </div>
             
-            <!-- Configuration Cards -->
+            <!-- Impostazioni Cards -->
             <div class="row g-4">
-                <div class="col-xl-4 col-lg-6 col-md-6">
-                    <div class="config-card company">
-                        <div class="config-icon company">
-                            <i class="bi bi-person-badge"></i>
+                <div class="col-xl-6 col-lg-6 col-md-6">
+                    <div class="config-card print-config">
+                        <div class="config-icon print-config">
+                            <i class="bi bi-link-45deg"></i>
                         </div>
-                        <h3 class="config-title">Profilo Utente</h3>
-                        <p class="config-description">Gestisci i dati anagrafici, fiscali e di contatto dell'azienda</p>
-                        <a href="{{ route('configurations.utente') }}" class="config-btn primary">
-                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }}
+                        <h3 class="config-title">Configurazione Stampe</h3>
+                        <p class="config-description">Associa i template grafici ai tipi di documento. Collega i template creati ai DDT, Fatture, Preventivi.</p>
+                        <a href="{{ route('impostazioni.configurazione-stampe') }}" class="config-btn purple">
+                            <i class="bi bi-arrow-right"></i> Gestisci Associazioni
                         </a>
                     </div>
                 </div>
                 
-                <div class="col-xl-4 col-lg-6 col-md-6">
-                    <div class="config-card banks">
-                        <div class="config-icon banks">
-                            <i class="bi bi-bank"></i>
+                <div class="col-xl-6 col-lg-6 col-md-6">
+                    <div class="config-card numbering">
+                        <div class="config-icon numbering">
+                            <i class="bi bi-123"></i>
                         </div>
-                        <h3 class="config-title">{{ __('app.bank_accounts') }}</h3>
-                        <p class="config-description">{{ __('app.bank_accounts_desc') }} Configura metodi di pagamento e coordinate per fatturazione.</p>
-                        <a href="{{ route('configurations.bank-accounts') }}" class="config-btn info">
-                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }}
+                        <h3 class="config-title">Configurazione Numeratori</h3>
+                        <p class="config-description">Gestisci i numeratori automatici per DDT, Fatture e Preventivi. Configura prefissi, suffissi e formati.</p>
+                        <a href="{{ route('impostazioni.configurazione-numeratori') }}" class="config-btn info">
+                            <i class="bi bi-arrow-right"></i> Gestisci Numeratori
                         </a>
                     </div>
                 </div>
                 
-                <div class="col-xl-4 col-lg-6 col-md-6">
-                    <div class="config-card enterprise">
-                        <div class="config-icon enterprise">
-                            <i class="bi bi-gear-wide-connected"></i>
+                <div class="col-xl-6 col-lg-6 col-md-6">
+                    <div class="config-card import">
+                        <div class="config-icon import">
+                            <i class="bi bi-cloud-upload"></i>
                         </div>
-                        <h3 class="config-title">Gestisci Tabelle</h3>
-                        <p class="config-description">Sistema enterprise per configurazioni avanzate. Associazioni Nature IVA e Aliquote con architettura moderna.</p>
-                        <a href="{{ route('configurations.gestione-tabelle.index') }}" class="config-btn warning">
-                            <i class="bi bi-arrow-right"></i> Gestisci
+                        <h3 class="config-title">Importazione Dati</h3>
+                        <p class="config-description">Importa anagrafiche clienti, fornitori e articoli da file CSV/Excel. Sistema guidato con mappatura campi.</p>
+                        <a href="{{ route('impostazioni.importazione-dati') }}" class="config-btn success">
+                            <i class="bi bi-arrow-right"></i> Gestisci Import
                         </a>
                     </div>
                 </div>
                 
-                <div class="col-xl-4 col-lg-6 col-md-6">
-                    <div class="config-card templates">
-                        <div class="config-icon templates">
-                            <i class="bi bi-printer"></i>
-                        </div>
-                        <h3 class="config-title">Moduli di Stampa</h3>
-                        <p class="config-description">Gestione template per documenti e report. Crea e personalizza layout per fatture, DDT e preventivi.</p>
-                        <a href="{{ route('configurations.templates.index') }}" class="config-btn purple">
-                            <i class="bi bi-arrow-right"></i> Gestisci
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="col-xl-6 col-lg-6 col-md-6">
                     <div class="config-card users">
                         <div class="config-icon users">
-                            <i class="bi bi-sliders"></i>
+                            <i class="bi bi-people"></i>
                         </div>
-                        <h3 class="config-title">Impostazioni</h3>
-                        <p class="config-description">Numeratori, stampe, importazioni e gestione utenze del sistema</p>
-                        <a href="{{ route('impostazioni.index') }}" class="config-btn danger">
-                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }}
+                        <h3 class="config-title">Gestione Utenze</h3>
+                        <p class="config-description">Sistema multi-utente enterprise. Crea sub-account, gestisci permessi e controllo accessi avanzato.</p>
+                        <a href="{{ route('configurations.users.index') }}" class="config-btn danger">
+                            <i class="bi bi-arrow-right"></i> Gestisci Utenti
                         </a>
                     </div>
                 </div>

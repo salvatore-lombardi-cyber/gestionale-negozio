@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Carbon\Carbon;
 
 class Template extends Model
@@ -30,10 +31,26 @@ class Template extends Model
     }
 
     /**
+     * Relazione con PrintAssociation
+     */
+    public function printAssociations(): HasMany
+    {
+        return $this->hasMany(PrintAssociation::class, 'template_id');
+    }
+
+    /**
      * Format modified_at for display
      */
     public function getFormattedModifiedAtAttribute()
     {
         return $this->modified_at ? $this->modified_at->format('d/m/Y H:i') : 'N/A';
+    }
+
+    /**
+     * Verifica se è associato a qualche tipo documento
+     */
+    public function hasAssociatedDocuments()
+    {
+        return $this->printAssociations()->where('active', true)->exists();
     }
 }

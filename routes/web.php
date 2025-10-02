@@ -38,12 +38,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/fatturazione/{vendita}/pdf', [App\Http\Controllers\FatturazioneController::class, 'downloadPdf'])->name('fatturazione.pdf');
     });
     
-    Route::middleware(['permissions:fatturazione,write'])->group(function () {
-        Route::get('/fatturazione/crea', [App\Http\Controllers\FatturazioneController::class, 'create'])->name('fatturazione.create');
-        Route::post('/fatturazione', [App\Http\Controllers\FatturazioneController::class, 'store'])->name('fatturazione.store');
-        Route::get('/fatturazione/{vendita}/modifica', [App\Http\Controllers\FatturazioneController::class, 'edit'])->name('fatturazione.edit');
-        Route::put('/fatturazione/{vendita}', [App\Http\Controllers\FatturazioneController::class, 'update'])->name('fatturazione.update');
-    });
+    Route::get('/fatturazione/crea', [App\Http\Controllers\FatturazioneController::class, 'create'])->name('fatturazione.create');
+    Route::post('/fatturazione', [App\Http\Controllers\FatturazioneController::class, 'store'])->name('fatturazione.store');
+    Route::get('/fatturazione/{vendita}/modifica', [App\Http\Controllers\FatturazioneController::class, 'edit'])->name('fatturazione.edit');
+    Route::put('/fatturazione/{vendita}', [App\Http\Controllers\FatturazioneController::class, 'update'])->name('fatturazione.update');
     
     Route::middleware(['permissions:fatturazione,delete'])->group(function () {
         Route::delete('/fatturazione/{vendita}', [App\Http\Controllers\FatturazioneController::class, 'destroy'])->name('fatturazione.destroy');
@@ -160,6 +158,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('/system-tables/{table}/{id}', [App\Http\Controllers\SystemTablesController::class, 'destroy'])->name('system-tables.destroy');
             Route::delete('/favorites/remove', [App\Http\Controllers\SystemTablesController::class, 'removeFromFavorites'])->name('system-tables.favorites.remove');
         });
+    });
+
+    // === NUOVO MODULO IMPOSTAZIONI ===
+    Route::prefix('impostazioni')->name('impostazioni.')->group(function () {
+        
+        // Route READ (visualizzazione impostazioni)
+        Route::middleware(['permissions:configurazioni,read'])->group(function () {
+            Route::get('/', [App\Http\Controllers\ImpostazioniController::class, 'index'])->name('index');
+            Route::get('/configurazione-stampe', [App\Http\Controllers\ImpostazioniController::class, 'configurazioneStampe'])->name('configurazione-stampe');
+            Route::get('/configurazione-numeratori', [App\Http\Controllers\ImpostazioniController::class, 'configurazioneNumeratori'])->name('configurazione-numeratori');
+            Route::get('/importazione-dati', [App\Http\Controllers\ImpostazioniController::class, 'importazioneDati'])->name('importazione-dati');
+        });
+        
+        // Route WRITE (modifica impostazioni)
+        Route::middleware(['permissions:configurazioni,write'])->group(function () {
+            Route::post('/configurazione-stampe', [App\Http\Controllers\ImpostazioniController::class, 'storeConfigurazioneStampe'])->name('configurazione-stampe.store');
+            Route::post('/configurazione-numeratori', [App\Http\Controllers\ImpostazioniController::class, 'updateConfigurazioneNumeratori'])->name('configurazione-numeratori.update');
+            Route::post('/numbering/preview', [App\Http\Controllers\ImpostazioniController::class, 'previewNumbering'])->name('numbering.preview');
+        });
+        
+        // Route DELETE (eliminazione)
+        Route::middleware(['permissions:configurazioni,delete'])->group(function () {
+            Route::delete('/configurazione-stampe/{uuid}', [App\Http\Controllers\ImpostazioniController::class, 'destroyConfigurazioneStampe'])->name('configurazione-stampe.destroy');
+        });
+    });
+    
+    // Route Configurazioni (modulo esistente)
+    Route::prefix('configurations')->name('configurations.')->group(function () {
         
         // Gestione Utenti (Sistema Multi-Utente Enterprise)
         Route::prefix('users')->name('users.')->group(function () {
@@ -291,13 +317,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 require __DIR__.'/auth.php';
 
-// Route per cambio lingua
-Route::get('/language/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'it'])) {
-        session(['locale' => $locale]);
-    }
-    return redirect()->back();
-})->name('language.change');
 
 // Routes AI Assistant
 Route::prefix('ai-assistant')->name('ai.')->group(function () {

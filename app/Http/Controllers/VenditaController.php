@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vendita;
-use App\Models\Cliente;
+use App\Models\Anagrafica;
 use App\Models\Prodotto;
 use App\Models\DettaglioVendita;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ class VenditaController extends Controller
     
     public function create()
 {
-    $clienti = Cliente::orderBy('cognome')->get();
+    $clienti = Anagrafica::clienti()->orderBy('cognome')->get();
     $prodotti = Prodotto::where('attivo', true)->orderBy('nome')->get();
     
     // Prendiamo anche i dati del magazzino per taglie e colori disponibili

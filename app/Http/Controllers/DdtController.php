@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ddt;
 use App\Models\Vendita;
-use App\Models\Cliente;
+use App\Models\Anagrafica;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;

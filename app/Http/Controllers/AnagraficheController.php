@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Cliente;
-use App\Models\Fornitore;
-use App\Models\Vettore;
+use App\Models\Anagrafica;
 
 class AnagraficheController extends Controller
 {
@@ -13,10 +11,10 @@ class AnagraficheController extends Controller
     {
         // Statistiche anagrafiche enterprise
         $stats = [
-            'clienti' => Cliente::count(),
-            'fornitori' => Fornitore::count(),
-            'vettori' => Vettore::count(),
-            'agenti' => 0   // Da implementare
+            'clienti' => Anagrafica::clienti()->count(),
+            'fornitori' => Anagrafica::fornitori()->count(),
+            'vettori' => Anagrafica::vettori()->count(),
+            'agenti' => Anagrafica::agenti()->count()
         ];
         
         return view('anagrafiche.index', compact('stats'));

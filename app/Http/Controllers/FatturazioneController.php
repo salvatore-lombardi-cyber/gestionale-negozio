@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Vendita;
-use App\Models\Cliente;
-use App\Models\Prodotto;
+use App\Models\Anagrafica;
+// use App\Models\Prodotto; // Sostituito con Anagrafica
 use App\Models\Magazzino;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -20,7 +20,7 @@ class FatturazioneController extends Controller
             'fatture_scadute' => 0,
             'fatture_ricevute' => 0,
             'fatturato_mensile' => Vendita::whereMonth('created_at', now()->month)->sum('totale'),
-            'clienti_attivi' => Cliente::count()
+            'clienti_attivi' => Anagrafica::clienti()->count()
         ];
 
         return view('fatturazione.index', compact('stats'));
@@ -29,13 +29,10 @@ class FatturazioneController extends Controller
     public function create()
     {
         // Recupera clienti e prodotti per il form
-        $clienti = Cliente::orderBy('nome')->get();
+        $clienti = Anagrafica::clienti()->orderBy('nome')->get();
         
-        // Recupera prodotti con quantità disponibile dal magazzino
-        $prodotti = Prodotto::with('magazzino')
-                           ->whereHas('magazzino', function($query) {
-                               $query->where('quantita', '>', 0);
-                           })
+        // Recupera articoli (sostituisce prodotti)
+        $prodotti = Anagrafica::articoli()
                            ->orderBy('nome')
                            ->get();
         
@@ -51,8 +48,8 @@ class FatturazioneController extends Controller
             return [
                 'id' => $p->id,
                 'nome' => $p->nome,
-                'prezzo' => $p->prezzo,
-                'quantita_disponibile' => $p->magazzino->sum('quantita')
+                'prezzo' => $p->prezzo_vendita ?? 0,
+                'quantita_disponibile' => $p->scorta_minima ?? 0
             ];
         });
         
@@ -144,12 +141,9 @@ class FatturazioneController extends Controller
             abort(404, 'Documento non trovato');
         }
         
-        // Recupera clienti e prodotti per il form
-        $clienti = Cliente::orderBy('nome')->get();
-        $prodotti = Prodotto::with('magazzino')
-                           ->whereHas('magazzino', function($query) {
-                               $query->where('quantita', '>', 0);
-                           })
+        // Recupera clienti e articoli per il form
+        $clienti = Anagrafica::clienti()->orderBy('nome')->get();
+        $prodotti = Anagrafica::articoli()
                            ->orderBy('nome')
                            ->get();
         
@@ -158,8 +152,8 @@ class FatturazioneController extends Controller
             return [
                 'id' => $p->id,
                 'nome' => $p->nome,
-                'prezzo' => $p->prezzo,
-                'quantita_disponibile' => $p->magazzino->sum('quantita')
+                'prezzo' => $p->prezzo_vendita ?? 0,
+                'quantita_disponibile' => $p->scorta_minima ?? 0
             ];
         });
         
@@ -310,7 +304,7 @@ class FatturazioneController extends Controller
                             ->sortByDesc('fatturato')
                             ->take(10);
 
-        $clienti = Cliente::orderBy('nome')->get();
+        $clienti = Anagrafica::clienti()->orderBy('nome')->get();
 
         return view('fatturazione.riepilogo', compact(
             'fatture', 'statistiche', 'fatturatoPeriodo', 'topClienti', 

@@ -18,7 +18,7 @@ class AIAssistantController extends Controller
     {
         $stats = [
             'products' => \App\Models\Prodotto::count(),
-            'customers' => \App\Models\Cliente::count(), 
+            'customers' => \App\Models\Anagrafica::clienti()->count(), 
             'sales' => \App\Models\Vendita::count(),
             'low_stock' => 0
         ];
@@ -31,7 +31,7 @@ class AIAssistantController extends Controller
     // Ottieni dati reali dal database
     $context = [
         'prodotti_totali' => \App\Models\Prodotto::count(),
-        'clienti_totali' => \App\Models\Cliente::count(),
+        'clienti_totali' => \App\Models\Anagrafica::clienti()->count(),
         'vendite_totali' => \App\Models\Vendita::count(),
         'vendite_oggi' => \App\Models\Vendita::whereDate('created_at', today())->count(),
         'scorte_basse' => \App\Models\Magazzino::whereRaw('quantita <= scorta_minima')->count()
