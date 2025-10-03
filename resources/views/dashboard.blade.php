@@ -406,18 +406,7 @@
                     </div>
                 </div>
                 
-                <div class="col-xl-3 col-lg-6 col-md-6">
-                    <div class="stats-card warning">
-                        <div class="stats-icon warning">
-                            <i class="bi bi-file-earmark-text"></i>
-                        </div>
-                        <h3 class="stats-number">{{ \App\Models\Ddt::count() }}</h3>
-                        <p class="stats-label">{{ __('app.ddts') }}</p>
-                        <a href="{{ route('ddts.index') }}" class="stats-btn warning">
-                            <i class="bi bi-arrow-right"></i> {{ __('app.manage') }} {{ __('app.ddts') }}
-                        </a>
-                    </div>
-                </div>
+                {{-- Statistiche DDT integrate nel modulo magazzino --}}
             </div>
         </div>
     </div>

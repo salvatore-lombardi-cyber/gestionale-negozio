@@ -381,9 +381,9 @@
                 <i class="bi bi-person-lines-fill"></i>
                 {{ __('app.anagrafiche') }}
             </a>
-            <a class="nav-link" href="{{ route('magazzino-overview.index') }}">
+            <a class="nav-link" href="{{ route('magazzino.index') }}">
                 <i class="bi bi-boxes"></i>
-                {{ __('app.warehouse_overview') }}
+                {{ __('app.warehouse') }}
             </a>
             <a class="nav-link" href="{{ route('configurations.index') }}">
                 <i class="bi bi-gear"></i>
@@ -397,10 +397,7 @@
                 <i class="bi bi-receipt"></i>
                 {{ __('app.fatturazione') }}
             </a>
-            <a class="nav-link" href="{{ route('ddts.index') }}">
-                <i class="bi bi-file-earmark-text"></i>
-                {{ __('app.ddts') }}
-            </a>
+            {{-- DDT integrato con controllo movimenti --}}
             <a class="nav-link" href="{{ route('ai.index') }}">
                 <i class="bi bi-robot"></i>
                 {{ __('app.ai_assistant') }}

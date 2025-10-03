@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Vendita;
 use App\Models\Anagrafica;
 // use App\Models\Prodotto; // Sostituito con Anagrafica
-use App\Models\Magazzino;
+// TODO: Integrazione con nuovo modulo magazzino
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class FatturazioneController extends Controller

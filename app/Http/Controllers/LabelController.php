@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prodotto;
-use App\Models\Magazzino;
+// TODO: Integrazione con nuovo modulo magazzino
 use App\Services\QRCodeService;
 use App\Services\LabelCodeService;
 use Illuminate\Http\Request;

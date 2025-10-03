@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Prodotto;
-use App\Models\Magazzino;
+// TODO: Integrazione con nuovo modulo magazzino
 use Illuminate\Support\Facades\DB;
 
 class LabelCodeService

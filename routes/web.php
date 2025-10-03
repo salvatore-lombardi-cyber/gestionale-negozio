@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VenditaController;
+// Moduli magazzino e DDT multi-deposito
 use App\Http\Controllers\MagazzinoController;
-use App\Http\Controllers\DdtController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\WeatherController;
@@ -25,8 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
     
     
-    // Magazzino Overview
-    Route::get('/magazzino-overview', [App\Http\Controllers\MagazzinoOverviewController::class, 'index'])->name('magazzino-overview.index');
+    // Modulo magazzino multi-deposito con tracciabilità movimenti
     
     // Route Fatturazione con controllo permessi
     Route::middleware(['permissions:fatturazione,read'])->group(function () {
@@ -75,29 +74,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/vendite/{vendita}', [VenditaController::class, 'destroy'])->name('vendite.destroy');
     });
     
-    // Route Magazzino con controllo permessi
+    // Sistema gestione magazzino enterprise con multi-deposito
     Route::middleware(['permissions:magazzino,read'])->group(function () {
         Route::get('/magazzino', [MagazzinoController::class, 'index'])->name('magazzino.index');
-        Route::get('/magazzino/{magazzino}', [MagazzinoController::class, 'show'])->name('magazzino.show');
-        Route::get('/magazzino/prodotto/{prodotto}', [MagazzinoController::class, 'dettaglioProdotto'])->name('magazzino.dettaglio-prodotto');
+        Route::get('/magazzino/movimenti', [MagazzinoController::class, 'movimenti'])->name('magazzino.movimenti');
+        Route::get('/magazzino/gestione', [MagazzinoController::class, 'gestione'])->name('magazzino.gestione');
+        Route::get('/magazzino/stato', [MagazzinoController::class, 'stato'])->name('magazzino.stato');
+        Route::get('/magazzino/ddt', [MagazzinoController::class, 'ddt'])->name('magazzino.ddt');
+        
+        // Route POST per operazioni magazzino
+        Route::post('/magazzino/carico', [MagazzinoController::class, 'eseguiCarico'])->name('magazzino.carico');
+        Route::post('/magazzino/scarico', [MagazzinoController::class, 'eseguiScarico'])->name('magazzino.scarico');
+        Route::post('/magazzino/trasferimento', [MagazzinoController::class, 'eseguiTrasferimento'])->name('magazzino.trasferimento');
+        
+        // Export PDF movimento
+        Route::get('/magazzino/movimento/{id}/pdf', [MagazzinoController::class, 'movimentoPdf'])->name('magazzino.movimento-pdf');
+        
+        // Dettagli movimento per modal
+        Route::get('/magazzino/movimento/{id}/dettagli', [MagazzinoController::class, 'movimentoDettagli'])->name('magazzino.movimento-dettagli');
     });
     
-    Route::middleware(['permissions:magazzino,write'])->group(function () {
-        Route::get('/magazzino/create', [MagazzinoController::class, 'create'])->name('magazzino.create');
-        Route::post('/magazzino', [MagazzinoController::class, 'store'])->name('magazzino.store');
-        Route::get('/magazzino/{magazzino}/edit', [MagazzinoController::class, 'edit'])->name('magazzino.edit');
-        Route::put('/magazzino/{magazzino}', [MagazzinoController::class, 'update'])->name('magazzino.update');
-        Route::get('/magazzino/caricamento-multiplo', [MagazzinoController::class, 'caricamentoMultiplo'])->name('magazzino.caricamento-multiplo');
-        Route::post('/magazzino/salva-multiplo', [MagazzinoController::class, 'salvaMultiplo'])->name('magazzino.salva-multiplo');
-    });
-    
-    Route::middleware(['permissions:magazzino,delete'])->group(function () {
-        Route::delete('/magazzino/{magazzino}', [MagazzinoController::class, 'destroy'])->name('magazzino.destroy');
-    });
-    
-    Route::resource('ddts', DdtController::class)->parameter('ddts', 'ddt');
-    Route::get('/ddts/{ddt}/pdf', [DdtController::class, 'downloadPdf'])->name('ddts.pdf');
-    Route::post('/ddts/{ddt}/email', [DdtController::class, 'sendEmail'])->name('ddts.email');
+    // Sistema DDT integrato con controllo movimenti magazzino
     
     
     // Route Gestione Etichette

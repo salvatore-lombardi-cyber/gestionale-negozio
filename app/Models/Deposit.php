@@ -13,7 +13,7 @@ class Deposit extends Model
 {
     use HasFactory;
 
-    protected $table = 'deposits';
+    protected $table = 'depositi';
 
     // Campi fillable con nomenclatura italiana
     protected $fillable = [

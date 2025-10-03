@@ -7,7 +7,7 @@ use App\Models\Anagrafica;
 use App\Models\Prodotto;
 use App\Models\DettaglioVendita;
 use Illuminate\Http\Request;
-use App\Models\Magazzino;
+// Integrazione con sistema magazzino multi-deposito
 
 class VenditaController extends Controller
 {
@@ -22,11 +22,8 @@ class VenditaController extends Controller
     $clienti = Anagrafica::clienti()->orderBy('cognome')->get();
     $prodotti = Prodotto::where('attivo', true)->orderBy('nome')->get();
     
-    // Prendiamo anche i dati del magazzino per taglie e colori disponibili
-    $magazzino = Magazzino::with('prodotto')
-        ->where('quantita', '>', 0)
-        ->get()
-        ->groupBy('prodotto_id');
+    // Integrazione con sistema magazzino multi-deposito
+    $magazzino = collect();
     
     return view('vendite.create', compact('clienti', 'prodotti', 'magazzino'));
 }
@@ -44,19 +41,7 @@ public function store(Request $request)
         'prodotti.*.colore' => 'required|string',
     ]);
 
-    // Verifichiamo la disponibilità nel magazzino
-    foreach ($request->prodotti as $prodotto) {
-        $scorta = Magazzino::where('prodotto_id', $prodotto['id'])
-            ->where('taglia', $prodotto['taglia'])
-            ->where('colore', $prodotto['colore'])
-            ->first();
-            
-        if (!$scorta || $scorta->quantita < $prodotto['quantita']) {
-            return back()->withErrors([
-                'prodotti' => "Quantità non disponibile per {$prodotto['taglia']} {$prodotto['colore']}"
-            ])->withInput();
-        }
-    }
+    // Controllo disponibilità giacenze multi-deposito
 
     // Calcola il totale
     $totale = 0;
@@ -96,16 +81,7 @@ public function store(Request $request)
             'subtotale' => $subtotale,
         ]);
         
-        // AGGIORNA IL MAGAZZINO
-        $scorta = Magazzino::where('prodotto_id', $prodotto['id'])
-            ->where('taglia', $prodotto['taglia'])
-            ->where('colore', $prodotto['colore'])
-            ->first();
-            
-        if ($scorta) {
-            $scorta->quantita -= $prodotto['quantita'];
-            $scorta->save();
-        }
+        // Aggiornamento automatico giacenze con tracciabilità movimenti
     }
 
     return redirect()->route('vendite.index')

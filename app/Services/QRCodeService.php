@@ -10,7 +10,7 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Prodotto;
-use App\Models\Magazzino;
+// TODO: Integrazione con nuovo modulo magazzino
 
 class QRCodeService
 {
